@@ -27,9 +27,16 @@ class AuthController extends Controller
         ]);
 
         $user->save();
+
+        $tokenResult = $user->createToken('Personal Access Token');
+
+        $token = $tokenResult->token;
+        $token->expires_at = Carbon::now()->addWeeks(1);
         
         return response()->json([
             'statusCode' => 201,
+            'access_token' => $tokenResult->accessToken,
+            'token_type' => 'Bearer',
             'message' => 'Successfully created user!'], 201);
     }
     
@@ -38,7 +45,6 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
-            'remember_me' => 'boolean'
         ]);
 
         $credentials = request(['email', 'password']);
@@ -53,8 +59,7 @@ class AuthController extends Controller
         $tokenResult = $user->createToken('Personal Access Token');
 
         $token = $tokenResult->token;
-        if ($request->remember_me)
-            $token->expires_at = Carbon::now()->addWeeks(1);
+        $token->expires_at = Carbon::now()->addWeeks(1);
         $token->save();
 
         return response()->json([
