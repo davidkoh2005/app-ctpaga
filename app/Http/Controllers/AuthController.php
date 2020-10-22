@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\User;
+use App\Bank;
 
 class AuthController extends Controller
 {
@@ -32,6 +33,7 @@ class AuthController extends Controller
 
         $token = $tokenResult->token;
         $token->expires_at = Carbon::now()->addWeeks(1);
+        $token->save();
         
         return response()->json([
             'statusCode' => 201,
@@ -81,6 +83,7 @@ class AuthController extends Controller
 
     public function user(Request $request)
     {
-        return response()->json(['statusCode' => 201,'data' => $request->user()]);
+        $banks = Bank::where('user_id', $request->user()->id)->limit(2)->get();
+        return response()->json(['statusCode' => 201,'data' => [$request->user(), 'banks'=> $banks ]]);
     }
 }

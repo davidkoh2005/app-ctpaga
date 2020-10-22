@@ -27,6 +27,7 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('logout', 'AuthController@logout');
         Route::post('user', 'AuthController@user');
         Route::post('updateUser', 'UsersController@update');
-        Route::post('test', 'UsersController@testJson');
+        Route::get('bankUser', 'UsersController@bankUser');
+        Route::get('test', 'UsersController@testJson');
     });
 });

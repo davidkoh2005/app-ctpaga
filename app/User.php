@@ -11,14 +11,16 @@ class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
 
+    //protected $table = 'users';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    /* protected $fillable = [
+    protected $fillable = [
         'name', 'email', 'password', 'address', 'phone',
-    ]; */
+    ]; 
 
     /**
      * The attributes that should be hidden for arrays.
@@ -37,4 +39,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function banks()
+    {
+        return $this->hasMany('App\Bank');
+    }
 }
