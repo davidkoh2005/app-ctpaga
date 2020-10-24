@@ -26,6 +26,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::group(['middleware' => 'auth:api'], function() {
         Route::post('logout', 'AuthController@logout');
         Route::post('user', 'AuthController@user');
+        Route::post('updateUserImg', 'UsersController@updateImg');
         Route::post('updateUser', 'UsersController@update');
         Route::get('bankUser', 'UsersController@bankUser');
         Route::get('test', 'UsersController@testJson');
