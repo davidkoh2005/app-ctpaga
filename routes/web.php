@@ -17,5 +17,3 @@ use Illuminate\Support\Facades\Route;
 }); 
 
 Route::get('/phpinfo', function() { phpinfo(); }); 
-
-Route::get('showProfile', 'UsersController@showProfile');

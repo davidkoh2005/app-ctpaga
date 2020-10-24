@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('nameCompany')->nullable();
             $table->string('addressCompany')->nullable();
             $table->string('phoneCompany', 20)->nullable();
+            $table->boolean('statusProfile')->default(false);
             $table->timestamps();
         });
     }

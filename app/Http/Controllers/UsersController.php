@@ -11,22 +11,18 @@ use App\Bank;
 
 class UsersController extends Controller
 {
+
     public function updateImg(Request $request)
     {
         $user = $request->user();
-        $file = $request->file('image');
-        $name = $file->getClientOriginalName();
-        \Storage::disk('public')->put('/Users/'.$user->id.'/profile.jpg',  \File::get($file));
+        $realImage = base64_decode($request->image);
+        \Storage::disk('public')->put('/Users/'.$user->id.'/profile.jpg',  $realImage);
+        $user->statusProfile = true;
+        $user->save();
         return response()->json([
             'statusCode' => 201,
             'message' => 'Update image correctly'
         ]);
-    }
-
-    public function showProfile(Request $request)
-    {
-        $user = User::where('email', $request->email)->first(); 
-        return view('users/userProfile', compact('user'));
     }
 
     public function update(Request $request)
