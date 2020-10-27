@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 use App\User;
 use App\Bank;
+use App\Picture;
 
 class UsersController extends Controller
 {
@@ -16,12 +18,16 @@ class UsersController extends Controller
     {
         $user = $request->user();
         $realImage = base64_decode($request->image);
-        \Storage::disk('public')->put('/Users/'.$user->id.'/profile.jpg',  $realImage);
-        $user->statusProfile = true;
-        $user->save();
+        $date = Carbon::now()->format('Y-m-d');
+        $url = '/Users/'.$user->id.'/storage/'.$date.'_'.$request->description.'.jpg';
+        \Storage::disk('public')->put($url,  $realImage);
+        
+        Picture::updateOrCreate(['user_id'=>$request->user()->id, 'description'=> $request->description], ['url' => '/storage'.$url]);
+
         return response()->json([
             'statusCode' => 201,
-            'message' => 'Update image correctly'
+            'message' => 'Update image correctly',
+            'url' => '/storage'.$url,
         ]);
     }
 

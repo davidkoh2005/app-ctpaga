@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\User;
 use App\Bank;
+use App\Picture;
 
 class AuthController extends Controller
 {
@@ -83,7 +84,8 @@ class AuthController extends Controller
 
     public function user(Request $request)
     {
+        $pictures = Picture::where('user_id', $request->user()->id)->get();
         $banks = Bank::where('user_id', $request->user()->id)->limit(2)->get();
-        return response()->json(['statusCode' => 201,'data' => [$request->user(), 'banks'=> $banks ]]);
+        return response()->json(['statusCode' => 201,'data' => [$request->user(), 'banks'=> $banks, 'pictures'=>$pictures ]]);
     }
 }
