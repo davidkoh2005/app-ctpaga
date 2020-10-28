@@ -19,7 +19,12 @@ class UsersController extends Controller
         $user = $request->user();
         $realImage = base64_decode($request->image);
         $date = Carbon::now()->format('Y-m-d');
-        $url = '/Users/'.$user->id.'/storage/'.$date.'_'.$request->description.'.jpg';
+        
+        if($request->description != 'Profile')
+            $url = '/Users/'.$user->id.'/storage/'.$date.'_'.$request->description.'.jpg';
+        else
+            $url = '/Users/'.$user->id.'/storage/'.$request->description.'.jpg';
+
         \Storage::disk('public')->put($url,  $realImage);
         
         Picture::updateOrCreate(['user_id'=>$request->user()->id, 'description'=> $request->description], ['url' => '/storage'.$url]);
