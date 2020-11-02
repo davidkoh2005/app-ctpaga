@@ -26,7 +26,7 @@ class UsersController extends Controller
         else
             $commerce_id = $request->commerce_id;
         
-        if($request->description != 'Profile')
+        if($request->description == 'Profile')
             $url = '/Users/'.$user->id.'/storage/'.$request->description.'.jpg';
         else if($request->commerce_id != 0)
             $url = '/Users/'.$user->id.'/storage/commercer/commerce_'.$request->commerce_id.'-'.$request->description.'.jpg';
