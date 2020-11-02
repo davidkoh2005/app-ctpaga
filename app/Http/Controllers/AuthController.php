@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\User;
 use App\Bank;
 use App\Picture;
+use App\Commerce;
+use DB;
 
 class AuthController extends Controller
 {
@@ -86,6 +89,16 @@ class AuthController extends Controller
     {
         $pictures = Picture::where('user_id', $request->user()->id)->get();
         $banks = Bank::where('user_id', $request->user()->id)->limit(2)->get();
-        return response()->json(['statusCode' => 201,'data' => [$request->user(), 'banks'=> $banks, 'pictures'=>$pictures ]]);
+        $commerces = Commerce::where('user_id', $request->user()->id)->get();
+        return response()->json(['statusCode' => 201,'data' => [$request->user(), 'banks'=> $banks, 'commerces'=> $commerces, 'pictures'=>$pictures ]]);
+    }
+
+    public function versionApp()
+    {
+        $version = DB::table("version")->get();
+        return response()->json([
+            'statusCode' => 201,
+            'data' => $version,
+        ]);
     }
 }

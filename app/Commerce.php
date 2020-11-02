@@ -4,15 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Picture extends Model
+class Commerce extends Model
 {
+    //
 
     protected $fillable = [
-        'user_id', 'description', 'url', 'commerce_id',
+        'id', 'user_id', 'rif', 'name', 'address', 'phone',
     ]; 
 
     public function user()
     {
         return $this->belongsTo('App\User', 'user_id');
     }
+
 }

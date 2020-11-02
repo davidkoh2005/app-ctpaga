@@ -19,6 +19,7 @@ class CreatePicturesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('description', 20);
             $table->string('url',100);
+            $table->integer('commerce_id')->nullable();
             $table->timestamps();
         });
     }

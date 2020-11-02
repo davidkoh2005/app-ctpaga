@@ -22,13 +22,15 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'AuthController@login');
     Route::post('signup', 'AuthController@signup');
+    Route::post('version', 'AuthController@VersionApp');
   
     Route::group(['middleware' => 'auth:api'], function() {
         Route::post('logout', 'AuthController@logout');
         Route::post('user', 'AuthController@user');
         Route::post('updateUserImg', 'UsersController@updateImg');
-        Route::post('updateUser', 'UsersController@update');
-        Route::get('bankUser', 'UsersController@bankUser');
+        Route::post('updateUser', 'UsersController@updateUser');
+        Route::get('updateBankUser', 'UsersController@updateBankUser');
+        Route::post('updateCommerceUser', 'UsersController@updateCommerceUser');
         Route::get('test', 'UsersController@testJson');
     });
 });
