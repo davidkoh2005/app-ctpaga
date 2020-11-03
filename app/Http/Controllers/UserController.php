@@ -12,7 +12,7 @@ use App\Bank;
 use App\Picture;
 use App\Commerce;
 
-class UsersController extends Controller
+class UserController extends Controller
 {
 
     public function updateImg(Request $request)
@@ -21,14 +21,14 @@ class UsersController extends Controller
         $realImage = base64_decode($request->image);
         $date = Carbon::now()->format('Y-m-d');
 
-        if($request->commerce_id == null)
+        if($request->commerce_id == null && $request->description != 'RIF')
             $commerce_id = 0;
         else
             $commerce_id = $request->commerce_id;
         
         if($request->description == 'Profile')
             $url = '/Users/'.$user->id.'/storage/'.$request->description.'.jpg';
-        else if($request->commerce_id != 0)
+        else if($request->commerce_id != 0 && $request->description == 'RIF')
             $url = '/Users/'.$user->id.'/storage/commercer/commerce_'.$request->commerce_id.'-'.$request->description.'.jpg';
         else
             $url = '/Users/'.$user->id.'/storage/'.$date.'_'.$request->description.'.jpg';

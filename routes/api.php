@@ -27,10 +27,13 @@ Route::group(['prefix' => 'auth'], function () {
     Route::group(['middleware' => 'auth:api'], function() {
         Route::post('logout', 'AuthController@logout');
         Route::post('user', 'AuthController@user');
-        Route::post('updateUserImg', 'UsersController@updateImg');
-        Route::post('updateUser', 'UsersController@updateUser');
-        Route::get('updateBankUser', 'UsersController@updateBankUser');
-        Route::post('updateCommerceUser', 'UsersController@updateCommerceUser');
-        Route::get('test', 'UsersController@testJson');
+        Route::post('updateUserImg', 'UserController@updateImg');
+        Route::post('updateUser', 'UserController@updateUser');
+        Route::get('updateBankUser', 'UserController@updateBankUser');
+        Route::post('updateCommerceUser', 'UserController@updateCommerceUser');
+        Route::get('test', 'UserController@testJson');
+
+        Route::post('showCategories', 'CategoryController@show');
+        Route::post('updateOrCreateCategories', 'CategoryController@updateOrCreate');
     });
 });

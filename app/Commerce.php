@@ -16,5 +16,8 @@ class Commerce extends Model
     {
         return $this->belongsTo('App\User', 'user_id');
     }
-
+    public function category()
+    {
+        return $this->hasMany('App\Category');
+    }
 }
