@@ -34,6 +34,9 @@ Route::group(['prefix' => 'auth'], function () {
         Route::get('test', 'UserController@testJson');
 
         Route::post('showCategories', 'CategoryController@show');
-        Route::post('updateOrCreateCategories', 'CategoryController@updateOrCreate');
+        Route::post('newCategories', 'CategoryController@new');
+
+        Route::post('showProducts', 'ProductController@show');
+        Route::post('newProducts', 'ProductController@new');
     });
 });

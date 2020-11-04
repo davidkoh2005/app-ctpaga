@@ -14,12 +14,14 @@ class CategoryController extends Controller
         return response()->json(['statusCode' => 201,'data' => $categories]);
     }
 
-    public function updateOrCreate(Request $request)
+    public function new(Request $request)
     {
-        Category::updateOrCreate($request->all());
+        $category = Category::firstOrCreate ($request->all());
+
         return response()->json([
             'statusCode' => 201,
             'message' => 'Update category correctly',
+            'data'=> ['id'=>$category->id, 'name'=>$category->name, 'commerce_id'=>(int)$category->commerce_id],
         ]);
     }
 }

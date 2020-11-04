@@ -21,22 +21,24 @@ class UserController extends Controller
         $realImage = base64_decode($request->image);
         $date = Carbon::now()->format('Y-m-d');
 
-        if($request->commerce_id == null && $request->description != 'RIF')
-            $commerce_id = 0;
-        else
+        if($request->commerce_id == '0'){
+            $commerce = Commerce::create(['user_id' => $user->id]);
+            $commerce_id = $commerce->id;
+            $commerce->save();
+        }else{
             $commerce_id = $request->commerce_id;
+        }
+
         
-        if($request->description == 'Profile')
-            $url = '/Users/'.$user->id.'/storage/'.$request->description.'.jpg';
-        else if($request->commerce_id != 0 && $request->description == 'RIF')
-            $url = '/Users/'.$user->id.'/storage/commercer/commerce_'.$request->commerce_id.'-'.$request->description.'.jpg';
+        if($request->description == 'Profile' || $request->description == 'RIF')
+            $url = '/Users/'.$user->id.'/storage/commercer/commerce_'.$commerce_id.'-'.$request->description.'.jpg';
         else
             $url = '/Users/'.$user->id.'/storage/'.$date.'_'.$request->description.'.jpg';
 
 
         \Storage::disk('public')->put($url,  $realImage);
         
-        Picture::updateOrCreate(['user_id'=>$request->user()->id, 'description'=> $request->description, 'url' => '/storage'.$url, 'commerce_id' => $request->commerce_id]);
+        Picture::updateOrCreate(['user_id'=>$user->id, 'description'=> $request->description, 'commerce_id' => $commerce_id], ['url' => '/storage'.$url]);
 
         return response()->json([
             'statusCode' => 201,
