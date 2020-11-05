@@ -12,7 +12,7 @@ class ProductController extends Controller
     public function show(Request $request)
     {
         $products = Product::where('user_id', $request->user()->id)
-                            ->where('commerce_id', $request->commerce_id)->get();
+                            ->where('commerce_id', $request->commerce_id)->orderBy('name', 'asc')->get();
         return response()->json(['statusCode' => 201,'data' => $products]);
     }
 
@@ -34,14 +34,14 @@ class ProductController extends Controller
         Product::create([
             "user_id"       => $user->id,
             "commerce_id"   => $request->commerce_id,
-            "url"           => $url,
+            "url"           => '/storage'+$url,
             "name"          => $request->name,
             "price"         => $price,
             "coin"          => $request->coin,
             "description"   => $request->description,
             "categories"    => $request->categories,
             "publish"       => $request->publish,
-            "quantity"      => $request->quantity,
+            "stock"      => $request->stock,
             "postPurchase"  => $request->postPurchase,
         ]);
 
