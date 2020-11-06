@@ -38,5 +38,6 @@ Route::group(['prefix' => 'auth'], function () {
 
         Route::post('showProducts', 'ProductController@show');
         Route::post('newProducts', 'ProductController@new');
+        Route::post('updateProducts', 'ProductController@update');
     });
 });
