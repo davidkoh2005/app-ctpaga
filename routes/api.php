@@ -27,11 +27,14 @@ Route::group(['prefix' => 'auth'], function () {
     Route::group(['middleware' => 'auth:api'], function() {
         Route::post('logout', 'AuthController@logout');
         Route::post('user', 'AuthController@user');
+        
         Route::post('updateUserImg', 'UserController@updateImg');
         Route::post('updateUser', 'UserController@updateUser');
+
         Route::get('updateBankUser', 'UserController@updateBankUser');
+
+        Route::post('createCommerce', 'UserController@createCommerce');
         Route::post('updateCommerceUser', 'UserController@updateCommerceUser');
-        Route::get('test', 'UserController@testJson');
 
         Route::post('showCategories', 'CategoryController@show');
         Route::post('newCategories', 'CategoryController@new');
@@ -39,5 +42,15 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('showProducts', 'ProductController@show');
         Route::post('newProducts', 'ProductController@new');
         Route::post('updateProducts', 'ProductController@update');
+
+        Route::post('showServices', 'ServiceController@show');
+        Route::post('newServices', 'ServiceController@new');
+        Route::post('updateServices', 'ServiceController@update');
+
+
+
+
+
+        Route::get('test', 'UserController@testJson');
     });
 });

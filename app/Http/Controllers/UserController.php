@@ -68,9 +68,18 @@ class UserController extends Controller
         ]);
     }
 
+    public function createCommerce(Request $request)
+    {
+        Commerce::create(['user_id'=>$request->user()->id, 'name'=>$request->name]);
+
+        return response()->json([
+            'statusCode' => 201,
+            'message' => 'Update data correctly'
+        ]);
+    }
+
     public function updateCommerceUser(Request $request)
     {   
-        $user = $request->user();
         Commerce::updateOrCreate(['user_id'=>$request->user()->id, 'rif'=>$request->rif], $request->all());
 
         return response()->json([
