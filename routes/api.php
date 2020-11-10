@@ -42,11 +42,12 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('showProducts', 'ProductController@show');
         Route::post('newProducts', 'ProductController@new');
         Route::post('updateProducts', 'ProductController@update');
+        Route::post('deleteProducts', 'ProductController@delete');
 
         Route::post('showServices', 'ServiceController@show');
         Route::post('newServices', 'ServiceController@new');
         Route::post('updateServices', 'ServiceController@update');
-
+        Route::post('deleteServices', 'ServiceController@delete');
 
 
 

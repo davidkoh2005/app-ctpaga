@@ -23,10 +23,15 @@ class ProductController extends Controller
         $name = str_replace(" ","_",$request->name);
         $url = '/Users/'.$user->id.'/storage/products/commerce_'.$request->commerce_id.'-'.$name.'.jpg';
 
-        if ($request->coin == 0)
+        if ($request->coin == 0){
             $price = str_replace("$ ","",$request->price);
-        else
+            $price = str_replace(".","",$request->price);
+            $price = str_replace(",",".",$request->price);
+        }else{
             $price = str_replace("Bs ","",$request->price);
+            $price = str_replace(".","",$request->price);
+            $price = str_replace(",",".",$request->price);
+        }
 
      
         \Storage::disk('public')->put($url,  $realImage);
@@ -46,7 +51,7 @@ class ProductController extends Controller
 
         return response()->json([
             'statusCode' => 201,
-            'message' => 'Update category correctly',
+            'message' => 'Create product correctly',
         ]);
     }
 
@@ -65,10 +70,15 @@ class ProductController extends Controller
             $url = $request->url;
         }
 
-        if ($request->coin == 0)
+        if ($request->coin == 0){
             $price = str_replace("$ ","",$request->price);
-        else
+            $price = str_replace(".","",$request->price);
+            $price = str_replace(",",".",$request->price);
+        }else{
             $price = str_replace("Bs ","",$request->price);
+            $price = str_replace(".","",$request->price);
+            $price = str_replace(",",".",$request->price);
+        }
 
         
         Product::find($request->id)->update([
@@ -85,7 +95,16 @@ class ProductController extends Controller
 
         return response()->json([
             'statusCode' => 201,
-            'message' => 'Update category correctly',
+            'message' => 'Update product correctly',
+        ]);
+    }
+
+    public function delete(Request $request)
+    {
+        Product::destroy($request->id);
+        return response()->json([
+            'statusCode' => 201,
+            'message' => 'Delete product correctly',
         ]);
     }
 }

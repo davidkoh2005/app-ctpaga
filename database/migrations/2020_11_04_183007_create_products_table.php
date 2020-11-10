@@ -27,7 +27,7 @@ class CreateProductsTable extends Migration
             $table->string('categories')->nullable();
             $table->boolean('publish');
             $table->integer('stock');
-            $table->boolean('postPurchase');
+            $table->string('postPurchase')->nullable();
             $table->timestamps();
         });
     }

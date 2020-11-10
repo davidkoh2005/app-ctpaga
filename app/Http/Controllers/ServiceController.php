@@ -23,10 +23,15 @@ class ServiceController extends Controller
         $name = str_replace(" ","_",$request->name);
         $url = '/Users/'.$user->id.'/storage/services/commerce_'.$request->commerce_id.'-'.$name.'.jpg';
 
-        if ($request->coin == 0)
+        if ($request->coin == 0){
             $price = str_replace("$ ","",$request->price);
-        else
+            $price = str_replace(".","",$request->price);
+            $price = str_replace(",",".",$request->price);
+        }else{
             $price = str_replace("Bs ","",$request->price);
+            $price = str_replace(".","",$request->price);
+            $price = str_replace(",",".",$request->price);
+        }
 
      
         \Storage::disk('public')->put($url,  $realImage);
@@ -45,7 +50,7 @@ class ServiceController extends Controller
 
         return response()->json([
             'statusCode' => 201,
-            'message' => 'Update category correctly',
+            'message' => 'Create service correctly',
         ]);
     }
 
@@ -64,10 +69,15 @@ class ServiceController extends Controller
             $url = $request->url;
         }
 
-        if ($request->coin == 0)
+        if ($request->coin == 0){
             $price = str_replace("$ ","",$request->price);
-        else
+            $price = str_replace(".","",$request->price);
+            $price = str_replace(",",".",$request->price);
+        }else{
             $price = str_replace("Bs ","",$request->price);
+            $price = str_replace(".","",$request->price);
+            $price = str_replace(",",".",$request->price);
+        }
 
         
         Service::find($request->id)->update([
@@ -83,7 +93,16 @@ class ServiceController extends Controller
 
         return response()->json([
             'statusCode' => 201,
-            'message' => 'Update category correctly',
+            'message' => 'Update service correctly',
+        ]);
+    }
+
+    public function delete(Request $request)
+    {
+        Service::destroy($request->id);
+        return response()->json([
+            'statusCode' => 201,
+            'message' => 'delete service correctly',
         ]);
     }
 }
