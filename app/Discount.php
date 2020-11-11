@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Shipping extends Model
+class Discount extends Model
 {
     protected $fillable = [
-        'id', 'user_id', 'description', 'price', 'coin',
+        'id', 'user_id', 'code', 'percentage',
     ]; 
 
     public function user()

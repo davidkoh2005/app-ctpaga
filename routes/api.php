@@ -49,6 +49,15 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('updateServices', 'ServiceController@update');
         Route::post('deleteServices', 'ServiceController@delete');
 
+        Route::post('showShipping', 'ShippingController@show');
+        Route::post('newShipping', 'ShippingController@new');
+        Route::post('updateShipping', 'ShippingController@update');
+        Route::post('deleteShipping', 'ShippingController@delete');
+
+        Route::post('showDiscounts', 'DiscountController@show');
+        Route::post('newDiscounts', 'DiscountController@new');
+        Route::post('updateDiscounts', 'DiscountController@update');
+        Route::post('deleteDiscounts', 'DiscountController@delete');
 
 
 

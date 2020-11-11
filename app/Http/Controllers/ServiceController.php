@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Service;
 use App\User;
@@ -23,16 +24,7 @@ class ServiceController extends Controller
         $name = str_replace(" ","_",$request->name);
         $url = '/Users/'.$user->id.'/storage/services/commerce_'.$request->commerce_id.'-'.$name.'.jpg';
 
-        if ($request->coin == 0){
-            $price = str_replace("$ ","",$request->price);
-            $price = str_replace(".","",$request->price);
-            $price = str_replace(",",".",$request->price);
-        }else{
-            $price = str_replace("Bs ","",$request->price);
-            $price = str_replace(".","",$request->price);
-            $price = str_replace(",",".",$request->price);
-        }
-
+        $price = app('App\Http\Controllers\Controller')->getPrice($request->price);
      
         \Storage::disk('public')->put($url,  $realImage);
         Service::create([
@@ -69,16 +61,7 @@ class ServiceController extends Controller
             $url = $request->url;
         }
 
-        if ($request->coin == 0){
-            $price = str_replace("$ ","",$request->price);
-            $price = str_replace(".","",$request->price);
-            $price = str_replace(",",".",$request->price);
-        }else{
-            $price = str_replace("Bs ","",$request->price);
-            $price = str_replace(".","",$request->price);
-            $price = str_replace(",",".",$request->price);
-        }
-
+        $price = app('App\Http\Controllers\Controller')->getPrice($request->price);
         
         Service::find($request->id)->update([
             "url"           => $url,

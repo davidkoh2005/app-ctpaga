@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Shipping;
 use App\User;
@@ -10,17 +11,52 @@ class ShippingController extends Controller
 {
     public function show(Request $request)
     {
-        $shipping = Shipping::where('commerce_id', $request ->commerce_id)->get();
-        return response()->json(['statusCode' => 201,'data' => $categories]);
+        $user = $request->user();
+        $shipping = Shipping::where('user_id', $user->id)->get();
+        return response()->json(['statusCode' => 201,'data' => $shipping]);
     }
 
     public function new(Request $request)
     {
-        $shipping = Shipping::firstOrCreate ($request->all());
+        $user = $request->user();
+
+        $price = app('App\Http\Controllers\Controller')->getPrice($request->price);
+
+        Shipping::create([
+            "user_id"       => $user->id,
+            "description"   => $request->description,
+            "price"         => $price,
+            "coin"          => $request->coin,
+        ]);
 
         return response()->json([
             'statusCode' => 201,
-            'message' => 'Update Shipping correctly',
+            'message' => 'Create shipping correctly',
+        ]);
+    }
+
+    public function update(Request $request)
+    {
+        $price = app('App\Http\Controllers\Controller')->getPrice($request->price);
+
+        Shipping::find($request->id)->update([
+            "price"         => $price,
+            "coin"          => $request->coin,
+            "description"   => $request->description,
+        ]);
+
+        return response()->json([
+            'statusCode' => 201,
+            'message' => 'Update shipping correctly',
+        ]);
+    }
+
+    public function delete(Request $request)
+    {
+        Shipping::destroy($request->id);
+        return response()->json([
+            'statusCode' => 201,
+            'message' => 'Delete shipping correctly',
         ]);
     }
 }
