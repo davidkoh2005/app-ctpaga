@@ -73,4 +73,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Discount');
     }
+
+    public function rate()
+    {
+        return $this->hasMany('App\Rate');
+    }
 }

@@ -20,7 +20,7 @@ class CategoryController extends Controller
 
         return response()->json([
             'statusCode' => 201,
-            'message' => 'Update category correctly',
+            'message' => 'Create category correctly',
             'data'=> ['id'=>$category->id, 'name'=>$category->name, 'commerce_id'=>(int)$category->commerce_id], "type"=>$category->type,
         ]);
     }

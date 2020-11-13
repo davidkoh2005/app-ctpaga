@@ -59,7 +59,8 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('updateDiscounts', 'DiscountController@update');
         Route::post('deleteDiscounts', 'DiscountController@delete');
 
-
+        Route::post('showRates', 'RateController@show');
+        Route::post('newRates', 'RateController@new');
 
         Route::get('test', 'UserController@testJson');
     });
