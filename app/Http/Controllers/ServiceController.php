@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Service;
 use App\User;
 
@@ -22,7 +23,7 @@ class ServiceController extends Controller
         $user = $request->user();
         $realImage = base64_decode($request->image);
         $name = str_replace(" ","_",$request->name);
-        $url = '/Users/'.$user->id.'/storage/services/commerce_'.$request->commerce_id.'-'.$name.'.jpg';
+        $url = '/Users/'.$user->id.'/storage/services/commerce_'.$request->commerce_id.'-'.$name.'-'.Carbon::now()->format('d-m-Y_H-i-s').'.jpg';
 
         $price = app('App\Http\Controllers\Controller')->getPrice($request->price);
      
@@ -53,7 +54,7 @@ class ServiceController extends Controller
         if ($request->url == null) {
             $realImage = base64_decode($request->image);
             $name = str_replace(" ","_",$request->name);
-            $url = '/Users/'.$user->id.'/storage/services/commerce_'.$request->commerce_id.'-'.$name.'.jpg';
+            $url = '/Users/'.$user->id.'/storage/services/commerce_'.$request->commerce_id.'-'.$name.'-'.Carbon::now()->format('d-m-Y_H-i-s').'.jpg';
             Storage::delete($request->url);
             \Storage::disk('public')->put($url,  $realImage);
             $url = '/storage'.$url;
@@ -82,6 +83,8 @@ class ServiceController extends Controller
 
     public function delete(Request $request)
     {
+        $url = substr($request->url, 8);
+        Storage::delete("/public".$url);
         Service::destroy($request->id);
         return response()->json([
             'statusCode' => 201,
