@@ -80,7 +80,15 @@ class UserController extends Controller
 
     public function updateCommerceUser(Request $request)
     {   
-        Commerce::updateOrCreate(['user_id'=>$request->user()->id, 'rif'=>$request->rif], $request->all());
+        if($request->commerce_id == '0'){
+            $commerce = Commerce::create(['user_id' => $request->user()->id]);
+            $commerce_id = $commerce->id;
+            $commerce->save();
+        }else{
+            $commerce_id = $request->commerce_id;
+        }
+
+        Commerce::updateOrCreate(['user_id'=>$request->user()->id, 'commerce_id'=>$request->comerce_id], $request->all());
 
         return response()->json([
             'statusCode' => 201,
