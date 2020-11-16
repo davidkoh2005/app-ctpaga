@@ -88,7 +88,12 @@ class UserController extends Controller
             $commerce_id = $request->commerce_id;
         }
 
-        Commerce::updateOrCreate(['user_id'=>$request->user()->id, 'commerce_id'=>$request->comerce_id], $request->all());
+        Commerce::find($request->commerce_id)->update([
+            "rif" => $request->rif,
+            "name" => $request->name,
+            "address" => $request->address,
+            "phone" => $request->phone,
+        ]);
 
         return response()->json([
             'statusCode' => 201,
