@@ -38,6 +38,8 @@ class AuthController extends Controller
         $token = $tokenResult->token;
         $token->expires_at = Carbon::now()->addYear(5);
         $token->save();
+
+        Commerce::create(['user_id'=>$user->id]);
         
         return response()->json([
             'statusCode' => 201,
