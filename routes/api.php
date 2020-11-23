@@ -23,6 +23,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'AuthController@login');
     Route::post('signup', 'AuthController@signup');
     Route::post('version', 'AuthController@VersionApp');
+    Route::post('verifyUrl', 'UserController@verifyUrlUser');
   
     Route::group(['middleware' => 'auth:api'], function() {
         Route::post('logout', 'AuthController@logout');
@@ -62,6 +63,6 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('showRates', 'RateController@show');
         Route::post('newRates', 'RateController@new');
 
-        Route::get('test', 'UserController@testJson');
+        Route::post('newSales', 'SaleController@new');
     });
 });

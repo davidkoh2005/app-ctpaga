@@ -70,7 +70,7 @@ class UserController extends Controller
 
     public function createCommerce(Request $request)
     {
-        Commerce::create(['user_id'=>$request->user()->id, 'name'=>$request->name]);
+        Commerce::create(['user_id'=>$request->user()->id, 'name'=>$request->name, 'userUrl'=>$request->userUrl]);
 
         return response()->json([
             'statusCode' => 201,
@@ -89,10 +89,11 @@ class UserController extends Controller
         }
 
         Commerce::find($request->commerce_id)->update([
-            "rif" => $request->rif,
-            "name" => $request->name,
-            "address" => $request->address,
-            "phone" => $request->phone,
+            "rif"       => $request->rif,
+            "name"      => $request->name,
+            "address"   => $request->address,
+            "phone"     => $request->phone,
+            "userUrl"   => $request->userUrl,
         ]);
 
         return response()->json([
@@ -101,8 +102,18 @@ class UserController extends Controller
         ]);
     }
 
-    public function testJson(Request $request)
+    public function verifyUrlUser(Request $request)
     {   
-        return response()->json($request->all());
+        $status = Commerce::where("userUrl", $request->userUrl)->first();
+        if(!$status){
+            return response()->json([
+                'statusCode' => 201,
+                'id' => $status->id,
+            ]);
+        }else{
+            return response()->json([
+                'statusCode' => 401,
+            ]);
+        }
     }
 }
