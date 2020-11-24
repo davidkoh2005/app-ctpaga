@@ -9,24 +9,30 @@ use App\Sale;
 
 class SaleController extends Controller
 {
+    public function index(userUrl,codeUrl)
+    {
+        return view('multi-step-form');
+    }
+
     public function new(Request $request)
     {
         $user = $request->user();
         $code = $this->randomCode();
 
         foreach($request->sales as $sale){
-            return response()->json($sale['data']['name']);
-            $price = app('App\Http\Controllers\Controller')->getPrice($sale['data']['price']);
+            $price = app('App\Http\Controllers\Controller')->getPriceSales($sale['data']['price']);
             
             Sale::create([
                 "user_id"       => $user->id,
                 "commerce_id"   => (int)$request->commerce_id,
                 "codeUrl"       => $code,
+                "type"          => $sale['type'],
                 "name"          => $sale['data']['name'],
                 "price"         => $price,
-                "type"          => $sale['type'],
+                "coin"          => $request->coin,
                 "quantity"      => $sale['quantity'],
-                "expires_at"    => Carbon::now()->format('Y-m-d 23:59')
+                "rate"          => $request->rate,
+                "expires_at"    => Carbon::now()->format('Y-m-d 23:59:59'),
             ]);
         }
 

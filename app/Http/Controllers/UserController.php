@@ -108,7 +108,6 @@ class UserController extends Controller
         if(!$status){
             return response()->json([
                 'statusCode' => 201,
-                'id' => $status->id,
             ]);
         }else{
             return response()->json([

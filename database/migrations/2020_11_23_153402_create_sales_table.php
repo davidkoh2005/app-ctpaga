@@ -22,9 +22,11 @@ class CreateSalesTable extends Migration
             $table->string("codeUrl",10);
             $table->string("name",50);
             $table->string("price");
+            $table->integer("coin");
             $table->integer("type");
             $table->integer("quantity");
-            $table->integer("statusSale")->default(1); //0 cancelado , 1 sin pagar, 3 pagado
+            $table->integer("statusSale")->default(0); //0 sin pagar, 1 pagado
+            $table->string("rate",50);
             $table->timestamps();
             $table->timestamp('expires_at');
         });

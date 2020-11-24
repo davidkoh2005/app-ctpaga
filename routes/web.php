@@ -16,4 +16,4 @@ use Illuminate\Support\Facades\Route;
     return view('welcome');
 }); 
 
-Route::get('/phpinfo', function() { phpinfo(); }); 
+Route::get('/{userUrl}/{codeUrl}', 'SaleController@index');
