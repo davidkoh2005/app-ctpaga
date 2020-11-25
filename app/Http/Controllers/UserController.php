@@ -29,13 +29,15 @@ class UserController extends Controller
             $commerce_id = $request->commerce_id;
         }
 
-        
-        if($request->description == 'Profile' || $request->description == 'RIF')
+        if($request->description == 'Profile')
+            $url = '/Users/'.$user->id.'/storage/commercer/commerce_'.$commerce_id.'-'.$request->description.'-'.Carbon::now()->format('d-m-Y_H-i-s').'.jpg';
+        elseif($request->description == 'RIF')
             $url = '/Users/'.$user->id.'/storage/commercer/commerce_'.$commerce_id.'-'.$request->description.'.jpg';
         else
             $url = '/Users/'.$user->id.'/storage/'.$date.'_'.$request->description.'.jpg';
-
-
+        
+        $urlPrevius = substr($request->urlPrevious,8);
+        \Storage::disk('public')->delete($urlPrevius);
         \Storage::disk('public')->put($url,  $realImage);
         
         Picture::updateOrCreate(['user_id'=>$user->id, 'description'=> $request->description, 'commerce_id' => $commerce_id], ['url' => '/storage'.$url]);

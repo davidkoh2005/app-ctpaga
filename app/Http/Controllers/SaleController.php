@@ -6,12 +6,32 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\User;
 use App\Sale;
+use App\Picture;
+use App\Commerce;
 
 class SaleController extends Controller
 {
-    public function index(userUrl,codeUrl)
+    public function index($userUrl, $codeUrl)
     {
-        return view('multi-step-form');
+        $sales = Sale::where('codeUrl',$codeUrl)->get();
+        $commerce = Commerce::find($sales[0]->commerce_id)->first();
+        $picture = Picture::where('commerce_id', $commerce->id)->first();
+        $rate = $sales[0]->rate;
+        $coinClient = $sales[0]->coinClient;
+        $total = 0.0;
+
+        foreach($sales as $sale){
+            $price = floatval($sale->price) * $sale->quantity;
+
+            if($sale->coin == 0 && $sale->coinClient==1)
+                $total+= $price * $rate;
+            else if($sale->coin == 1 && $sale->coinClient==0)
+                $total+= $price / $rate;
+            else
+                $total+= $price;
+        }
+
+        return view('multi-step-form', compact('commerce','picture', 'sales', 'rate', 'coinClient', 'total'));
     }
 
     public function new(Request $request)
@@ -29,7 +49,9 @@ class SaleController extends Controller
                 "type"          => $sale['type'],
                 "name"          => $sale['data']['name'],
                 "price"         => $price,
-                "coin"          => $request->coin,
+                "nameClient"    => $request->nameClient,
+                "coinClient"    => $request->coin,
+                "coin"          => $sale['data']['coin'],
                 "quantity"      => $sale['quantity'],
                 "rate"          => $request->rate,
                 "expires_at"    => Carbon::now()->format('Y-m-d 23:59:59'),

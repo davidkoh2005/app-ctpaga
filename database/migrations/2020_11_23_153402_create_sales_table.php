@@ -22,6 +22,8 @@ class CreateSalesTable extends Migration
             $table->string("codeUrl",10);
             $table->string("name",50);
             $table->string("price");
+            $table->string("nameClient",50);
+            $table->integer("coinClient");
             $table->integer("coin");
             $table->integer("type");
             $table->integer("quantity");

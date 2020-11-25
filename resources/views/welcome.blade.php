@@ -7,7 +7,9 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <title>ctpaga</title>
+
         @include('library')
+        <link rel="stylesheet" type="text/css" href="../css/style.css">
     </head>
     <body>
 
@@ -37,34 +39,12 @@
             </div>
         </section>
 
-        <section class="primary-bg">
+        <section class="primary-bg initialText">
             <div class="container center">
                 <div class="row ">
                     <div class="col-md-12 col-sm-12 col-12">
                         <h3> Inicia el negocio de tus sueños en segundos </h3>
                         <h6> ¡Manéjalo desde tu celular y sin complicaciones! </h6>
-
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="secundary-bg">
-            <div class="container center">
-                <div class="row ">
-                    <div class="col-md-6 col-sm-12 col-12">
-                        Regístrate en instantes
-                        Empieza a vender en menos de 5 minutos:
-
-                        1 Descarga el app ⬇️
-                        2 Rellena los datos de la empresa y bancaria ✍️
-                        3 Agrega tus productos 🛍
-                        4 Recibe pagos 🤑
-                    </div>
-                    <div class="col-md-6 col-sm-12 col-12">
-                        <div class="present_img">
-                            <img src="images/mobile.png" alt="image">
-                        </div>
                     </div>
                 </div>
             </div>
@@ -74,19 +54,53 @@
             <div class="container center">
                 <div class="row ">
                     <div class="col-md-6 col-sm-12 col-12">
-                    Vende por redes sociales y WhatsApp
-                    Crea y comparte enlaces de pago con tus clientes por el medio donde te comunicas con ellos:
+                        <div class="present_img">
+                            <img class ="perfil" src="images/perfil.png" alt="image">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-12">
+                        <h3>Regístrate en instantes</h3>
+                        <h5>Empieza a vender en menos de 5 minutos:</h5>
 
-                    WhatsApp
-                    Instagram
-                    Twitter
-                    Facebook
-                    Correo Electrónico
-                    SMS
+                        <ul class="ulDesing">
+                            <li> Descarga la app ⬇️ </li>
+                            <li> Rellena los datos de la empresa y bancaria ✍️ </li>
+                            <li> Agrega tus productos 🛍️ </li>
+                            <li> Recibe pagos 💰</li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="secondary-bg">
+            <div class="container center">
+                <div class="row ">
+                    <div class="col-md-6 col-sm-12 col-12">
+                        <h3>Vende por redes sociales</h3>
+                        <h5>Crea y comparte enlaces de pago con tus clientes por el medio donde te comunicas con ellos:</h5>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12 col-12">
+                                <ul class="ulDesingRedes">
+                                    <li> WhatsApp </li>
+                                    <li> Instagram </li>
+                                    <li> Twitter </li>
+                                    <li> Facebook </li>
+                                    <li> Electrónico </li>
+                                    <li> SMS </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-12">
+                                <div class="present_img">
+                                    <img class="redes" src="images/redes.png" alt="image">
+                                </div>
+                            </div>  
+                        </div>
                     </div>
                     <div class="col-md-6 col-sm-12 col-12">
                         <div class="present_img">
-                            <img src="images/mobile.png" alt="image">
+                            <img class="ws" src="images/ws.png" alt="image">
                         </div>
                     </div>
                 </div>
