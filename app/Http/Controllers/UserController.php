@@ -36,8 +36,10 @@ class UserController extends Controller
         else
             $url = '/Users/'.$user->id.'/storage/'.$date.'_'.$request->description.'.jpg';
         
-        $urlPrevius = substr($request->urlPrevious,8);
-        \Storage::disk('public')->delete($urlPrevius);
+        if($request->urlPrevious != ''){
+            $urlPrevius = substr($request->urlPrevious,8);
+            \Storage::disk('public')->delete($urlPrevius);
+        }
         \Storage::disk('public')->put($url,  $realImage);
         
         Picture::updateOrCreate(['user_id'=>$user->id, 'description'=> $request->description, 'commerce_id' => $commerce_id], ['url' => '/storage'.$url]);

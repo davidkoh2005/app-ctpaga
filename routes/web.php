@@ -14,10 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 Route::get('/', function () {
     return view('welcome');
-}); 
+})->name('welcome'); 
 
 Route::fallback(function () {
-    return view('welcome');
+    return redirect()->route('welcome');
 });
 
 Route::get('/{userUrl}/{codeUrl}', 'SaleController@index');

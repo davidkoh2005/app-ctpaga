@@ -8,14 +8,23 @@ use App\User;
 use App\Sale;
 use App\Picture;
 use App\Commerce;
+use App\Shipping;
 
 class SaleController extends Controller
 {
     public function index($userUrl, $codeUrl)
     {
         $sales = Sale::where('codeUrl',$codeUrl)->get();
-        $commerce = Commerce::find($sales[0]->commerce_id)->first();
+        $commerce = Commerce::where('userUrl',$userUrl)->first();
+
+        if(count($sales) == 0|| !$commerce)
+            return redirect()->route('welcome');
+        else if($sales[0]->commerce_id != $commerce->id)
+            return redirect()->route('welcome');
+
         $picture = Picture::where('commerce_id', $commerce->id)->first();
+        $shippings = Shipping::where('user_id', $commerce->user_id)->get();
+        
         $rate = $sales[0]->rate;
         $coinClient = $sales[0]->coinClient;
         $total = 0.0;
@@ -31,7 +40,7 @@ class SaleController extends Controller
                 $total+= $price;
         }
 
-        return view('multi-step-form', compact('commerce','picture', 'sales', 'rate', 'coinClient', 'total'));
+        return view('multi-step-form', compact('commerce','picture', 'sales', 'rate', 'coinClient', 'total', 'shippings'));
     }
 
     public function new(Request $request)

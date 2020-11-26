@@ -1,11 +1,23 @@
+body {
+    background-color: #e6e6e6;
+}
+
 section{
     padding-top: 100px;
 }
 
-.form-section{
+.form-section.center{
     padding-left: 15px;
+    padding-right: 15px;
     display: none;
     text-align: center;
+}
+
+.form-section{
+    padding-left: 15px;
+    padding-right: 15px;
+    display: none;
+    text-align: justify;
 }
 
 .form-section.current{
@@ -13,12 +25,11 @@ section{
 }
 
 .card-header {
-    background-color: #00cc5f !important;
+    background-color: white !important;
 }
 
-.btn-info, .btn-btn-success{
-    margin-top: 10px;
-    background-color: #00cc5f !important;
+.form-sales {
+    padding-top: 10px;
 }
 
 .parsley-error-list{
@@ -38,12 +49,13 @@ span#total{
     font-size:40px;
 }
 
-div.sales{
+div.sales, div.shippings {
     border-radius: 60px;
-    padding: 20px;
+    padding: 15px;
     border: 2px solid #00cc5f;
     background-color: #e6e6e6;
-    color:black
+    color:black;
+    margin-bottom: 20px;
 }
 
 div.quantity{
@@ -52,11 +64,65 @@ div.quantity{
     padding: 5px;
 }
 
-div.name{
-    padding: 5px;
+div.shippings:hover{
+    box-shadow: 0 0 0 10px #e6e6e6;
+    transition: .5s ease;
+}
+
+div.name, div.description, div.description-shippings{
+    padding-top: 5px;
+    padding-left: 20px;
+    text-align: left;
+}
+
+div.description-shippings{
+    padding-left: 0px;
 }
 
 div.price{
     padding: 5px;
+    text-align: right;
+}
+
+
+.form-navigation.bottom {
+    padding-top: 20px;
+}
+
+.btn-bottom { 
+    width: 100%;
+    border-radius: 60px;
+    font-size: large;
+    background-color: #00cc5f !important;
+    color: white;
+}
+
+
+.btn-bottom:hover {
+    background-color: white !important;
+    border: 2px solid #00cc5f;
+    color: #00cc5f;
+}
+
+.bi-chevron-left{
+    color: #00cc5f;
+}
+
+.parsley-errors-list {
+    color: red;
+}
+
+.bi-check-circle-fill {
+    color: #00cc5f;
+    visibility: hidden;
+}
+
+.bi-check-circle-fill.checked{
+    visibility: visible;
+}
+
+.radio-shippings {
+    width: 0;
+    height: 0;
 }
 

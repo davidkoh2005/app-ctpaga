@@ -19,8 +19,9 @@ class ShippingController extends Controller
     public function new(Request $request)
     {
         $user = $request->user();
-
-        $price = app('App\Http\Controllers\Controller')->getPrice($request->price);
+        $price = $request->price;
+        if($price != "FREE")
+            $price = app('App\Http\Controllers\Controller')->getPriceShipping($request->price);
 
         Shipping::create([
             "user_id"       => $user->id,
@@ -37,7 +38,7 @@ class ShippingController extends Controller
 
     public function update(Request $request)
     {
-        $price = app('App\Http\Controllers\Controller')->getPrice($request->price);
+        $price = app('App\Http\Controllers\Controller')->getPriceShipping($request->price);
 
         Shipping::find($request->id)->update([
             "price"         => $price,

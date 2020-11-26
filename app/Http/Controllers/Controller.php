@@ -29,4 +29,14 @@ class Controller extends BaseController
         
         return $price;
     }
+
+    public function getPriceShipping($price)
+    {
+        $price = str_replace("$ ","",$price);
+        $price = str_replace("Bs ","",$price);
+        $price = intVal($price) / 100;
+        $price = floatval($price);
+        
+        return "$price";
+    }
 }
