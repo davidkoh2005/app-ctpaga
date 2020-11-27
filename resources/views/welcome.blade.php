@@ -32,7 +32,7 @@
                     
                     <div class="col-md-6 col-sm-12 col-12">
                         <div class="present_img">
-                            <img src="images/mobile.png" alt="image">
+                            <img src="../images/mobile.png" alt="image">
                         </div>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                 <div class="row ">
                     <div class="col-md-6 col-sm-12 col-12">
                         <div class="present_img">
-                            <img class ="perfil" src="images/perfil.png" alt="image">
+                            <img class ="perfil" src="../images/perfil.png" alt="image">
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-12 col-12">
@@ -93,14 +93,14 @@
                             </div>
                             <div class="col-md-6 col-sm-12 col-12">
                                 <div class="present_img">
-                                    <img class="redes" src="images/redes.png" alt="image">
+                                    <img class="redes" src="../images/redes.png" alt="image">
                                 </div>
                             </div>  
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-12 col-12">
                         <div class="present_img">
-                            <img class="ws" src="images/ws.png" alt="image">
+                            <img class="ws" src="../images/ws.png" alt="image">
                         </div>
                     </div>
                 </div>
@@ -113,7 +113,7 @@
                 <div class="row justify-content-md-center">
                 <div class="col-md-6 col-sm-12 col-12">
                     <div class="workng_img">
-                        <img class="mobile2" src="images/mobile2.png" alt="image">
+                        <img class="mobile2" src="../images/mobile2.png" alt="image">
                     </div>
                 </div>
                 
