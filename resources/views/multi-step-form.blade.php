@@ -42,9 +42,9 @@
                                     <div class="row">&nbsp;</div>
                                     @foreach ($sales as $sale)
                                         <div class="row sales">
-                                            <div class="quantity col-md-1 col-sm-1 col-1">{{$sale->quantity}}</div>
-                                            <div class="name col">{{$sale->name}}</div>
-                                            <div class="price col"><script> document.write(showPrice({{$sale->price}}, {{$rate}}, {{$sale->coin}}, {{$coinClient}}))</script></div>
+                                            <div class="quantity col-md-2 col-sm-2 col-3"><div id="desingQuantity">{{$sale->quantity}}</div></div>
+                                            <div class="name col">{{$sale->name}} - <script> document.write(showPrice("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}))</script></div>
+                                            <div class="total col"><script> document.write(showTotal("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}, {{$sale->quantity}}))</script></div>
                                         </div>
                                     @endforeach
                                 </div>
@@ -55,27 +55,60 @@
                                 </div>
 
                                 @if (count($shippings)!=0)
+                                <script> statusShipping = true;</script>
                                 <div class="form-section">
                                     @foreach ($shippings as $shipping)
                                         <div class="row shippings">
-                                            <div class="col-md-2 col-sm-2 col-2">
-                                                <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-check-circle-fill" fill="currentColor">
-                                                    <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                                                </svg>
+                                            <div class="col-md-2 col-sm-2 col-2" id="iconChecked">
                                                 <input type="radio" class="radio-shippings" name="shippings" id="shippings">
                                             </div>
                                             <div class="description-shippings col">{{$shipping->description}}</div>
-                                            <div class="price col">@if($shipping->price == "FREE") Gratis @else <script> document.write(showPrice({{$shipping->price}}, {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script> @endif</div>
+                                            <div class="shipping-price col">@if($shipping->price == "FREE") Gratis @else <script> document.write(showPrice({{$shipping->price}}, {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script> @endif</div>
                                         </div>
                                     @endforeach
                                 </div>
                                 @endif
 
+                                @if (count($shippings)!=0)
                                 <div class="form-section">
-                                    <label for="password">Password:</label>
-                                    <input type="text" name="password" class="form-control" required />
+                                    <p> Ingresa la dirección de envío:</p>
+                                    <label for="name">NOMBRE:</label>
+                                    <input type="text" name="name" class="form-control" placeholder="Joe Doe" required />
+                                    <label for="number">NUMERO DE CELULAR:</label>
+                                    <input type="number" name="number" class="form-control" placeholder="04121234567" required />
+                                    <label for="address">DIRECCÍON:</label>
+                                    <textarea class="form-control" name="address" row="3" placeholder="Av. Principal los dos caminos" required></textarea>
+                                    <label for="details">DETALLE ADICIONALES (OPCIONAL)</label>
+                                    <textarea class="form-control" name="details" row="3" placeholder="Deja en la recepción"></textarea>
                                 </div>
-                                
+                                @endif
+
+                                <div class= "form-section">
+                                    <p>Ingresa la información de tu tarjeta de crédito o debito (Visa o Master Card):</p>
+                                    <div class="row center">
+                                        <div class="col">
+                                            <img src="../images/visa.png" class="img-fluid" width="150px" height="150px">
+                                        </div>
+                                        <div class="col">
+                                        <img src="../images/MasterCard.png" class="img-fluid" width="100px" height="100px">
+                                        </div>
+                                    </div>
+                                    <label for="nameCard">NOMBRE DE LA TARJETA:</label>
+                                    <input type="text" name="nameCard" class="form-control" placeholder="Joe Doe" required />
+                                    <label for="numberCard">NUMERO DE LA TARJETA:</label>
+                                    <input type="number" name="numberCard" class="form-control" placeholder="4012888888881881" required />
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="dateCard">FECHA DE EXPIRACIÓN:</label>
+                                            <input type="number" name="dateCard" class="form-control" placeholder="MM/AA" required />
+                                        </div>
+                                        <div class="col">
+                                            <label for="cvcCard">CVV/CVC:</label>
+                                            <input type="number" name="cvcCard" class="form-control" placeholder="123" required />
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="row">&nbsp;</div>
                                 
                                 <div class="form-navigation bottom">

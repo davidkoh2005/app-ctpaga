@@ -3,7 +3,16 @@ body {
 }
 
 section{
-    padding-top: 100px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+label{
+    padding-top: 20px;
+}
+
+.center{
+    text-align: center;
 }
 
 .form-section.center{
@@ -58,7 +67,7 @@ div.sales, div.shippings {
     margin-bottom: 20px;
 }
 
-div.quantity{
+div#desingQuantity{
     background-color: white;
     border-radius:100%;
     padding: 5px;
@@ -79,7 +88,12 @@ div.description-shippings{
     padding-left: 0px;
 }
 
-div.price{
+div.total{
+    padding: 5px;
+    text-align: right;
+}
+
+div.shipping-price{
     padding: 5px;
     text-align: right;
 }
@@ -114,11 +128,6 @@ div.price{
 
 .bi-check-circle-fill {
     color: #00cc5f;
-    visibility: hidden;
-}
-
-.bi-check-circle-fill.checked{
-    visibility: visible;
 }
 
 .radio-shippings {

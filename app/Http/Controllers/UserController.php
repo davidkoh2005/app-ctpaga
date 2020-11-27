@@ -41,8 +41,16 @@ class UserController extends Controller
             \Storage::disk('public')->delete($urlPrevius);
         }
         \Storage::disk('public')->put($url,  $realImage);
+
+        if($request->description == "Selfie") 
+            $commerce_id = null; 
         
-        Picture::updateOrCreate(['user_id'=>$user->id, 'description'=> $request->description, 'commerce_id' => $commerce_id], ['url' => '/storage'.$url]);
+        Picture::updateOrCreate([
+            'user_id'=>$user->id,
+            'description'=> $request->description, 
+            'commerce_id' => $commerce_id,
+        ],
+        ['url' => '/storage'.$url]);
 
         return response()->json([
             'statusCode' => 201,
