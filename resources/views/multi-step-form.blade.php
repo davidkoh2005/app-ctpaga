@@ -37,13 +37,12 @@
                                     <div class="row">&nbsp;</div>
                                     <span id="coin">@if ($coinClient == 0) $ @else Bs @endif</span> <span id="total"> {{$total}}</span>
                                     <div class="row">&nbsp;</div>
-                                    <div class="row">&nbsp;</div>
                                     <h3> Por </h3>
                                     <div class="row">&nbsp;</div>
                                     @foreach ($sales as $sale)
-                                        <div class="row sales">
+                                        <div class="row sales justify-content-center align-items-center minh-10">
                                             <div class="quantity col-md-2 col-sm-2 col-3"><div id="desingQuantity">{{$sale->quantity}}</div></div>
-                                            <div class="name col">{{$sale->name}} - <script> document.write(showPrice("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}))</script></div>
+                                            <div class="name col">{{$sale->name}}<br> <script> document.write(showPrice("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}))</script></div>
                                             <div class="total col"><script> document.write(showTotal("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}, {{$sale->quantity}}))</script></div>
                                         </div>
                                     @endforeach
@@ -59,7 +58,7 @@
                                 <div class="form-section">
                                     @foreach ($shippings as $shipping)
                                         <div class="row shippings">
-                                            <div class="col-md-2 col-sm-2 col-2" id="iconChecked">
+                                            <div class="col-md-2 col-sm-2 col-3" id="iconChecked">
                                                 <input type="radio" class="radio-shippings" name="shippings" id="shippings">
                                             </div>
                                             <div class="description-shippings col">{{$shipping->description}}</div>
