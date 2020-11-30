@@ -21,3 +21,4 @@ Route::fallback(function () {
 });
 
 Route::get('/{userUrl}/{codeUrl}', 'SaleController@index');
+Route::post('verify', 'SaleController@verifyDiscount');

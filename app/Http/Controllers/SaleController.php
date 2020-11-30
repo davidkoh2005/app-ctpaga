@@ -9,6 +9,7 @@ use App\Sale;
 use App\Picture;
 use App\Commerce;
 use App\Shipping;
+use App\Discount;
 
 class SaleController extends Controller
 {
@@ -22,15 +23,25 @@ class SaleController extends Controller
         else if($sales[0]->commerce_id != $commerce->id)
             return redirect()->route('welcome');
 
+        $user = User::find($commerce->user_id)->first();
         $picture = Picture::where('commerce_id', $commerce->id)->first();
         $shippings = Shipping::where('user_id', $commerce->user_id)->get();
         
         $rate = $sales[0]->rate;
         $coinClient = $sales[0]->coinClient;
         $total = 0.0;
+        $product = 0;
+        $service = 0;
+        $quantity = 0;
 
         foreach($sales as $sale){
             $price = floatval($sale->price) * $sale->quantity;
+
+            $quantity += $sale->quantity;
+            if($sale->type == 0)
+                $product +=$sale->quantity;
+            else
+                $service +=$sale->quantity;
 
             if($sale->coin == 0 && $sale->coinClient==1)
                 $total+= $price * $rate;
@@ -40,7 +51,26 @@ class SaleController extends Controller
                 $total+= $price;
         }
 
-        return view('multi-step-form', compact('commerce','picture', 'sales', 'rate', 'coinClient', 'total', 'shippings'));
+        $total =  number_format($total, 2, ",", ".");
+
+        if($product == 1)
+            $msgProduct = "Producto";
+        else if($product > 1)
+            $msgProduct = "Productos";
+        
+        if ($service == 1)
+            $msgService = "Servicio";
+        else if ($service > 1)
+            $msgService = "Servicios";
+        
+        if($product != 0 && $service != 0)
+            $msg = $msgProduct+" y "+$msgService;
+        else if($product != 0 && $service == 0)
+            $msg = $msgProduct;
+        else if($product == 0 && $service != 0)
+            $msg = $msgService;
+
+        return view('multi-step-form', compact('commerce','picture', 'sales', 'rate', 'coinClient', 'total', 'shippings', 'quantity', 'msg'));
     }
 
     public function new(Request $request)
@@ -52,18 +82,20 @@ class SaleController extends Controller
             $price = app('App\Http\Controllers\Controller')->getPriceSales($sale['data']['price']);
             
             Sale::create([
-                "user_id"       => $user->id,
-                "commerce_id"   => (int)$request->commerce_id,
-                "codeUrl"       => $code,
-                "type"          => $sale['type'],
-                "name"          => $sale['data']['name'],
-                "price"         => $price,
-                "nameClient"    => $request->nameClient,
-                "coinClient"    => $request->coin,
-                "coin"          => $sale['data']['coin'],
-                "quantity"      => $sale['quantity'],
-                "rate"          => $request->rate,
-                "expires_at"    => Carbon::now()->format('Y-m-d 23:59:59'),
+                "user_id"               => $user->id,
+                "commerce_id"           => (int)$request->commerce_id,
+                "codeUrl"               => $code,
+                "type"                  => $sale['type'],
+                "name"                  => $sale['data']['name'],
+                "price"                 => $price,
+                "nameClient"            => $request->nameClient,
+                "coinClient"            => $request->coin,
+                "coin"                  => $sale['data']['coin'],
+                "quantity"              => $sale['quantity'],
+                "rate"                  => $request->rate,
+                "statusShipping"        => $request->statusShipping,
+                "descriptionShipping"   => $request->descriptionShipping,
+                "expires_at"            => Carbon::now()->format('Y-m-d 23:59:59'),
             ]);
         }
 
@@ -90,5 +122,14 @@ class SaleController extends Controller
         while(!empty($statusCode));
 
         return $code;
+    }
+
+    public function verifyDiscount(Request $request)
+    {
+        $discount = Discount::where("user_id",$request->user_id)->where("code", $request->input)->first();  
+        if($discount)
+            return $discount;
+        else
+            return "ERROR";
     }
 }
