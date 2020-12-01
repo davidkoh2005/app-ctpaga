@@ -43,7 +43,12 @@
                                         <div class="row sales justify-content-center align-items-center minh-10">
                                             <div class="quantity col-md-2 col-sm-2 col-3"><div id="desingQuantity">{{$sale->quantity}}</div></div>
                                             <div class="name col">{{$sale->name}}<br> <script> document.write(showPrice("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}))</script></div>
-                                            <div class="total col"><script> document.write(showTotal("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}, {{$sale->quantity}}))</script></div>
+                                            @if ($coinClient == 0) 
+                                                <div class="total col"><script> document.write(showTotal("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}, {{$sale->quantity}}))</script></div>
+                                            @else
+                                                <div class="total bold col-12 d-block d-sm-none"> Total:</div>
+                                                <div class="total col-12"> <script> document.write(showTotal("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}, {{$sale->quantity}}))</script></div>
+                                            @endif
                                         </div>
                                     @endforeach
                                 </div>
@@ -56,15 +61,21 @@
                                 @if ($sales[0]->statusShipping && count($shippings)!=0)
                                 <script> statusShipping = true;</script>
                                 <div class="form-section">
+                                    <p> Seleccione un envio:</p>
                                     @foreach ($shippings as $shipping)
-                                        <div class="row shippings">
-                                            <div class="col-md-2 col-sm-2 col-3" id="iconChecked">
+                                        <div class="row shippings justify-content-center align-items-center minh-10">
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4" id="iconChecked">
                                                 <input type="radio" class="radio-shippings" name="shippings" id="shippings">
                                                 <input type="hidden" id="shippingPrice" value="{{$shipping->price}}">
                                                 <input type="hidden" id="shippingCoin" value="{{$shipping->coin}}">
                                             </div>
                                             <div class="description-shippings col">{{$shipping->description}}</div>
-                                            <div class="shipping-price col"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
+                                            @if ($coinClient == 0) 
+                                                <div class="shipping-price col"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
+                                            @else
+                                                <div class="shipping-price col-12"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
+                                            @endif
+    
                                         </div>
                                     @endforeach
                                 </div>
@@ -166,7 +177,19 @@
 
     <script> 
         $(function(){
-            $("#discount").on("input", function(){
+            
+            function delay(callback, ms) {
+                var timer = 0;
+                return function() {
+                    var context = this, args = arguments;
+                    clearTimeout(timer);
+                    timer = setTimeout(function () {
+                    callback.apply(context, args);
+                    }, ms || 0);
+                };
+            }
+
+            $('#discount').keyup(delay(function (e) {
                 $.ajax({
                     url: "{{ url('/verify')}}", 
                     data: {"input" : $(this).val(), "user_id" : "{{$commerce->user_id}}"},
@@ -179,8 +202,8 @@
                 ).fail(function(result){  
                     $('#percentageSelect').val(0);
                     $('.next').hide();                    
-                },);
-            });
+                });
+            }, 500));
             
         });
     </script>

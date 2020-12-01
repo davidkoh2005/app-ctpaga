@@ -11,7 +11,6 @@ var formatter = new Intl.NumberFormat(locale, options);
 $(function(){
     var $sections = $('.form-section');
     var statusShippingClient = false;
-    var statusShipping = false;
     var statusSwitch = false;
 
     $(window).keydown(function(event){
@@ -31,7 +30,7 @@ $(function(){
         $('.form-navigation [type=submit]').toggle(arTheEnd);
 
         if(index == 2 || index == 5){
-            if(statusShipping && statusShippingClient)
+            if(statusShippingClient && $('#percentageSelect').val() != 0)
                 $('.next').show();
             else
                 $('.next').hide();
@@ -63,11 +62,21 @@ $(function(){
     })
 
     $('.form-navigation .next').click(function(){
-        $('.contact-form').parsley().whenValidate({
-            group: 'block-' + curIndex()
-        }).done(function(){
-            navigateTo(curIndex()+1);
-        })
+        if(curIndex() == 2 || curIndex() == 5){
+            if(statusShippingClient)
+                $('.contact-form').parsley().whenValidate({
+                    group: 'block-' + curIndex()
+                }).done(function(){
+                    navigateTo(curIndex()+1);
+                })
+        }else{
+            $('.contact-form').parsley().whenValidate({
+                group: 'block-' + curIndex()
+            }).done(function(){
+                navigateTo(curIndex()+1);
+            })
+        }
+
     })
 
     $sections.each(function(index, section){
