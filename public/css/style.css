@@ -61,8 +61,20 @@ p{
 ul.ulDesing {
   list-style: none;
   text-align: left;
+  padding-top: 20px;
 }
 
+ul.ulDesing a, ul.ulDesing a:visited {
+  color: black;
+}
+
+ul.ulDesing a:hover {
+  color: #00cc5f;
+}
+
+ul.ulDesing a:active{
+  color: #00cc5f;
+}
 
 ul.ulDesingRedes {
   list-style: none;
@@ -83,6 +95,10 @@ ul.ulDesingRedes li::before {
   font-weight: bold;
   display: inline-block; 
   margin-left: -2em;
+}
+
+.bold {
+  font-weight: bold;
 }
 
 .center{
@@ -224,6 +240,10 @@ section.top_banner_bg:after {
 .present b {
   color: #00cc5f;
   font-weight: 700;
+}
+
+.section_btn2 {
+  padding-bottom: 60px;
 }
 
 .section_btn .btn.btn-default {

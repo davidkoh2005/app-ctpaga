@@ -8,6 +8,9 @@
     <link rel="stylesheet" type="text/css" href="../css/styleForm.css">
     <script src="../js/form.js"></script>
     <script src="../js/i18n/es.js"></script>
+    @if($coinClient == 0)
+        <script src="https://js.stripe.com/v3/"></script>
+    @endif
 <body>
     <Section>
         <div class="container">
@@ -29,7 +32,8 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <form action="" class="contact-form">
+                            <form id="payment-form" class="contact-form" method='POST' action="{{route('form.formSubmit')}}">
+                                <input type="hidden" id="STRIPE_KEY" value="{{env('STRIPE_KEY')}}">
                                 @csrf
                                 <div class= "form-section center">
                                     <img class="rounded-circle" src="{{$picture->url}}" width="100px" height="100px">
@@ -47,10 +51,13 @@
                                                 <div class="total col"><script> document.write(showTotal("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}, {{$sale->quantity}}))</script></div>
                                             @else
                                                 <div class="total bold col-12 d-block d-sm-none"> Total:</div>
-                                                <div class="total col-12"> <script> document.write(showTotal("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}, {{$sale->quantity}}))</script></div>
+                                                <div class="total col-md col-12"> <script> document.write(showTotal("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}, {{$sale->quantity}}))</script></div>
                                             @endif
                                         </div>
                                     @endforeach
+                                    <input type="hidden" id="coinClient"  name="coinClient" value="{{$coinClient}}">
+                                    <input type="hidden" id="userUrl"  name="userUrl" value="{{$userUrl}}">
+                                    <input type="hidden" id="codeUrl"  name="codeUrl" value="{{$codeUrl}}">
                                 </div>
                                 <div class= "form-section">
                                     <p>Ingrese un correo electrónico donde podamos enviarte el recibo de pago:</p>
@@ -65,15 +72,15 @@
                                     @foreach ($shippings as $shipping)
                                         <div class="row shippings justify-content-center align-items-center minh-10">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4" id="iconChecked">
-                                                <input type="radio" class="radio-shippings" name="shippings" id="shippings">
+                                                <input type="radio" class="radio-shippings" name="shippings" id="shippings" value="{{$shipping->id}}">
                                                 <input type="hidden" id="shippingPrice" value="{{$shipping->price}}">
-                                                <input type="hidden" id="shippingCoin" value="{{$shipping->coin}}">
+                                                <input type="hidden" id="shippingCoin"  name="shippingCoin" value="{{$shipping->coin}}">
                                             </div>
                                             <div class="description-shippings col">{{$shipping->description}}</div>
                                             @if ($coinClient == 0) 
                                                 <div class="shipping-price col"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
                                             @else
-                                                <div class="shipping-price col-12"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
+                                                <div class="shipping-price col-md col-12"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
                                             @endif
     
                                         </div>
@@ -87,7 +94,7 @@
                                     <label for="name">NOMBRE:</label>
                                     <input type="text" name="name" class="form-control" data-parsley-minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" required />
                                     <label for="number">NUMERO DE CELULAR:</label>
-                                    <input type="tel" name="number" class="form-control" placeholder="04121234567" maxlength="20" data-parsley-maxlength="20" data-parsley-pattern="^(?:(\+)58|0)(?:2(?:12|4[0-9]|5[1-9]|6[0-9]|7[0-8]|8[1-35-8]|9[1-5]|3[45789])|4(?:1[246]|2[46]))\d{7}$" required />
+                                    <input type="tel" name="number" class="form-control" placeholder="04121234567" size="11" maxlength="20" data-parsley-maxlength="20" data-parsley-pattern="^(?:(\+)58|0)(?:2(?:12|4[0-9]|5[1-9]|6[0-9]|7[0-8]|8[1-35-8]|9[1-5]|3[45789])|4(?:1[246]|2[46]))\d{7}$" required />
                                     <label for="address">DIRECCÍON:</label>
                                     <textarea class="form-control" name="address" row="3" placeholder="Av. Principal los dos caminos" required></textarea>
                                     <label for="details">DETALLE ADICIONALES (OPCIONAL)</label>
@@ -97,7 +104,7 @@
 
                                 <div class= "form-section">
                                     <p>Ingresa la información de tu tarjeta de crédito o debito (Visa o Master Card):</p>
-                                    <div class="row center">
+                                    <div class="row center" id="card-element">
                                         <div class="col">
                                             <img src="../images/visa.png" class="img-fluid" width="150px" height="150px">
                                         </div>
@@ -108,15 +115,26 @@
                                     <label for="nameCard">NOMBRE DE LA TARJETA:</label>
                                     <input type="text" name="nameCard" class="form-control" data-parsley-minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" required />
                                     <label for="numberCard">NUMERO DE LA TARJETA:</label>
-                                    <input type="number" name="numberCard" id="numberCard" class="form-control" data-parsley-maxlength="16" placeholder="4012888888881881" data-parsley-pattern="^(?:4\d([\- ])?\d{6}\1\d{5}|(?:4\d{3}|5[1-5]\d{2}|6011)([\- ])?\d{4}\2\d{4}\2\d{4})$" required />
+                                    <input type="number" name="numberCard" id="numberCard" class="form-control" size="16" data-parsley-maxlength="16" placeholder="4012888888881881" data-parsley-pattern="^(?:4\d([\- ])?\d{6}\1\d{5}|(?:4\d{3}|5[1-5]\d{2}|6011)([\- ])?\d{4}\2\d{4}\2\d{4})$" data-stripe="number" required/>
                                     <div class="row">
-                                        <div class="col">
+                                        <div class="col-6">
                                             <label for="dateCard">FECHA DE EXPIRACIÓN:</label>
-                                            <input type="text" name="dateCard" id="dateCard" class="form-control" placeholder="MM/AA" maxlength="5" data-parsley-pattern="^(0[1-9]|1[0-2])\/(2[0-9]{1})$" required />
+                                            <div class="form-row" id="dateCard">
+                                                <div class="col">
+                                                    <input type="number" class="form-control" name="exp_month" id="exp_month" placeholder="MM" size="2" data-stripe="exp_month">
+                                                </div>
+                                                <div class="col-1 spanSize">
+                                                    <span> / </span>
+                                                </div> 
+                                                <div class="col">
+                                                    <input type="number" class="form-control" name="exp_year" id="exp_year" placeholder="YY" size="2" data-stripe="exp_year">
+                                                </div> 
+                                            </div>
+                                            
                                         </div>
-                                        <div class="col">
+                                        <div class="col-6">
                                             <label for="cvcCard">CVV/CVC:</label>
-                                            <input type="number" name="cvcCard" class="form-control" minlength="3" maxlength="3" data-parsley-maxlength="3" placeholder="123" required />
+                                            <input type="number" name="cvcCard" id="cvcCard" class="form-control" size="3" minlength="3" maxlength="3" data-parsley-maxlength="3" placeholder="123" data-stripe="cvc" required />
                                         </div>
                                     </div>
                                 </div>
@@ -124,7 +142,7 @@
                                 <div class="form-section">
                                     <p>Ingresa código de descuento:</p>
                                     <label for="discount">CODE DE DESCUENTO:</label>
-                                    <input type="text" name="discount" id="discount" class="form-control" data-parsley-minlength="3" placeholder="DESCO20" onkeyup="javascript:this.value=this.value.toUpperCase();" />
+                                    <input type="text" name="discount" id="discount" class="form-control" data-parsley-minlength="3" placeholder="DESCO20" autocomplete="off" onkeyup="javascript:this.value=this.value.toUpperCase();" />
                                     <div class="row">&nbsp;</div>
                                     <div class="row justify-content-center align-items-center">
                                         <label class="switch">
@@ -144,19 +162,31 @@
                                             </svg>
                                         </diV>
                                         <div class="name col">Pedido <br>{{$quantity}} {{$msg}}</div>
-                                        <div class="total col">@if ($coinClient == 0) $ @else Bs @endif {{$total}}</div>
-                                        <input type="hidden" id="totalProductService" value="{{$total}}">
-                                        <input type="hidden" id="percentageSelect">
+                                        <input type="hidden" id="orderClient" name="orderClient" value="{{$quantity}} {{$msg}}">
+                                        @if ($coinClient == 0) 
+                                            <div class="total col">$ {{$total}}</div>
+                                        @else
+                                            <div class="total col-md col-12">Bs {{$total}}</div>
+                                        @endif
+
+                                        <input type="hidden" id="totalProductService" name="totalProductService" value="{{$total}}">
+                                        <input type="hidden" id="percentageSelect" name="percentageSelect">
                                     </div>
                                     <div class="row sales justify-content-center align-items-center minh-10">
                                         <div class="col-md-2 col-sm-2 col-3">
                                             <img src="/images/envios.png" class="figure-img img-fluid rounded" width="50px" height="50px">
                                         </diV>
                                         <div class="name col">Envio</div>
-                                        <div class="col total showShipping"></div>
+                                        
+                                        @if ($coinClient == 0) 
+                                            <div class="col total showShipping"></div>
+                                        @else
+                                            <div class="col-md col-12 total showShipping"></div>
+                                        @endif
                                     </div>
                                     <div class="showPercentage"></div>
                                     <div class="totalGlobal"></div>
+                                    <input type="hidden" id="totalAll" name="totalAll">
 
                                 </div> 
 

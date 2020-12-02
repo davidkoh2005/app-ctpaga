@@ -70,7 +70,7 @@ class SaleController extends Controller
         else if($product == 0 && $service != 0)
             $msg = $msgService;
 
-        return view('multi-step-form', compact('commerce','picture', 'sales', 'rate', 'coinClient', 'total', 'shippings', 'quantity', 'msg'));
+        return view('multi-step-form', compact('userUrl','codeUrl','commerce','picture', 'sales', 'rate', 'coinClient', 'total', 'shippings', 'quantity', 'msg'));
     }
 
     public function new(Request $request)

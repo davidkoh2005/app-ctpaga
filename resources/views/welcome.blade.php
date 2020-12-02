@@ -39,18 +39,26 @@
             </div>
         </section>
 
+
         <section class="primary-bg initialText">
             <div class="container center">
                 <div class="row ">
                     <div class="col-md-12 col-sm-12 col-12">
                         <h3> Inicia el negocio de tus sueños en segundos </h3>
                         <h6> ¡Manéjalo desde tu celular y sin complicaciones! </h6>
+                        
+                        <ul class="ulDesing">
+                            <li> <a href="#register">Regístrate en instantes. 👈 <strong class="bold">click aqui</strong></a> </li>
+                            <li> <a href="#socialNetworks">Vende por redes sociales. 👈 <strong class="bold">click aqui</strong></a> </li>
+                            <li> <a href="#downloadApp">Descargar la aplicación ahora. 👈 <strong class="bold">click aqui</strong></a> </li>
+                            <li> <a href="#share">Comparte tus aplicaciones móviles favoritas con tus amigos. 👈 <strong class="bold">click aqui</strong></a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="primary-bg">
+        <section class="primary-bg" id="register">
             <div class="container center">
                 <div class="row ">
                     <div class="col-md-6 col-sm-12 col-12">
@@ -74,7 +82,7 @@
             </div>
         </section>
 
-        <section class="secondary-bg">
+        <section class="secondary-bg" id="socialNetworks">
             <div class="container center">
                 <div class="row ">
                     <div class="col-md-6 col-sm-12 col-12">
@@ -108,7 +116,7 @@
         </section>
 
 
-        <section class="primary-bg">
+        <section class="primary-bg" id="downloadApp">
             <div class="container">
                 <div class="row justify-content-md-center">
                 <div class="col-md-6 col-sm-12 col-12">
@@ -123,7 +131,7 @@
                         
                         <h6> Seleccione la plataforma de su dispositivo y comience la descarga </h6>
 
-                        <div class="section_btn">
+                        <div class="section_btn section_btn2 ">
                             <button class="btn btn-default" type="submit"> <i class="fa fa-apple" aria-hidden="true"></i> App Store</button>	
                             
                             <span><button class="btn btn-default" type="submit"><i class="fa fa-android" aria-hidden="true"></i> Play Store</button></span>							
@@ -135,7 +143,7 @@
         </section>
 
 
-        <footer class="third-bg">
+        <footer class="third-bg" id="share">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
@@ -163,7 +171,7 @@
             <div class="footer_bottom fourth-bg">
                 <!-- Keep Footer Credit Links Intact -->
                 <p> 2020 &copy; Copyright Ctpaga. Todos los derechos reservados. </p>
-                <a href="#" class="backtop"> ^ </a>
+                <a href="#home" class="backtop"> ^ </a>
             </div>
                         
         </footer>

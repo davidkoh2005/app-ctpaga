@@ -67,6 +67,10 @@ span#total{
     font-size:40px;
 }
 
+div.spanSize{
+    font-size: 25px;
+}
+
 div.sales, div.shippings {
     border-radius: 60px;
     padding: 15px;
