@@ -16,6 +16,9 @@ class SaleController extends Controller
     public function index($userUrl, $codeUrl)
     {
         $sales = Sale::where('codeUrl',$codeUrl)->get();
+        /* if($sales[0]->statusSale == 1)
+            return redirect()->route('form.store', ['userUrl' => $userUrl]); */
+
         $commerce = Commerce::where('userUrl',$userUrl)->first();
 
         if(count($sales) == 0|| !$commerce)
@@ -27,6 +30,7 @@ class SaleController extends Controller
         $picture = Picture::where('commerce_id', $commerce->id)->first();
         $shippings = Shipping::where('user_id', $commerce->user_id)->get();
         
+        $nameClient = $sales[0]->nameClient;
         $rate = $sales[0]->rate;
         $coinClient = $sales[0]->coinClient;
         $total = 0.0;
@@ -70,7 +74,7 @@ class SaleController extends Controller
         else if($product == 0 && $service != 0)
             $msg = $msgService;
 
-        return view('multi-step-form', compact('userUrl','codeUrl','commerce','picture', 'sales', 'rate', 'coinClient', 'total', 'shippings', 'quantity', 'msg'));
+        return view('multi-step-form', compact('userUrl','codeUrl','commerce','picture', 'sales', 'nameClient', 'rate', 'coinClient', 'total', 'shippings', 'quantity', 'msg'));
     }
 
     public function new(Request $request)
@@ -104,6 +108,10 @@ class SaleController extends Controller
             'message' => 'Create sales correctly',
             'codeUrl' => $code,
         ]); 
+    }
+
+    public function indexStore($userUrl){
+        
     }
 
     public function randomCode()

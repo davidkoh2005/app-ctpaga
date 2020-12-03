@@ -21,13 +21,16 @@ class CreatePaidsTable extends Migration
             $table->foreign('commerce_id')->references('id')->on('commerces');
             $table->string("codeUrl",10);
             $table->string("nameClient",50);
-            $table->integer("total");
+            $table->String("total");
             $table->integer("coin");
             $table->string("email");
             $table->string("nameShopping",50);
             $table->string("numberShopping", 20);
             $table->string("addressShopping");
-            $table->string("detailsShopping");
+            $table->string("detailsShopping")->nullable();
+            $table->string('shipping_id')->nullable();
+            $table->integer("percentage");
+            $table->String("nameCompanyPayments");
             $table->timestamps();
         });
     }

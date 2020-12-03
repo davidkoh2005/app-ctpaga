@@ -36,5 +36,10 @@ class Commerce extends Model
     {
         return $this->hasMany('App\Shipping');
     }
+
+    public function paid()
+    {
+        return $this->hasMany('App\Paid');
+    }
     
 }

@@ -20,6 +20,7 @@ Route::fallback(function () {
     return redirect()->route('welcome');
 });
 
+Route::get('/{userUrl}/', 'SaleController@indexStore')->name('form.store');
 Route::get('/{userUrl}/{codeUrl}', 'SaleController@index');
 Route::post('verify', 'SaleController@verifyDiscount');
 Route::post('pay', 'PaidController@formSubmit')->name('form.formSubmit');

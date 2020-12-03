@@ -8,9 +8,7 @@
     <link rel="stylesheet" type="text/css" href="../css/styleForm.css">
     <script src="../js/form.js"></script>
     <script src="../js/i18n/es.js"></script>
-    @if($coinClient == 0)
-        <script src="https://js.stripe.com/v3/"></script>
-    @endif
+    <script src="https://js.stripe.com/v3/"></script>
 <body>
     <Section>
         <div class="container">
@@ -32,6 +30,11 @@
                             </div>
                         </div>
                         <div class="card-body">
+                            @if (Session::has('message'))
+                                <div class="alert alert-danger">
+                                    <strong>Error: </strong> {{Session::get('message') }}
+                                </div>
+                            @endif
                             <form id="payment-form" class="contact-form" method='POST' action="{{route('form.formSubmit')}}">
                                 <input type="hidden" id="STRIPE_KEY" value="{{env('STRIPE_KEY')}}">
                                 @csrf
@@ -55,6 +58,7 @@
                                             @endif
                                         </div>
                                     @endforeach
+                                    <input type="hidden" id="nameClient"  name="nameClient" value="{{$nameClient}}">
                                     <input type="hidden" id="coinClient"  name="coinClient" value="{{$coinClient}}">
                                     <input type="hidden" id="userUrl"  name="userUrl" value="{{$userUrl}}">
                                     <input type="hidden" id="codeUrl"  name="codeUrl" value="{{$codeUrl}}">
@@ -109,34 +113,29 @@
                                             <img src="../images/visa.png" class="img-fluid" width="150px" height="150px">
                                         </div>
                                         <div class="col">
-                                        <img src="../images/MasterCard.png" class="img-fluid" width="100px" height="100px">
+                                            <img src="../images/MasterCard.png" class="img-fluid" width="100px" height="100px">
                                         </div>
                                     </div>
                                     <label for="nameCard">NOMBRE DE LA TARJETA:</label>
                                     <input type="text" name="nameCard" class="form-control" data-parsley-minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" required />
                                     <label for="numberCard">NUMERO DE LA TARJETA:</label>
-                                    <input type="number" name="numberCard" id="numberCard" class="form-control" size="16" data-parsley-maxlength="16" placeholder="4012888888881881" data-parsley-pattern="^(?:4\d([\- ])?\d{6}\1\d{5}|(?:4\d{3}|5[1-5]\d{2}|6011)([\- ])?\d{4}\2\d{4}\2\d{4})$" data-stripe="number" required/>
+                                    <div id="errorCard">
+                                        <ul><li>Complete los datos de la tarjeta</li></ul></div>
+                                    <div id="card_number" class="field"></div>
+                                    <div id="paymentResponseCardNumber"></div>
                                     <div class="row">
                                         <div class="col-6">
                                             <label for="dateCard">FECHA DE EXPIRACIÓN:</label>
-                                            <div class="form-row" id="dateCard">
-                                                <div class="col">
-                                                    <input type="number" class="form-control" name="exp_month" id="exp_month" placeholder="MM" size="2" data-stripe="exp_month">
-                                                </div>
-                                                <div class="col-1 spanSize">
-                                                    <span> / </span>
-                                                </div> 
-                                                <div class="col">
-                                                    <input type="number" class="form-control" name="exp_year" id="exp_year" placeholder="YY" size="2" data-stripe="exp_year">
-                                                </div> 
-                                            </div>
-                                            
+                                            <div id="card_expiry" class="field"></div>
+                                            <div id="paymentResponseDate"></div>
                                         </div>
                                         <div class="col-6">
                                             <label for="cvcCard">CVV/CVC:</label>
-                                            <input type="number" name="cvcCard" id="cvcCard" class="form-control" size="3" minlength="3" maxlength="3" data-parsley-maxlength="3" placeholder="123" data-stripe="cvc" required />
+                                            <div id="card_cvc" class="field"></div>
+                                            <div id="paymentResponseCVC"></div>
                                         </div>
                                     </div>
+
                                 </div>
 
                                 <div class="form-section">
@@ -187,15 +186,18 @@
                                     <div class="showPercentage"></div>
                                     <div class="totalGlobal"></div>
                                     <input type="hidden" id="totalAll" name="totalAll">
-
+                                    <input type="hidden" id="stripeToken" name="stripeToken" value="">
                                 </div> 
 
                                 <div class="row">&nbsp;</div>
-                                
+
                                 <div class="form-navigation bottom">
                                     <button type="button" class="next btn btn-bottom">Siguiente</button>
                                     <button type="button" class="pay btn btn-bottom">Pagar</button>
-                                    <button type="submit" class="btn btn-bottom">Realizar Pago</button>
+                                    <button type="submit" class="submit btn btn-bottom">Realizar Pago</button>
+                                </div>
+                                <div class="row justify-content-center"id="loading">
+                                    <img widht="80px" height="80px" class="justify-content-center" src="../images/loading.gif">
                                 </div>
                             </form>
                         </div>

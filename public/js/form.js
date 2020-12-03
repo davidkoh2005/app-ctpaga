@@ -12,6 +12,81 @@ $(function(){
     var $sections = $('.form-section');
     var statusShippingClient = false;
     var statusSwitch = false;
+    var stripe = Stripe($("#STRIPE_KEY").val());
+    var statusCard = false;
+    var statusDate = false;
+    var statusCVC = false;
+    var statusLoading = false;
+    $('#errorCard').hide();
+    $('#loading').hide();
+
+    var elements = stripe.elements();
+
+    var style = {
+        base: {
+            fontWeight: 400,
+            fontFamily: 'Roboto, Open Sans, Segoe UI, sans-serif',
+            fontSize: '16px',
+            lineHeight: '1.4',
+            color: '#555',
+            backgroundColor: '#fff',
+            '::placeholder': {
+                color: '#888',
+            },
+        },
+        invalid: {
+            color: '#eb1c26',
+        }
+    };
+
+    var cardElement = elements.create('cardNumber', {
+        style: style
+    });
+    cardElement.mount('#card_number');
+    
+    var exp = elements.create('cardExpiry', {
+        'style': style
+    });
+    exp.mount('#card_expiry');
+    
+    var cvc = elements.create('cardCvc', {
+        'style': style
+    });
+    cvc.mount('#card_cvc');
+    
+    // Validate input of the card elements
+    var resultContainerCard = document.getElementById('paymentResponseCardNumber');
+    cardElement.addEventListener('change', function(event) {
+        if (event.error) {
+            statusCard = false;
+            resultContainerCard.innerHTML = '<p>'+event.error.message+'</p>';
+        } else {
+            statusCard = true;
+            resultContainerCard.innerHTML = '';
+        }
+    });
+
+    var resultContainerDate = document.getElementById('paymentResponseDate');
+    exp.addEventListener('change', function(event) {
+        if (event.error) {
+            statusDate = false;
+            resultContainerDate.innerHTML = '<p>'+event.error.message+'</p>';
+        } else {
+            statusDate = true;
+            resultContainerDate.innerHTML = '';
+        }
+    });     
+    
+    var resultContainerCVC = document.getElementById('paymentResponseCVC');
+    cvc.addEventListener('change', function(event) {
+        if (event.error) {
+            statusCVC = false;
+            resultContainerCVC.innerHTML = '<p>'+event.error.message+'</p>';
+        } else {
+            statusCVC = true;
+            resultContainerCVC.innerHTML = '';
+        }
+    });
 
     $(window).keydown(function(event){
         if(event.keyCode == 13) {
@@ -36,6 +111,12 @@ $(function(){
                 $('.next').hide();
         }
 
+        if(index == 5)
+            if($("#switchDiscount").is(':checked') || $('#percentageSelect').val() != 0)
+                $('.next').show();
+            else
+                $('.next').hide();
+
         if(index == 6)
             calculateTotal();
     }
@@ -46,10 +127,12 @@ $(function(){
     }
 
     $('.form-navigation .previous').click(function(){
-        if(curIndex()-1 == 0)
+        if(!statusLoading){
+            if(curIndex()-1 == 0)
             $(".form-sales").text("Ventas");
 
-        navigateTo(curIndex()-1);
+            navigateTo(curIndex()-1);
+        }
     })
 
     $('.form-navigation .pay').click(function(){
@@ -71,12 +154,20 @@ $(function(){
                     navigateTo(curIndex()+1);
                 })
         }else if(curIndex() == 4){
-            if(!validateDateCard())
+            if(statusCard && statusDate && statusCVC){
+                $('#errorCard').hide();
                 $('.contact-form').parsley().whenValidate({
                     group: 'block-' + curIndex()
                 }).done(function(){
                     navigateTo(curIndex()+1);
                 })
+            }else{
+                $('#errorCard').show();
+                $('.contact-form').parsley().whenValidate({
+                    group: 'block-' + curIndex()
+                });
+            }
+
         }
         else{
             $('.contact-form').parsley().whenValidate({
@@ -121,55 +212,38 @@ $(function(){
             $('.next').hide();
     });
 
-    function validateDateCard(){
-        var d = new Date(); 
-        var month = d.getMonth()+1; 
-        var year = d.getFullYear().toString().substr(-2);
 
-        var elem = $('#dateCard').parsley();
-        var error_name = 'dateCard';
-
-        var monthClient = $('#exp_month').val();
-        var yearClient = $('#exp_year').val();
-
-        if((monthClient >= month && yearClient >= year) || (monthClient < month && yearClient > year)){
-            elem.removeError(error_name);
-            return false;
-        }else{
-            elem.removeError(error_name);
-            elem.addError(error_name, {message: 'Fecha de Vencimiento Incorrecta.'});
-            return true;
-        }
-
-    }
-
-    $("#payment-form").submit(function(e){
+    $(".submit").on('click', function(e){
         e.preventDefault();
-        var stripe = Stripe($("#STRIPE_KEY").val());
-        var elements = stripe.elements();
-        var card = elements.create('card');
-        card.mount('#card-element');
-        console.log(elements.getElement('card'));
+        statusLoading = true;
+        $('.submit').hide();
+        $('#loading').show();
+
         if($('#coinClient').val() == 0){
-            stripe.createToken(card).then(function(result) {
-                if (result.error) {
-                    alert("error");
-                    console.log(response.error.message);
-                    $('.error')
-                        .removeClass('hide')
-                        .find('.alert')
-                        .text(response.error.message);
-                    
-                } else {
-                    alert(result.token);
-                    $("#payment-form").append("<input type='hidden' name='stripeToken' value='" + result.token.id + "'/>");
-                    $("#payment-form").get(0).submit();
-                }
-            });
+            createToken();
         }
     });
 
+    function createToken() {
+        stripe.createToken(cardElement).then(function(result) {
+            if (result.error) {
+                statusLoading = false;
+                $('#loading').hide();
+                $('.submit').show();
+                resultContainer.innerHTML = '<p>'+result.error.message+'</p>';
+                navigateTo(4);
+            } else {
+                stripeTokenHandler(result.token);
+            }
+        });
+    }
+    
 
+    function stripeTokenHandler(token) {
+        $('#stripeToken').val(token.id);
+        
+        $("#payment-form").submit();
+    }
 
 });
 
@@ -236,11 +310,11 @@ function calculateTotal(){
     resultShipping = exchangeRate(shippingPrice, _rate, shippingCoin, _coinClient)
 
     if(_coinClient == 0)
-        $(".showShipping").append("$ "+formatter.format(resultShipping));
+        $(".showShipping").text("$ "+formatter.format(resultShipping));
     else
-        $(".showShipping").append("Bs "+formatter.format(resultShipping));
+        $(".showShipping").text("Bs "+formatter.format(resultShipping));
 
-    $(".showPercentage").append("Descuento: "+percentage+" %");
+    $(".showPercentage").text("Descuento: "+percentage+" %");
 
     if (_coinClient == 0)
         resulttotal = "Total: $ "+formatter.format((total-((total*percentage)/100)+resultShipping));
@@ -248,7 +322,7 @@ function calculateTotal(){
         resulttotal = "Total: Bs "+formatter.format((total-((total*percentage)/100)+resultShipping));
 
     $("#totalAll").val(formatter.format((total-((total*percentage)/100)+resultShipping)));
-    $(".totalGlobal").append(resulttotal);
+    $(".totalGlobal").text(resulttotal);
     
 }
 
