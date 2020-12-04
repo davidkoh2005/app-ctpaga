@@ -6,10 +6,14 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\User;
 use App\Sale;
+use App\Rate;
 use App\Picture;
 use App\Commerce;
 use App\Shipping;
 use App\Discount;
+use App\Product;
+use App\Service;
+use App\Category;
 
 class SaleController extends Controller
 {
@@ -110,8 +114,75 @@ class SaleController extends Controller
         ]); 
     }
 
-    public function indexStore($userUrl){
+    public function indexStore($userUrl)
+    {
+        $coinClient = 1;
+        $commerce = Commerce::where('userUrl',$userUrl)->first();
+        $user = User::find($commerce->user_id)->first();
+
+        if(!$commerce)
+            return redirect()->route('welcome');
         
+        $picture = Picture::where('commerce_id', $commerce->id)->first();    
+        $shippings = Shipping::where('user_id', $user->id)->get();
+
+        $rate = Rate::where('user_id', $user->id)->orderBy('date', 'desc')->first();
+        $rate = $rate->rate;
+
+        $products = Product::where('user_id', $user->id)
+                            ->where('commerce_id', $commerce->id)
+                            ->where('publish', 1)->orderBy('name', 'asc')->get();
+
+        $services = Service::where('user_id', $user->id)
+                            ->where('commerce_id', $commerce->id)
+                            ->where('publish', 1)->orderBy('name', 'asc')->get();
+
+        return view('store', compact('userUrl','commerce','picture','coinClient', 'shippings', 'rate'));
+    }
+
+    public function showCategories(Request $request)
+    {   
+        $categories = Category::where('commerce_id', $request->commerce_id)
+                                ->where('type', $request->type)->get();
+
+        $returnHTML=view('categories', compact('categories'))->render();
+        return response()->json(array('html'=>$returnHTML));
+    }
+
+    public function showProductsServices(Request $request)
+    {   
+        $products = null;
+        $services = null;
+        $coinClient = $request->type;
+
+        $user = Commerce::find($request->commerce_id)->first();
+
+        if ($request->type == 0){
+            $products = Product::where('commerce_id', $request->commerce_id)
+                                ->where('publish', 1)->orderBy('name', 'asc');
+
+            if($request->category_select != null)
+                $products = $products->where('categories','like',"%$request->category_select%");
+
+            $products = $products->get();
+
+        }else{
+            $services = Service::where('commerce_id', $request->commerce_id)
+                                ->where('publish', 1)->orderBy('name', 'asc');
+
+            if($request->category_select != null)
+                $services = $services->where('categories','like',"%$request->category_select%");
+
+            $services = $services->get();
+
+        }
+
+        $rate = Rate::where('user_id', $user->id)->orderBy('date', 'desc')->first();
+        $rate = $rate->rate;
+        
+        $returnHTML=view('productsServices', compact('products', 'services', 'rate'))->render();
+        return response()->json(array('html'=>$returnHTML));
+
     }
 
     public function randomCode()

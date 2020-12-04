@@ -13,9 +13,9 @@ class ServiceController extends Controller
 {
     public function show(Request $request)
     {
-        $products = Service::where('user_id', $request->user()->id)
+        $services = Service::where('user_id', $request->user()->id)
                             ->where('commerce_id', $request->commerce_id)->orderBy('name', 'asc')->get();
-        return response()->json(['statusCode' => 201,'data' => $products]);
+        return response()->json(['statusCode' => 201,'data' => $services]);
     }
 
     public function new(Request $request)

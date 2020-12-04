@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="../css/styleForm.css">
     <script src="../js/form.js"></script>
     <script src="../js/i18n/es.js"></script>
+    <script src="../js/global.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
 <body>
     <Section>

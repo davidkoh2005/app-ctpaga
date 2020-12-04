@@ -4,9 +4,6 @@ var shippingPrice = 0;
 var shippingCoin = 0;
 var _coinClient = 0;
 var _rate = 0;
-var locale = 'es';
-var options = {minimumFractionDigits: 2, maximumFractionDigits: 2};
-var formatter = new Intl.NumberFormat(locale, options);
 
 $(function(){
     var $sections = $('.form-section');
@@ -246,44 +243,6 @@ $(function(){
     }
 
 });
-
-function exchangeRate(price, rate, coin, coinClient){
-    _coinClient = coinClient;
-    _rate = rate;
-
-    var result;
-    price = parseFloat(price);
-
-    if(coin == 0 && coinClient == 1)
-      result = (parseFloat(price) * rate);
-    else if(coin == 1 && coinClient == 0)
-      result = (parseFloat(price) / rate);
-    else
-      result = (parseFloat(price));
-
-    return result;
-}
-
-function showPrice(price, rate, coin, coinClient){
-    if (price == "FREE")
-        return "GRATIS";
-    else if (coinClient == 0)
-        return "$ "+ formatter.format(exchangeRate(price, rate, coin, coinClient));
-    else
-        return "Bs "+formatter.format(exchangeRate(price, rate, coin, coinClient));
-}
-
-function showPriceValue(price, rate, coin, coinClient){
-    c
-
-    if (price = "FREE")
-        price = 0;
-    
-    if (coinClient == 0)
-        return formatter.format(exchangeRate(price, rate, coin, coinClient));
-    else
-        return formatter.format(exchangeRate(price, rate, coin, coinClient));
-}
 
 function showTotal(price, rate, coin, coinClient, quantity){
     var result = exchangeRate(price, rate, coin, coinClient);

@@ -23,4 +23,7 @@ Route::fallback(function () {
 Route::get('/{userUrl}/', 'SaleController@indexStore')->name('form.store');
 Route::get('/{userUrl}/{codeUrl}', 'SaleController@index');
 Route::post('verify', 'SaleController@verifyDiscount');
+Route::post('showCategories', 'SaleController@showCategories')->name('show.categories');
+Route::post('showProductsServices', 'SaleController@showProductsServices')->name('show.productsServices');
+
 Route::post('pay', 'PaidController@formSubmit')->name('form.formSubmit');
