@@ -10,6 +10,7 @@
     <script src="../js/i18n/es.js"></script>
     <script src="../js/global.js"></script>
 <body>
+    <div class="loader"></div>
     <Section>
         <div class="container">
             <div class="Row">
@@ -46,6 +47,7 @@
                                         </ul>
                                     </div>
                                     <div class="row">&nbsp;</div>
+
                                     <div class="row" id="ProductsServices">
                                         <div class="col">
                                             <button type="button" class="btn btn-bottom btn-current" id="btn-products">Productos</button>
@@ -91,7 +93,7 @@
                                 <div class="row">&nbsp;</div>
 
                                 <div class="form-navigation bottom">
-                                    <button type="button" class="next btn btn-bottom">Pagar</button>
+                                    <button type="button" id="totalBtn" class="next btn btn-bottom">Pagar</button>
                                     <button type="submit" class="submit btn btn-bottom">Realizar Pago</button>
                                 </div>
                                 <div class="row justify-content-center"id="loading">
@@ -105,11 +107,35 @@
         </div>
     </Section>
 
+    <div class="row">
+        <div class="col text-right fixed-item" id="btnFloating">
+            <video id="videoBs" class="btnFloating" width="100px">
+                <source src="../videos/botonBs.mp4" type="video/mp4">
+            </video>
+            <video id="videoUSD" class="btnFloating" width="100px">
+                <source src="../videos/botonUSD.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col text-right fixed-item-cart" id="btnFloatingShipping">
+            <div class="relative">
+                <div> <img class="logoCart" widht="80px" height="80px" class="justify-content-center" src="../images/logoCarrito.png"> </div>
+                <div class="circleGreen">0</div>
+            </div>
+        </div>
+    </div>
+
     <script>
         var ClientType = 0;
         var categorySelect = null;
         function showCategories(type)
         {   
+            $( ".loader" ).fadeIn(150, function() {
+                $( ".loader" ).fadeIn("slow"); 
+            }); 
+
             ClientType = type
 
             if(type == 0)
@@ -135,15 +161,21 @@
 
             $.ajax({
                 url: "{{ route('show.productsServices')}}", 
-                data: {"type" : ClientType, "commerce_id" : "{{$commerce->id}}", "category_select" : _categorySelect},
+                data: {"type" : ClientType, "commerce_id" : "{{$commerce->id}}", "category_select" : _categorySelect, "coinClient" : coinClient},
                 type: "POST",
                 dataType: "json"
             }).done(function(data){
-                console.log(data.html);
-                $('#showProductsServices').html(data.html);  
+                $('#showProductsServices').html(data.html);
+                setTimeout(removeLoader, 2000);
             }).fail(function(){  
                 $('#showProductsServices').html();                 
             });
+        }
+
+        function removeLoader(){
+            $( ".loader" ).fadeOut(500, function() {
+                $( ".loader" ).fadeOut("slow"); 
+            });  
         }
     </script>
 </body>

@@ -24,6 +24,11 @@
 $(function(){
     $('.listCategories').click(function(){
         $('.listCategories').removeClass("category-current");
+
+        $( ".loader" ).fadeIn(150, function() {
+            $( ".loader" ).fadeIn("slow"); 
+        }); 
+
         categorySelect = $(this).find('#category-id').val();
         $(this).addClass("category-current");
         showProductsServices(categorySelect);

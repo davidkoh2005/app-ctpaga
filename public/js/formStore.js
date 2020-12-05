@@ -1,12 +1,44 @@
 var locale = 'es';
 var options = {minimumFractionDigits: 2, maximumFractionDigits: 2};
 var formatter = new Intl.NumberFormat(locale, options);
-
+var listCart = [];
 $(function(){
     var $sections = $('.form-section-store');
     var statusLoading = false;
+    var statusBtn = false;
 
+    $('#videoUSD').hide();
     $('#loading').hide();
+
+    $('#btnFloating').click(function(){
+        if(coinClient == 0 && !statusBtn){
+            statusBtn = true;
+            $('#videoUSD').get(0).play();
+        }else if(coinClient == 1 && !statusBtn){
+            statusBtn = true;
+            $('#videoBs').get(0).play();
+        }
+    });
+
+    $("#videoUSD").bind("ended", function() {
+        $('#videoUSD').hide();
+        $('#videoBs').show();
+        $('#videoUSD').get(0).load(); 
+        coinClient = 1;
+        statusBtn = false;
+        showProductsServices(categorySelect);
+        showTotalBtn();
+    });
+
+    $("#videoBs").bind("ended", function() {
+        $('#videoBs').hide();
+        $('#videoUSD').show(); 
+        $('#videoBs').get(0).load();
+        coinClient = 0;
+        statusBtn = false;
+        showProductsServices(categorySelect);
+        showTotalBtn();
+    });
     
     $(window).keydown(function(event){
         if(event.keyCode == 13) {
@@ -86,7 +118,67 @@ $(function(){
 });
 
 
-function initialText(result)
+function addCart(productService, type){
+    $("#btnFloatingShipping").removeClass("WOW animated bounceIn");
+    var statusCart = false;
+    var newListCart = [];
+    if(listCart.length == 0){
+        listCart.push({
+            "data": [
+                productService
+            ],
+            "quantity": 1,
+            "type": type,
+        });
+    }else{
+        $.each( listCart, function( key, value ) {
+            if(value['data'][0]['name'] == productService['name'] && value['data'][0]['id'] == productService['id']){
+                value['quantity'] += 1; 
+                statusCart = true;
+            }
+
+            newListCart.push(value);
+
+        });
+
+        if(!statusCart){
+            newListCart.push({
+                "data": [
+                    productService
+                ],
+                "quantity": 1,
+                "type": type,
+            });
+        }
+
+        listCart = newListCart;
+    }
+    alertify.success('Se agrego al carrito');
+    showTotalBtn();
+
+}
+
+function showTotalBtn()
 {
-    return result.charAt(0).toUpperCase();
+    total = 0;
+    quantity = 0;
+    if(listCart.length == 0){
+        $('#totalBtn').text("Pagar");
+    }else{
+        $.each( listCart, function( key, value ) {
+            total += (exchangeRate(value['data'][0]['price'], rateToday, value['data'][0]['coin'], coinClient ) * value['quantity']);
+            quantity += value['quantity'];
+        });
+    }
+    
+    if(coinClient == 0){
+        $('#totalBtn').text("Pagar $ "+formatter.format(total));
+    }else{
+        $('#totalBtn').text("Pagar Bs "+formatter.format(total));
+    }
+
+    $('.circleGreen').text(quantity);
+    $("#btnFloatingShipping").addClass("WOW animated bounceIn");
+    //new WOW().init();
+
 }

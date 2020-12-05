@@ -153,7 +153,7 @@ class SaleController extends Controller
     {   
         $products = null;
         $services = null;
-        $coinClient = $request->type;
+        $coinClient = $request->coinClient;
 
         $user = Commerce::find($request->commerce_id)->first();
 
@@ -180,7 +180,7 @@ class SaleController extends Controller
         $rate = Rate::where('user_id', $user->id)->orderBy('date', 'desc')->first();
         $rate = $rate->rate;
         
-        $returnHTML=view('productsServices', compact('products', 'services', 'rate'))->render();
+        $returnHTML=view('productsServices', compact('products', 'services', 'rate', 'coinClient'))->render();
         return response()->json(array('html'=>$returnHTML));
 
     }

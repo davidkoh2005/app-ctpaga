@@ -1,27 +1,55 @@
-<script src="../js/i18n/es.js"></script>
-<script src="../js/global.js"></script>
 @if($products != null)
     @foreach($products as $product)
-    <div class="card" style="width: 12rem;">
-        <img class="card-img-top" src="{{$product->url}}">
-        <div class="card-body">
-            <h5 class="card-title">{{$product->name}}</h5>
-            <p class="card-text"><small class="text-muted">@if($product->description != null) {{$product->description}} @endif</small></p>
-            <p class="card-text"><!-- <script> document.write(showPrice("{{$product->price}}", {{$rate}}, {{$product->coin}}, 0))</script> --></p>
-            <button type="button" class="btn btn-bottom">Agregar al carrito</button>
+    <div class="col justify-content-sm-center">
+        <div class="card" style="width: 12rem;">
+            <img class="card-img-top" src="{{$product->url}}">
+            <div class="card-body">
+                <h5 class="card-title">{{$product->name}}</h5>
+                <p class="card-text"><small class="text-muted">@if($product->description != null) {{$product->description}} @endif</small></p>
+                <p class="card-text right">@php showPrice($product->price, $rate, $product->coin, $coinClient); @endphp</p>
+                <button type="button" class="btn btn-bottom" onclick="addCart({{$product}}, 0)">Agregar al carrito</button>
+            </div>
         </div>
     </div>
     @endforeach
 @else
-    @foreach($services as $services)
-    <div class="card" style="width: 12rem;">
-        <img class="card-img-top" src="{{$services->url}}">
-        <div class="card-body">
-            <h5 class="card-title">{{$services->name}}</h5>
-            <p class="card-text"><small class="text-muted">@if($services->description != null) {{$service->description}} @endif</small></p>
-            <p class="card-text"><!-- <script> document.write(showPrice("{{$service->price}}", {{$rate}}, {{$service->coin}}, 0))</script> --></p>
-            <button type="button" class="btn btn-bottom">Agregar al carrito</button>
+    @foreach($services as $service)
+    <div class="co">
+        <div class="card" style="width: 12rem;">
+            <img class="card-img-top" src="{{$services->url}}">
+            <div class="card-body">
+                <h5 class="card-title">{{$service->name}}</h5>
+                <p class="card-text"><small class="text-muted">@if($service->description != null) {{$service->description}} @endif</small></p>
+                <p class="card-text right">@php showPrice($service->price, $rate, $service->coin, $coinClient); @endphp</p>
+                <button type="button" class="btn btn-bottom" onclick="addCart({{$service}} 1)">Agregar al carrito</button>
+            </div>
         </div>
     </div>
     @endforeach
 @endif
+
+@php
+    function showPrice($price, $rate, $coin, $coinClient){
+        if ($price == "FREE")
+            echo "GRATIS";
+        else if ($coinClient == 0)
+            echo "$ ".number_format(exchangeRate($price, $rate, $coin, $coinClient), 2, ',', '.');
+        else
+            echo "Bs ".number_format(exchangeRate($price, $rate, $coin, $coinClient), 2, ',', '.');
+    }
+
+    function exchangeRate($price, $rate, $coin, $coinClient){
+        $_coinClient = $coinClient;
+        $_rate = $rate;
+        $result = 0;
+
+        if($coin == 0 && $coinClient == 1)
+            $result = (floatval($price) * $rate);
+        else if($coin == 1 && $coinClient == 0)
+            $result = (floatval($price) / $rate);
+        else
+            $result = (floatval($price));
+
+        return $result;
+    }
+@endphp
