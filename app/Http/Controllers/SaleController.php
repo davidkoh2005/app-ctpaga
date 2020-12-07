@@ -87,7 +87,10 @@ class SaleController extends Controller
         $code = $this->randomCode();
 
         foreach($request->sales as $sale){
-            $price = app('App\Http\Controllers\Controller')->getPriceSales($sale['data']['price']);
+            if($sale['data']['id'] == 0)
+                $price = app('App\Http\Controllers\Controller')->getPriceAmount($sale['data']['price']);
+            else
+                $price = app('App\Http\Controllers\Controller')->getPriceSales($sale['data']['price']);
             
             Sale::create([
                 "user_id"               => $user->id,

@@ -20,6 +20,10 @@ Route::fallback(function () {
     return redirect()->route('welcome');
 });
 
+Route::get('password/create', 'Auth\PasswordResetController@create');
+Route::get('password/find/{token}', 'Auth\PasswordResetController@find');
+Route::post('password/reset', 'Auth\PasswordResetController@reset');
+
 Route::get('/{userUrl}/', 'SaleController@indexStore')->name('form.store');
 Route::get('/{userUrl}/{codeUrl}', 'SaleController@index');
 Route::post('verify', 'SaleController@verifyDiscount');

@@ -30,6 +30,15 @@ class Controller extends BaseController
         return $price;
     }
 
+    public function getPriceAmount($price)
+    {
+        $price = str_replace("$ ","",$price);
+        $price = str_replace("Bs ","",$price);
+        $price = str_replace(",",".",$price);
+        
+        return $price;
+    }
+
     public function getPriceShipping($price)
     {
         $price = str_replace("$ ","",$price);

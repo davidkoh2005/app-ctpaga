@@ -87,6 +87,43 @@ class AuthController extends Controller
         ]);
     }
 
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required|string',
+            'new_password' => 'required|string',
+        ]);
+
+        $user = $request->user();
+
+        if (\Hash::check($request->current_password , $user->password)) {
+ 
+            if (!\Hash::check($request->new_password , $user->password)) {
+    
+                $user->password = bcrypt($request->new_password);
+                $user->save();
+
+                $request->user()->token()->revoke();
+
+                return response()->json([
+                'statusCode' => 201,
+                'message' => 'password updated successfully!'], 201);
+
+            }else{
+
+                return response()->json([
+                    'statusCode' => 401,
+                    'message' => 'la nueva contraseña no puede ser la misma que la contraseña anterior!'], 201);
+            }
+
+        }else{
+            return response()->json([
+                'statusCode' => 401,
+                'message' => 'la contraseña es incorrecta!'], 201);
+        }
+    
+    }
+
     public function user(Request $request)
     {
         $pictures = Picture::where('user_id', $request->user()->id)->get();
