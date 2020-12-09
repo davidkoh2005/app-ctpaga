@@ -12,6 +12,10 @@ body {
     background: url('../images/loading.gif') 50% 50% no-repeat rgb(249,249,249);
 }
 
+#btnFloating {
+    width: 150px;
+}
+
 .btnFloating {
     border: 2px solid #00cc5f;
     border-radius: 25%;

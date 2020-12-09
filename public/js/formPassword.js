@@ -23,20 +23,58 @@ $(function(){
 
     }
 
-    function curIndex()
-    {
-        return $sections.index($sections.filter('.current'));
-    }
 
+    $('.form-navigation .submit').click(function(e){
+        e.preventDefault();
+        $('#errorPassword').empty();
+        var errorValidate = 'La contraseña es inválida, debe tener:';
+        var epUpperCase = "(?=.*[A-Z])";                 // should contain at least one upper case
+        var epLowerCase = "(?=.*[a-z])";                    // should contain at least one lower case
+        var epDigit= "(?=.*?[0-9])";                        // should contain at least one digit
+        var epSpecialCharacter = "(?=.*?[-_!@#\$&*~])";  // should contain at least one Special character
+        
+        password = $('#password').val();
+        passwordConfirm = $('#password_confirmation').val();
+        if(password.length == 0 || passwordConfirm == 0){
+            $('#errorPassword').html('Ingrese la contraseña correctamente');
+        }else{
+            var regExp = new RegExp(epUpperCase);
+            if (!regExp.test(password)){
+                errorValidate = errorValidate + '<li> Una letra mayúscula.</li>';
+            }
 
-    $('.form-navigation .submit').click(function(){
+            regExp = new RegExp(epLowerCase);
+            if (!regExp.test(password)){
+                errorValidate = errorValidate + '<li> Una letra minúscula.</li>';
+            }
 
-        $('.contact-form').parsley().whenValidate({
-            group: 'block-' + curIndex()
-        }).done(function(){
-            alert("entro");
-        })
+            regExp = new RegExp(epDigit);
+            if (!regExp.test(password)){
+                errorValidate = errorValidate + '<li> Un número numérico.</li>';
+            }
 
+            regExp = new RegExp(epSpecialCharacter);
+            if (!regExp.test(password)){
+                errorValidate = errorValidate + '<li> Un Carácter Especial.</li>';
+            }
+        
+            if (password.length < 6){
+                errorValidate = errorValidate + '<li> Al menos 6 caracteres.</li>';
+            }
+        
+            if (errorValidate == 'La contraseña es inválida, debe tener:'){
+                $('#errorPassword').html('La contraseña no coincide');
+                if(password == passwordConfirm){
+                    $('#errorPassword').empty();
+                    $("#password-form").submit();
+                }else if(password != passwordConfirm){
+                    $('#errorPassword').html('La contraseña no coincide');
+                }
+            }else{
+                $('#errorPassword').html('<ul><li>'+errorValidate+'</li></ul>');
+            }
+        }
+        
     });
 
     $sections.each(function(index, section){

@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ctpaga</title>
     @include('library')
-    <link rel="stylesheet" type="text/css" href="../css/styleForm.css">
-    <script src="../js/form.js"></script>
-    <script src="../js/i18n/es.js"></script>
-    <script src="../js/global.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../css/styleForm.css">
+    <script src="../../js/form.js"></script>
+    <script src="../../js/i18n/es.js"></script>
+    <script src="../../js/global.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
+</head>
 <body>
     <Section>
         <div class="container">
@@ -48,8 +49,9 @@
                                     <h3> Por </h3>
                                     <div class="row">&nbsp;</div>
                                     @foreach ($sales as $sale)
-                                        <div class="row sales justify-content-center align-items-center minh-10">
+                                        <div class="row sales justify-content-center align-items-center minh-10" id="listSale">
                                             <div class="quantity col-md-2 col-sm-2 col-3"><div id="desingQuantity">{{$sale->quantity}}</div></div>
+                                            <input type="hidden" name="idSale" id="idSale" value="{{$sale->id}}">
                                             <div class="name col">{{$sale->name}}<br> <script> document.write(showPrice("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}))</script></div>
                                             @if ($coinClient == 0) 
                                                 <div class="total col"><script> document.write(showTotal("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}, {{$sale->quantity}}))</script></div>
@@ -59,10 +61,37 @@
                                             @endif
                                         </div>
                                     @endforeach
+
                                     <input type="hidden" id="nameClient"  name="nameClient" value="{{$nameClient}}">
                                     <input type="hidden" id="coinClient"  name="coinClient" value="{{$coinClient}}">
                                     <input type="hidden" id="userUrl"  name="userUrl" value="{{$userUrl}}">
                                     <input type="hidden" id="codeUrl"  name="codeUrl" value="{{$codeUrl}}">
+                                </div>
+                                <div class= "form-section center">
+                                    <div id="saleQuantity" ></div>
+                                    <button type="button" class="remove btn btn-remove"><i class="fa fa-trash" aria-hidden="true"></i> Eliminar</button>
+                                    <div class="numPad">
+                                        <div class="row">
+                                            <div class="col" onclick="addNum(1)">1</div>
+                                            <div class="col" onclick="addNum(2)">2</div>
+                                            <div class="col" onclick="addNum(3)">3</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col" onclick="addNum(4)">4</div>
+                                            <div class="col" onclick="addNum(5)">5</div>
+                                            <div class="col" onclick="addNum(6)">6</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col" onclick="addNum(7)">7</div>
+                                            <div class="col" onclick="addNum(8)">8</div>
+                                            <div class="col" onclick="addNum(9)">9</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col"> </div>
+                                            <div class="col" onclick="addNum(0)">0</div>
+                                            <div class="col" onclick="removeNum()"><img src="../../images/delete.png" class="img-fluid" width="30px" height="30px"></div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class= "form-section">
                                     <p>Ingrese un correo electrónico donde podamos enviarte el recibo de pago:</p>
@@ -123,7 +152,8 @@
                                     <input type="text" name="nameCard" class="form-control" data-parsley-minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" required />
                                     <label for="numberCard">NUMERO DE LA TARJETA:</label>
                                     <div id="errorCard">
-                                        <ul><li>Complete los datos de la tarjeta</li></ul></div>
+                                        <ul><li>Complete los datos de la tarjeta</li></ul>
+                                    </div>
                                     <div id="card_number" class="field"></div>
                                     <div id="paymentResponseCardNumber"></div>
                                     <div class="row">
@@ -197,6 +227,7 @@
                                 <div class="form-navigation bottom">
                                     <button type="button" class="next btn btn-bottom">Siguiente</button>
                                     <button type="button" class="pay btn btn-bottom">Pagar</button>
+                                    <button type="button" class="save btn btn-bottom">Guardar</button>
                                     <button type="submit" class="submit btn btn-bottom">Realizar Pago</button>
                                 </div>
                                 <div class="row justify-content-center"id="loading">
@@ -211,8 +242,8 @@
     </Section>
 
     <script> 
+        var statusModification = {{$statusModification}};
         $(function(){
-            
             function delay(callback, ms) {
                 var timer = 0;
                 return function() {
@@ -239,6 +270,30 @@
                     $('.next').hide();                    
                 });
             }, 500));
+            
+            $('.save').on('click', function(){
+                if(parseInt($('#saleQuantity').text()) == 0){
+                    alertify.error('Debe ser diferente a cero');
+                }else{
+                    $.ajax({
+                        url: "{{route('sale.modifysale')}}", 
+                        data: {"sale_id" : _selectSale, "quantity" : $('#saleQuantity').text(), "userUrl": "{{$userUrl}}", "codeUrl": "{{$codeUrl}}" },
+                        type: "POST",
+                    }).done(function(result){
+                        window.location=result.url;
+                    }).fail(function(result){});
+                }
+            });
+
+            $('.save').on('click', function(){
+                $.ajax({
+                    url: "{{route('sale.modifysale')}}", 
+                    data: {"sale_id" : _selectSale, "userUrl": "{{$userUrl}}", "codeUrl": "{{$codeUrl}}" },
+                    type: "POST",
+                }).done(function(result){
+                    window.location=result.url;
+                }).fail(function(result){});
+            });
             
         });
     </script>

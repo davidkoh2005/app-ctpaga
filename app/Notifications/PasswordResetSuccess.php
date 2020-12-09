@@ -38,7 +38,8 @@ class PasswordResetSuccess extends Notification implements ShouldQueue
         return (new MailMessage)
             ->line('Has cambiado tu contraseña correctamente.')
             ->line('Si cambió la contraseña, no se requiere ninguna otra acción.')
-            ->line('Si no cambió la contraseña, proteja su cuenta.');
+            ->line('Si no cambió la contraseña, proteja su cuenta.')
+            ->subject('Restablecimiento de contraseña exitoso');
     }
 /**
      * Get the array representation of the notification.

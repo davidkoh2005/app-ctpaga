@@ -12,12 +12,7 @@ use App\Notifications\PasswordResetSuccess;
 
 class PasswordResetController extends Controller
 {
-    /**
-     * Create token password reset
-     *
-     * @param  [string] email
-     * @return [string] message
-     */
+
     public function create(Request $request)
     {
         $request->validate([
@@ -28,6 +23,7 @@ class PasswordResetController extends Controller
 
         if (!$user)
             return response()->json([
+                'statusCode' => 404,
                 'message' => 'Email error.'
             ], 404);
 
@@ -46,16 +42,11 @@ class PasswordResetController extends Controller
             );
 
         return response()->json([
+            'statusCode' => 201,
             'message' => 'Email send'
         ]);
     }
-    /**
-     * Find token password reset
-     *
-     * @param  [string] $token
-     * @return [string] message
-     * @return [json] passwordReset object
-     */
+
     public function find($token)
     {
         $passwordReset = PasswordReset::where('token', $token)->first();
@@ -74,20 +65,10 @@ class PasswordResetController extends Controller
             
         return view('updatePassword', compact('token'));
     }
-     /**
-     * Reset password
-     *
-     * @param  [string] email
-     * @param  [string] password
-     * @param  [string] password_confirmation
-     * @param  [string] token
-     * @return [string] message
-     * @return [json] user object
-     */
+
     public function reset(Request $request)
     {
         $request->validate([
-            'email' => 'required|string|email',
             'password' => 'required|string|confirmed',
             'token' => 'required|string'
         ]);
@@ -95,14 +76,14 @@ class PasswordResetController extends Controller
         $passwordReset = PasswordReset::where('token', $request->token)->first();
 
         if (!$passwordReset){
-            Session::flash('message', "Este token de restablecimiento de contraseña no es válido.");
+            Session::flash('error', "Este token de restablecimiento de contraseña no es válido.");
             return view('updatePassword');
         }
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $passwordReset->email)->first();
 
         if (!$user){
-            Session::flash('message', "No podemos encontrar un usuario con esa dirección de correo electrónico.");
+            Session::flash('error', "No podemos encontrar un usuario con esa dirección de correo electrónico.");
             return view('updatePassword');
         }
 
@@ -112,7 +93,7 @@ class PasswordResetController extends Controller
         $passwordReset->delete();
         $user->notify(new PasswordResetSuccess($passwordReset));
 
-        Session::flash('Succecs', "Guardado corractamente.");
+        Session::flash('succecs', "Guardado corractamente.");
         return view('updatePassword');
 
     }

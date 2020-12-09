@@ -100,7 +100,7 @@ class UserController extends Controller
             $commerce_id = $request->commerce_id;
         }
 
-        Commerce::find($request->commerce_id)->update([
+        Commerce::where('id',$request->commerce_id)->update([
             "rif"       => $request->rif,
             "name"      => $request->name,
             "address"   => $request->address,

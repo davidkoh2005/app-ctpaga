@@ -23,20 +23,31 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            @if (Session::has('message'))
+
+                            @if (Session::has('error'))
                                 <div class="alert alert-danger">
-                                    <strong>Error: </strong> {{Session::get('message') }}
+                                    <strong>Error: </strong> {{Session::get('error') }}
                                 </div>
+                            @elseif (Session::has('succecs'))
+                            <div class="center">
+                                <svg width='3em' height='3em' viewBox='0 0 16 16' class='bi bi-check-circle-fill' fill='currentColor'>
+                                    <path fill-rule='evenodd' d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z'/>
+                                </svg>
+                                <div class="row">&nbsp;</div>
+                                <p>{{Session::get('succecs') }}</p>
+
+                            </div>
                             @else
-                            <form id="password-form" class="contact-form" method='POST' action="{{route('form.formSubmit')}}">
+                            <form id="password-form" class="contact-form" method='POST' action="{{route('form.passwordReset')}}">
                                 @csrf
                                 <input type="hidden" name="token" id="token" value="{{$token}}">
-                                <div class= "form-section">
+                                <div class= "form-section current">
                                     <p>Ingrese la nueva contraseña:</p>
                                     <label for="password">Contraseña</label>
-                                    <input type="password" name="password" class="form-control" placeholder="***************" min="6" data-parsley-min="6" required />
-                                    <label for="passwordConfirm">Confirmar contraseña</label>
-                                    <input type="password" name="passwordConfirm" class="form-control" placeholder="***************" min="6" data-parsley-min="6" required />
+                                    <input type="password" name="password" id="password" class="form-control" placeholder="***************"  required />
+                                    <label for="password_confirmation">Confirmar contraseña</label>
+                                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="***************"  required />
+                                    <div id="errorPassword"></div>
                                 </div>
 
                                 <div class="row">&nbsp;</div>
@@ -55,6 +66,5 @@
             </div>
         </div>
     </Section>
-
 </body>
 </html>

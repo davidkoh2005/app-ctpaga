@@ -64,7 +64,7 @@ class ServiceController extends Controller
 
         $price = app('App\Http\Controllers\Controller')->getPrice($request->price);
         
-        Service::find($request->id)->update([
+        Service::where('id',$request->id)->update([
             "url"           => $url,
             "name"          => $request->name,
             "price"         => $price,

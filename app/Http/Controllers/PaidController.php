@@ -62,7 +62,7 @@ class PaidController extends Controller
                             foreach ($sales as $sale)
                             {
                                 if($sale->type == 0 && $sale->productService_id != 0){
-                                    $product = Product::find($sale->productService_id)->first();
+                                    $product = Product::where('id',$sale->productService_id)->first();
                                     $product->stock -= $sale->quantity;
                                     $product->save();
                                 }
@@ -72,7 +72,7 @@ class PaidController extends Controller
                             }
 
                             $commerce = Commerce::where('userUrl',$request->userUrl)->first();
-                            $user = User::find($commerce->user_id)->first();
+                            $user = User::where('id',$commerce->user_id)->first();
                             
                             Paid::create([
                                 "user_id"               => $user->id,

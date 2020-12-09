@@ -18,10 +18,11 @@ use App\Category;
 
 class SaleController extends Controller
 {
-    public function index($userUrl, $codeUrl, $statusModification = false)
+    public function index($userUrl, $codeUrl, $statusModification = 0)
     {
+
         Session::flash('message', null);
-        $sales = Sale::where('codeUrl',$codeUrl)->get();
+        $sales = Sale::where('codeUrl',$codeUrl)->orderBy('name', 'asc')->get();
 
         
         /* if($sales[0]->statusSale == 1 || Carbon::now()->format('Y-m-d 23:59:59') > $sales[0]->expires_at)
@@ -34,7 +35,7 @@ class SaleController extends Controller
         else if($sales[0]->commerce_id != $commerce->id)
             return redirect()->route('welcome');
 
-        $user = User::find($commerce->user_id)->first();
+        $user = User::where('id',$commerce->user_id)->first();
         $picture = Picture::where('commerce_id', $commerce->id)->first();
         $shippings = Shipping::where('user_id', $commerce->user_id)->get();
         
@@ -82,55 +83,77 @@ class SaleController extends Controller
         else if($product == 0 && $service != 0)
             $msg = $msgService;
 
+        
         return view('multi-step-form', compact('userUrl','codeUrl', 'statusModification', 'commerce','picture', 'sales', 'nameClient', 'rate', 'coinClient', 'total', 'shippings', 'quantity', 'msg'));
     }
 
     public function new(Request $request)
     {
-        
-        if($request->user_id){
-            $user = $request->user_id;
-        }else{
-            $user_id = $request->user()->id;
-        }
-
-
         $code = $this->randomCode();
         
-        foreach($request->sales as $sale){
+        if($request->user_id){
+            $user_id = $request->user_id;
+            foreach($request->sales as $sale){
+                Sale::create([
+                    "user_id"               => $user_id,
+                    "commerce_id"           => (int)$request->commerce_id,
+                    "codeUrl"               => $code,
+                    "type"                  => (int)$sale['type'],
+                    "productService_id"     => (int)$sale['data'][0]['id'],
+                    "name"                  => $sale['data'][0]['name'],
+                    "price"                 => $sale['data'][0]['price'],
+                    "nameClient"            => $request->nameClient,
+                    "coinClient"            => (int)$request->coin,
+                    "coin"                  => (int)$sale['data'][0]['coin'],
+                    "quantity"              => (int)$sale['quantity'],
+                    "rate"                  => $request->rate,
+                    "statusShipping"        => $request->statusShipping,
+                    "descriptionShipping"   => $request->descriptionShipping,
+                    "expires_at"            => Carbon::now()->format('Y-m-d 23:59:59'),
+                ]);
+            }
 
-            if($sale['data']['id'] == 0)
-                $price = app('App\Http\Controllers\Controller')->getPriceAmount($sale['data']['price']);
-            else
-                $price = app('App\Http\Controllers\Controller')->getPriceSales($sale['data']['price']);
-            
-            Sale::create([
-                "user_id"               => $user_id,
-                "commerce_id"           => (int)$request->commerce_id,
-                "codeUrl"               => $code,
-                "type"                  => $sale['type'],
-                "productService_id"     => $sale['data']['id'],
-                "name"                  => $sale['data']['name'],
-                "price"                 => $price,
-                "nameClient"            => $request->nameClient,
-                "coinClient"            => $request->coin,
-                "coin"                  => $sale['data']['coin'],
-                "quantity"              => $sale['quantity'],
-                "rate"                  => $request->rate,
-                "statusShipping"        => $request->statusShipping,
-                "descriptionShipping"   => $request->descriptionShipping,
-                "expires_at"            => Carbon::now()->format('Y-m-d 23:59:59'),
-            ]);
+        }else{
+            $user_id = $request->user()->id;
+
+            foreach($request->sales as $sale){
+
+                if($sale['data']['id'] == 0)
+                    $price = app('App\Http\Controllers\Controller')->getPriceAmount($sale['data']['price']);
+                else
+                    $price = app('App\Http\Controllers\Controller')->getPriceSales($sale['data']['price']);
+                
+                Sale::create([
+                    "user_id"               => $user_id,
+                    "commerce_id"           => (int)$request->commerce_id,
+                    "codeUrl"               => $code,
+                    "type"                  => $sale['type'],
+                    "productService_id"     => $sale['data']['id'],
+                    "name"                  => $sale['data']['name'],
+                    "price"                 => $price,
+                    "nameClient"            => $request->nameClient,
+                    "coinClient"            => $request->coin,
+                    "coin"                  => $sale['data']['coin'],
+                    "quantity"              => $sale['quantity'],
+                    "rate"                  => $request->rate,
+                    "statusShipping"        => $request->statusShipping,
+                    "descriptionShipping"   => $request->descriptionShipping,
+                    "expires_at"            => Carbon::now()->format('Y-m-d 23:59:59'),
+                ]);
+            }
         }
 
+
         if($request->userUrl)
-            $this->index($userUrl, $code, true);
+            return response()->json([
+                'url' => url($request->userUrl.'/'.$code.'/'.true)
+            ]);
         else
             return response()->json([
                 'statusCode' => 201,
                 'message' => 'Create sales correctly',
                 'codeUrl' => $code,
-            ]); 
+            ]);  
     }
 
     public function indexStore($userUrl)
@@ -140,8 +163,8 @@ class SaleController extends Controller
                 
         if(!$commerce)
             return redirect()->route('welcome');
-            
-        $user = User::find($commerce->user_id)->first();
+        
+        $user = User::where('id', $commerce->user_id)->first();
         $picture = Picture::where('commerce_id', $commerce->id)->first();    
         $shippings = Shipping::where('user_id', $user->id)->get();
 
@@ -174,7 +197,7 @@ class SaleController extends Controller
         $services = null;
         $coinClient = $request->coinClient;
 
-        $user = User::find($request->user_id)->first();
+        $user = User::where('id',$request->user_id)->first();
 
         if ($request->type == 0){
             $products = Product::where('commerce_id', $request->commerce_id)
@@ -229,5 +252,23 @@ class SaleController extends Controller
             return $discount;
         else
             return "ERROR";
+    }
+
+    public function modifysale(Request $request){
+        Sale::where('id', $request->sale_id)->update([
+            "quantity" => $request->quantity
+        ]);
+
+        return response()->json([
+            'url' => url($request->userUrl.'/'.$request->codeUrl.'/'.true)
+        ]);
+    }
+
+    public function removeSale(Request $request){
+        Sale::where('id', $request->sale_id)->delete();
+
+        return response()->json([
+            'url' => url($request->userUrl.'/'.$request->codeUrl.'/'.true)
+        ]);
     }
 }

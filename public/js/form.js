@@ -4,11 +4,11 @@ var shippingPrice = 0;
 var shippingCoin = 0;
 var _coinClient = 0;
 var _rate = 0;
+var _selectSale;
 
 $(function(){
     var $sections = $('.form-section');
     var statusShippingClient = false;
-    var statusSwitch = false;
     var stripe = Stripe($("#STRIPE_KEY").val());
     var statusCard = false;
     var statusDate = false;
@@ -94,27 +94,32 @@ $(function(){
 
     function navigateTo(index){
         $sections.removeClass('current').eq(index).addClass('current');
-        $('.form-navigation .previous').toggle(index>0);
+        if(statusModification)
+            $('.form-navigation .previous').toggle(index>0);
+        else
+            $('.form-navigation .previous').toggle(index>1);
+
         var arTheEnd = index >= $sections.length -1;
         $('.form-navigation .pay').toggle(index == 0);
-        $('.form-navigation .next').toggle(!arTheEnd && index != 0);
+        $('.form-navigation .save').toggle(index == 1);
+        $('.form-navigation .next').toggle(!arTheEnd && index != 0 && index != 1);
 
         $('.form-navigation [type=submit]').toggle(arTheEnd);
 
-        if(index == 2){
+        if(index == 3){
             if(statusShippingClient)
                 $('.next').show();
             else
                 $('.next').hide();
         }
 
-        if(index == 5)
+        if(index == 6)
             if($("#switchDiscount").is(':checked') || $('#percentageSelect').val() != 0)
                 $('.next').show();
             else
                 $('.next').hide();
 
-        if(index == 6)
+        if(index == 7)
             calculateTotal();
     }
 
@@ -131,30 +136,33 @@ $(function(){
 
             if(curIndex()==4 && $('#statusShipping').val()=='false')
                 navigateTo(curIndex()-3);
+            else if(curIndex()==2)
+                navigateTo(curIndex()-2);
             else
                 navigateTo(curIndex()-1);
-        }
+        }   
+        
     })
 
     $('.form-navigation .pay').click(function(){
         $('.contact-form').parsley().whenValidate({
             group: 'block-' + curIndex()
         }).done(function(){
-            navigateTo(curIndex()+1);
+            navigateTo(curIndex()+2);
             $(".form-sales").text("Formulario");
         })
     })
 
     $('.form-navigation .next').click(function(){
-        if(curIndex() == 1 && $('#statusShipping').val()=='false'){
+        if(curIndex() == 2 && $('#statusShipping').val()=='false'){
             $('.contact-form').parsley().whenValidate({
                 group: 'block-' + curIndex()
             }).done(function(){
-                navigateTo(curIndex()+3);
+                navigateTo(curIndex()+4);
             }) 
         }
 
-        if(curIndex() == 2 || curIndex() == 5){
+        if(curIndex() == 3 || curIndex() == 6){
             if($('#statusShipping').val()=='true' && statusShippingClient)
                 $('.contact-form').parsley().whenValidate({
                     group: 'block-' + curIndex()
@@ -162,7 +170,7 @@ $(function(){
                     navigateTo(curIndex()+1);
                 });
                 
-        }else if(curIndex() == 4){
+        }else if(curIndex() == 5){
             if(statusCard && statusDate && statusCVC){
                 $('#errorCard').hide();
                 $('.contact-form').parsley().whenValidate({
@@ -210,7 +218,6 @@ $(function(){
 
     $("#switchDiscount").on('click', function(){
         $( "#discount" ).prop( "disabled", $(this).is(':checked'));
-        statusSwitch = $(this).is(':checked');
 
         if($(this).is(':checked')){
             $('#discount').val('');
@@ -247,12 +254,20 @@ $(function(){
         });
     }
     
-
     function stripeTokenHandler(token) {
         $('#stripeToken').val(token.id);
         
         $("#payment-form").submit();
     }
+
+    $('.sales').on('click', function(){
+        if(statusModification){
+            $('#saleQuantity').text($(this).find('#desingQuantity').text());
+            _selectSale = $(this).find('#idSale').val();
+            navigateTo(1);
+            $(".form-sales").text("Modificar Cantidad");
+        }
+    });
 
 });
 
@@ -297,3 +312,15 @@ function calculateTotal(){
     
 }
 
+function addNum(value){
+    var result = $('#saleQuantity').text().replace(/^0+/, '');
+    $('#saleQuantity').text(result+value);
+}
+
+function removeNum(){
+    var result = $('#saleQuantity').text().substring(0, $('#saleQuantity').text().length - 1);
+    if (result.length == 0)
+        $('#saleQuantity').text("0");
+    else
+    $('#saleQuantity').text(result);
+}

@@ -40,7 +40,7 @@ class ShippingController extends Controller
     {
         $price = app('App\Http\Controllers\Controller')->getPriceShipping($request->price);
 
-        Shipping::find($request->id)->update([
+        Shipping::where('id',$request->id)->update([
             "price"         => $price,
             "coin"          => $request->coin,
             "description"   => $request->description,

@@ -33,7 +33,7 @@ class DiscountController extends Controller
 
     public function update(Request $request)
     {
-        Discount::find($request->id)->update([
+        Discount::where('id',$request->id)->update([
             "code"          => $request->code,
             "percentage"    => $request->percentage,
         ]);

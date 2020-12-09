@@ -9,6 +9,7 @@
     <script src="../../js/formStore.js"></script>
     <script src="../../js/i18n/es.js"></script>
     <script src="../../js/global.js"></script>
+</head>
 <body>
     <div class="loader"></div>
     <Section>
@@ -160,7 +161,7 @@
                 dataType: "json"
             }).done(function(data){
                 $('#showProductsServices').html(data.html);
-                setTimeout(removeLoader, 2000);
+                setTimeout(removeLoader, 100);
             }).fail(function(){  
                 $('#showProductsServices').html();                 
             });
@@ -173,17 +174,13 @@
         }
 
         function sendData(){
-            console.log(listCart);
-           /*  $.ajax({
+            $.ajax({
                 url: "{{route('sale.newSale')}}", 
                 data: {"commerce_id" : "{{$commerce->id}}", "user_id" : "{{$commerce->user_id}}", "sales" : listCart, "coin": coinClient, "rate": rateToday, "nameClient":"Tienda Web", "statusShipping":$('#statusShipping').val(), "descriptionShipping": "", "userUrl": "{{$commerce->userUrl}}" },
                 type: "POST",
-                dataType: "json",
             }).done(function(result){
-                console.log(result)
-            }).fail(function(result){  
-                  
-            }); */
+                window.location=result.url;
+            }).fail(function(result){});
         }
     </script>
 </body>
