@@ -201,6 +201,7 @@ div.shipping-price{
     padding-top: 20px;
 }
 
+
 .btn-bottom { 
     width: 100%;
     border-radius: 60px;
@@ -210,6 +211,12 @@ div.shipping-price{
 }
 
 .btn-bottom:hover {
+    background-color: white !important;
+    border: 2px solid #00cc5f;
+    color: #00cc5f;
+}
+
+.statusButton, .statusButton:hover{
     background-color: white !important;
     border: 2px solid #00cc5f;
     color: #00cc5f;

@@ -14,7 +14,7 @@
     @endforeach
 @else
     @foreach($services as $service)
-    <div class="co">
+    <div class="col">
         <div class="card" style="width: 12rem;">
             <img class="card-img-top" src="{{$services->url}}">
             <div class="card-body">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Session;
 use App\User;
 use App\Sale;
 use App\Rate;
@@ -17,10 +18,13 @@ use App\Category;
 
 class SaleController extends Controller
 {
-    public function index($userUrl, $codeUrl)
+    public function index($userUrl, $codeUrl, $statusModification = false)
     {
+        Session::flash('message', null);
         $sales = Sale::where('codeUrl',$codeUrl)->get();
-        /* if($sales[0]->statusSale == 1)
+
+        
+        /* if($sales[0]->statusSale == 1 || Carbon::now()->format('Y-m-d 23:59:59') > $sales[0]->expires_at)
             return redirect()->route('form.store', ['userUrl' => $userUrl]); */
 
         $commerce = Commerce::where('userUrl',$userUrl)->first();
@@ -78,25 +82,34 @@ class SaleController extends Controller
         else if($product == 0 && $service != 0)
             $msg = $msgService;
 
-        return view('multi-step-form', compact('userUrl','codeUrl','commerce','picture', 'sales', 'nameClient', 'rate', 'coinClient', 'total', 'shippings', 'quantity', 'msg'));
+        return view('multi-step-form', compact('userUrl','codeUrl', 'statusModification', 'commerce','picture', 'sales', 'nameClient', 'rate', 'coinClient', 'total', 'shippings', 'quantity', 'msg'));
     }
 
     public function new(Request $request)
     {
-        $user = $request->user();
-        $code = $this->randomCode();
+        
+        if($request->user_id){
+            $user = $request->user_id;
+        }else{
+            $user_id = $request->user()->id;
+        }
 
+
+        $code = $this->randomCode();
+        
         foreach($request->sales as $sale){
+
             if($sale['data']['id'] == 0)
                 $price = app('App\Http\Controllers\Controller')->getPriceAmount($sale['data']['price']);
             else
                 $price = app('App\Http\Controllers\Controller')->getPriceSales($sale['data']['price']);
             
             Sale::create([
-                "user_id"               => $user->id,
+                "user_id"               => $user_id,
                 "commerce_id"           => (int)$request->commerce_id,
                 "codeUrl"               => $code,
                 "type"                  => $sale['type'],
+                "productService_id"     => $sale['data']['id'],
                 "name"                  => $sale['data']['name'],
                 "price"                 => $price,
                 "nameClient"            => $request->nameClient,
@@ -110,27 +123,30 @@ class SaleController extends Controller
             ]);
         }
 
-        return response()->json([
-            'statusCode' => 201,
-            'message' => 'Create sales correctly',
-            'codeUrl' => $code,
-        ]); 
+        if($request->userUrl)
+            $this->index($userUrl, $code, true);
+        else
+            return response()->json([
+                'statusCode' => 201,
+                'message' => 'Create sales correctly',
+                'codeUrl' => $code,
+            ]); 
     }
 
     public function indexStore($userUrl)
     {
         $coinClient = 1;
         $commerce = Commerce::where('userUrl',$userUrl)->first();
-        $user = User::find($commerce->user_id)->first();
-
+                
         if(!$commerce)
             return redirect()->route('welcome');
-        
+            
+        $user = User::find($commerce->user_id)->first();
         $picture = Picture::where('commerce_id', $commerce->id)->first();    
         $shippings = Shipping::where('user_id', $user->id)->get();
 
-        $rate = Rate::where('user_id', $user->id)->orderBy('date', 'desc')->first();
-        $rate = $rate->rate;
+        $rateUser = Rate::where('user_id', $user->id)->orderBy('date', 'desc')->first();
+        $rate = $rateUser->rate;
 
         $products = Product::where('user_id', $user->id)
                             ->where('commerce_id', $commerce->id)
@@ -158,7 +174,7 @@ class SaleController extends Controller
         $services = null;
         $coinClient = $request->coinClient;
 
-        $user = Commerce::find($request->commerce_id)->first();
+        $user = User::find($request->user_id)->first();
 
         if ($request->type == 0){
             $products = Product::where('commerce_id', $request->commerce_id)

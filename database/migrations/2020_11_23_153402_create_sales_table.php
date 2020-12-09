@@ -20,6 +20,7 @@ class CreateSalesTable extends Migration
             $table->unsignedBigInteger('commerce_id');
             $table->foreign('commerce_id')->references('id')->on('commerces');
             $table->string("codeUrl",10);
+            $table->integer('productService_id');
             $table->string("name",50);
             $table->string("price");
             $table->string("nameClient",50);

@@ -31,7 +31,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            @if (Session::has('message'))
+                            @if (Session::has('message') != null)
                                 <div class="alert alert-danger">
                                     <strong>Error: </strong> {{Session::get('message') }}
                                 </div>
@@ -70,42 +70,44 @@
                                     <input type="email" name="email" class="form-control" placeholder="joedoe@gmail.com" required />
                                 </div>
 
-                                @if ($sales[0]->statusShipping && count($shippings)!=0)
-                                <script> statusShipping = true;</script>
                                 <div class="form-section">
-                                    <p> Seleccione un envio:</p>
-                                    @foreach ($shippings as $shipping)
-                                        <div class="row shippings justify-content-center align-items-center minh-10">
-                                            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4" id="iconChecked">
-                                                <input type="radio" class="radio-shippings" name="shippings" id="shippings" value="{{$shipping->id}}">
-                                                <input type="hidden" id="shippingPrice" value="{{$shipping->price}}">
-                                                <input type="hidden" id="shippingCoin"  name="shippingCoin" value="{{$shipping->coin}}">
+                                    @if ($sales[0]->statusShipping && count($shippings)!=0)
+                                    <input type="hidden" id="statusShipping" value="true">
+                                        <p> Seleccione un envio:</p>
+                                        @foreach ($shippings as $shipping)
+                                            <div class="row shippings justify-content-center align-items-center minh-10">
+                                                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4" id="iconChecked">
+                                                    <input type="radio" class="radio-shippings" name="shippings" id="shippings" value="{{$shipping->id}}">
+                                                    <input type="hidden" id="shippingPrice" value="{{$shipping->price}}">
+                                                    <input type="hidden" id="shippingCoin"  name="shippingCoin" value="{{$shipping->coin}}">
+                                                </div>
+                                                <div class="description-shippings col">{{$shipping->description}}</div>
+                                                @if ($coinClient == 0) 
+                                                    <div class="shipping-price col"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
+                                                @else
+                                                    <div class="shipping-price col-md col-12"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
+                                                @endif
+        
                                             </div>
-                                            <div class="description-shippings col">{{$shipping->description}}</div>
-                                            @if ($coinClient == 0) 
-                                                <div class="shipping-price col"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
-                                            @else
-                                                <div class="shipping-price col-md col-12"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
-                                            @endif
-    
-                                        </div>
-                                    @endforeach
+                                        @endforeach
+                                    @else
+                                        <input type="hidden" id="statusShipping" value="false">
+                                    @endif
                                 </div>
-                                @endif
 
-                                @if ($sales[0]->statusShipping && count($shippings)!=0)
                                 <div class="form-section">
-                                    <p> Ingresa la dirección de envío:</p>
-                                    <label for="name">NOMBRE:</label>
-                                    <input type="text" name="name" class="form-control" data-parsley-minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" required />
-                                    <label for="number">NUMERO DE CELULAR:</label>
-                                    <input type="tel" name="number" class="form-control" placeholder="04121234567" size="11" maxlength="20" data-parsley-maxlength="20" data-parsley-pattern="^(?:(\+)58|0)(?:2(?:12|4[0-9]|5[1-9]|6[0-9]|7[0-8]|8[1-35-8]|9[1-5]|3[45789])|4(?:1[246]|2[46]))\d{7}$" required />
-                                    <label for="address">DIRECCÍON:</label>
-                                    <textarea class="form-control" name="address" row="3" placeholder="Av. Principal los dos caminos" required></textarea>
-                                    <label for="details">DETALLE ADICIONALES (OPCIONAL)</label>
-                                    <textarea class="form-control" name="details" row="3" placeholder="Deja en la recepción"></textarea>
+                                    @if ($sales[0]->statusShipping && count($shippings)!=0)
+                                        <p> Ingresa la dirección de envío:</p>
+                                        <label for="name">NOMBRE:</label>
+                                        <input type="text" name="name" class="form-control" data-parsley-minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" required />
+                                        <label for="number">NUMERO DE CELULAR:</label>
+                                        <input type="tel" name="number" class="form-control" placeholder="04121234567" size="11" maxlength="20" data-parsley-maxlength="20" data-parsley-pattern="^(?:(\+)58|0)(?:2(?:12|4[0-9]|5[1-9]|6[0-9]|7[0-8]|8[1-35-8]|9[1-5]|3[45789])|4(?:1[246]|2[46]))\d{7}$" required />
+                                        <label for="address">DIRECCÍON:</label>
+                                        <textarea class="form-control" name="address" row="3" placeholder="Av. Principal los dos caminos" required></textarea>
+                                        <label for="details">DETALLE ADICIONALES (OPCIONAL)</label>
+                                        <textarea class="form-control" name="details" row="3" placeholder="Deja en la recepción"></textarea>
+                                    @endif
                                 </div>
-                                @endif
 
                                 <div class= "form-section">
                                     <p>Ingresa la información de tu tarjeta de crédito o debito (Visa o Master Card):</p>

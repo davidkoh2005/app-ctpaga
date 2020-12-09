@@ -31,3 +31,4 @@ Route::post('showCategories', 'SaleController@showCategories')->name('show.categ
 Route::post('showProductsServices', 'SaleController@showProductsServices')->name('show.productsServices');
 
 Route::post('pay', 'PaidController@formSubmit')->name('form.formSubmit');
+Route::post('newSales', 'SaleController@new')->name('sale.newSale');

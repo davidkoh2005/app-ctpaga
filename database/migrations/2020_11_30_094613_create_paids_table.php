@@ -24,9 +24,9 @@ class CreatePaidsTable extends Migration
             $table->String("total");
             $table->integer("coin");
             $table->string("email");
-            $table->string("nameShopping",50);
-            $table->string("numberShopping", 20);
-            $table->string("addressShopping");
+            $table->string("nameShopping",50)->nullable();
+            $table->string("numberShopping", 20)->nullable();
+            $table->string("addressShopping")->nullable();
             $table->string("detailsShopping")->nullable();
             $table->string('shipping_id')->nullable();
             $table->integer("percentage");

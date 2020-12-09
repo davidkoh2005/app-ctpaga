@@ -6,9 +6,9 @@
     <title>Ctpaga</title>
     @include('library')
     <link rel="stylesheet" type="text/css" href="../css/styleStore.css">
-    <script src="../js/formStore.js"></script>
-    <script src="../js/i18n/es.js"></script>
-    <script src="../js/global.js"></script>
+    <script src="../../js/formStore.js"></script>
+    <script src="../../js/i18n/es.js"></script>
+    <script src="../../js/global.js"></script>
 <body>
     <div class="loader"></div>
     <Section>
@@ -31,75 +31,68 @@
                             </div>
                         </div>
                         <div class="card-body">
+                            <input type="hidden" id="coinClient"  name="coinClient" value="{{$coinClient}}">
+                            <input type="hidden" id="userUrl"  name="userUrl" value="{{$userUrl}}">
 
-                            <form id="payment-form" class="store-form" method='POST' action="">
-                                @csrf
-                                <input type="hidden" id="coinClient"  name="coinClient" value="{{$coinClient}}">
-                                <input type="hidden" id="userUrl"  name="userUrl" value="{{$userUrl}}">
-
-                                <div class= "form-section-store center">
-                                    <img class="rounded-circle" src="{{$picture->url}}" width="100px" height="100px">
-                                    <h3> {{$commerce->name}}</h3>
-                                    <div class="button-circle">
-                                        <ul>
-                                            <li> <a href="https://api.whatsapp.com/send/?phone={{env('WHATSAPP_NUM')}}"> <i class="fa fa-whatsapp" aria-hidden="true"></i><p>Whatsapp</p></a></li>
-                                            <li> <a href="#"> <i class="fa fa-truck button-shipping" aria-hidden="true"></i><p class="shipping">Envíos</p></a> </li>
-                                        </ul>
-                                    </div>
-                                    <div class="row">&nbsp;</div>
-
-                                    <div class="row" id="ProductsServices">
-                                        <div class="col">
-                                            <button type="button" class="btn btn-bottom btn-current" id="btn-products">Productos</button>
-                                        </div>
-                                        <div class="col">
-                                            <button type="button" class="btn btn-bottom" id="btn-services">Servicios</button>
-                                        </div>
-                                    </div>
-
-                                    <hr class="category">
-
-                                    <div class="row categories bold">Categorías</div>
-                                    <div class="row">&nbsp;</div>
-                                    <div class="row categories" id="showCategories"></div>
-                                    <div class="row">&nbsp;</div>
-                                    <hr>
-                                    <div class="row categories bold" id="showTitleProductsServices"></div>
-                                    <div class="row">&nbsp;</div>
-                                    <div class="row categories" id="showProductsServices"></div>
+                            <div class= "form-section-store center">
+                                <img class="rounded-circle" src="{{$picture->url}}" width="100px" height="100px">
+                                <h3> {{$commerce->name}}</h3>
+                                <div class="button-circle">
+                                    <ul>
+                                        <li> <a href="https://api.whatsapp.com/send/?phone={{env('WHATSAPP_NUM')}}"> <i class="fa fa-whatsapp" aria-hidden="true"></i><p>Whatsapp</p></a></li>
+                                        <li> <a href="#"> <i class="fa fa-truck button-shipping" aria-hidden="true"></i><p class="shipping">Envíos</p></a> </li>
+                                    </ul>
                                 </div>
-
-                                @if (count($shippings)!=0)
-                                <div class="form-section-store">
-                                    <p> Metodo de envío:</p>
-                                    @foreach ($shippings as $shipping)
-                                        <div class="row shippings justify-content-center align-items-center minh-10">
-                                            <div class="description-shippings col">{{$shipping->description}}</div>
-                                            @if ($coinClient == 0) 
-                                                <div class="shipping-price col"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
-                                            @else
-                                                <div class="shipping-price col-md col-12"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
-                                            @endif
-                                        </div>
-                                    @endforeach
-                                </div>
-                                @endif
-                                
-                                <div class="form-section-store">
-                                    <p> ejemplo:</p>
-                                    
-                                </div>
-
                                 <div class="row">&nbsp;</div>
 
-                                <div class="form-navigation bottom">
-                                    <button type="button" id="totalBtn" class="next btn btn-bottom">Pagar</button>
-                                    <button type="submit" class="submit btn btn-bottom">Realizar Pago</button>
+                                <div class="row" id="ProductsServices">
+                                    <div class="col">
+                                        <button type="button" class="btn btn-bottom btn-current" id="btn-products">Productos</button>
+                                    </div>
+                                    <div class="col">
+                                        <button type="button" class="btn btn-bottom" id="btn-services">Servicios</button>
+                                    </div>
                                 </div>
-                                <div class="row justify-content-center"id="loading">
-                                    <img widht="80px" height="80px" class="justify-content-center" src="../images/loading.gif">
-                                </div>
-                            </form>
+
+                                <hr class="category">
+
+                                <div class="row categories bold">Categorías</div>
+                                <div class="row">&nbsp;</div>
+                                <div class="row categories" id="showCategories"></div>
+                                <div class="row">&nbsp;</div>
+                                <hr>
+                                <div class="row categories bold" id="showTitleProductsServices"></div>
+                                <div class="row">&nbsp;</div>
+                                <div class="row categories" id="showProductsServices"></div>
+                            </div>
+
+                            @if (count($shippings)!=0)
+                            <div class="form-section-store">
+                                <input type="hidden" id="statusShipping" value="true">
+                                <p> Metodo de envío:</p>
+                                @foreach ($shippings as $shipping)
+                                    <div class="row shippings justify-content-center align-items-center minh-10">
+                                        <div class="description-shippings col">{{$shipping->description}}</div>
+                                        @if ($coinClient == 0) 
+                                            <div class="shipping-price col"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
+                                        @else
+                                            <div class="shipping-price col-md col-12"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                            @else
+                                <input type="hidden" id="statusShipping" value="false">
+                            @endif
+
+                            <div class="row">&nbsp;</div>
+
+                            <div class="form-navigation bottom">
+                                <button type="button" id="totalBtn" class="submit btn btn-bottom statusButton">Pagar</button>
+                            </div>
+                            <div class="row justify-content-center"id="loading">
+                                <img widht="80px" height="80px" class="justify-content-center" src="../images/loading.gif">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -130,6 +123,7 @@
     <script>
         var ClientType = 0;
         var categorySelect = null;
+        var rateToday = {{$rate}};
         function showCategories(type)
         {   
             $( ".loader" ).fadeIn(150, function() {
@@ -161,7 +155,7 @@
 
             $.ajax({
                 url: "{{ route('show.productsServices')}}", 
-                data: {"type" : ClientType, "commerce_id" : "{{$commerce->id}}", "category_select" : _categorySelect, "coinClient" : coinClient},
+                data: {"type" : ClientType, "commerce_id" : "{{$commerce->id}}", "category_select" : _categorySelect, "coinClient" : coinClient, "user_id": "{{$commerce->user_id}}"},
                 type: "POST",
                 dataType: "json"
             }).done(function(data){
@@ -176,6 +170,20 @@
             $( ".loader" ).fadeOut(500, function() {
                 $( ".loader" ).fadeOut("slow"); 
             });  
+        }
+
+        function sendData(){
+            console.log(listCart);
+           /*  $.ajax({
+                url: "{{route('sale.newSale')}}", 
+                data: {"commerce_id" : "{{$commerce->id}}", "user_id" : "{{$commerce->user_id}}", "sales" : listCart, "coin": coinClient, "rate": rateToday, "nameClient":"Tienda Web", "statusShipping":$('#statusShipping').val(), "descriptionShipping": "", "userUrl": "{{$commerce->userUrl}}" },
+                type: "POST",
+                dataType: "json",
+            }).done(function(result){
+                console.log(result)
+            }).fail(function(result){  
+                  
+            }); */
         }
     </script>
 </body>

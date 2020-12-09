@@ -101,8 +101,8 @@ $(function(){
 
         $('.form-navigation [type=submit]').toggle(arTheEnd);
 
-        if(index == 2 || index == 5){
-            if(statusShippingClient && $('#percentageSelect').val() != 0)
+        if(index == 2){
+            if(statusShippingClient)
                 $('.next').show();
             else
                 $('.next').hide();
@@ -124,11 +124,15 @@ $(function(){
     }
 
     $('.form-navigation .previous').click(function(){
+
         if(!statusLoading){
             if(curIndex()-1 == 0)
-            $(".form-sales").text("Ventas");
+                $(".form-sales").text("Ventas");
 
-            navigateTo(curIndex()-1);
+            if(curIndex()==4 && $('#statusShipping').val()=='false')
+                navigateTo(curIndex()-3);
+            else
+                navigateTo(curIndex()-1);
         }
     })
 
@@ -142,14 +146,22 @@ $(function(){
     })
 
     $('.form-navigation .next').click(function(){
+        if(curIndex() == 1 && $('#statusShipping').val()=='false'){
+            $('.contact-form').parsley().whenValidate({
+                group: 'block-' + curIndex()
+            }).done(function(){
+                navigateTo(curIndex()+3);
+            }) 
+        }
 
         if(curIndex() == 2 || curIndex() == 5){
-            if(statusShippingClient)
+            if($('#statusShipping').val()=='true' && statusShippingClient)
                 $('.contact-form').parsley().whenValidate({
                     group: 'block-' + curIndex()
                 }).done(function(){
                     navigateTo(curIndex()+1);
-                })
+                });
+                
         }else if(curIndex() == 4){
             if(statusCard && statusDate && statusCVC){
                 $('#errorCard').hide();

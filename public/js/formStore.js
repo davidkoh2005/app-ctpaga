@@ -4,7 +4,6 @@ var formatter = new Intl.NumberFormat(locale, options);
 var listCart = [];
 $(function(){
     var $sections = $('.form-section-store');
-    var statusLoading = false;
     var statusBtn = false;
 
     $('#videoUSD').hide();
@@ -51,7 +50,7 @@ $(function(){
         $sections.removeClass('current').eq(index).addClass('current');
         $('.form-navigation .previous').toggle(index>0);
         var arTheEnd = index >= $sections.length -1;
-        $('.form-navigation [type=submit]').toggle(arTheEnd);
+        $('.form-navigation [type=submit]').toggle(index ==0);
 
         if(index == 1){
             $(".form-store").text("Envio");
@@ -67,29 +66,13 @@ $(function(){
     }
 
     $('.form-navigation .previous').click(function(){
-        if(curIndex() == 2)
+        if(curIndex() == 2){
             navigateTo(curIndex()-1);
-
-        if(!statusLoading){
-            if(curIndex()-1 == 0)
-            $(".form-store").text("Tienda");
-
-            navigateTo(curIndex()-1);
+            showTotalBtn();
         }
-    });
-
-    $('.form-navigation .next').click(function(){
-
-        $('.store-form').parsley().whenValidate({
-            group: 'block-' + curIndex()
-        }).done(function(){
-            if(curIndex() == 0)
-                navigateTo(curIndex()+2);
-            else
-            navigateTo(curIndex()+1);
-        })
 
     });
+
 
     $sections.each(function(index, section){
         $(section).find(':input').attr('data-parsley-group', 'block-'+index);
@@ -113,6 +96,20 @@ $(function(){
         $('#btn-products').removeClass('btn-current');
         $('#btn-services').addClass('btn-current');
         showCategories(1);
+    });
+
+    $(".submit").on('click', function(){
+        if(listCart.length != 0){
+            $('.submit').hide();
+            $('#loading').show();
+            sendData();
+        }
+    });
+
+    $("#btnFloatingShipping").on('click', function(){
+        if(listCart.length != 0){
+            sendData();
+        }
     });
 
 });
@@ -155,6 +152,7 @@ function addCart(productService, type){
     }
     alertify.success('Se agrego al carrito');
     showTotalBtn();
+    $('#totalBtn').removeClass('statusButton');
 
 }
 
@@ -162,6 +160,7 @@ function showTotalBtn()
 {
     total = 0;
     quantity = 0;
+    
     if(listCart.length == 0){
         $('#totalBtn').text("Pagar");
     }else{
@@ -169,16 +168,15 @@ function showTotalBtn()
             total += (exchangeRate(value['data'][0]['price'], rateToday, value['data'][0]['coin'], coinClient ) * value['quantity']);
             quantity += value['quantity'];
         });
-    }
-    
-    if(coinClient == 0){
-        $('#totalBtn').text("Pagar $ "+formatter.format(total));
-    }else{
-        $('#totalBtn').text("Pagar Bs "+formatter.format(total));
+
+        if(coinClient == 0){
+            $('#totalBtn').text("Pagar $ "+formatter.format(total));
+        }else{
+            $('#totalBtn').text("Pagar Bs "+formatter.format(total));
+        }
     }
 
     $('.circleGreen').text(quantity);
     $("#btnFloatingShipping").addClass("WOW animated bounceIn");
-    //new WOW().init();
 
 }

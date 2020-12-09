@@ -8,6 +8,7 @@ use App\User;
 use App\Sale;
 use App\Paid;
 use App\Commerce;
+use App\Product;
 use Session;
 
 class PaidController extends Controller
@@ -56,7 +57,19 @@ class PaidController extends Controller
 
                         if($payment_status == 'succeeded'){ 
 
-                            Sale::where("codeUrl", $request->codeUrl)->update(['statusSale' => 1]);
+                            $sales = Sale::where("codeUrl", $request->codeUrl)->get();
+                            
+                            foreach ($sales as $sale)
+                            {
+                                if($sale->type == 0 && $sale->productService_id != 0){
+                                    $product = Product::find($sale->productService_id)->first();
+                                    $product->stock -= $sale->quantity;
+                                    $product->save();
+                                }
+
+                                $sale->statusSale = 1;
+                                $sale->save();
+                            }
 
                             $commerce = Commerce::where('userUrl',$request->userUrl)->first();
                             $user = User::find($commerce->user_id)->first();
