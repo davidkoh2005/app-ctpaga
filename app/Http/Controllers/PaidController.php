@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
+use App\Notifications\PostPurchase;
 use App\User;
 use App\Sale;
 use App\Paid;
@@ -58,17 +59,31 @@ class PaidController extends Controller
                         if($payment_status == 'succeeded'){ 
 
                             $sales = Sale::where("codeUrl", $request->codeUrl)->get();
-                            
+                            $message="";
                             foreach ($sales as $sale)
                             {
                                 if($sale->type == 0 && $sale->productService_id != 0){
                                     $product = Product::where('id',$sale->productService_id)->first();
+                                    
+                                    if ($product->postPurchase)
+                                        $message .= "- ".$product->postPurchase."\n";
+
                                     $product->stock -= $sale->quantity;
                                     $product->save();
+
+                                    
+                                }
+
+                                if($sale->type == 1 && $sale->productService_id != 0){
+                                    $service = Service::where('id',$sale->productService_id)->first();
+                                    
+                                    if($service->postPurchase)
+                                        $message .= "- ".$service->postPurchase."\n";
                                 }
 
                                 $sale->statusSale = 1;
                                 $sale->save();
+
                             }
 
                             $commerce = Commerce::where('userUrl',$request->userUrl)->first();
@@ -93,6 +108,10 @@ class PaidController extends Controller
 
                             $userUrl = $request->userUrl;
 
+                            $user->notify(
+                                new PostPurchase($message, $userUrl, $commerce->name)
+                            );
+
                             return view('result', compact('userUrl'));
                         }else{ 
                             Session::flash('message', "¡Tu pago ha fallado!");
@@ -111,8 +130,72 @@ class PaidController extends Controller
                 return Redirect::back();  
             } 
         }else{
-            // bs
+            dd($request->all());
+
+            $url = 'https://esitef-homologacao.softwareexpress.com.br/e-sitef/api/v1/transactions';
+            $ch = curl_init($url);
+            $jsonData = array(
+                'installments' => '1',
+                'installment_type' => '4',
+                'authorizer_id' => '2',
+                'amount' => '200000000',
+                'additional_data' => array(
+                    'currency' => 'VEF'
+                )
+            );
+
+            $jsonDataEncoded = json_encode($jsonData);
+
+
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array( 
+                "Content-Type: application/json",
+                "merchant_id: compralotodo",
+                "merchant_key: 059951C653E21C6ED5456E5705550709017E2F3FF04C07688504D0525ED473B4"
+            ));
+            
+            $result = json_decode(curl_exec($ch), true);
+            curl_close($ch);
+
+            $url = 'https://esitef-homologacao.softwareexpress.com.br/e-sitef/api/v1/payments/'.$result['payment']['nit'];
+            $ch = curl_init($url);
+
+            $jsonData = array(
+                'card' => array(
+                    'number' => '5555555555555555',
+                    'expiry_date' => '1220',
+                    'security_code' => '601'
+                )
+            );
+
+            $jsonDataEncoded = json_encode($jsonData);
+
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array( 
+                "Content-Type: application/json",
+                "merchant_id: compralotodo",
+                "merchant_key: 059951C653E21C6ED5456E5705550709017E2F3FF04C07688504D0525ED473B4"
+            ));
+            
+            $result = json_decode(curl_exec($ch), true);
+            curl_close($ch);
+
+            dd($result);
         }
 
+    }
+
+    public function show(Request $request)
+    {
+        $user = $request->user();
+        $paids = Paid::where('user_id', $user->id)
+                    ->where('commerce_id', $request->commerce_id)
+                    ->orderBy('created_at', 'asc')->get();
+        
+        return response()->json(['statusCode' => 201,'data' => $paids]);
     }
 }

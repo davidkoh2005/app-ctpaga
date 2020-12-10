@@ -25,7 +25,7 @@
             $color = $level;
             break;
         default:
-            $color = 'primary';
+            $color = 'success';
     }
 ?>
 @component('mail::button', ['url' => $actionUrl, 'color' => $color])
@@ -43,7 +43,7 @@
 @if (! empty($salutation))
 {{ $salutation }}
 @else
-@lang('Regards'),<br>
+@lang('Saludos'),<br>
 {{ config('app.name') }}
 @endif
 

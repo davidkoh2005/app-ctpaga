@@ -28,9 +28,9 @@ class CreatePaidsTable extends Migration
             $table->string("numberShopping", 20)->nullable();
             $table->string("addressShopping")->nullable();
             $table->string("detailsShopping")->nullable();
-            $table->string('shipping_id')->nullable();
+            $table->integer('shipping_id')->default(0);
             $table->integer("percentage");
-            $table->String("nameCompanyPayments");
+            $table->String("nameCompanyPayments", 10);
             $table->timestamps();
         });
     }

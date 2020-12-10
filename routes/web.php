@@ -20,6 +20,7 @@ Route::fallback(function () {
     return redirect()->route('welcome');
 });
 
+
 Route::get('password/create', 'Auth\PasswordResetController@create');
 Route::get('password/find/{token}', 'Auth\PasswordResetController@find');
 Route::post('password/reset', 'Auth\PasswordResetController@reset')->name('form.passwordReset');
@@ -35,3 +36,4 @@ Route::post('pay', 'PaidController@formSubmit')->name('form.formSubmit');
 Route::post('newSales', 'SaleController@new')->name('sale.newSale');
 Route::post('modifysale', 'SaleController@modifysale')->name('sale.modifysale');
 Route::post('removeSale', 'SaleController@removeSale')->name('sale.removeSale');
+

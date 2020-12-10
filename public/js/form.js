@@ -228,7 +228,6 @@ $(function(){
             $('.next').hide();
     });
 
-
     $(".submit").on('click', function(e){
         e.preventDefault();
         statusLoading = true;
@@ -237,6 +236,9 @@ $(function(){
 
         if($('#coinClient').val() == 0){
             createToken();
+        }else{
+            alert($("#payment-form").val())
+            $("#payment-form").submit();
         }
     });
 

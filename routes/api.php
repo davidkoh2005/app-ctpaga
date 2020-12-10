@@ -65,5 +65,7 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('newRates', 'RateController@new');
 
         Route::post('newSales', 'SaleController@new');
+
+        Route::post('showPaids', 'PaidController@show');
     });
 });
