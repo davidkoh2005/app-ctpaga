@@ -10,18 +10,17 @@ use Illuminate\Notifications\Notification;
 class PostPurchase extends Notification
 {
     use Queueable;
-    protected $message, $userUrl, $name, $emailFrom;
+    protected $message, $userUrl, $name;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($message, $userUrl, $name, $emailFrom)
+    public function __construct($message, $userUrl, $name)
     {
         $this->message = $message;
         $this->userUrl = $userUrl;
         $this->name = $name;
-        $this->emailFrom = $emailFrom;
     }
 
     /**
@@ -44,8 +43,7 @@ class PostPurchase extends Notification
     public function toMail($notifiable)
     {   
         $url = url($this->userUrl);
-        return (new MailMessage)
-            ->from($this->emailFrom)    
+        return (new MailMessage)  
             ->subject('Gracias por realizar tu compra')
             ->markdown(
             'email.postPurchase', ['url' => $url, 'message' => $this->message, "name" => $this->name]

@@ -7,16 +7,15 @@ use Illuminate\Notifications\Messages\MailMessage;
 class PasswordResetRequest extends Notification implements ShouldQueue
 {
     use Queueable;
-    protected $token, $emailFrom;
+    protected $token;
     /**
     * Create a new notification instance.
     *
     * @return void
     */
-    public function __construct($token, $emailFrom)
+    public function __construct($token)
     {
         $this->token = $token;
-        $this->emailFrom = $emailFrom;
     }
     /**
     * Get the notification's delivery channels.
@@ -38,7 +37,6 @@ class PasswordResetRequest extends Notification implements ShouldQueue
     {
         $url = url('/password/find/'.$this->token);
         return (new MailMessage)
-            ->from($this->emailFrom)  
             ->line('Estás recibiendo este correo electrónico porque recibimos una solicitud de restablecimiento de contraseña para tu cuenta.')
             ->action('Cambiar contraseña', url($url))
             ->line('Si no solicitó un restablecimiento de contraseña, no es necesario realizar ninguna otra acción.')

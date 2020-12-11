@@ -38,7 +38,7 @@ class PasswordResetController extends Controller
 
         if ($user && $passwordReset)
             $user->notify(
-                new PasswordResetRequest($passwordReset->token, env('MAIL_FROM_ADDRESS'))
+                new PasswordResetRequest($passwordReset->token)
             );
 
         return response()->json([
@@ -91,7 +91,7 @@ class PasswordResetController extends Controller
         $user->save();
 
         $passwordReset->delete();
-        $user->notify(new PasswordResetSuccess($passwordReset, env('MAIL_FROM_ADDRESS')));
+        $user->notify(new PasswordResetSuccess($passwordReset));
 
         Session::flash('succecs', "Guardado corractamente.");
         return view('updatePassword');
