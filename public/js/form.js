@@ -221,7 +221,7 @@ $(function(){
         $(section).find(':input').attr('data-parsley-group', 'block-'+index);
     })
 
-    navigateTo(5);
+    navigateTo(0);
 
     $('.shippings').on('click', function(){
         $('#svg-check').remove();
