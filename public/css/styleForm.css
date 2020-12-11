@@ -282,3 +282,9 @@ div#card_number, div#card_expiry, div#card_cvc{
 .ajs-message {
     color: white;
 }
+
+.form-row label {
+    bottom: 25px;
+    position: relative;
+    font-size: 25px;
+}

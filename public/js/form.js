@@ -9,81 +9,85 @@ var _selectSale;
 $(function(){
     var $sections = $('.form-section');
     var statusShippingClient = false;
-    var stripe = Stripe($("#STRIPE_KEY").val());
     var statusCard = false;
     var statusDate = false;
     var statusCVC = false;
     var statusLoading = false;
+
     $('#errorCard').hide();
     $('#loading').hide();
 
-    var elements = stripe.elements();
+    if(_coinClient == 0){
+        var stripe = Stripe($("#STRIPE_KEY").val());
+        var elements = stripe.elements();
 
-    var style = {
-        base: {
-            fontWeight: 400,
-            fontFamily: 'Roboto, Open Sans, Segoe UI, sans-serif',
-            fontSize: '16px',
-            lineHeight: '1.4',
-            color: '#555',
-            backgroundColor: '#fff',
-            '::placeholder': {
-                color: '#888',
+        var style = {
+            base: {
+                fontWeight: 400,
+                fontFamily: 'Roboto, Open Sans, Segoe UI, sans-serif',
+                fontSize: '16px',
+                lineHeight: '1.4',
+                color: '#555',
+                backgroundColor: '#fff',
+                '::placeholder': {
+                    color: '#888',
+                },
             },
-        },
-        invalid: {
-            color: '#eb1c26',
-        }
-    };
+            invalid: {
+                color: '#eb1c26',
+            }
+        };
 
-    var cardElement = elements.create('cardNumber', {
-        style: style
-    });
-    cardElement.mount('#card_number');
-    
-    var exp = elements.create('cardExpiry', {
-        'style': style
-    });
-    exp.mount('#card_expiry');
-    
-    var cvc = elements.create('cardCvc', {
-        'style': style
-    });
-    cvc.mount('#card_cvc');
-    
-    // Validate input of the card elements
-    var resultContainerCard = document.getElementById('paymentResponseCardNumber');
-    cardElement.addEventListener('change', function(event) {
-        if (event.error) {
-            statusCard = false;
-            resultContainerCard.innerHTML = '<p>'+event.error.message+'</p>';
-        } else {
-            statusCard = true;
-            resultContainerCard.innerHTML = '';
-        }
-    });
+        var cardElement = elements.create('cardNumber', {
+            style: style
+        });
+        cardElement.mount('#card_number');
+        
+        var exp = elements.create('cardExpiry', {
+            'style': style
+        });
+        exp.mount('#card_expiry');
+        
+        var cvc = elements.create('cardCvc', {
+            'style': style
+        });
+        cvc.mount('#card_cvc');
+        
+        // Validate input of the card elements
+        var resultContainerCard = document.getElementById('paymentResponseCardNumber');
+        cardElement.addEventListener('change', function(event) {
+            if (event.error) {
+                statusCard = false;
+                resultContainerCard.innerHTML = '<p>'+event.error.message+'</p>';
+            } else {
+                statusCard = true;
+                resultContainerCard.innerHTML = '';
+            }
+        });
 
-    var resultContainerDate = document.getElementById('paymentResponseDate');
-    exp.addEventListener('change', function(event) {
-        if (event.error) {
-            statusDate = false;
-            resultContainerDate.innerHTML = '<p>'+event.error.message+'</p>';
-        } else {
-            statusDate = true;
-            resultContainerDate.innerHTML = '';
-        }
-    });     
+        var resultContainerDate = document.getElementById('paymentResponseDate');
+        exp.addEventListener('change', function(event) {
+            if (event.error) {
+                statusDate = false;
+                resultContainerDate.innerHTML = '<p>'+event.error.message+'</p>';
+            } else {
+                statusDate = true;
+                resultContainerDate.innerHTML = '';
+            }
+        });     
+        
+        var resultContainerCVC = document.getElementById('paymentResponseCVC');
+        cvc.addEventListener('change', function(event) {
+            if (event.error) {
+                statusCVC = false;
+                resultContainerCVC.innerHTML = '<p>'+event.error.message+'</p>';
+            } else {
+                statusCVC = true;
+                resultContainerCVC.innerHTML = '';
+            }
+        });
+    }
     
-    var resultContainerCVC = document.getElementById('paymentResponseCVC');
-    cvc.addEventListener('change', function(event) {
-        if (event.error) {
-            statusCVC = false;
-            resultContainerCVC.innerHTML = '<p>'+event.error.message+'</p>';
-        } else {
-            statusCVC = true;
-            resultContainerCVC.innerHTML = '';
-        }
-    });
 
     $(window).keydown(function(event){
         if(event.keyCode == 13) {
@@ -171,19 +175,36 @@ $(function(){
                 });
                 
         }else if(curIndex() == 5){
-            if(statusCard && statusDate && statusCVC){
-                $('#errorCard').hide();
-                $('.contact-form').parsley().whenValidate({
-                    group: 'block-' + curIndex()
-                }).done(function(){
-                    navigateTo(curIndex()+1);
-                })
-            }else{
-                $('#errorCard').show();
-                $('.contact-form').parsley().whenValidate({
-                    group: 'block-' + curIndex()
-                });
+            $('#errorCard').hide();
+            if(_coinClient == 0)
+                if(statusCard && statusDate && statusCVC){
+                    $('.contact-form').parsley().whenValidate({
+                        group: 'block-' + curIndex()
+                    }).done(function(){
+                        navigateTo(curIndex()+1);
+                    })
+                }else{
+                    $('#errorCard').show();
+                    $('.contact-form').parsley().whenValidate({
+                        group: 'block-' + curIndex()
+                    });
+                }
+            else{
+                if(validateDate()){
+                    $('.contact-form').parsley().whenValidate({
+                        group: 'block-' + curIndex()
+                    }).done(function(){
+                        navigateTo(curIndex()+1);
+                    })
+                }else{
+                    $('#errorCard').show();
+                    $('.contact-form').parsley().whenValidate({
+                        group: 'block-' + curIndex()
+                    });
+                }
+
             }
+                
 
         }
         else{
@@ -200,7 +221,7 @@ $(function(){
         $(section).find(':input').attr('data-parsley-group', 'block-'+index);
     })
 
-    navigateTo(0);
+    navigateTo(5);
 
     $('.shippings').on('click', function(){
         $('#svg-check').remove();
@@ -270,8 +291,30 @@ $(function(){
             $(".form-sales").text("Modificar Cantidad");
         }
     });
+    
+    $("#numberCard, #dateMM, #dateYY, #cardCVC").inputFilter(function(value) {
+        return /^\d*$/.test(value);    // Allow digits only, using a RegExp
+    });
 
 });
+
+
+(function($) {
+    $.fn.inputFilter = function(inputFilter) {
+      return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
+        if (inputFilter(this.value)) {
+          this.oldValue = this.value;
+          this.oldSelectionStart = this.selectionStart;
+          this.oldSelectionEnd = this.selectionEnd;
+        } else if (this.hasOwnProperty("oldValue")) {
+          this.value = this.oldValue;
+          this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+        } else {
+          this.value = "";
+        }
+      });
+    };
+  }(jQuery));
 
 function showTotal(price, rate, coin, coinClient, quantity){
     var result = exchangeRate(price, rate, coin, coinClient);
@@ -325,4 +368,14 @@ function removeNum(){
         $('#saleQuantity').text("0");
     else
     $('#saleQuantity').text(result);
+}
+
+
+function validateDate(){
+    var minMonth = new Date().getMonth() + 1;
+    var minYear = new Date().getFullYear().toString().substr(2,2);
+    minYear = parseInt(minYear);
+    var month = parseInt($('#dateMM').val(), 10);
+    var year = parseInt($('#dateYY').val(), 10);
+    return (month && year && (month >= 1 && month <= 12) && (year == minYear && month >= minMonth) || year > minYear);
 }

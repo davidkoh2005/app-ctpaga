@@ -24,7 +24,7 @@ class PasswordResetController extends Controller
         if (!$user)
             return response()->json([
                 'statusCode' => 404,
-                'message' => 'Email error.'
+                'message' => 'Este Email no se encuentra registrado en nuestra base de datos.'
             ], 404);
 
         
@@ -38,7 +38,7 @@ class PasswordResetController extends Controller
 
         if ($user && $passwordReset)
             $user->notify(
-                new PasswordResetRequest($passwordReset->token)
+                new PasswordResetRequest($passwordReset->token, env('MAIL_FROM_ADDRESS'))
             );
 
         return response()->json([
@@ -91,7 +91,7 @@ class PasswordResetController extends Controller
         $user->save();
 
         $passwordReset->delete();
-        $user->notify(new PasswordResetSuccess($passwordReset));
+        $user->notify(new PasswordResetSuccess($passwordReset, env('MAIL_FROM_ADDRESS')));
 
         Session::flash('succecs', "Guardado corractamente.");
         return view('updatePassword');

@@ -9,7 +9,9 @@
     <script src="../../js/form.js"></script>
     <script src="../../js/i18n/es.js"></script>
     <script src="../../js/global.js"></script>
-    <script src="https://js.stripe.com/v3/"></script>
+    @if($coinClient == 0)
+        <script src="https://js.stripe.com/v3/"></script>
+    @endif
 </head>
 <body>
     <Section>
@@ -150,25 +152,51 @@
                                     </div>
                                     <label for="nameCard">NOMBRE DE LA TARJETA:</label>
                                     <input type="text" name="nameCard" class="form-control" data-parsley-minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" required />
-                                    <label for="numberCard">NUMERO DE LA TARJETA:</label>
-                                    <div id="errorCard">
-                                        <ul><li>Complete los datos de la tarjeta</li></ul>
-                                    </div>
-                                    <div id="card_number" class="field"></div>
-                                    <div id="paymentResponseCardNumber"></div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <label for="dateCard">FECHA DE EXPIRACIÓN:</label>
-                                            <div id="card_expiry" class="field"></div>
-                                            <div id="paymentResponseDate"></div>
+                                    @if ($coinClient ==0)
+                                        <label for="numberCard">NUMERO DE LA TARJETA:</label>
+                                        <div id="errorCard">
+                                            <ul><li>Complete los datos de la tarjeta</li></ul>
                                         </div>
-                                        <div class="col-6">
-                                            <label for="cvcCard">CVV/CVC:</label>
-                                            <div id="card_cvc" class="field"></div>
-                                            <div id="paymentResponseCVC"></div>
+                                        <div id="card_number" class="field"></div>
+                                        <div id="paymentResponseCardNumber"></div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <label for="dateCard">FECHA DE EXPIRACIÓN:</label>
+                                                <div id="card_expiry" class="field"></div>
+                                                <div id="paymentResponseDate"></div>
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="cvcCard">CVV/CVC:</label>
+                                                <div id="card_cvc" class="field"></div>
+                                                <div id="paymentResponseCVC"></div>
+                                            </div>
                                         </div>
-                                    </div>
-
+                                    @else
+                                        <label for="numberCard">NUMERO DE LA TARJETA:</label>
+                                        <div id="errorCard">
+                                            <ul><li>Complete los datos de la tarjeta</li></ul>
+                                        </div>
+                                        <input type="text" name="numberCard" id="numberCard" class="form-control" maxlength="16" placeholder="4242 4242 4242 4242" required data-parsley-maxlength="16" data-parsley-minlength="16" />
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <label for="dateCard">FECHA DE EXPIRACIÓN:</label>
+                                                <div class="form-row">
+                                                    <div class="col">
+                                                        <input type="text" name="dateMM" id="dateMM" class="form-control" maxlength="2" placeholder="MM" data-parsley-type="integer" data-parsley-maxlength="2"/>
+                                                    </div>
+                                                    <label>/</label>
+                                                    <div class="col">
+                                                        <input type="text"  name="dateYY" id="dateYY" class="form-control" maxlength="2" placeholder="YY" data-parsley-type="integer" data-parsley-maxlength="2"/>
+                                                    </div>
+                                                </div>
+                                                <div id="statusDate"></div>
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="cvcCard">CVV/CVC:</label>
+                                                <input type="text"  name="cardCVC" id="cardCVC" class="form-control" placeholder="123" minlenght="3" maxlength="3" required data-parsley-maxlength="3" data-parsley-minlength="3"/>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
 
                                 <div class="form-section">

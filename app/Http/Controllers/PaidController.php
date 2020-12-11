@@ -109,7 +109,7 @@ class PaidController extends Controller
                             $userUrl = $request->userUrl;
 
                             $user->notify(
-                                new PostPurchase($message, $userUrl, $commerce->name)
+                                new PostPurchase($message, $userUrl, $commerce->name, env('MAIL_FROM_ADDRESS'))
                             );
 
                             return view('result', compact('userUrl'));
