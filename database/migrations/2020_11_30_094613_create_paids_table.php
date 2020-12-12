@@ -24,13 +24,17 @@ class CreatePaidsTable extends Migration
             $table->String("total");
             $table->integer("coin");
             $table->string("email");
-            $table->string("nameShopping",50)->nullable();
-            $table->string("numberShopping", 20)->nullable();
-            $table->string("addressShopping")->nullable();
-            $table->string("detailsShopping")->nullable();
-            $table->integer('shipping_id')->default(0);
+            $table->string("nameShipping",50)->nullable();
+            $table->string("numberShipping", 20)->nullable();
+            $table->string("addressShipping")->nullable();
+            $table->string("detailsShipping")->nullable();
+            $table->string("selectShipping")->nullable();
+            $table->string("priceShipping")->nullable();
+            $table->integer("statusShipping")->default(0); // 0: no enviado 1: enviado
+            $table->string('totalShipping');
             $table->integer("percentage");
             $table->String("nameCompanyPayments", 10);
+            $table->String("date");
             $table->timestamps();
         });
     }

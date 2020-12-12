@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use App\Notifications\PostPurchase;
+use Carbon\Carbon;
 use App\User;
 use App\Sale;
 use App\Paid;
@@ -97,13 +98,16 @@ class PaidController extends Controller
                                 "total"                 => $amount,
                                 "coin"                  => $request->coinClient,
                                 "email"                 => $request->email,
-                                "nameShopping"          => $request->name,
-                                "numberShopping"        => $request->number,
-                                "addressShopping"       => $request->address,
-                                "detailsShopping"       => $request->details,
-                                "shipping_id"           => $request->shippings,
+                                "nameShipping"          => $request->name,
+                                "numberShipping"        => $request->number,
+                                "addressShipping"       => $request->address,
+                                "detailsShipping"       => $request->details,
+                                "selectShipping"        => $request->selectShipping,
+                                "priceShipping"         => $request->priceShipping,
+                                "totalShipping"         => $request->totalShipping,
                                 "percentage"            => $request->percentageSelect,
                                 "nameCompanyPayments"   => "Stripe",
+                                "date"                  => Carbon::now(),
                             ]);
 
                             $userUrl = $request->userUrl;

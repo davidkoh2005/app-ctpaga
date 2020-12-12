@@ -270,4 +270,13 @@ class SaleController extends Controller
             'url' => url($request->userUrl.'/'.$request->codeUrl.'/'.true)
         ]);
     }
+
+    public function showSales(Request $request){
+        $sales = Sale::where('codeUrl',$request->codeUrl)->orderBy('name', 'asc')->get();
+        return response()->json([
+            'statusCode' => 201,
+            'message' => 'Show Sale',
+            'data'  => $sales,
+        ]);
+    }
 }

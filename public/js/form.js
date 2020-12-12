@@ -138,7 +138,7 @@ $(function(){
             if(curIndex()-1 == 0)
                 $(".form-sales").text("Ventas");
 
-            if(curIndex()==4 && $('#statusShipping').val()=='false')
+            if(curIndex()==5 && $('#statusShipping').val() =='false')
                 navigateTo(curIndex()-3);
             else if(curIndex()==2)
                 navigateTo(curIndex()-2);
@@ -162,19 +162,11 @@ $(function(){
             $('.contact-form').parsley().whenValidate({
                 group: 'block-' + curIndex()
             }).done(function(){
-                navigateTo(curIndex()+4);
+                navigateTo(curIndex()+3);
             }) 
         }
 
-        if(curIndex() == 3 || curIndex() == 6){
-            if($('#statusShipping').val()=='true' && statusShippingClient)
-                $('.contact-form').parsley().whenValidate({
-                    group: 'block-' + curIndex()
-                }).done(function(){
-                    navigateTo(curIndex()+1);
-                });
-                
-        }else if(curIndex() == 5){
+        if(curIndex() == 5){
             $('#errorCard').hide();
             if(_coinClient == 0)
                 if(statusCard && statusDate && statusCVC){
@@ -234,6 +226,7 @@ $(function(){
         shippingPrice = $(this).find('#shippingPrice').val();
         shippingCoin = $(this).find('#shippingCoin').val();
         statusShippingClient = true;
+        $('#selectShipping').val($(this).find('#shippingDescription').val());
         $('.next').show();
     });
 
@@ -337,7 +330,6 @@ function calculateTotal(){
     total = parseFloat(total);
 
     var percentage = parseInt($("#percentageSelect").val());
-
     resultShipping = exchangeRate(shippingPrice, _rate, shippingCoin, _coinClient)
 
     if(_coinClient == 0)
@@ -346,6 +338,7 @@ function calculateTotal(){
         $(".showShipping").text("Bs "+formatter.format(resultShipping));
 
     $(".showPercentage").text("Descuento: "+percentage+" %");
+    $("#priceShipping").val(formatter.format(resultShipping));
 
     if (_coinClient == 0)
         resulttotal = "Total: $ "+formatter.format((total-((total*percentage)/100)+resultShipping));
@@ -354,6 +347,9 @@ function calculateTotal(){
 
     $("#totalAll").val(formatter.format((total-((total*percentage)/100)+resultShipping)));
     $(".totalGlobal").text(resulttotal);
+
+    if(formatter.format((total-((total*percentage)/100)+resultShipping)) == "NaN")
+        location.reload();
     
 }
 

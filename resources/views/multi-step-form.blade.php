@@ -113,6 +113,7 @@
                                                     <input type="hidden" id="shippingCoin"  name="shippingCoin" value="{{$shipping->coin}}">
                                                 </div>
                                                 <div class="description-shippings col">{{$shipping->description}}</div>
+                                                <input type="hidden" id="shippingDescription" value="{{$shipping->description}}">
                                                 @if ($coinClient == 0) 
                                                     <div class="shipping-price col"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
                                                 @else
@@ -246,6 +247,8 @@
                                     </div>
                                     <div class="showPercentage"></div>
                                     <div class="totalGlobal"></div>
+                                    <input type="hidden" id="selectShipping" name="selectShipping">
+                                    <input type="hidden" id="priceShipping" name="priceShipping" >
                                     <input type="hidden" id="totalAll" name="totalAll">
                                     <input type="hidden" id="stripeToken" name="stripeToken" value="">
                                 </div> 
