@@ -42,4 +42,8 @@ class Commerce extends Model
         return $this->hasMany('App\Paid');
     }
     
+    public function balance()
+    {
+        return $this->hasMany('App\Balance');
+    }
 }

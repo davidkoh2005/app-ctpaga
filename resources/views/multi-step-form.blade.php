@@ -34,7 +34,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            @if (Session::has('message') != null)
+                            @if (Session::has('message'))
                                 <div class="alert alert-danger">
                                     <strong>Error: </strong> {{Session::get('message') }}
                                 </div>
@@ -142,15 +142,17 @@
                                 </div>
 
                                 <div class= "form-section">
-                                    <p>Ingresa la información de tu tarjeta de crédito o debito (Visa o Master Card):</p>
-                                    <div class="row center" id="card-element">
-                                        <div class="col">
-                                            <img src="../images/visa.png" class="img-fluid" width="150px" height="150px">
+                                    <p>Ingresa la información de tu tarjeta de crédito o debito:</p>
+                                    @if ($coinClient ==0)
+                                        <div class="row center" id="card-element">
+                                            <div class="col">
+                                                <img src="../images/visa.png" class="img-fluid" width="150px" height="150px">
+                                            </div>
+                                            <div class="col">
+                                                <img src="../images/MasterCard.png" class="img-fluid" width="100px" height="100px">
+                                            </div>
                                         </div>
-                                        <div class="col">
-                                            <img src="../images/MasterCard.png" class="img-fluid" width="100px" height="100px">
-                                        </div>
-                                    </div>
+                                    @endif
                                     <label for="nameCard">NOMBRE DE LA TARJETA:</label>
                                     <input type="text" name="nameCard" class="form-control" data-parsley-minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" required />
                                     @if ($coinClient ==0)
@@ -173,10 +175,37 @@
                                             </div>
                                         </div>
                                     @else
-                                        <label for="numberCard">NUMERO DE LA TARJETA:</label>
+                                        <label for="SelectTypeCard">SELECCONE EL TIPO DE TARJETA:</label>
                                         <div id="errorCard">
                                             <ul><li>Complete los datos de la tarjeta</li></ul>
                                         </div>
+                                        <div class="row justify-content-center" >
+                                            <div class="col">
+                                                <label>
+                                                    <input type="radio" name="typeCard" id="typeCard" value="1">
+                                                    <img src="../images/visa.png" width="70px" height="60px">
+                                                </label>
+                                            </div>
+                                            <div class="col">
+                                                <label>
+                                                    <input type="radio" name="typeCard" id="typeCard" value="2">
+                                                    <img src="../images/MasterCard.png" width="60px" height="60px">
+                                                </label>
+                                            </div>
+                                            <div class="col">
+                                                <label>
+                                                    <input type="radio" name="typeCard" id="typeCard" value="3">
+                                                    <img src="../images/americanExpress.png" width="60px" height="60px">
+                                                </label>
+                                            </div>
+                                            <div class="col">
+                                                <label>
+                                                    <input type="radio" name="typeCard" id="typeCard" value="33" required data-parsley-required>
+                                                    <img src="../images/diners.png" width="60px" height="60px">
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <label for="numberCard">NUMERO DE LA TARJETA:</label>
                                         <input type="text" name="numberCard" id="numberCard" class="form-control" maxlength="16" placeholder="4242 4242 4242 4242" required data-parsley-maxlength="16" data-parsley-minlength="16" />
                                         <div class="row">
                                             <div class="col-6">

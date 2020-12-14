@@ -11,12 +11,15 @@ use App\Sale;
 use App\Paid;
 use App\Commerce;
 use App\Product;
+use App\Balance;
 use Session;
 
 class PaidController extends Controller
 {
     public function formSubmit(Request $request)
     {
+        $amount = str_replace(".","",$request->totalAll);
+        $amount = str_replace(",",".",$amount);
         if($request->coinClient == 0){
             \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
@@ -36,8 +39,6 @@ class PaidController extends Controller
             }
 
             if(empty($error) && $customer){  
-                $amount = str_replace(".","",$request->totalAll);
-                $amount = str_replace(",",".",$amount);
                 try {  
                     $charge = \Stripe\Charge::create( array(
                         'amount' => $amount*100, 
@@ -90,6 +91,12 @@ class PaidController extends Controller
                             $commerce = Commerce::where('userUrl',$request->userUrl)->first();
                             $user = User::where('id',$commerce->user_id)->first();
                             
+                            if($request->totalShipping != null){
+                                $totalShipping = $request->totalShipping;
+                            }else{
+                                $totalShipping = 0;
+                            }
+
                             Paid::create([
                                 "user_id"               => $user->id,
                                 "commerce_id"           => $commerce->id,
@@ -104,11 +111,20 @@ class PaidController extends Controller
                                 "detailsShipping"       => $request->details,
                                 "selectShipping"        => $request->selectShipping,
                                 "priceShipping"         => $request->priceShipping,
-                                "totalShipping"         => $request->totalShipping,
+                                "totalShipping"         => $totalShipping,
                                 "percentage"            => $request->percentageSelect,
                                 "nameCompanyPayments"   => "Stripe",
                                 "date"                  => Carbon::now(),
                             ]);
+
+                            $balance = Balance::firstOrNew([
+                                'user_id'       => $user->id,
+                                "commerce_id"   => $commerce->id,
+                                "coin"          => $request->coinClient,
+                            ]);
+
+                            $balance->total += floatval($amount);
+                            $balance->save();
 
                             $userUrl = $request->userUrl;
 
@@ -134,15 +150,14 @@ class PaidController extends Controller
                 return Redirect::back();  
             } 
         }else{
-            dd($request->all());
 
             $url = 'https://esitef-homologacao.softwareexpress.com.br/e-sitef/api/v1/transactions';
             $ch = curl_init($url);
             $jsonData = array(
                 'installments' => '1',
                 'installment_type' => '4',
-                'authorizer_id' => '2',
-                'amount' => '200000000',
+                'authorizer_id' => $request->typeCard,
+                'amount' => $amount*100,
                 'additional_data' => array(
                     'currency' => 'VEF'
                 )
@@ -168,9 +183,9 @@ class PaidController extends Controller
 
             $jsonData = array(
                 'card' => array(
-                    'number' => '5555555555555555',
-                    'expiry_date' => '1220',
-                    'security_code' => '601'
+                    'number' => $request->numberCard,
+                    'expiry_date' => $request->dateMM . $request->dateMM,
+                    'security_code' => $request->cardCVC
                 )
             );
 
@@ -185,10 +200,88 @@ class PaidController extends Controller
                 "merchant_key: 059951C653E21C6ED5456E5705550709017E2F3FF04C07688504D0525ED473B4"
             ));
             
-            $result = json_decode(curl_exec($ch), true);
+            $resultTransaction = json_decode(curl_exec($ch), true);
             curl_close($ch);
 
-            dd($result);
+
+            if($resultTransaction['message'] == 'OK. Transaction successful'){
+                $sales = Sale::where("codeUrl", $request->codeUrl)->get();
+                $message="";
+                foreach ($sales as $sale)
+                {
+                    if($sale->type == 0 && $sale->productService_id != 0){
+                        $product = Product::where('id',$sale->productService_id)->first();
+                        
+                        if ($product->postPurchase)
+                            $message .= "- ".$product->postPurchase."\n";
+
+                        $product->stock -= $sale->quantity;
+                        $product->save();
+
+                        
+                    }
+
+                    if($sale->type == 1 && $sale->productService_id != 0){
+                        $service = Service::where('id',$sale->productService_id)->first();
+                        
+                        if($service->postPurchase)
+                            $message .= "- ".$service->postPurchase."\n";
+                    }
+
+                    $sale->statusSale = 1;
+                    $sale->save();
+
+                }
+
+                $commerce = Commerce::where('userUrl',$request->userUrl)->first();
+                $user = User::where('id',$commerce->user_id)->first();
+                
+                if($request->totalShipping != null){
+                    $totalShipping = $request->totalShipping;
+                }else{
+                    $totalShipping = 0;
+                }
+                
+                Paid::create([
+                    "user_id"               => $user->id,
+                    "commerce_id"           => $commerce->id,
+                    "codeUrl"               => $request->codeUrl,
+                    "nameClient"            => $request->nameClient,
+                    "total"                 => $amount,
+                    "coin"                  => $request->coinClient,
+                    "email"                 => $request->email,
+                    "nameShipping"          => $request->name,
+                    "numberShipping"        => $request->number,
+                    "addressShipping"       => $request->address,
+                    "detailsShipping"       => $request->details,
+                    "selectShipping"        => $request->selectShipping,
+                    "priceShipping"         => $request->priceShipping,
+                    "totalShipping"         => $totalShipping,
+                    "percentage"            => $request->percentageSelect,
+                    "nameCompanyPayments"   => "E-sitef",
+                    "date"                  => Carbon::now(),
+                ]);
+
+                $balance = Balance::firstOrNew([
+                    'user_id'       => $user->id,
+                    "commerce_id"   => $commerce->id,
+                    "coin"          => $request->coinClient,
+                ]);
+
+                $balance->total += floatval($amount);
+                $balance->save();
+
+                $userUrl = $request->userUrl;
+
+                $user->notify(
+                    new PostPurchase($message, $userUrl, $commerce->name)
+                );
+
+                return view('result', compact('userUrl'));
+            }else{
+                Session::flash('message', "¡Tu pago ha fallado!");
+                return Redirect::back();
+            }
         }
 
     }

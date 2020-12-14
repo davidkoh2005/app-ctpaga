@@ -20,7 +20,6 @@ class SaleController extends Controller
 {
     public function index($userUrl, $codeUrl, $statusModification = 0)
     {
-        Session::flash('message', null);
         $sales = Sale::where('codeUrl',$codeUrl)->orderBy('name', 'asc')->get();
 
         

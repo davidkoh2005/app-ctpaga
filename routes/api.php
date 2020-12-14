@@ -68,5 +68,7 @@ Route::group(['prefix' => 'auth'], function () {
         Route::get('showSales', 'SaleController@showSales');
 
         Route::post('showPaids', 'PaidController@show');
+
+        Route::post('showBalances', 'BalanceController@show');
     });
 });

@@ -182,7 +182,7 @@ $(function(){
                     });
                 }
             else{
-                if(validateDate()){
+                if(validateDate() && $("input[name='typeCard']:checked").length  == 1){
                     $('.contact-form').parsley().whenValidate({
                         group: 'block-' + curIndex()
                     }).done(function(){
@@ -251,7 +251,6 @@ $(function(){
         if($('#coinClient').val() == 0){
             createToken();
         }else{
-            alert($("#payment-form").val())
             $("#payment-form").submit();
         }
     });

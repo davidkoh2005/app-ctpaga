@@ -288,3 +288,20 @@ div#card_number, div#card_expiry, div#card_cvc{
     position: relative;
     font-size: 25px;
 }
+
+#typeCard { 
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+
+#typeCard + img {
+    cursor: pointer;
+}
+
+
+#typeCard:checked + img {
+    outline: 2px solid #f00;
+} 
