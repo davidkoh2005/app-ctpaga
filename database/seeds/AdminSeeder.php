@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class VersionSeeder extends Seeder
+class AdminSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,11 +11,11 @@ class VersionSeeder extends Seeder
      */
     public function run()
     {
-        \DB::table("version")->insert(
+        \DB::table("admins")->insert(
             array(
                 'id'        => 1,
-                'version'   => '1.0.12',
-                'url'       => 'https://drive.google.com/file/d/1CMtAtfHiVajGsJ3SUjlinuqH18dWg2AX/view?usp=sharing',
+                'email'   => 'ctpaga@admin.com',
+                'password' => bcrypt("Ee81887127*"),
                 'created_at'=> date('Y-m-d H:m:s'),
                 'updated_at'=> date('Y-m-d H:m:s'),
             )

@@ -171,8 +171,8 @@ class PaidController extends Controller
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array( 
                 "Content-Type: application/json",
-                "merchant_id: compralotodo",
-                "merchant_key: 059951C653E21C6ED5456E5705550709017E2F3FF04C07688504D0525ED473B4"
+                "merchant_id: ".env('merchant_id'),
+                "merchant_key: ".env('merchant_key')
             ));
             
             $result = json_decode(curl_exec($ch), true);
@@ -196,8 +196,8 @@ class PaidController extends Controller
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array( 
                 "Content-Type: application/json",
-                "merchant_id: compralotodo",
-                "merchant_key: 059951C653E21C6ED5456E5705550709017E2F3FF04C07688504D0525ED473B4"
+                "merchant_id: ".env('merchant_id'),
+                "merchant_key: ".env('merchant_key')
             ));
             
             $resultTransaction = json_decode(curl_exec($ch), true);

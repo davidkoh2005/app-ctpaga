@@ -20,6 +20,12 @@ Route::fallback(function () {
     return redirect()->route('welcome');
 });
 
+Route::get('admin/', function () {
+    return view('admin.login');
+});
+
+Route::post('admin/login/', 'AdminController@login')->name('form.login');
+
 
 Route::get('password/create', 'Auth\PasswordResetController@create');
 Route::get('password/find/{token}', 'Auth\PasswordResetController@find');
