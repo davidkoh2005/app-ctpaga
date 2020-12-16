@@ -20,12 +20,18 @@ Route::fallback(function () {
     return redirect()->route('welcome');
 });
 
-Route::get('admin/', function () {
+Route::get('/admin/login', function () {
     return view('admin.login');
-});
+})->name('admin.login');
 
 Route::post('admin/login/', 'AdminController@login')->name('form.login');
+Route::get('admin/logout/', 'AdminController@logout')->name('admin.logout');
+Route::post('admin/logout/', 'AdminController@logout')->name('admin.logout');
 
+Route::group(['middleware'=>'admin'], function() {
+    Route::get('/admin/', 'AdminController@index')->name('admin.dashboard');
+    Route::get('/admin/{id}', 'AdminController@show')->name('admin.show');
+});
 
 Route::get('password/create', 'Auth\PasswordResetController@create');
 Route::get('password/find/{token}', 'Auth\PasswordResetController@find');

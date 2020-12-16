@@ -6,7 +6,6 @@
     <title>Ctpaga</title>
     @include('library')
     <link rel="stylesheet" type="text/css" href="../../css/styleFormPassword.css">
-    <script src="../../js/formPassword.js"></script>
     <script src="../../js/i18n/es.js"></script>
 
 </head>
@@ -29,11 +28,11 @@
                                     <strong>Error: </strong> {{Session::get('message') }}
                                 </div>
                             @endif
-                            <form class="contact-form" method='POST' action="{{route('form.login')}}">
+                            <form class="contact-form" id="login-form" method='POST' action="{{route('form.login')}}">
                                 @csrf
                                 <div class= "form-section">
                                     <label for="email">Correo</label>
-                                    <input type="email" name="email" id="email" class="form-control" placeholder="joedoe@gmail.com"  required />
+                                    <input type="email" name="email" id="email" class="form-control" placeholder="joedoe@gmail.com" data-parsley-type="email"  required />
                                     <label for="password">Contraseña</label>
                                     <input type="password" name="password" id="password" class="form-control" placeholder="***************"  required />
                                     <div id="errorPassword"></div>
@@ -54,6 +53,39 @@
             </div>
         </div>
     </Section>
+    <script>
+        $(function(){
+            var $sections = $('.form-section');
+            $('#loading').hide();
 
+            function navigateTo(index){
+                $sections.removeClass('current').eq(index).addClass('current');
+                var arTheEnd = index >= $sections.length -1;
+                $('.form-navigation [type=submit]').toggle(arTheEnd);
+            }
+
+            function curIndex()
+            {
+                return $sections.index($sections.filter('.current'));
+            }
+
+            $sections.each(function(index, section){
+                $(section).find(':input').attr('data-parsley-group', 'block-'+index);
+            })
+
+            navigateTo(0);
+
+            $('.submit').click(function(e){
+                e.preventDefault();
+                $('.contact-form').parsley().whenValidate({
+                    group: 'block-' + curIndex()
+                }).done(function(){
+                    $('.submit').hide();
+                    $('#loading').show();
+                    $("#login-form").submit();
+                })
+            });
+        });
+    </script>
 </body>
 </html>
