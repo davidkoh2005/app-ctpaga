@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use DB;
 use Session;
 use App\Admin;
+use App\User;
+use App\Picture;
+use App\Balance;
+use App\Commerce;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -17,17 +21,35 @@ class AdminController extends Controller
 
     public function index(Request $request)
     {
+        $balances = array();
         if (false == Auth::guard('admin')->check()) {
             return redirect()->route('admin.login');
         }
 
-        $balances = DB::table('balances')
+        $balancesAll = DB::table('balances')
                 ->join('commerces', 'commerces.id', '=', 'balances.commerce_id')
                 ->where('balances.total', '>=', 1)
                 ->orderBy('name', 'asc')
                 ->orderBy('coin', 'desc')
                 ->get();
 
+        foreach ($balancesAll as $balance)
+        {
+            $pictures = Picture::where('user_id', $balance->user_id)
+                            ->where('commerce_id', $balance->commerce_id)
+                            ->orWhere('commerce_id', '=', null)->get();
+            
+            $count= 0;
+            foreach($pictures as $picture)
+            {
+                if (in_array($picture->description, array('Selfie','RIF','Identification'))) {
+                    $count +=1;
+                }
+            }
+
+            if($count == 3)
+                $balances[] = $balance;
+        }
 
         return view('admin.dashboard', compact('balances'));
     }
@@ -58,7 +80,21 @@ class AdminController extends Controller
 
     public function show($id)
     {
-        return view('admin.show');
+        $commerce = Commerce::where("id", $id)->first();
+        $user = User::where("id", $commerce->user_id)->first();
+        $pictures = Picture::where('user_id', $user->id)
+                            ->where('commerce_id', $commerce->id)
+                            ->where('description', '<>','Profile')->get();
+
+        $profile = Picture::where('user_id', $user->id)
+                        ->where('commerce_id', '=', null)->first();
+
+        $balance = Balance::where('user_id', $user->id)
+                        ->where('commerce_id', $commerce->id)->first();
+
+        $domain = $_SERVER['HTTP_HOST'];
+
+        return view('admin.show', compact('domain','commerce', 'user', 'pictures', 'profile', 'balance'));
     }
 
 }
