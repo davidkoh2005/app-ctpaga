@@ -128,7 +128,9 @@ class PaidController extends Controller
 
                             $userUrl = $request->userUrl;
 
-                            $user->notify(
+                            (new User)->forceFill([
+                                'email' => $request->email,
+                            ])->notify(
                                 new PostPurchase($message, $userUrl, $commerce->name)
                             );
 
@@ -273,7 +275,9 @@ class PaidController extends Controller
 
                 $userUrl = $request->userUrl;
 
-                $user->notify(
+                (new User)->forceFill([
+                    'email' => $request->email,
+                ])->notify(
                     new PostPurchase($message, $userUrl, $commerce->name)
                 );
 

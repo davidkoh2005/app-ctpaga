@@ -24,6 +24,10 @@ section {
     font-weight: bold;
 }
 
+.card-footer {
+    background-color: #e6e6e6 !important;
+}
+
 a.tienda {
     color: #00cc5f;
     font-weight: bold;
@@ -47,13 +51,35 @@ a.tienda {
     color: #00cc5f;
 }
 
-.modal-dialog {
+.btn-remove { 
+    width: 150px;
+    border-radius: 60px;
+    font-size: large;
+    background-color: red !important;
+    color: white;
+}
+
+.btn-remove:hover {
+    background-color: white !important;
+    border: 2px solid red;
+    color: red;
+}
+
+.btn-error, .btn-error:hover { 
+    width: 100%;
+    border-radius: 60px;
+    font-size: large;
+    background-color: red !important;
+    color: white;
+}
+
+#imagemodal .modal-dialog {
     width: 100%;
     height: 100%;
     padding: 0;
 }
 
-.modal-content {
+#imagemodal .modal-content {
     width: 100%;
     height: 90%;
     border-radius: 0;
@@ -64,10 +90,22 @@ a.tienda {
 }
 
 .imagepreview {
-    width: 500px;
-    height: 500px;
+    width: 55%;
+    height: 70%;
 }
 
 .marginAuto {
     margin: auto;
+}
+
+.dataPay {
+    text-align: left;
+}
+
+.center {
+    text-align: center;
+}
+
+.ajs-message {
+    color: white;
 }

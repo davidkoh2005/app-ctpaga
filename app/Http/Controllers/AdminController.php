@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use DB;
 use Session;
-use App\Admin;
 use App\User;
+use App\Bank;
+use App\Admin;
 use App\Picture;
 use App\Balance;
 use App\Commerce;
+use App\Deposits;
+use App\Notifications\PictureRemove;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -29,6 +32,8 @@ class AdminController extends Controller
         $balancesAll = DB::table('balances')
                 ->join('commerces', 'commerces.id', '=', 'balances.commerce_id')
                 ->where('balances.total', '>=', 1)
+                ->select('balances.id', 'balances.user_id', 'balances.commerce_id', 'balances.coin', 'balances.total',
+                'commerces.name')
                 ->orderBy('name', 'asc')
                 ->orderBy('coin', 'desc')
                 ->get();
@@ -80,21 +85,66 @@ class AdminController extends Controller
 
     public function show($id)
     {
-        $commerce = Commerce::where("id", $id)->first();
+        $balance = Balance::where('id', $id)->first();
+        $commerce = Commerce::where("id", $balance->commerce_id)->first();
         $user = User::where("id", $commerce->user_id)->first();
         $pictures = Picture::where('user_id', $user->id)
                             ->where('commerce_id', $commerce->id)
                             ->where('description', '<>','Profile')->get();
 
-        $profile = Picture::where('user_id', $user->id)
+        $selfie = Picture::where('user_id', $user->id)
                         ->where('commerce_id', '=', null)->first();
+        
+        if($balance->coin == 0)
+            $coin = "USD";
+        else
+            $coin = "Bs";
 
-        $balance = Balance::where('user_id', $user->id)
-                        ->where('commerce_id', $commerce->id)->first();
+        $bank = Bank::where('user_id', $user->id)
+                    ->where('coin', $coin)->first();
 
         $domain = $_SERVER['HTTP_HOST'];
 
-        return view('admin.show', compact('domain','commerce', 'user', 'pictures', 'profile', 'balance'));
+        return view('admin.show', compact('domain','commerce', 'user', 'pictures', 'selfie', 'balance', 'bank'));
     }
 
+    public function removePicture(Request $request)
+    {
+        $picture = Picture::where('id', $request->id)->first();
+        $urlPrevius = substr($picture->url,8);
+
+        $user = User::where('id', $picture->user_id)->first();
+
+        \Storage::disk('public')->delete($urlPrevius);
+        $picture->delete();
+
+        $user->notify(
+            new PictureRemove($request->reason)
+        );
+
+        return response()->json([
+            'status' => 201
+        ]);
+    }
+
+    public function saveDeposits(Request $request)
+    {
+        $balance = Balance::where('id', $request->id)->first();
+        $total = $request->total;
+        $balance->total -= $request->total;
+        $balance->save(); 
+
+        Deposits::create([
+            "user_id"       => $balance->user_id,
+            "commerce_id"   => (int)$balance->commerce_id,
+            "coin"          => $balance->coin,
+            "total"         => $total,
+            "numRef"        => $request->numRef
+        ]);
+
+        return response()->json([
+            'status' => 201
+        ]);
+        
+    }
 }

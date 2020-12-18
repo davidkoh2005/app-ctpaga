@@ -4,11 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Balance extends Model
+class Deposits extends Model
 {
-
     protected $fillable = [
-        'id', 'user_id', 'commerce_id', 'coin', 'total',
+        'id', 'user_id', 'commerce_id', 'coin', 'total', 'numRef',
     ]; 
 
     public function user()

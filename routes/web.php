@@ -33,6 +33,9 @@ Route::group(['middleware'=>'admin'], function() {
     Route::get('/admin/{id}', 'AdminController@show')->name('admin.show');
 });
 
+Route::post('/admin/removePicture', 'AdminController@removePicture')->name('admin.removePicture');
+Route::post('admin/saveDeposits', 'AdminController@saveDeposits')->name('admin.saveDeposits');
+
 Route::get('password/create', 'Auth\PasswordResetController@create');
 Route::get('password/find/{token}', 'Auth\PasswordResetController@find');
 Route::post('password/reset', 'Auth\PasswordResetController@reset')->name('form.passwordReset');
