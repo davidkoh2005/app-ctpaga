@@ -23,8 +23,8 @@ class SaleController extends Controller
         $sales = Sale::where('codeUrl',$codeUrl)->orderBy('name', 'asc')->get();
 
         
-        /* if($sales[0]->statusSale == 1 || Carbon::now()->format('Y-m-d 23:59:59') > $sales[0]->expires_at)
-            return redirect()->route('form.store', ['userUrl' => $userUrl]); */
+        if($sales[0]->statusSale == 1 || Carbon::now()->format('Y-m-d 23:59:59') > $sales[0]->expires_at)
+            return redirect()->route('form.store', ['userUrl' => $userUrl]);
 
         $commerce = Commerce::where('userUrl',$userUrl)->first();
 
