@@ -60,7 +60,9 @@ class AdminController extends Controller
             $bank = Bank::where('user_id', $balance->user_id)
                         ->where('coin', $coin)->first();
 
-            if($count == 3 && count($bank) == 1)
+            dd($bank);
+
+            if($count == 3 && $bank)
                 $balances[] = $balance;
         }
 
