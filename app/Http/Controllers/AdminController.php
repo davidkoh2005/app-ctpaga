@@ -53,9 +53,9 @@ class AdminController extends Controller
             }
             
             if($balance->coin == 0)
-                $coin = "USD"
+                $coin = "USD";
             else
-                $coin = "Bs"
+                $coin = "Bs";
 
             $bank = Bank::where('user_id', $balance->user_id)
                         ->where('coin', $coin)->first();
