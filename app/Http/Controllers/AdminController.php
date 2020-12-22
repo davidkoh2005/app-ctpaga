@@ -51,10 +51,14 @@ class AdminController extends Controller
                     $count +=1;
                 }
             }
-
+            
+            if($balance->coin == 0)
+                $coin = "USD"
+            else
+                $coin = "Bs"
 
             $bank = Bank::where('user_id', $balance->user_id)
-                        ->where('coin', $balance->coin)->first();
+                        ->where('coin', $coin)->first();
 
             if($count == 3 && $bank)
                 $balances[] = $balance;
