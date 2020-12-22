@@ -52,7 +52,11 @@ class AdminController extends Controller
                 }
             }
 
-            if($count == 3)
+
+            $bank = Bank::where('user_id', $balance->user_id)
+                        ->where('coin', $balance->coin)->first();
+
+            if($count == 3 && $bank)
                 $balances[] = $balance;
         }
 
