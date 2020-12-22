@@ -40,9 +40,9 @@ class AdminController extends Controller
 
         foreach ($balancesAll as $balance)
         {
-            $pictures = Picture::where('user_id', $balance->user_id)
-                            ->where('commerce_id', $balance->commerce_id)
-                            ->orWhere('commerce_id', '=', null)->get();
+            $pictures = Picture::where('user_id', '=', $balance->user_id)
+                            ->where('commerce_id', '=', null)
+                            ->orwhere('commerce_id', $balance->commerce_id)->get();
             
             $count= 0;
             foreach($pictures as $picture)
@@ -50,6 +50,7 @@ class AdminController extends Controller
                 if (in_array($picture->description, array('Selfie','RIF','Identification'))) {
                     $count +=1;
                 }
+
             }
             
             if($balance->coin == 0)
@@ -59,8 +60,6 @@ class AdminController extends Controller
 
             $bank = Bank::where('user_id', $balance->user_id)
                         ->where('coin', $coin)->first();
-
-            dd($bank);
 
             if($count == 3 && $bank)
                 $balances[] = $balance;

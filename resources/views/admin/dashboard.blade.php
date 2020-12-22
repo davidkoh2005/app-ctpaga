@@ -39,7 +39,7 @@
                     <td>{{ $balance->name }}</td>
                     <td>@if($balance->coin == 0 )  $ @else Bs @endif</td>
                     <td>@if($balance->coin == 0 )  $ @else Bs @endif {{ $balance->total }}</td>
-                    <td><a class="btn btn-current" href="{{route('admin.show', ['id' => $balance->id])}}"><i class="fa fa-eye"></i> Ver</a></td>
+                    <td><a class="btn btn-bottom" href="{{route('admin.show', ['id' => $balance->id])}}"><i class="fa fa-eye"></i> Ver</a></td>
                 </tr>
                 @endforeach
             </tbody>
