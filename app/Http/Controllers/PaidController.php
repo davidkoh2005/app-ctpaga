@@ -128,6 +128,11 @@ class PaidController extends Controller
 
                             $userUrl = $request->userUrl;
 
+                            $messageNotification['commerce_id'] = $commerce->id;
+                            $messageNotification['total'] = $amount;
+                            $messageNotification['coin'] = $request->coinClient;
+                            $success = event(new App\Events\NewNotification($messageNotification));
+
                             (new User)->forceFill([
                                 'email' => $request->email,
                             ])->notify(
@@ -220,7 +225,6 @@ class PaidController extends Controller
                         $product->stock -= $sale->quantity;
                         $product->save();
 
-                        
                     }
 
                     if($sale->type == 1 && $sale->productService_id != 0){
@@ -274,6 +278,11 @@ class PaidController extends Controller
                 $balance->save();
 
                 $userUrl = $request->userUrl;
+
+                $messageNotification['commerce_id'] = $commerce->id;
+                $messageNotification['total'] = $amount;
+                $messageNotification['coin'] = $request->coinClient;
+                $success = event(new App\Events\NewNotification($messageNotification));
 
                 (new User)->forceFill([
                     'email' => $request->email,
