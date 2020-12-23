@@ -105,7 +105,7 @@
         <div class="row">&nbsp;</div>
         <div class="row">
             @foreach ($pictures as $picture)
-                <div class="col-md-4 col-12 card text-center">
+                <div class="col-md-6 col-12 card text-center">
                     <div class="card-header">
                         @if($picture->descripction == 'Identification')
                             Identificación
@@ -122,8 +122,8 @@
                         <input type="button" class="btn btn-bottom btn-remove" value="Rechazar">
                         <input type="hidden" name="idPictures" id="idPictures" value="{{$picture->id}}">
                     </div>
-                    <div class="row">&nbsp;</div>
                 </div>
+                <div class="row">&nbsp;</div>
             @endforeach
         </div>
     </section>

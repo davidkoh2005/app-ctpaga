@@ -1,8 +1,8 @@
 @if($products != null)
     @if(count($products) != 0)
         @foreach($products as $product)
-        <div class="col justify-content-sm-center">
-            <div class="card" style="width: 12rem;">
+        <div class="col justify-content-sm-center productService">
+            <div class="card">
                 <img class="card-img-top" src="{{$product->url}}">
                 <div class="card-body">
                     <h5 class="card-title">{{$product->name}}</h5>
@@ -23,8 +23,8 @@
 @else
     @if(count($services) != 0)
         @foreach($services as $service)
-        <div class="col">
-            <div class="card" style="width: 12rem;">
+        <div class="col justify-content-sm-center productService">
+            <div class="card"
                 <img class="card-img-top" src="{{$services->url}}">
                 <div class="card-body">
                     <h5 class="card-title">{{$service->name}}</h5>

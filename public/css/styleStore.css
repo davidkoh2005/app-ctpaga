@@ -241,10 +241,6 @@ hr {
     margin-bottom: 20px;
 }
 
-div.categories {
-    padding-left: 15px;
-}
-
 div.category-circle {
     background: #e6e6e6 none repeat scroll 0 0;
     border-radius: 100%;
@@ -314,4 +310,8 @@ div.category-current div.category-circle {
 
 .ajs-message {
     color: white;
+}
+
+.productService {
+    padding-top: 10px;
 }
