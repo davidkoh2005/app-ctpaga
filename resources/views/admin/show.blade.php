@@ -12,21 +12,7 @@
     <script type="text/javascript" src="../../js/datatables.min.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand">Ctpaga</a>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('admin.dashboard')}}">Principal</a>
-                </li>
-            </ul>
-        </div>
-        <form class="d-flex" action="{{route('admin.logout')}}">
-            <button class="btn btn-light" type="submit">Salir</button>
-        </form>
-    </div>
-    </nav>
+    @include('admin.navbar')
     <section>
         <div class="row">
             <div class="col-md-4 col-12">
@@ -76,7 +62,7 @@
                         <label><strong>Rif: </strong>{{$commerce->rif}}</label> <br>
                         <label><strong>Telefono: </strong>{{$commerce->phone}}</label> <br>
                         <label><strong>Dirección: </strong>{{$commerce->address}}</label> <br>
-                        <label><strong>Link: </strong><a href="http://{{$domain}}/{{$commerce->userUrl}}" class="tienda">Tienda</a></label> <br>
+                        <label><strong>Link: </strong><a href="{{route('form.store', ['userUrl' => $commerce->userUrl])}}" class="tienda">Tienda</a></label> <br>
 
                     </div>
                 </div>
@@ -259,6 +245,8 @@
             </div>
         </div>
     </div>
+
+    
     <script>
         $('#loading').hide();
         $('#loadingReason').hide();

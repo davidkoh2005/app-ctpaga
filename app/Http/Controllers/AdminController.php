@@ -6,6 +6,8 @@ use DB;
 use Session;
 use App\User;
 use App\Bank;
+use App\Paid;
+use App\Sale;
 use App\Admin;
 use App\Picture;
 use App\Balance;
@@ -112,9 +114,7 @@ class AdminController extends Controller
         $bank = Bank::where('user_id', $user->id)
                     ->where('coin', $coin)->first();
 
-        $domain = $_SERVER['HTTP_HOST'];
-
-        return view('admin.show', compact('domain','commerce', 'user', 'pictures', 'selfie', 'balance', 'bank'));
+        return view('admin.show', compact('commerce', 'user', 'pictures', 'selfie', 'balance', 'bank'));
     }
 
     public function removePicture(Request $request)
@@ -155,5 +155,43 @@ class AdminController extends Controller
             'status' => 201
         ]);
         
+    }
+
+    public function commerces(Request $request)
+    {
+        $commerces = Commerce::all()->sortBy("name");
+        return view('admin.commerces', compact('commerces'));
+    }
+
+    public function commercesShow($id)
+    {
+        $commerce = Commerce::where('id', $id)->first();
+        $user = User::where('id',$commerce->user_id)->first();
+        $transactions = Paid::where('commerce_id', $id)->orderBy('date', 'asc')->get();
+
+        return view('admin.commerceShow', compact('commerce', 'user', 'transactions'));
+    }
+
+    public function transactions(Request $request)
+    {
+        $transactions = DB::table('paids')
+                        ->join('commerces', 'commerces.id', '=', 'paids.commerce_id')
+                        ->orderBy('date', 'asc')
+                        ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.coin', 'paids.total',
+                'paids.date', 'paids.nameCompanyPayments')
+                        ->get();
+
+        return view('admin.transactions', compact('transactions'));
+    }
+
+    public function transactionsShow(Request $request)
+    {
+        $transaction = Paid::where('id', $request->id)->first();
+        $sales = Sale::where('codeUrl', $transaction->codeUrl)->orderBy('name', 'asc')->get();
+        $rate = $sales[0]->rate;
+        $coinClient = $sales[0]->coinClient;
+
+        $returnHTML=view('admin.dataProductService', compact('sales', 'rate', 'coinClient'))->render();
+        return response()->json(array('html'=>$returnHTML));
     }
 }

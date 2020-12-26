@@ -19,19 +19,24 @@
                 <tr class="table-title">
                     <th scope="col">#</th>
                     <th scope="col">Nombre Compañia</th>
-                    <th scope="col">Moneda</th>
-                    <th scope="col">Total</th>
+                    <th scope="col">RIF</th>
+                    <th scope="col">Dirección</th>
+                    <th scope="col">Telefono</th>
                     <th scope="col">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($balances as $balance)
+                @foreach($commerces as $commerce)
                 <tr>
-                    <th scope="row">{{ $balance->id }}</th>
-                    <td>{{ $balance->name }}</td>
-                    <td>@if($balance->coin == 0 )  USD @else Bs @endif</td>
-                    <td>@if($balance->coin == 0 )  $ @else Bs @endif {{ $balance->total }}</td>
-                    <td><a class="btn btn-bottom" href="{{route('admin.show', ['id' => $balance->id])}}"><i class="fa fa-eye"></i> Ver</a></td>
+                    <th scope="row">{{ $commerce->id }}</th>
+                    <td>{{ $commerce->name }}</td>
+                    <td>{{ $commerce->rif }}</td>
+                    <td>{{ $commerce->address }}</td>
+                    <td>{{ $commerce->phone }}</td>
+                    <td>
+                        <a class="btn btn-bottom" href="{{route('form.store', ['userUrl' => $commerce->userUrl])}}" target="_blank"><i class="fa fa-eye"></i> Ver Tienda</a>
+                        <a class="btn btn-bottom" href="{{route('admin.commercesShow', ['id' => $commerce->id])}}"><i class="fa fa-eye"></i> Ver Transacciones</a>
+                    </td>
                 </tr>
                 @endforeach
             </tbody>
@@ -43,12 +48,12 @@
                 language: {
                     "decimal": "",
                     "emptyTable": "No hay información",
-                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Balances",
-                    "infoEmpty": "Mostrando 0 to 0 of 0 Balances",
-                    "infoFiltered": "(Filtrado de _MAX_ total Balances)",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Comerciantes",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Comerciantes",
+                    "infoFiltered": "(Filtrado de _MAX_ total Comerciantes)",
                     "infoPostFix": "",
                     "thousands": ",",
-                    "lengthMenu": "Mostrar _MENU_ Balances",
+                    "lengthMenu": "Mostrar _MENU_ Comerciantes",
                     "loadingRecords": "Cargando...",
                     "processing": "Procesando...",
                     "search": "Buscar:",

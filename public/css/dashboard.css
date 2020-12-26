@@ -33,3 +33,7 @@ table {
     border: 2px solid #00cc5f;
     color: #00cc5f;
 }
+
+.nav-link .active {
+    font-weight: bold;
+}
