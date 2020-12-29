@@ -13,6 +13,7 @@ $(function(){
     var statusDate = false;
     var statusCVC = false;
     var statusLoading = false;
+    var switchPay = false;
 
     $('#errorCard').hide();
     $('#loading').hide();
@@ -169,32 +170,47 @@ $(function(){
         if(curIndex() == 5){
             $('#errorCard').hide();
             if(_coinClient == 0)
-                if(statusCard && statusDate && statusCVC){
+                if(switchPay){
                     $('.contact-form').parsley().whenValidate({
                         group: 'block-' + curIndex()
                     }).done(function(){
                         navigateTo(curIndex()+1);
                     })
                 }else{
-                    $('#errorCard').show();
-                    $('.contact-form').parsley().whenValidate({
-                        group: 'block-' + curIndex()
-                    });
+                    if(statusCard && statusDate && statusCVC){
+                        $('.contact-form').parsley().whenValidate({
+                            group: 'block-' + curIndex()
+                        }).done(function(){
+                            navigateTo(curIndex()+1);
+                        })
+                    }else{
+                        $('#errorCard').show();
+                        $('.contact-form').parsley().whenValidate({
+                            group: 'block-' + curIndex()
+                        });
+                    }
                 }
             else{
-                if(validateDate() && $("input[name='typeCard']:checked").length  == 1){
+                if(switchPay){
                     $('.contact-form').parsley().whenValidate({
                         group: 'block-' + curIndex()
                     }).done(function(){
                         navigateTo(curIndex()+1);
                     })
                 }else{
-                    $('#errorCard').show();
-                    $('.contact-form').parsley().whenValidate({
-                        group: 'block-' + curIndex()
-                    });
+                    if(validateDate() && $("input[name='typeCard']:checked").length  == 1){
+                        $('.contact-form').parsley().whenValidate({
+                            group: 'block-' + curIndex()
+                        }).done(function(){
+                            navigateTo(curIndex()+1);
+                        })
+                    }else{
+                        $('#errorCard').show();
+                        $('.contact-form').parsley().whenValidate({
+                            group: 'block-' + curIndex()
+                        });
+                    }
                 }
-
             }
                 
 
@@ -242,13 +258,28 @@ $(function(){
             $('.next').hide();
     });
 
+    $("#switchPay").on('click', function(){
+        if($(this).is(':checked')){
+            switchPay = true;
+            $(".dataPay").hide();
+            $("#nameCard").prop('required',false);
+        }
+        else{
+            switchPay = false;
+            $(".dataPay").show();
+            $("#nameCard").prop('required',true);
+        }
+    });
+
     $(".submit").on('click', function(e){
         e.preventDefault();
-        statusLoading = true;
+        statusLoading = false;
         $('.submit').hide();
         $('#loading').show();
 
-        if($('#coinClient').val() == 0){
+        if(switchPay){
+            $("#payment-form").submit();
+        }else if($('#coinClient').val() == 0){
             createToken();
         }else{
             $("#payment-form").submit();

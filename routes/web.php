@@ -56,4 +56,3 @@ Route::post('pay', 'PaidController@formSubmit')->name('form.formSubmit');
 Route::post('newSales', 'SaleController@new')->name('sale.newSale');
 Route::post('modifysale', 'SaleController@modifysale')->name('sale.modifysale');
 Route::post('removeSale', 'SaleController@removeSale')->name('sale.removeSale');
-

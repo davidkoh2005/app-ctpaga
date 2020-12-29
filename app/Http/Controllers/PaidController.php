@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Events\NewNotification;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use App\Notifications\PostPurchase;
@@ -20,7 +20,78 @@ class PaidController extends Controller
     {
         $amount = str_replace(".","",$request->totalAll);
         $amount = str_replace(",",".",$amount);
-        if($request->coinClient == 0){
+        if($request->switchPay){
+            $sales = Sale::where("codeUrl", $request->codeUrl)->get();
+            $message="";
+            foreach ($sales as $sale)
+            {
+                if($sale->type == 0 && $sale->productService_id != 0){
+                    $product = Product::where('id',$sale->productService_id)->first();
+                    
+                    if ($product->postPurchase)
+                        $message .= "- ".$product->postPurchase."\n";
+
+                    $product->stock -= $sale->quantity;
+                    $product->save();
+
+                }
+
+                if($sale->type == 1 && $sale->productService_id != 0){
+                    $service = Service::where('id',$sale->productService_id)->first();
+                    
+                    if($service->postPurchase)
+                        $message .= "- ".$service->postPurchase."\n";
+                }
+
+                $sale->statusSale = 1;
+                $sale->save();
+
+            }
+
+            $commerce = Commerce::where('userUrl',$request->userUrl)->first();
+            $user = User::where('id',$commerce->user_id)->first();
+            
+            if($request->totalShipping != null){
+                $totalShipping = $request->totalShipping;
+            }else{
+                $totalShipping = 0;
+            }
+
+            Paid::create([
+                "user_id"               => $user->id,
+                "commerce_id"           => $commerce->id,
+                "codeUrl"               => $request->codeUrl,
+                "nameClient"            => $request->nameClient,
+                "total"                 => $amount,
+                "coin"                  => $request->coinClient,
+                "email"                 => $request->email,
+                "nameShipping"          => $request->name,
+                "numberShipping"        => $request->number,
+                "addressShipping"       => $request->address,
+                "detailsShipping"       => $request->details,
+                "selectShipping"        => $request->selectShipping,
+                "priceShipping"         => $request->priceShipping,
+                "totalShipping"         => $totalShipping,
+                "percentage"            => $request->percentageSelect,
+                "nameCompanyPayments"   => "Pagar en efectivo",
+                "date"                  => Carbon::now(),
+            ]);
+
+            $userUrl = $request->userUrl;
+
+            $messageNotification['commerce_id'] = $commerce->id;
+            $messageNotification['total'] = $amount;
+            $messageNotification['coin'] = $request->coinClient;
+            $success = event(new NewNotification($messageNotification));
+
+            (new User)->forceFill([
+                'email' => $request->email,
+            ])->notify(
+                new PostPurchase($message, $userUrl, $commerce->name)
+            );
+
+            return view('result', compact('userUrl'));
+        }elseif($request->coinClient == 0){
             \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
             try{
@@ -72,8 +143,6 @@ class PaidController extends Controller
 
                                     $product->stock -= $sale->quantity;
                                     $product->save();
-
-                                    
                                 }
 
                                 if($sale->type == 1 && $sale->productService_id != 0){
@@ -131,7 +200,7 @@ class PaidController extends Controller
                             $messageNotification['commerce_id'] = $commerce->id;
                             $messageNotification['total'] = $amount;
                             $messageNotification['coin'] = $request->coinClient;
-                            $success = event(new App\Events\NewNotification($messageNotification));
+                            $success = event(new NewNotification($messageNotification));
 
                             (new User)->forceFill([
                                 'email' => $request->email,
@@ -224,7 +293,6 @@ class PaidController extends Controller
 
                         $product->stock -= $sale->quantity;
                         $product->save();
-
                     }
 
                     if($sale->type == 1 && $sale->productService_id != 0){
@@ -236,7 +304,6 @@ class PaidController extends Controller
 
                     $sale->statusSale = 1;
                     $sale->save();
-
                 }
 
                 $commerce = Commerce::where('userUrl',$request->userUrl)->first();
@@ -282,7 +349,7 @@ class PaidController extends Controller
                 $messageNotification['commerce_id'] = $commerce->id;
                 $messageNotification['total'] = $amount;
                 $messageNotification['coin'] = $request->coinClient;
-                $success = event(new App\Events\NewNotification($messageNotification));
+                $success = event(new NewNotification($messageNotification));
 
                 (new User)->forceFill([
                     'email' => $request->email,

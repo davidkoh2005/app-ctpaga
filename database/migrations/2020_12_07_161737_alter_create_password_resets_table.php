@@ -9,8 +9,8 @@ class AlterCreatePasswordResetsTable extends Migration
     public function up()
     {
         Schema::table('password_resets', function (Blueprint $table){
-        $table->increments('id')->first();
-        $table->timestamp('updated_at')->nullable();
+            $table->increments('id')->first();
+            $table->timestamp('updated_at')->nullable();
         });
     } 
     

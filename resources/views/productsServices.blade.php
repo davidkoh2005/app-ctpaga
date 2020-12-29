@@ -56,8 +56,6 @@
     }
 
     function exchangeRate($price, $rate, $coin, $coinClient){
-        $_coinClient = $coinClient;
-        $_rate = $rate;
         $result = 0;
 
         if($coin == 0 && $coinClient == 1)

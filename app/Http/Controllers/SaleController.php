@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Notifications\PostPurchase;
 use Carbon\Carbon;
 use Session;
 use App\User;
 use App\Sale;
 use App\Rate;
+use App\Paid;
 use App\Picture;
 use App\Commerce;
 use App\Shipping;
@@ -15,7 +17,6 @@ use App\Discount;
 use App\Product;
 use App\Service;
 use App\Category;
-
 class SaleController extends Controller
 {
     public function index($userUrl, $codeUrl, $statusModification = 0)
@@ -112,6 +113,7 @@ class SaleController extends Controller
             }
 
         }else{
+            $totalPrice = 0;
             $user_id = $request->user()->id;
 
             foreach($request->sales as $sale){
@@ -138,6 +140,7 @@ class SaleController extends Controller
                     "descriptionShipping"   => $request->descriptionShipping,
                     "expires_at"            => Carbon::now()->format('Y-m-d 23:59:59'),
                 ]);
+                $totalPrice += $this->exchangeRate($price, $request->rate, $sale['data']['coin'], $request->coin);
             }
         }
 
@@ -146,12 +149,92 @@ class SaleController extends Controller
             return response()->json([
                 'url' => url($request->userUrl.'/'.$code.'/'.true)
             ]);
-        else
+        elseif($request->email){
+            $this->registerPaid($request->commerce_id, $code, $totalPrice, $request->nameClient, $request->coin, $request->email );
+            return response()->json([
+                'statusCode' => 201,
+                'message' => 'Paid Registered Successfully',
+            ]);
+        }else
             return response()->json([
                 'statusCode' => 201,
                 'message' => 'Create sales correctly',
                 'codeUrl' => $code,
             ]);  
+    }
+
+    public function exchangeRate($price, $rate, $coin, $coinClient){
+        $result = 0;
+
+        if($coin == 0 && $coinClient == 1)
+            $result = (floatval($price) * $rate);
+        else if($coin == 1 && $coinClient == 0)
+            $result = (floatval($price) / $rate);
+        else
+            $result = (floatval($price));
+
+        return $result;
+    }
+
+    public function registerPaid($commerce_id, $codeUrl, $totalPaid, $nameClient, $coinClient, $emailClient)
+    {
+        $sales = Sale::where("codeUrl", $codeUrl)->get();
+        $commerce = Commerce::where('id', $commerce_id)->first();
+        $message="";
+        foreach ($sales as $sale)
+        {
+            if($sale->type == 0 && $sale->productService_id != 0){
+                $product = Product::where('id',$sale->productService_id)->first();
+                
+                if ($product->postPurchase)
+                    $message .= "- ".$product->postPurchase."\n";
+
+                $product->stock -= $sale->quantity;
+                $product->save();
+
+            }
+
+            if($sale->type == 1 && $sale->productService_id != 0){
+                $service = Service::where('id',$sale->productService_id)->first();
+                
+                if($service->postPurchase)
+                    $message .= "- ".$service->postPurchase."\n";
+            }
+
+            $sale->statusSale = 1;
+            $sale->save();
+
+        }
+
+        $user = User::where('id',$commerce->user_id)->first();
+    
+        Paid::create([
+            "user_id"               => $user->id,
+            "commerce_id"           => $commerce->id,
+            "codeUrl"               => $codeUrl,
+            "nameClient"            => $nameClient,
+            "total"                 => strval($totalPaid),
+            "coin"                  => $coinClient,
+            "email"                 => $emailClient,
+            "nameShipping"          => null,
+            "numberShipping"        => null,
+            "addressShipping"       => null,
+            "detailsShipping"       => null,
+            "selectShipping"        => null,
+            "priceShipping"         => null,
+            "totalShipping"         => "",
+            "percentage"            => 0,
+            "nameCompanyPayments"   => "Tienda Fisica",
+            "date"                  => Carbon::now(),
+        ]);
+
+        $userUrl = $commerce->userUrl;
+
+        (new User)->forceFill([
+            'email' => $emailClient,
+        ])->notify(
+            new PostPurchase($message, $userUrl, $commerce->name)
+        );
     }
 
     public function indexStore($userUrl)
