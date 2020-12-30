@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ctpaga</title>
-    @include('library')
+    @include('bookshop')
     <link rel="stylesheet" type="text/css" href="../../css/styleFormPassword.css">
     <script src="../../js/formPassword.js"></script>
     <script src="../../js/i18n/es.js"></script>

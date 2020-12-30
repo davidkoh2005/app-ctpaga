@@ -174,14 +174,46 @@ class AdminController extends Controller
 
     public function transactions(Request $request)
     {
-        $transactions = DB::table('paids')
-                        ->join('commerces', 'commerces.id', '=', 'paids.commerce_id')
-                        ->orderBy('date', 'asc')
-                        ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.coin', 'paids.total',
-                'paids.date', 'paids.nameCompanyPayments')
-                        ->get();
+        $searchNameCompany="";
+        $searchNameClient="";
+        $selectCoin="Selecionar Moneda";
+        $selectPayment="Selecionar Tipo de Pago";
+        $startDate="";
+        $endDate="";
 
-        return view('admin.transactions', compact('transactions'));
+        if($request->all()){
+            $searchNameCompany=$request->searchNameCompany;
+            $searchNameClient=$request->searchNameClient;
+            $selectCoin=$request->selectCoin;
+            $selectPayment=$request->selectPayment;
+            $startDate=$request->startDate;
+            $endDate=$request->endDate;
+        }
+
+        $transactions = Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
+                        ->orderBy('paids.id', 'desc')
+                        ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.coin', 'paids.total',
+                            'paids.date', 'paids.nameCompanyPayments');
+
+        if(!empty($request->searchNameCompany))
+            $transactions->where('commerces.name', 'ilike', "%" . $request->searchNameCompany . "%" );
+        
+        if(!empty($request->searchNameClient))
+            $transactions->where('paids.nameClient', 'ilike', "%" . $request->searchNameClient . "%" );
+
+        if(!empty($request->selectCoin) && $request->selectCoin != "Selecionar Moneda")
+            $transactions->where('paids.coin', $request->selectCoin);
+        
+            if(!empty($request->selectPayment) && $request->selectPayment != "Selecionar Tipo de Pago")
+            $transactions->where('paids.nameCompanyPayments',  'ilike', "%" . $request->selectPayment . "%" );
+
+        if(!empty($request->startDate) && !empty($request->endDate))
+            $transactions->where('paids.date', ">=",$request->startDate)
+                        ->where('paids.date', "<=",$request->endDate);
+
+        $transactions = $transactions->get();
+
+        return view('admin.transactions', compact('transactions', 'searchNameCompany', 'searchNameClient', 'selectCoin', 'selectPayment', 'startDate', 'endDate'));
     }
 
     public function transactionsShow(Request $request)
@@ -190,8 +222,7 @@ class AdminController extends Controller
         $sales = Sale::where('codeUrl', $transaction->codeUrl)->orderBy('name', 'asc')->get();
         $rate = $sales[0]->rate;
         $coinClient = $sales[0]->coinClient;
-
-        $returnHTML=view('admin.dataProductService', compact('sales', 'rate', 'coinClient'))->render();
+        $returnHTML=view('admin.dataProductService', compact('transaction','sales', 'rate', 'coinClient'))->render();
         return response()->json(array('html'=>$returnHTML));
     }
 }

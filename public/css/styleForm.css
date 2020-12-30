@@ -19,7 +19,7 @@ a.store {
     width: 70%;
 }
 
-label{
+label.form{
     padding-top: 20px;
 }
 
@@ -96,6 +96,7 @@ div#desingQuantity{
     background-color: white;
     border-radius:100%;
     padding: 5px;
+    text-align: center;
 }
 
 div.shippings:hover{
@@ -305,3 +306,34 @@ div#card_number, div#card_expiry, div#card_cvc{
 #typeCard:checked + img {
     outline: 2px solid #f00;
 } 
+
+/* style transactions */
+.card-Transactions, .card-Transactions .card-header{
+    background-color: #e6e6e6 !important;
+}
+
+#showProducts{
+    margin: 10px;
+}
+
+.input-group-addon{
+    color: white;
+    background-color: #00cc5f;
+    padding-top: 6px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.remove-transactions { 
+    width: 100%;
+    border-radius: 60px;
+    font-size: large;
+    background-color: red !important;
+    color: white;
+}
+
+.remove-transactions:hover {
+    background-color: white !important;
+    border: 2px solid red;
+    color: red;
+}

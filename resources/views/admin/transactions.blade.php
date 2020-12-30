@@ -4,17 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ctpaga</title>
-    @include('library')
+    @include('bookshop')
     <link rel="stylesheet" type="text/css" href="../../css/styleForm.css">
     <link rel="stylesheet" type="text/css" href="../../css/dashboard.css">
-    <link rel="stylesheet" type="text/css" href="../../css/datatables.min.css"/>
-    
-    <script src="../../js/i18n/es.js"></script>
-    <script src="../../js/global.js"></script>
-    <script type="text/javascript" src="../../js/datatables.min.js"></script>
+
+    <script type="text/javascript" src="../../js/transactions.js"></script>
 </head>
-<body>
+<body class="body-admin">
     @include('admin.navbar')
+    <div class="row">&nbsp;</div>
+    <div class="row justify-content-center">
+        <div class="col-10">
+            <div class="card card-Transactions">
+                <div class="card-header">
+                    Filtro:
+                </div>
+                <div class="card-body">
+                    <form id="payment-form" class="contact-form" method='POST' action="{{route('admin.transactionsSearch')}}">
+                        <div class="mb-3 row">
+                            <label class="col-2 col-form-label">Nombre Compañia</label>
+                            <div class="col">
+                                <input type="text" class="form-control" name="searchNameCompany" id="searchNameCompany" value="{{$searchNameCompany}}">
+                            </div>
+
+                            <label class="col-2 col-form-label">Nombre Cliente</label>
+                            <div class="col">
+                                <input type="text" class="form-control" name="searchNameClient" id="searchNameClient" value="{{$searchNameClient}}">
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <label class="col-sm-2 col-form-label">Tipo de Pago</label>
+                            <div class="col">
+                                <select class="form-select form-control" name="selectPayment" id="selectPayment">
+                                    <option value="Selecionar Tipo de Pago">Selecionar Tipo de Pago</option>
+                                    <option value="E-sitef">E-sitef</option>
+                                    <option value="Stripe">Stripe</option>
+                                    <option value="Pago en Efectivo">Pago en Efectivo</option>
+                                    <option value="Tienda Fisica">Tienda Fisica</option>
+                                    <option value="Tienda Web">Tienda Web</option>
+                                </select>
+                            </div>
+
+                            <label class="col-sm-2 col-form-label">Moneda</label>
+                            <div class="col">
+                                <select class="form-select form-control" name="selectCoin" id="selectCoin">
+                                    <option value="Selecionar Moneda">Selecionar Moneda</option>
+                                    <option value="0">USA $</option>
+                                    <option value="1">VE BS</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-2 col-form-label">Rango de Fecha</label>
+
+                            <div class="col">
+                                <div class="input-daterange input-group" id="datepicker">
+                                    <input type="text" class="form-control" name="startDate" placeholder="Fechan Inicial" value="{{$startDate}}"/>
+                                    <span class="input-group-addon"> Hasta </span>
+                                    <input type="text" class="form-control" name="endDate" placeholder="Fecha Final" value="{{$endDate}}"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">&nbsp;</div>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="submit" class="submit btn btn-bottom">Buscar</button>
+                            </div>
+                            <div class="col-6">
+                                <a type="button" class="remove-transactions btn" href="{{route('admin.transactions')}}">Limpiar</a>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <div class="tableShow">
         <table id="table_id" class="table table-bordered mb-5 display">
@@ -49,7 +117,7 @@
         </table>
     </div>
 
-    <!--- Modal Picture -->
+    <!--- Modal products -->
     <div class="modal fade" id="productsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -59,49 +127,18 @@
                     </button>
                 </div>              
                 <div class="modal-body">
-                    <label><strong>Productos y/o Servicios:</strong></label>
                     <div id="showProducts"></div>
-                </div>
-                <div class="modal-footer">
-                    <div class="marginAuto">
-                        <input type="input" class="btn btn-bottom btn-current" id="submitReason" value="Enviar Razón">
-                        <div class="row marginAuto"id="loadingReason">
-                            <img widht="80px" height="80px" class="justify-content-center" src="../images/loading.gif">
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script> 
-        $(document).ready( function () {
-            $('#productsModal').modal('hide'); 
 
-            $('#table_id').DataTable({
-                language: {
-                    "decimal": "",
-                    "emptyTable": "No hay información",
-                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Transacciones",
-                    "infoEmpty": "Mostrando 0 to 0 of 0 Transacciones",
-                    "infoFiltered": "(Filtrado de _MAX_ total Transacciones)",
-                    "infoPostFix": "",
-                    "thousands": ",",
-                    "lengthMenu": "Mostrar _MENU_ Transacciones",
-                    "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
-                    "search": "Buscar:",
-                    "zeroRecords": "Sin resultados encontrados",
-                    "paginate": {
-                        "first": "Primero",
-                        "last": "Ultimo",
-                        "next": "Siguiente",
-                        "previous": "Anterior"
-                    }
-                },
-            });
-        });
+        var selectCoin = '{{$selectCoin}}';
+        var selectPayment ='{{$selectPayment}}';
+        $("#selectCoin option[value='"+ selectCoin +"']").attr("selected",true);
+        $("#selectPayment option[value='"+ selectPayment +"']").attr("selected",true);
 
         function showProduct(id)
         {
@@ -110,9 +147,12 @@
                 data: {"id" : id},
                 type: "GET",
             }).done(function(data){
-                $('#showProducts').html(data.html);
                 $('#productsModal').modal('show'); 
-            }).fail(function(result){});
+                $('#showProducts').html(data.html);
+            }).fail(function(result){
+                $('#productsModal').modal('hide'); 
+                $('#showProducts').html();
+            });
         }
     </script>
 </body>

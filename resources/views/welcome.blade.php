@@ -8,7 +8,7 @@
         <meta name="author" content="">
         <title>ctpaga</title>
 
-        @include('library')
+        @include('bookshop')
         <link rel="stylesheet" type="text/css" href="../css/style.css">
     </head>
     <body>

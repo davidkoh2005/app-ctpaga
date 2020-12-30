@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Notifications\NewUser;
 use Carbon\Carbon;
 use App\User;
 use App\Bank;
@@ -40,6 +41,12 @@ class AuthController extends Controller
         $token->save();
 
         Commerce::create(['user_id'=>$user->id]);
+
+        (new User)->forceFill([
+            'email' => $request->email,
+        ])->notify(
+            new NewUser()
+        );
         
         return response()->json([
             'statusCode' => 201,

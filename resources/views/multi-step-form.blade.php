@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ctpaga</title>
-    @include('library')
+    @include('bookshop')
     <link rel="stylesheet" type="text/css" href="../../css/styleForm.css">
     <script src="../../js/form.js"></script>
     <script src="../../js/i18n/es.js"></script>
@@ -19,7 +19,7 @@
             <div class="Row">
                 <div class="col-md-6 col-sm-12 col-12 mx-auto">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header card-header-form">
                             <div class="row float-left">
                                 <div class="col form-navigation">
                                     <button type="button" class="previous btn">
@@ -97,7 +97,7 @@
                                 </div>
                                 <div class= "form-section">
                                     <p>Ingrese un correo electrónico donde podamos enviarte el recibo de pago:</p>
-                                    <label for="email">CORREO ELECTRÓNICO</label>
+                                    <label class="form" for="email">CORREO ELECTRÓNICO</label>
                                     <input type="email" name="email" class="form-control" placeholder="joedoe@gmail.com" required />
                                 </div>
 
@@ -130,13 +130,13 @@
                                 <div class="form-section">
                                     @if ($sales[0]->statusShipping && count($shippings)!=0)
                                         <p> Ingresa la dirección de envío:</p>
-                                        <label for="name">NOMBRE:</label>
+                                        <label class="form" for="name">NOMBRE:</label>
                                         <input type="text" name="name" class="form-control" data-parsley-minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" required />
-                                        <label for="number">NUMERO DE CELULAR:</label>
+                                        <label class="form" for="number">NUMERO DE CELULAR:</label>
                                         <input type="tel" name="number" class="form-control" placeholder="04121234567" size="11" maxlength="20" data-parsley-maxlength="20" data-parsley-pattern="^(?:(\+)58|0)(?:2(?:12|4[0-9]|5[1-9]|6[0-9]|7[0-8]|8[1-35-8]|9[1-5]|3[45789])|4(?:1[246]|2[46]))\d{7}$" required />
-                                        <label for="address">DIRECCÍON:</label>
+                                        <label class="form" for="address">DIRECCÍON:</label>
                                         <textarea class="form-control" name="address" row="3" placeholder="Av. Principal los dos caminos" required></textarea>
-                                        <label for="details">DETALLE ADICIONALES (OPCIONAL)</label>
+                                        <label class="form" for="details">DETALLE ADICIONALES (OPCIONAL)</label>
                                         <textarea class="form-control" name="details" row="3" placeholder="Deja en la recepción"></textarea>
                                     @endif
                                 </div>
@@ -162,10 +162,10 @@
                                         <label class="noPadding">Realizar pago en Efectivo</label>
                                     </div>
                                     <div class="dataPay">
-                                        <label for="nameCard">NOMBRE DE LA TARJETA:</label>
+                                        <label class="form" for="nameCard">NOMBRE DE LA TARJETA:</label>
                                         <input type="text" name="nameCard" id="nameCard" class="form-control" data-parsley-minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" required />
                                         @if ($coinClient ==0)
-                                            <label for="numberCard">NUMERO DE LA TARJETA:</label>
+                                            <label class="form" for="numberCard">NUMERO DE LA TARJETA:</label>
                                             <div id="errorCard">
                                                 <ul><li>Complete los datos de la tarjeta</li></ul>
                                             </div>
@@ -173,18 +173,18 @@
                                             <div id="paymentResponseCardNumber"></div>
                                             <div class="row">
                                                 <div class="col-6">
-                                                    <label for="dateCard">FECHA DE EXPIRACIÓN:</label>
+                                                    <label class="form" for="dateCard">FECHA DE EXPIRACIÓN:</label>
                                                     <div id="card_expiry" class="field"></div>
                                                     <div id="paymentResponseDate"></div>
                                                 </div>
                                                 <div class="col-6">
-                                                    <label for="cvcCard">CVV/CVC:</label>
+                                                    <label class="form" for="cvcCard">CVV/CVC:</label>
                                                     <div id="card_cvc" class="field"></div>
                                                     <div id="paymentResponseCVC"></div>
                                                 </div>
                                             </div>
                                         @else
-                                            <label for="SelectTypeCard">SELECCONE EL TIPO DE TARJETA:</label>
+                                            <label class="form" for="SelectTypeCard">SELECCONE EL TIPO DE TARJETA:</label>
                                             <div id="errorCard">
                                                 <ul><li>Complete los datos de la tarjeta</li></ul>
                                             </div>
@@ -214,16 +214,16 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <label for="numberCard">NUMERO DE LA TARJETA:</label>
+                                            <label class="form" for="numberCard">NUMERO DE LA TARJETA:</label>
                                             <input type="text" name="numberCard" id="numberCard" class="form-control" maxlength="16" placeholder="4242 4242 4242 4242" required data-parsley-maxlength="16" data-parsley-minlength="16" />
                                             <div class="row">
                                                 <div class="col-6">
-                                                    <label for="dateCard">FECHA DE EXPIRACIÓN:</label>
+                                                    <label class="form" for="dateCard">FECHA DE EXPIRACIÓN:</label>
                                                     <div class="form-row">
                                                         <div class="col">
                                                             <input type="text" name="dateMM" id="dateMM" class="form-control" maxlength="2" placeholder="MM" data-parsley-type="integer" data-parsley-maxlength="2"/>
                                                         </div>
-                                                        <label>/</label>
+                                                        <label class="form">/</label>
                                                         <div class="col">
                                                             <input type="text"  name="dateYY" id="dateYY" class="form-control" maxlength="2" placeholder="YY" data-parsley-type="integer" data-parsley-maxlength="2"/>
                                                         </div>
@@ -231,7 +231,7 @@
                                                     <div id="statusDate"></div>
                                                 </div>
                                                 <div class="col-6">
-                                                    <label for="cvcCard">CVV/CVC:</label>
+                                                    <label class="form" for="cvcCard">CVV/CVC:</label>
                                                     <input type="text"  name="cardCVC" id="cardCVC" class="form-control" placeholder="123" minlenght="3" maxlength="3" required data-parsley-maxlength="3" data-parsley-minlength="3"/>
                                                 </div>
                                             </div>
@@ -241,7 +241,7 @@
 
                                 <div class="form-section">
                                     <p>Ingresa código de descuento:</p>
-                                    <label for="discount">CODE DE DESCUENTO:</label>
+                                    <label class="form" for="discount">CODE DE DESCUENTO:</label>
                                     <input type="text" name="discount" id="discount" class="form-control" data-parsley-minlength="3" placeholder="DESCO20" autocomplete="off" onkeyup="javascript:this.value=this.value.toUpperCase();" />
                                     <div class="row">&nbsp;</div>
                                     <div class="row justify-content-center align-items-center">

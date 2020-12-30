@@ -50,12 +50,6 @@ class PaidController extends Controller
 
             $commerce = Commerce::where('userUrl',$request->userUrl)->first();
             $user = User::where('id',$commerce->user_id)->first();
-            
-            if($request->totalShipping != null){
-                $totalShipping = $request->totalShipping;
-            }else{
-                $totalShipping = 0;
-            }
 
             Paid::create([
                 "user_id"               => $user->id,
@@ -71,9 +65,8 @@ class PaidController extends Controller
                 "detailsShipping"       => $request->details,
                 "selectShipping"        => $request->selectShipping,
                 "priceShipping"         => $request->priceShipping,
-                "totalShipping"         => $totalShipping,
                 "percentage"            => $request->percentageSelect,
-                "nameCompanyPayments"   => "Pagar en efectivo",
+                "nameCompanyPayments"   => "Pago en Efectivo",
                 "date"                  => Carbon::now(),
             ]);
 
@@ -160,11 +153,6 @@ class PaidController extends Controller
                             $commerce = Commerce::where('userUrl',$request->userUrl)->first();
                             $user = User::where('id',$commerce->user_id)->first();
                             
-                            if($request->totalShipping != null){
-                                $totalShipping = $request->totalShipping;
-                            }else{
-                                $totalShipping = 0;
-                            }
 
                             Paid::create([
                                 "user_id"               => $user->id,
@@ -180,7 +168,6 @@ class PaidController extends Controller
                                 "detailsShipping"       => $request->details,
                                 "selectShipping"        => $request->selectShipping,
                                 "priceShipping"         => $request->priceShipping,
-                                "totalShipping"         => $totalShipping,
                                 "percentage"            => $request->percentageSelect,
                                 "nameCompanyPayments"   => "Stripe",
                                 "date"                  => Carbon::now(),
@@ -309,12 +296,6 @@ class PaidController extends Controller
                 $commerce = Commerce::where('userUrl',$request->userUrl)->first();
                 $user = User::where('id',$commerce->user_id)->first();
                 
-                if($request->totalShipping != null){
-                    $totalShipping = $request->totalShipping;
-                }else{
-                    $totalShipping = 0;
-                }
-                
                 Paid::create([
                     "user_id"               => $user->id,
                     "commerce_id"           => $commerce->id,
@@ -329,7 +310,6 @@ class PaidController extends Controller
                     "detailsShipping"       => $request->details,
                     "selectShipping"        => $request->selectShipping,
                     "priceShipping"         => $request->priceShipping,
-                    "totalShipping"         => $totalShipping,
                     "percentage"            => $request->percentageSelect,
                     "nameCompanyPayments"   => "E-sitef",
                     "date"                  => Carbon::now(),

@@ -23,16 +23,16 @@ class SaleController extends Controller
     {
         $sales = Sale::where('codeUrl',$codeUrl)->orderBy('name', 'asc')->get();
 
-        
-        if($sales[0]->statusSale == 1 || Carbon::now()->format('Y-m-d 23:59:59') > $sales[0]->expires_at)
-            return redirect()->route('form.store', ['userUrl' => $userUrl]);
-
         $commerce = Commerce::where('userUrl',$userUrl)->first();
-
-        if(count($sales) == 0|| !$commerce)
+    
+        if(count($sales) == 0 || !$commerce)
             return redirect()->route('welcome');
         else if($sales[0]->commerce_id != $commerce->id)
             return redirect()->route('welcome');
+
+        if($sales[0]->statusSale == 1 || Carbon::now()->format('Y-m-d 23:59:59') > $sales[0]->expires_at)
+            return redirect()->route('form.store', ['userUrl' => $userUrl]);
+
 
         $user = User::where('id',$commerce->user_id)->first();
         $picture = Picture::where('commerce_id', $commerce->id)->first();
@@ -222,7 +222,6 @@ class SaleController extends Controller
             "detailsShipping"       => null,
             "selectShipping"        => null,
             "priceShipping"         => null,
-            "totalShipping"         => "",
             "percentage"            => 0,
             "nameCompanyPayments"   => "Tienda Fisica",
             "date"                  => Carbon::now(),
