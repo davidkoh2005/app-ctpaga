@@ -31,7 +31,20 @@
                     <td>{{ $balance->name }}</td>
                     <td>@if($balance->coin == 0 )  USD @else Bs @endif</td>
                     <td>@if($balance->coin == 0 )  $ @else Bs @endif {{ $balance->total }}</td>
-                    <td><a class="btn btn-bottom" href="{{route('admin.show', ['id' => $balance->id])}}"><i class="fa fa-eye"></i> Ver</a></td>
+                    <td>
+
+                        <form method='POST' action="{{route('admin.transactionsSearch')}}">
+                            <div class="row">
+                                <div class="col">
+                                    <a class="btn btn-bottom" href="{{route('admin.show', ['id' => $balance->id])}}"><i class="fa fa-eye"></i> Ver documentos</a>
+                                </div>
+                                <div class="col">
+                                    <input type="hidden" name="idCommerce" value="{{$balance->commerce_id}}">
+                                    <button type="submit" class="btn btn-bottom"><i class="fa fa-eye"></i> Ver transacciones</button>
+                                </div>
+                            </div>
+                        </form>
+                    </td>
                 </tr>
                 @endforeach
             </tbody>

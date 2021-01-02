@@ -182,6 +182,7 @@ class AdminController extends Controller
         $endDate="";
 
         if($request->all()){
+            $idCommerce = $request->idCommerce;
             $searchNameCompany=$request->searchNameCompany;
             $searchNameClient=$request->searchNameClient;
             $selectCoin=$request->selectCoin;
@@ -194,6 +195,9 @@ class AdminController extends Controller
                         ->orderBy('paids.id', 'desc')
                         ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.coin', 'paids.total',
                             'paids.date', 'paids.nameCompanyPayments');
+
+        if(!empty($request->idCommerce))
+            $transactions->where('commerces.id', $request->idCommerce); 
 
         if(!empty($request->searchNameCompany))
             $transactions->where('commerces.name', 'ilike', "%" . $request->searchNameCompany . "%" );

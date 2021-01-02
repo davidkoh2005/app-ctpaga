@@ -51,6 +51,12 @@ class PaidController extends Controller
             $commerce = Commerce::where('userUrl',$request->userUrl)->first();
             $user = User::where('id',$commerce->user_id)->first();
 
+            if(strlen($request->priceShipping)>0){
+                $priceShipping = $request->priceShipping;
+            }else{
+                $priceShipping = "0";
+            }
+
             Paid::create([
                 "user_id"               => $user->id,
                 "commerce_id"           => $commerce->id,
@@ -64,7 +70,7 @@ class PaidController extends Controller
                 "addressShipping"       => $request->address,
                 "detailsShipping"       => $request->details,
                 "selectShipping"        => $request->selectShipping,
-                "priceShipping"         => $request->priceShipping,
+                "priceShipping"         => str_replace(",",".",$priceShipping),
                 "percentage"            => $request->percentageSelect,
                 "nameCompanyPayments"   => "Pago en Efectivo",
                 "date"                  => Carbon::now(),
@@ -153,6 +159,11 @@ class PaidController extends Controller
                             $commerce = Commerce::where('userUrl',$request->userUrl)->first();
                             $user = User::where('id',$commerce->user_id)->first();
                             
+                            if(strlen($request->priceShipping)>0){
+                                $priceShipping = $request->priceShipping;
+                            }else{
+                                $priceShipping = "0";
+                            }
 
                             Paid::create([
                                 "user_id"               => $user->id,
@@ -167,7 +178,7 @@ class PaidController extends Controller
                                 "addressShipping"       => $request->address,
                                 "detailsShipping"       => $request->details,
                                 "selectShipping"        => $request->selectShipping,
-                                "priceShipping"         => $request->priceShipping,
+                                "priceShipping"         => str_replace(",",".",$priceShipping),
                                 "percentage"            => $request->percentageSelect,
                                 "nameCompanyPayments"   => "Stripe",
                                 "date"                  => Carbon::now(),
@@ -295,6 +306,12 @@ class PaidController extends Controller
 
                 $commerce = Commerce::where('userUrl',$request->userUrl)->first();
                 $user = User::where('id',$commerce->user_id)->first();
+
+                if(strlen($request->priceShipping)>0){
+                    $priceShipping = $request->priceShipping;
+                }else{
+                    $priceShipping = "0";
+                }
                 
                 Paid::create([
                     "user_id"               => $user->id,
@@ -309,7 +326,7 @@ class PaidController extends Controller
                     "addressShipping"       => $request->address,
                     "detailsShipping"       => $request->details,
                     "selectShipping"        => $request->selectShipping,
-                    "priceShipping"         => $request->priceShipping,
+                    "priceShipping"         => str_replace(",",".",$priceShipping),
                     "percentage"            => $request->percentageSelect,
                     "nameCompanyPayments"   => "E-sitef",
                     "date"                  => Carbon::now(),
@@ -351,7 +368,7 @@ class PaidController extends Controller
         $user = $request->user();
         $paids = Paid::where('user_id', $user->id)
                     ->where('commerce_id', $request->commerce_id)
-                    ->orderBy('created_at', 'asc')->get();
+                    ->orderBy('created_at', 'desc')->get();
         
         return response()->json(['statusCode' => 201,'data' => $paids]);
     }
