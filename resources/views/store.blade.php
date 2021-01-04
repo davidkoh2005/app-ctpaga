@@ -40,8 +40,8 @@
                                 <h3> {{$commerce->name}}</h3>
                                 <div class="button-circle">
                                     <ul>
-                                        <li> <a href="https://api.whatsapp.com/send/?phone={{env('WHATSAPP_NUM')}}"> <i class="fa fa-whatsapp" aria-hidden="true"></i><p>Whatsapp</p></a></li>
-                                        <li> <a href="#"> <i class="fa fa-truck button-shipping" aria-hidden="true"></i><p class="shipping">Envíos</p></a> </li>
+                                        <li> <a href="https://api.whatsapp.com/send/?phone={{$whatsappNum}}"> <i class="fa fa-whatsapp" aria-hidden="true"></i><p>Whatsapp</p></a></li>
+                                        @if($statusShipping)<li> <a href="#"> <i class="fa fa-truck button-shipping" aria-hidden="true"></i><p class="shipping">Envíos</p></a> </li>@endif
                                     </ul>
                                 </div>
                                 <div class="row">&nbsp;</div>

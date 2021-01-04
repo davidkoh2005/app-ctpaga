@@ -245,6 +245,8 @@ class SaleController extends Controller
             return redirect()->route('welcome');
         
         $user = User::where('id', $commerce->user_id)->first();
+        $statusShipping = $user->statusShipping;
+        
         $picture = Picture::where('commerce_id', $commerce->id)->first();    
         $shippings = Shipping::where('user_id', $user->id)->get();
 
@@ -259,7 +261,8 @@ class SaleController extends Controller
                             ->where('commerce_id', $commerce->id)
                             ->where('publish', 1)->orderBy('name', 'asc')->get();
 
-        return view('store', compact('userUrl','commerce','picture','coinClient', 'shippings', 'rate'));
+        $whatsappNum = env('WHATSAPP_NUM');
+        return view('store', compact('userUrl','commerce','picture','coinClient', 'shippings', 'rate', 'statusShipping', 'whatsappNum'));
     }
 
     public function showCategories(Request $request)

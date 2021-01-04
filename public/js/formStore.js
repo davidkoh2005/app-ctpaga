@@ -50,11 +50,13 @@ $(function(){
         $sections.removeClass('current').eq(index).addClass('current');
         $('.form-navigation .previous').toggle(index>0);
         var arTheEnd = index >= $sections.length -1;
-        $('.form-navigation [type=submit]').toggle(index ==0);
+        $('.form-navigation [type=submit]').toggle(index==0);
 
         if(index == 1){
             $(".form-store").text("Envio");
+            $('#totalBtn').hide();
         }else{
+            $('#totalBtn').show();
             $('.form-navigation .next').toggle(!arTheEnd);
         }
 
@@ -66,11 +68,8 @@ $(function(){
     }
 
     $('.form-navigation .previous').click(function(){
-        if(curIndex() == 2){
-            navigateTo(curIndex()-1);
-            showTotalBtn();
-        }
-
+        navigateTo(curIndex()-1);
+        showTotalBtn();
     });
 
 
