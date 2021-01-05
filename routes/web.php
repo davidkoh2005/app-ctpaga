@@ -46,6 +46,11 @@ Route::get('password/create', 'Auth\PasswordResetController@create');
 Route::get('password/find/{token}', 'Auth\PasswordResetController@find');
 Route::post('password/reset', 'Auth\PasswordResetController@reset')->name('form.passwordReset');
 
+Route::get('password/delivery/create', 'Auth\PasswordResetController@createDelivery');
+Route::get('password/delivery/find/{token}', 'Auth\PasswordResetController@findDelivery');
+Route::post('password/delivery/reset', 'Auth\PasswordResetController@resetDelivery')->name('form.passwordResetDelivery');
+
+
 Route::get('/{userUrl}/', 'SaleController@indexStore')->name('form.store');
 Route::get('/{userUrl}/{codeUrl}/{statusModification?}', 'SaleController@index');
 Route::post('verify', 'SaleController@verifyDiscount');

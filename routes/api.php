@@ -22,14 +22,25 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'AuthController@login');
     Route::post('signup', 'AuthController@signup');
+
+    Route::post('loginDelivery', 'AuthController@loginDelivery');
+    Route::post('signupDelivery', 'AuthController@signupDelivery');
+
     Route::post('version', 'AuthController@VersionApp');
     Route::post('verifyUrl', 'UserController@verifyUrlUser');
+
+    Route::group(['middleware' => 'auth:delivery'], function() {
+        Route::post('logoutDelivery', 'AuthController@logout');
+        Route::post('delivery', 'AuthController@delivery');
+        Route::post('updatePasswordDelivery', 'AuthController@updatePassword');
+        
+    });
   
     Route::group(['middleware' => 'auth:api'], function() {
         Route::post('logout', 'AuthController@logout');
         Route::post('user', 'AuthController@user');
         Route::post('updatePassword', 'AuthController@updatePassword');
-        
+
         Route::post('updateUserImg', 'UserController@updateImg');
         Route::post('updateUser', 'UserController@updateUser');
 

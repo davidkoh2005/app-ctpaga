@@ -42,7 +42,6 @@
                                     <option value="Stripe">Stripe</option>
                                     <option value="Pago en Efectivo">Pago en Efectivo</option>
                                     <option value="Tienda Fisica">Tienda Fisica</option>
-                                    <option value="Tienda Web">Tienda Web</option>
                                 </select>
                             </div>
 

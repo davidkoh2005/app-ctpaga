@@ -225,6 +225,7 @@ class SaleController extends Controller
             "percentage"            => 0,
             "nameCompanyPayments"   => "Tienda Fisica",
             "date"                  => Carbon::now(),
+            "statusShipping"        => 1,
         ]);
 
         $userUrl = $commerce->userUrl;

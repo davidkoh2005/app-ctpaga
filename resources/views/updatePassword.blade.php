@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ctpaga</title>
     @include('bookshop')
-    <link rel="stylesheet" type="text/css" href="../../css/styleFormPassword.css">
-    <script src="../../js/formPassword.js"></script>
-    <script src="../../js/i18n/es.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/styleFormPassword.css">
+    <script src="../../../js/formPassword.js"></script>
+    <script src="../../../js/i18n/es.js"></script>
 </head>
 <body>
     <Section>
@@ -38,26 +38,31 @@
 
                             </div>
                             @else
-                            <form id="password-form" class="contact-form" method='POST' action="{{route('form.passwordReset')}}">
-                                @csrf
-                                <input type="hidden" name="token" id="token" value="{{$token}}">
-                                <div class= "form-section current">
-                                    <p>Ingrese la nueva contraseña:</p>
-                                    <label for="password">Contraseña</label>
-                                    <input type="password" name="password" id="password" class="form-control" placeholder="***************"  required />
-                                    <label for="password_confirmation">Confirmar contraseña</label>
-                                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="***************"  required />
-                                    <div id="errorPassword"></div>
-                                </div>
+                                @if($type == 0)
+                                    <form id="password-form" class="contact-form" method='POST' action="{{route('form.passwordReset')}}">
+                                @else
+                                    <form id="password-form" class="contact-form" method='POST' action="{{route('form.passwordResetDelivery')}}">
+                                @endif
 
-                                <div class="row">&nbsp;</div>
+                                    @csrf
+                                    <input type="hidden" name="token" id="token" value="{{$token}}">
+                                    <div class= "form-section current">
+                                        <p>Ingrese la nueva contraseña:</p>
+                                        <label for="password">Contraseña</label>
+                                        <input type="password" name="password" id="password" class="form-control" placeholder="***************"  required />
+                                        <label for="password_confirmation">Confirmar contraseña</label>
+                                        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="***************"  required />
+                                        <div id="errorPassword"></div>
+                                    </div>
 
-                                <div class="form-navigation bottom">
-                                    <button type="submit" class="submit btn btn-bottom">Guardar Contraseña</button>
-                                </div>
-                                <div class="row justify-content-center" id="loading">
-                                    <img widht="80px" height="80px" class="justify-content-center" src="../images/loading.gif">
-                                </div>
+                                    <div class="row">&nbsp;</div>
+
+                                    <div class="form-navigation bottom">
+                                        <button type="submit" class="submit btn btn-bottom">Guardar Contraseña</button>
+                                    </div>
+                                    <div class="row justify-content-center" id="loading">
+                                        <img widht="80px" height="80px" class="justify-content-center" src="../images/loading.gif">
+                                    </div>
                             @endif
                             </form>
                         </div>
