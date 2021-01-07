@@ -24,6 +24,10 @@ Route::get('/admin/login', function () {
     return view('admin.login');
 })->name('admin.login');
 
+Route::get('sockets/serve', function(){
+    \Illuminate\Support\Facades\Artisan::call('websockets:serve');
+});
+
 Route::post('admin/login/', 'AdminController@login')->name('form.login');
 Route::get('admin/logout/', 'AdminController@logout')->name('admin.logout');
 Route::post('admin/logout/', 'AdminController@logout')->name('admin.logout');
