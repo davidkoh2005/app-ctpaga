@@ -35,6 +35,8 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('updatePasswordDelivery', 'AuthController@updatePassword');
 
         Route::post('updateDelivery', 'DeliveryController@update');
+
+        Route::post('showPaid', 'PaidController@showPaid');
         
     });
   

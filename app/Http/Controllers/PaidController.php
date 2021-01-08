@@ -372,4 +372,16 @@ class PaidController extends Controller
         
         return response()->json(['statusCode' => 201,'data' => $paids]);
     }
+
+    public function showPaid(Request $request)
+    {
+        $paids = Paid::where('codeUrl', $request->codeUrl)->first();
+        if($paids){
+            $sales = Sale::where('codeUrl',$request->codeUrl)->orderBy('name', 'asc')->get();
+            $commerce = Commerce::whereId($paids->commerce_id)->first();
+            return response()->json(['statusCode' => 201,'data' =>['paid'=>$paids, 'commerce'=>$commerce, 'sales'=>$sales]]);
+        }
+
+        return response()->json(['statusCode' => 401,'message' => "No se encuentra en nuestra base de datos"]);
+    }
 }
