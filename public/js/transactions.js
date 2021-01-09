@@ -1,4 +1,5 @@
 $(document).ready( function () {
+    $('.main-panel').perfectScrollbar({suppressScrollX: true, maxScrollbarLength: 200}); 
     $('#productsModal').modal('hide'); 
 
     $('#table_id').DataTable({
@@ -30,3 +31,4 @@ $(document).ready( function () {
         language: "es",
     });
 });
+$(".main-panel").perfectScrollbar('update');

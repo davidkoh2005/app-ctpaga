@@ -2,14 +2,6 @@ section {
     margin: 50px;
 }
 
-.navbar {
-    background-color: #00cc5f !important;
-}
-
-.navbar-brand, .nav-link {
-    color: white !important;
-}
-
 .card-body {
     text-align: left;
 }
@@ -25,7 +17,7 @@ section {
 }
 
 .card-footer {
-    background-color: #e6e6e6 !important;
+    background-color: white !important;
 }
 
 a.tienda {
@@ -39,38 +31,35 @@ a.tienda {
 
 
 .btn-bottom { 
-    border-radius: 60px;
-    font-size: large;
+    border-radius: 60px !important;
     background-color: #00cc5f !important;
     color: white;
 }
 
 .btn-bottom:hover {
     background-color: white !important;
-    border: 2px solid #00cc5f;
-    color: #00cc5f;
+    border: 2px solid #00cc5f !important;
+    color: #00cc5f !important;
 }
 
 .btn-remove { 
-    width: 150px;
-    border-radius: 60px;
-    font-size: large;
+    width: 100%;
+    border-radius: 60px !important;
     background-color: red !important;
-    color: white;
+    color: white !important;
 }
 
 .btn-remove:hover {
     background-color: white !important;
-    border: 2px solid red;
-    color: red;
+    border: 2px solid red !important;
+    color: red!important;
 }
 
 .btn-error, .btn-error:hover { 
-    width: 100%;
-    border-radius: 60px;
-    font-size: large;
+    width: 100% !important;
+    border-radius: 60px !important;
     background-color: red !important;
-    color: white;
+    color: white !important;
 }
 
 #imagemodal .modal-dialog {

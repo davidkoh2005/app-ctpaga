@@ -10,109 +10,114 @@
     <script type="text/javascript" src="../../js/show.js"></script>
     <script type="text/javascript" src="../../js/rotate.js"></script>
     <script type="text/javascript" src="../../js/datatables.min.js"></script>
+    @include('admin.bookshop')
 </head>
 <body>
-    @include('admin.navbar')
-    <section>
-        <div class="row">
-            <div class="col-md-4 col-12">
-                <div class="card text-center">
-                    <div class="card-header">
-                        Selfie
-                    </div>
-                    <div class="card-body center">
+    @include('admin.menu')
+    <div class="main-panel">
+        @include('admin.navbar')
+        <section>
+            <div class="row">
+                <div class="col-md-4 col-12">
+                    <div class="card text-center">
+                        <div class="card-header">
+                            Selfie
+                        </div>
+                        <div class="card-body center">
+                            @if($selfie)
+                                @php
+                                $idSelfie = $selfie->id;
+                                @endphp
+                                <div class="zoom">
+                                    <img src="{{url($selfie->url)}}" width="250px" height="350px">
+                                </div>
+                            @else
+                                @php
+                                $idSelfie = 0;
+                                @endphp
+                                <p> No tiene Foto </p>
+                            @endif
+                        </div>
                         @if($selfie)
-                            @php
-                             $idSelfie = $selfie->id;
-                            @endphp
-                            <div class="zoom">
-                                <img src="{{url($selfie->url)}}" width="250px" height="350px">
-                            </div>
-                        @else
-                            @php
-                             $idSelfie = 0;
-                            @endphp
-                            <p> No tiene Foto </p>
+                        <div class="card-footer" >
+                            <input type="button" class="btn btn-bottom btn-remove" id="rejectSelfie" value="Rechazar">
+                        </div>
                         @endif
                     </div>
-                    @if($selfie)
-                    <div class="card-footer ">
-                        <input type="button" class="btn btn-bottom btn-remove" id="rejectSelfie" value="Rechazar">
-                    </div>
-                    @endif
+                    <div class="row">&nbsp;</div>
                 </div>
-                <div class="row">&nbsp;</div>
-            </div>
-            <div class="col-md-4 col-12">
-                <div class="card text-center">
-                    <div class="card-header">
-                        Informacion
-                    </div>
-                    <div class="card-body">
-                        <h5 class="center">Datos Personal</h5>
-                        <label><strong>Nombre: </strong>{{$user->name}}</label> <br>
-                        <label><strong>Telefono: </strong>{{$user->phone}}</label> <br>
-                        <label><strong>Dirección: </strong>{{$user->address}}</label> <br>
-                        <label><strong>Correo: </strong>{{$user->email}}</label> 
+                <div class="col-md-4 col-12">
+                    <div class="card text-center">
+                        <div class="card-header">
+                            Informacion
+                        </div>
+                        <div class="card-body">
+                            <h5 class="center">Datos Personal</h5>
+                            <label><strong>Nombre: </strong>{{$user->name}}</label> <br>
+                            <label><strong>Telefono: </strong>{{$user->phone}}</label> <br>
+                            <label><strong>Dirección: </strong>{{$user->address}}</label> <br>
+                            <label><strong>Correo: </strong>{{$user->email}}</label> 
 
-                        <div class="row">&nbsp;</div>
+                            <div class="row">&nbsp;</div>
 
-                        <h5 class="center">Datos de Empresa</h5>
-                        <label><strong>Nombre: </strong>{{$commerce->name}}</label> <br>
-                        <label><strong>Rif: </strong>{{$commerce->rif}}</label> <br>
-                        <label><strong>Telefono: </strong>{{$commerce->phone}}</label> <br>
-                        <label><strong>Dirección: </strong>{{$commerce->address}}</label> <br>
-                        <label><strong>Link: </strong><a href="{{route('form.store', ['userUrl' => $commerce->userUrl])}}" class="tienda">Tienda</a></label> <br>
+                            <h5 class="center">Datos de Empresa</h5>
+                            <label><strong>Nombre: </strong>{{$commerce->name}}</label> <br>
+                            <label><strong>Rif: </strong>{{$commerce->rif}}</label> <br>
+                            <label><strong>Telefono: </strong>{{$commerce->phone}}</label> <br>
+                            <label><strong>Dirección: </strong>{{$commerce->address}}</label> <br>
+                            <label><strong>Link: </strong><a href="{{route('form.store', ['userUrl' => $commerce->userUrl])}}" class="tienda">Tienda</a></label> <br>
 
-                    </div>
-                </div>
-                <div class="row">&nbsp;</div>
-            </div>
-            <div class="col-md-4 col-12">
-                <div class="card text-center">
-                    <div class="card-header">
-                        Balance
-                    </div>
-                    <div class="card-body ">
-                        <h1 class="center"> @if($balance->coin == 0) $ @else BS @endif {{$balance->total}} </h1>
-                        <div class="row">&nbsp;</div>
-                        <div class="row">&nbsp;</div>
-                        @if($selfie && count($pictures) == 2 && $balance->total >0)
-                            <input type="button" class="btn pay btn-bottom btn-current" value="Pagar">
-                        @else
-                            <input type="button" class="btn btn-error" value="No puede realizar pago">
-                        @endif
-                        <div class="row">&nbsp;</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">&nbsp;</div>
-        <div class="row">&nbsp;</div>
-        <div class="row">
-            @foreach ($pictures as $picture)
-                <div class="col-md-6 col-12 card text-center">
-                    <div class="card-header">
-                        @if($picture->descripction == 'Identification')
-                            Identificación
-                        @else
-                            {{$picture->description}}
-                        @endif
-                    </div>
-                    <div class="card-body center">
-                        <div class="zoom">
-                            <img src="{{url($picture->url)}}" width="250px" height="350px">
                         </div>
                     </div>
-                    <div class="card-footer btnReject">
-                        <input type="button" class="btn btn-bottom btn-remove" value="Rechazar">
-                        <input type="hidden" name="idPictures" id="idPictures" value="{{$picture->id}}">
+                    <div class="row">&nbsp;</div>
+                </div>
+                <div class="col-md-4 col-12">
+                    <div class="card text-center">
+                        <div class="card-header">
+                            Balance
+                        </div>
+                        <div class="card-body ">
+                            <h1 class="center"> @if($balance->coin == 0) $ @else BS @endif {{$balance->total}} </h1>
+                            <div class="row">&nbsp;</div>
+                            <div class="row">&nbsp;</div>
+                            @if($selfie && count($pictures) == 2 && $balance->total >0)
+                                <input type="button" class="btn pay btn-bottom btn-current" value="Pagar">
+                            @else
+                                <input type="button" class="btn btn-error" value="No puede realizar pago">
+                            @endif
+                            <div class="row">&nbsp;</div>
+                        </div>
                     </div>
                 </div>
-                <div class="row">&nbsp;</div>
-            @endforeach
-        </div>
-    </section>
+            </div>
+            <div class="row">&nbsp;</div>
+            <div class="row">&nbsp;</div>
+            <div class="row">
+                @foreach ($pictures as $picture)
+                    <div class="col-md-6 col-12">
+                        <div class="card text-center">
+                            <div class="card-header">
+                                @if($picture->descripction == 'Identification')
+                                    Identificación
+                                @else
+                                    {{$picture->description}}
+                                @endif
+                            </div>
+                            <div class="card-body center">
+                                <div class="zoom">
+                                    <img src="{{url($picture->url)}}" width="250px" height="350px">
+                                </div>
+                            </div>
+                            <div class="card-footer btnReject">
+                                <input type="button" class="btn btn-bottom btn-remove" value="Rechazar">
+                                <input type="hidden" name="idPictures" id="idPictures" value="{{$picture->id}}">
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </section>
+    </div>
 
 
     <!--- Modal Picture -->
@@ -246,7 +251,7 @@
         </div>
     </div>
 
-    
+    @include('admin.bookshopBottom')
     <script>
         $('#loading').hide();
         $('#loadingReason').hide();
@@ -255,8 +260,10 @@
         var totalBalance = {{$balance->total}};
         var statusReason= 0;
         var idSelect;
+        var statusMenu = "{{$statusMenu}}";
     
         $(function() {
+            $('.main-panel').perfectScrollbar({suppressScrollX: true, maxScrollbarLength: 200}); 
             $('#rejectSelfie').on('click', function() {
                 statusReason= 0;
                 $('#reasonModal').modal('show'); 
@@ -334,6 +341,7 @@
                 
             });	
         });	
+        $(".main-panel").perfectScrollbar('update');
     </script>
 </body>
 </html>

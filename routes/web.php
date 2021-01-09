@@ -33,14 +33,14 @@ Route::get('admin/logout/', 'AdminController@logout')->name('admin.logout');
 Route::post('admin/logout/', 'AdminController@logout')->name('admin.logout');
 
 Route::group(['middleware'=>'admin'], function() {
-    Route::get('/admin/', 'AdminController@index')->name('admin.dashboard');
-    Route::get('/admin/balance', 'AdminController@index')->name('admin.balance');
-    Route::get('/admin/comerciante', 'AdminController@commerces')->name('admin.commerces');
-    Route::get('/admin/comerciante/{id}', 'AdminController@commercesShow')->name('admin.commercesShow');
+    Route::get('/admin/', 'AdminController@dashboard')->name('admin.dashboard');
+    Route::get('/admin/depositos', 'AdminController@index')->name('admin.balance');
+    Route::get('/admin/comerciantes', 'AdminController@commerces')->name('admin.commerces');
+    Route::get('/admin/comerciantes/{id}', 'AdminController@commercesShow')->name('admin.commercesShow');
     Route::post('/admin/transacciones', 'AdminController@transactions')->name('admin.transactionsSearch');
     Route::get('/admin/transacciones', 'AdminController@transactions')->name('admin.transactions');
     Route::get('/admin/transaccionesShow/', 'AdminController@transactionsShow')->name('admin.transactionsShow');
-    Route::get('/admin/balance/{id}', 'AdminController@show')->name('admin.show');
+    Route::get('/admin/depositos/{id}', 'AdminController@show')->name('admin.show');
 });
 
 Route::post('/admin/removePicture', 'AdminController@removePicture')->name('admin.removePicture');

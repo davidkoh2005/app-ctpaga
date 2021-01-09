@@ -1,0 +1,76 @@
+body.body-admin{
+    background-color: white;
+}
+
+.table-title {
+    text-align: center;
+    background-color: #00cc5f;
+    color: white;
+}
+
+table {
+    text-align: center;
+}
+
+.tableShow{
+    margin: 60px;
+}
+
+
+#table_id_filter {
+    text-align: left;
+    padding-right: 20px;
+}
+
+.btn-bottom { 
+    border-radius: 60px  !important;
+    font-size: large;
+    background-color: #00cc5f !important;
+    color: white  !important;
+}
+
+.btn-bottom:hover {
+    background-color: white !important;
+    border: 2px solid #00cc5f  !important;
+    color: #00cc5f  !important;
+}
+
+#row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -15px;
+    margin-top: 60px;
+}
+
+#rowOther {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 60px;
+}
+
+.col-form-label {
+    color: black;
+    font-weight: 100;
+}
+
+#title {
+    height: 40px;
+    border-radius: 60px !important;
+    background-color: #00cc5f !important;
+    border: 2px solid #00cc5f !important;
+    color: white !important;
+    margin-bottom: 10px !important;
+    padding-top: 7px;
+}
+
+.dataTables_wrapper {
+    position: relative;
+    clear: both;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+#topBalance {
+    padding-top: 20px;
+}

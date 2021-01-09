@@ -1,21 +1,21 @@
-<h5 class="center">Información Completa</h5>
+<div id="title"><h5 class="center">Información Completa</h5></div>
 <label><strong>Nombre de Cliente: </strong>{{$transaction->nameClient}}</label> <br>
 <label><strong>Correo: </strong>{{$transaction->email}}</label> <br>
 
 <div class="row">&nbsp;</div>
-<h5 class="center">Información quien recibe el Productos y/o Servicios </h5>
+<div id="title"><h5 class="center">Información quien recibe el Productos y/o Servicios </h5></div>
 <label><strong>Nombre: </strong>{{$transaction->nameShipping}}</label> <br>
 <label><strong>Telefono: </strong>{{$transaction->numberShipping}}</label> <br>
 <label><strong>Direccion: </strong>{{$transaction->addressShipping}}</label> <br>
 <label><strong>Detalle: </strong>{{$transaction->detailsShipping}}</label> <br>
 
 <div class="row">&nbsp;</div>
-<h5 class="center">Envio Seleccionado </h5>
+<div id="title"><h5 class="center">Envio Seleccionado </h5></div>
 <label><strong>Descripción: </strong>@if($transaction->selectShipping != null) {{$transaction->selectShipping}} @else 0 @endif</label> <br>
 <label><strong>Price: </strong>@if($transaction->coin == 0) $ @else Bs @endif @if($transaction->priceShipping != null) {{$transaction->priceShipping}} @else 0 @endif</label> <br>
 
 <div class="row">&nbsp;</div>
-<label><strong>Productos y/o Servicios:</strong></label>
+<div id="title"><h5 class="center">Productos y/o Servicios </h5></div>
 @foreach ($sales as $sale)
     <div class="row sales justify-content-center align-items-center minh-10" id="listSale">
         <div class="quantity col-md-2 col-sm-2 col-3"><div id="desingQuantity">{{$sale->quantity}}</div></div>

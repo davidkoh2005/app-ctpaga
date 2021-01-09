@@ -313,27 +313,26 @@ div#card_number, div#card_expiry, div#card_cvc{
 }
 
 #showProducts{
-    margin: 10px;
+    margin: 10px !important;
 }
 
 .input-group-addon{
-    color: white;
-    background-color: #00cc5f;
-    padding-top: 6px;
-    padding-left: 20px;
-    padding-right: 20px;
+    color: white !important;
+    background-color: #00cc5f !important;
+    padding-top: 6px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
 }
 
 .remove-transactions { 
-    width: 100%;
-    border-radius: 60px;
-    font-size: large;
+    width: 100% !important;
+    border-radius: 60px !important;
     background-color: red !important;
-    color: white;
+    color: white!important;
 }
 
 .remove-transactions:hover {
     background-color: white !important;
-    border: 2px solid red;
-    color: red;
+    border: 2px solid red !important;
+    color: red !important;
 }

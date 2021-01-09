@@ -9,34 +9,44 @@
     <link rel="stylesheet" type="text/css" href="../../css/datatables.min.css"/>
     @include('admin.bookshop')
     <script type="text/javascript" src="../../js/datatables.min.js"></script>
+    <script src="../../js/dashboard/script.js" type="text/javascript"></script>
 </head>
 <body class="body-admin">
-@include('admin.menu')
+  @include('admin.menu')
     <div class="main-panel">
       @include('admin.navbar')
-        <div class="tableShow">
+        
+        <div class="tableShow" id="topBalance">
             <table id="table_id" class="table table-bordered mb-5 display">
                 <thead>
                     <tr class="table-title">
                         <th scope="col">#</th>
                         <th scope="col">Nombre Compañia</th>
-                        <th scope="col">RIF</th>
-                        <th scope="col">Dirección</th>
-                        <th scope="col">Telefono</th>
+                        <th scope="col">Moneda</th>
+                        <th scope="col">Total</th>
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($commerces as $commerce)
+                    @foreach($balances as $balance)
                     <tr>
-                        <th scope="row">{{ $commerce->id }}</th>
-                        <td>{{ $commerce->name }}</td>
-                        <td>{{ $commerce->rif }}</td>
-                        <td>{{ $commerce->address }}</td>
-                        <td>{{ $commerce->phone }}</td>
+                        <th scope="row">{{ $balance->id }}</th>
+                        <td>{{ $balance->name }}</td>
+                        <td>@if($balance->coin == 0 )  USD @else Bs @endif</td>
+                        <td>@if($balance->coin == 0 )  $ @else Bs @endif {{ $balance->total }}</td>
                         <td>
-                        <a class="btn btn-bottom" href="{{route('form.store', ['userUrl' => $commerce->userUrl])}}" target="_blank"><i class="fa fa-eye"></i> Ver Tienda</a>
-                            <a class="btn btn-bottom" href="{{route('admin.commercesShow', ['id' => $commerce->id])}}"><i class="fa fa-eye"></i> Ver Transacciones</a>
+
+                            <form method='POST' action="{{route('admin.transactionsSearch')}}">
+                                <div class="row">
+                                    <div class="col">
+                                        <a class="btn btn-bottom" href="{{route('admin.show', ['id' => $balance->id])}}"><i class="fa fa-eye"></i> Ver documentos</a>
+                                    </div>
+                                    <div class="col">
+                                        <input type="hidden" name="idCommerce" value="{{$balance->commerce_id}}">
+                                        <button type="submit" class="btn btn-bottom"><i class="fa fa-eye"></i> Ver transacciones</button>
+                                    </div>
+                                </div>
+                            </form>
                         </td>
                     </tr>
                     @endforeach
@@ -53,12 +63,12 @@
                 language: {
                     "decimal": "",
                     "emptyTable": "No hay información",
-                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Comerciantes",
-                    "infoEmpty": "Mostrando 0 to 0 of 0 Comerciantes",
-                    "infoFiltered": "(Filtrado de _MAX_ total Comerciantes)",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Balances",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Balances",
+                    "infoFiltered": "(Filtrado de _MAX_ total Balances)",
                     "infoPostFix": "",
                     "thousands": ",",
-                    "lengthMenu": "Mostrar _MENU_ Comerciantes",
+                    "lengthMenu": "Mostrar _MENU_ Balances",
                     "loadingRecords": "Cargando...",
                     "processing": "Procesando...",
                     "search": "Buscar:",
@@ -70,9 +80,11 @@
                         "previous": "Anterior"
                     }
                 },
-            });
+            });            
+
         });
         $(".main-panel").perfectScrollbar('update');
     </script>
+    
 </body>
 </html>

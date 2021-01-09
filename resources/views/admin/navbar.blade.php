@@ -1,22 +1,15 @@
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{{route('admin.dashboard')}}">Ctpaga</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarAdmin" arial-expanded="false">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        
-        <div class="collapse navbar-collapse" id="navbarAdmin">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{{route('admin.balance')}}">Balance</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{route('admin.commerces')}}">Comerciante</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{route('admin.transactions')}}">Transacciones</a>
-            </li>
-        </ul>
-        <form class="form-inline justify-content-between" action="{{route('admin.logout')}}">
-            <button class="btn btn-light" type="submit">Salir</button>
-        </form>
-    </nav>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+        <div class="container-fluid">
+          <div class="navbar-wrapper">
+            <a class="navbar-brand" href="javascript:;" id="title-navbar"></a>
+          </div>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+          </button>
+        </div>
+      </nav>
+      <!-- End Navbar -->

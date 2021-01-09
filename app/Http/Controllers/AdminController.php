@@ -13,6 +13,7 @@ use App\Picture;
 use App\Balance;
 use App\Commerce;
 use App\Deposits;
+use Carbon\Carbon;
 use App\Notifications\PictureRemove;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -23,6 +24,25 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class AdminController extends Controller
 {
+    public function dashboard(Request $request)
+    {
+        $totalShopping = 0;
+        $totalShoppingStripe = 0;
+        $totalShoppingSitef = 0;
+        $paidAll = Paid::where("date", 'like', "%".Carbon::now()->format('Y-m-d')."%")->get();
+        foreach ($paidAll as $paid)
+        {
+            $totalShopping += 1;
+            if($paid->nameCompanyPayments == "Stripe")
+                $totalShoppingStripe += floatval($paid->total);
+            
+            if($paid->nameCompanyPayments == "E-sitef")
+                $totalShoppingSitef += floatval($paid->total);
+        }
+
+        $statusMenu = "dashboard";
+        return view('admin.dashboard',compact("totalShopping", "totalShoppingStripe", "totalShoppingSitef", "statusMenu"));
+    }
 
     public function index(Request $request)
     {
@@ -67,7 +87,9 @@ class AdminController extends Controller
                 $balances[] = $balance;
         }
 
-        return view('admin.dashboard', compact('balances'));
+        $statusMenu = "balance";
+
+        return view('admin.balance', compact('balances',"statusMenu"));
     }
 
     public function login(Request $request)
@@ -113,8 +135,9 @@ class AdminController extends Controller
 
         $bank = Bank::where('user_id', $user->id)
                     ->where('coin', $coin)->first();
-
-        return view('admin.show', compact('commerce', 'user', 'pictures', 'selfie', 'balance', 'bank'));
+        
+        $statusMenu = "balance";
+        return view('admin.show', compact('commerce', 'user', 'pictures', 'selfie', 'balance', 'bank','statusMenu'));
     }
 
     public function removePicture(Request $request)
@@ -159,8 +182,16 @@ class AdminController extends Controller
 
     public function commerces(Request $request)
     {
-        $commerces = Commerce::all()->sortBy("name");
-        return view('admin.commerces', compact('commerces'));
+        $commerces = Commerce::all()
+                    ->whereNotNull("name")
+                    ->whereNotNull("rif")
+                    ->whereNotNull("address")
+                    ->whereNotNull("phone")
+                    ->whereNotNull("userUrl")
+                    ->sortBy("name");
+
+        $statusMenu = "commerces";
+        return view('admin.commerces', compact('commerces','statusMenu'));
     }
 
     public function commercesShow($id)
@@ -169,7 +200,8 @@ class AdminController extends Controller
         $user = User::where('id',$commerce->user_id)->first();
         $transactions = Paid::where('commerce_id', $id)->orderBy('date', 'asc')->get();
 
-        return view('admin.commerceShow', compact('commerce', 'user', 'transactions'));
+        $statusMenu = "commerces";
+        return view('admin.commerceShow', compact('commerce', 'user', 'transactions', 'statusMenu'));
     }
 
     public function transactions(Request $request)
@@ -217,7 +249,8 @@ class AdminController extends Controller
 
         $transactions = $transactions->get();
 
-        return view('admin.transactions', compact('transactions', 'searchNameCompany', 'searchNameClient', 'selectCoin', 'selectPayment', 'startDate', 'endDate'));
+        $statusMenu = "transactions";
+        return view('admin.transactions', compact('transactions', 'searchNameCompany', 'searchNameClient', 'selectCoin', 'selectPayment', 'startDate', 'endDate', 'statusMenu'));
     }
 
     public function transactionsShow(Request $request)

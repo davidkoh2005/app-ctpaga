@@ -1,80 +1,137 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ctpaga</title>
-    @include('bookshop')
-    <link rel="stylesheet" type="text/css" href="../../css/dashboard.css">
-    <link rel="stylesheet" type="text/css" href="../../css/datatables.min.css"/>
- 
-<script type="text/javascript" src="../../js/datatables.min.js"></script>
-</head>
-<body class="body-admin">
-    @include('admin.navbar')
-    
-    <div class="tableShow">
-        <table id="table_id" class="table table-bordered mb-5 display">
-            <thead>
-                <tr class="table-title">
-                    <th scope="col">#</th>
-                    <th scope="col">Nombre Compañia</th>
-                    <th scope="col">Moneda</th>
-                    <th scope="col">Total</th>
-                    <th scope="col">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($balances as $balance)
-                <tr>
-                    <th scope="row">{{ $balance->id }}</th>
-                    <td>{{ $balance->name }}</td>
-                    <td>@if($balance->coin == 0 )  USD @else Bs @endif</td>
-                    <td>@if($balance->coin == 0 )  $ @else Bs @endif {{ $balance->total }}</td>
-                    <td>
+<html lang="en">
 
-                        <form method='POST' action="{{route('admin.transactionsSearch')}}">
-                            <div class="row">
-                                <div class="col">
-                                    <a class="btn btn-bottom" href="{{route('admin.show', ['id' => $balance->id])}}"><i class="fa fa-eye"></i> Ver documentos</a>
-                                </div>
-                                <div class="col">
-                                    <input type="hidden" name="idCommerce" value="{{$balance->commerce_id}}">
-                                    <button type="submit" class="btn btn-bottom"><i class="fa fa-eye"></i> Ver transacciones</button>
-                                </div>
-                            </div>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+<head>
+  <meta charset="utf-8" />
+  <link rel="apple-touch-icon" sizes="76x76" href="../../../images/logo/logoctpaga.ico">
+  <link rel="icon" type="image/png" href=".../../../images/logo/logoctpaga.ico">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>Ctpaga</title>
+  <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+  <!--     Fonts and icons     -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+  <!-- CSS Files -->
+  <link href="../../css/dashboard/material-dashboard.css?v=2.1.2" rel="stylesheet" />
+</head>
+
+<body class="">
+  @include('admin.menu')
+    <div class="main-panel">
+      @include('admin.navbar')
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-4 col-md-7 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-warning card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">shopping_cart</i>
+                  </div>
+                  <p class="card-category">Total de Ventas</p>
+                  <h3 class="card-title">{{$totalShopping}}</h3>
+                </div>
+                <div class="card-footer">
+                    <div class="stats">
+                        <i class="material-icons">date_range</i> Hoy
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-7 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-info card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">account_balance</i>
+                  </div>
+                  <p class="card-category">Stripe</p>
+                  <h3 class="card-title">$ {{$totalShoppingStripe}}</h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">date_range</i> Hoy
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-7 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-success card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">account_balance</i>
+                  </div>
+                  <p class="card-category">E-sitef</p>
+                  <h3 class="card-title">Bs {{$totalShoppingSitef}}</h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">date_range</i> Hoy
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="card card-chart">
+                <div class="card-header card-header-warning">
+                  <div class="ct-chart" id="dailySalesChart"></div>
+                </div>
+                <div class="card-body">
+                  <h4 class="card-title">Ventas Diarias</h4>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">access_time</i> Actualizado Recientemente
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card card-chart">
+                <div class="card-header card-header-info">
+                  <div class="ct-chart" id="dailySalesStripeChart"></div>
+                </div>
+                <div class="card-body">
+                  <h4 class="card-title">Ventas con Stripe</h4>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">access_time</i> Actualizado Recientemente
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card card-chart">
+                <div class="card-header card-header-success">
+                  <div class="ct-chart" id="dailySalesSitefChart"></div>
+                </div>
+                <div class="card-body">
+                  <h4 class="card-title">Ventas con E-sitef</h4>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">access_time</i> Actualizado Recientemente
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <script> 
-        $(document).ready( function () {
-            $('#table_id').DataTable({
-                language: {
-                    "decimal": "",
-                    "emptyTable": "No hay información",
-                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Balances",
-                    "infoEmpty": "Mostrando 0 to 0 of 0 Balances",
-                    "infoFiltered": "(Filtrado de _MAX_ total Balances)",
-                    "infoPostFix": "",
-                    "thousands": ",",
-                    "lengthMenu": "Mostrar _MENU_ Balances",
-                    "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
-                    "search": "Buscar:",
-                    "zeroRecords": "Sin resultados encontrados",
-                    "paginate": {
-                        "first": "Primero",
-                        "last": "Ultimo",
-                        "next": "Siguiente",
-                        "previous": "Anterior"
-                    }
-                },
-            });
-        });
-    </script>
+  </div>
+  <script src="../../js/dashboard/core/jquery.min.js"></script>
+  @include('admin.bookshopBottom')
+  <script>
+    var statusMenu = "{{$statusMenu}}";
+    $(document).ready(function() {
+      // Javascript method's body can be found in assets/js/demos.js
+      md.initDashboardPageCharts();
+
+    });
+  </script>
 </body>
+
 </html>
