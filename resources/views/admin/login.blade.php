@@ -14,6 +14,7 @@
     
     <!-- Script js -->
     <script src="../../js/i18n/es.js"></script>
+    <script src="../../js/login.js"></script>
 
 </head>
 
@@ -109,42 +110,6 @@
     <!-- Active js -->
     <script src="../landingPage/js/active.js"></script>
 
-    <script>
-        $(function(){
-            var $sections = $('.form-section');
-            $('#loading').hide();
-
-            function navigateTo(index){
-                $sections.removeClass('current').eq(index).addClass('current');
-                var arTheEnd = index >= $sections.length -1;
-                $('.form-navigation [type=submit]').toggle(arTheEnd);
-            }
-
-            function curIndex()
-            {
-                return $sections.index($sections.filter('.current'));
-            }
-
-            $sections.each(function(index, section){
-                $(section).find(':input').attr('data-parsley-group', 'block-'+index);
-            })
-
-            navigateTo(0);
-
-            $('.submit').click(function(e){
-                e.preventDefault();
-                $('.contact-form').parsley().whenValidate({
-                    group: 'block-' + curIndex()
-                }).done(function(){
-                    $("#login-form").submit();
-                    if($('#password').val().length >0){
-                        $('.submit').hide();
-                        $('#loading').show();
-                    }
-                });
-            });
-        });
-    </script>
 </body>
 
 </html>
