@@ -43,7 +43,7 @@ class PasswordResetRequest extends Notification implements ShouldQueue
 
         return (new MailMessage)
             ->line('Estás recibiendo este correo electrónico porque recibimos una solicitud de restablecimiento de contraseña para tu cuenta.')
-            ->action('Cambiar contraseña', url($url))
+            ->action('Cambiar Contraseña', url($url))
             ->line('Si no solicitó un restablecimiento de contraseña, no es necesario realizar ninguna otra acción.')
             ->subject('Aviso Ctpaga');
     }

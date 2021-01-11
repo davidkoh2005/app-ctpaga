@@ -1,58 +1,114 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ctpaga</title>
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Iniciar Sesión</title>
     @include('bookshop')
-    <link rel="stylesheet" type="text/css" href="../../css/styleFormPassword.css">
+    <!-- Style css -->
+    <link rel="stylesheet" type="text/css" href="../landingPage/css/style.css">
+    
+    <!-- Script js -->
     <script src="../../js/i18n/es.js"></script>
 
 </head>
-<body class="body-admin">
-    <Section>
-        <div class="container">
-            <div class="Row">
-                <div class="col-md-6 col-sm-12 col-12 mx-auto">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="row justify-content-center">
-                                <div class="col-md-auto col-sm-auto col-auto">
-                                    <img src="../images/logo/logo.png" alt="image" width="160px" height="90px">
-                                </div>
-                            </div>
+
+<body class="homepage-5 accounts">
+    <!--====== Scroll To Top Area Start ======-->
+    <div id="scrollUp" title="Scroll To Top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+    <!--====== Scroll To Top Area End ======-->
+
+    <div class="main">
+        @include('navbar')
+
+        <!-- ***** Welcome Area Start ***** -->
+        <section id="home" class="section welcome-area bg-overlay d-flex align-items-center">
+            <div class="container">
+                <div class="row align-items-center justify-content-center">
+                    <!-- Welcome Intro Start -->
+                    <div class="col-12 col-lg-7">
+                        <div class="welcome-intro">
+                            <h1 class="text-white">Bienvenido a Ctpaga!</h1>
                         </div>
-                        <div class="card-body">
+                    </div>
+                    <div class="col-12 col-md-8 col-lg-5">
+                        <!-- Contact Box -->
+                        <div class="contact-box bg-white text-center rounded p-4 p-sm-5 mt-5 mt-lg-0 shadow-lg">
                             @if (Session::has('message'))
                                 <div class="alert alert-danger">
                                     <strong>Error: </strong> {{Session::get('message') }}
                                 </div>
-                            @endif
+                            @endif    
+                            <!-- Contact Form -->
                             <form class="contact-form" id="login-form" method='POST' action="{{route('form.login')}}">
                                 @csrf
-                                <div class= "form-section">
-                                    <label for="email">Correo</label>
-                                    <input type="email" name="email" id="email" class="form-control" placeholder="joedoe@gmail.com" data-parsley-type="email"  required />
-                                    <label for="password">Contraseña</label>
-                                    <input type="password" name="password" id="password" class="form-control" placeholder="***************"  required />
-                                    <div id="errorPassword"></div>
+                                <div class="contact-top">
+                                    <h3 class="contact-title">Iniciar Sesión</h3>
+                                    <h5 class="text-secondary fw-3 py-3">Complete todos los campos para que podamos obtener información sobre usted.</h5>
                                 </div>
-
-                                <div class="row">&nbsp;</div>
-
-                                <div class="form-navigation bottom">
-                                    <button type="submit" class="submit btn btn-bottom">Ingresar</button>
-                                </div>
-                                <div class="row justify-content-center" id="loading">
-                                    <img widht="80px" height="80px" class="justify-content-center" src="../images/loading.gif">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group form-section">
+                                            <div class="input-group">
+                                              <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-envelope-open"></i></span>
+                                              </div>
+                                              <input type="email" class="form-control" name="email" placeholder="Correo Electrónico" data-parsley-type="email" data-parsley-errors-container="#email-errors" required="required">
+                                            </div>
+                                        </div>
+                                        <div id="email-errors" style="color:red;"></div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                              <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-unlock-alt"></i></span>
+                                              </div>
+                                              <input type="password" class="form-control" name="password" id="password" placeholder="Contraseña" data-parsley-required="true" data-parsley-errors-container="#errorPassword" required="required">
+                                            </div>
+                                            <div id="errorPassword" style="color:red;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="submit btn btn-bordered w-100 mt-3 mt-sm-4" type="submit">Ingresar</button>
+                                        <div id="loading">
+                                            <img class="justify-content-center" src="../images/loading.gif" style="max-width:80px !important;">
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
+                            <p class="form-message"></p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </Section>
+            <!-- Shape Bottom -->
+            <div class="shape-bottom">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" preserveAspectRatio="none">
+                    <path class="shape-fill" fill="#FFFFFF" d="M421.9,6.5c22.6-2.5,51.5,0.4,75.5,5.3c23.6,4.9,70.9,23.5,100.5,35.7c75.8,32.2,133.7,44.5,192.6,49.7  c23.6,2.1,48.7,3.5,103.4-2.5c54.7-6,106.2-25.6,106.2-25.6V0H0v30.3c0,0,72,32.6,158.4,30.5c39.2-0.7,92.8-6.7,134-22.4  c21.2-8.1,52.2-18.2,79.7-24.2C399.3,7.9,411.6,7.5,421.9,6.5z"></path>
+                </svg>
+            </div>
+        </section>
+        <!-- ***** Welcome Area End ***** -->
+    </div>
+
+
+    <!-- ***** All jQuery Plugins ***** -->
+
+    <!-- Bootstrap js -->
+    <script src="../landingPage/js/bootstrap/popper.min.js"></script>
+    <script src="../landingPage/js/bootstrap/bootstrap.min.js"></script>
+
+    <!-- Plugins js -->
+    <script src="../landingPage/js/plugins/plugins.min.js"></script>
+
+    <!-- Active js -->
+    <script src="../landingPage/js/active.js"></script>
+
     <script>
         $(function(){
             var $sections = $('.form-section');
@@ -80,12 +136,15 @@
                 $('.contact-form').parsley().whenValidate({
                     group: 'block-' + curIndex()
                 }).done(function(){
-                    $('.submit').hide();
-                    $('#loading').show();
                     $("#login-form").submit();
-                })
+                    if($('#password').val().length >0){
+                        $('.submit').hide();
+                        $('#loading').show();
+                    }
+                });
             });
         });
     </script>
 </body>
+
 </html>

@@ -50,10 +50,11 @@ class PasswordResetController extends Controller
 
     public function find($token)
     {
+        $type = 0;
         $passwordReset = PasswordReset::where('token', $token)->first();
         if (!$passwordReset){
             Session::flash('message', "Este token de restablecimiento de contraseña no es válido.");
-            return view('updatePassword');
+            return view('updatePassword', compact('token', 'type'));
         }
         
 
@@ -61,10 +62,9 @@ class PasswordResetController extends Controller
         if (Carbon::parse($passwordReset->updated_at)->addMinutes(720)->isPast()) {
             $passwordReset->delete();
             Session::flash('message', "Este token de restablecimiento de contraseña no es válido.");
-            return view('updatePassword');
+            return view('updatePassword', compact('token', 'type'));
         }
             
-        $type = 0;
             
         return view('updatePassword', compact('token', 'type'));
     }

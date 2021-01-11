@@ -4,7 +4,6 @@ var formatter = new Intl.NumberFormat(locale, options);
 
 $(function(){
     var $sections = $('.form-section');
-    var statusLoading = false;
 
     $('#loading').hide();
 
@@ -40,26 +39,26 @@ $(function(){
         }else{
             var regExp = new RegExp(epUpperCase);
             if (!regExp.test(password)){
-                errorValidate = errorValidate + '<li> Una letra mayúscula.</li>';
+                errorValidate = errorValidate + '<li>* Una letra mayúscula.</li>';
             }
 
             regExp = new RegExp(epLowerCase);
             if (!regExp.test(password)){
-                errorValidate = errorValidate + '<li> Una letra minúscula.</li>';
+                errorValidate = errorValidate + '<li>* Una letra minúscula.</li>';
             }
 
             regExp = new RegExp(epDigit);
             if (!regExp.test(password)){
-                errorValidate = errorValidate + '<li> Un número numérico.</li>';
+                errorValidate = errorValidate + '<li>* Un número numérico.</li>';
             }
 
             regExp = new RegExp(epSpecialCharacter);
             if (!regExp.test(password)){
-                errorValidate = errorValidate + '<li> Un Carácter Especial.</li>';
+                errorValidate = errorValidate + '<li>* Un Carácter Especial.</li>';
             }
         
             if (password.length < 6){
-                errorValidate = errorValidate + '<li> Al menos 6 caracteres.</li>';
+                errorValidate = errorValidate + '<li>* Al menos 6 caracteres.</li>';
             }
         
             if (errorValidate == 'La contraseña es inválida, debe tener:'){
@@ -67,6 +66,8 @@ $(function(){
                 if(password == passwordConfirm){
                     $('#errorPassword').empty();
                     $("#password-form").submit();
+                    $('.submit').hide();
+                    $('#loading').show();
                 }else if(password != passwordConfirm){
                     $('#errorPassword').html('La contraseña no coincide');
                 }
