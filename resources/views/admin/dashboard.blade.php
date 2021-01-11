@@ -78,7 +78,7 @@
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons">access_time</i> Actualizado Recientemente
+                    <i class="material-icons">access_time</i> Ultimos 6 Dias
                   </div>
                 </div>
               </div>
@@ -93,7 +93,7 @@
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons">access_time</i> Actualizado Recientemente
+                    <i class="material-icons">access_time</i> Ultimos 6 Dias
                   </div>
                 </div>
               </div>
@@ -108,7 +108,7 @@
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons">access_time</i> Actualizado Recientemente
+                    <i class="material-icons">access_time</i> Ultimos 6 Dias
                   </div>
                 </div>
               </div>
