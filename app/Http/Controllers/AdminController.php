@@ -44,6 +44,36 @@ class AdminController extends Controller
         return view('admin.dashboard',compact("totalShopping", "totalShoppingStripe", "totalShoppingSitef", "statusMenu"));
     }
 
+    public function dataGraphic()
+    {
+        $month = Carbon::now()->format('m');
+        $years = Carbon::now()->format('Y');
+        $listDay= array();
+        $count=1;
+        for ($i = 0; $i < 7; $i++) {
+            $totalShop = 0;
+            $totalShopStripe = 0;
+            $totalShopSitef = 0;
+            $paidAll = Paid::where("date", 'like', "%".Carbon::now()->format($years.'-'.$month.'-'.Carbon::now()->subDay(6-$i)->format('d'))."%")->get();
+            foreach ($paidAll as $paid)
+            {
+                $totalShop += 1;
+                if($paid->nameCompanyPayments == "Stripe")
+                    $totalShopStripe += floatval($paid->total);
+                
+                if($paid->nameCompanyPayments == "E-sitef")
+                    $totalShopSitef += floatval($paid->total);
+            }
+            $listDay[$i]['dia'] = Carbon::now()->subDay(6-$i)->format('d');
+            $listDay[$i]['totalSales'] = $totalShop;
+            $listDay[$i]['totalStripe'] = $totalShopStripe;
+            $listDay[$i]['totalSitef'] = $totalShopSitef;
+        }
+
+        $listDayJson = json_encode($listDay);
+        echo json_encode($listDay);
+    }
+
     public function index(Request $request)
     {
         $balances = array();

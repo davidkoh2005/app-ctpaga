@@ -282,9 +282,9 @@ md = {
       /* ----------==========     Daily Sales Chart initialization    ==========---------- */
 
       dataDailySalesChart = {
-        labels: ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do'],
+        labels: ['01', '02', '03', '04', '05', '06', '07'],
         series: [
-          [12, 17, 7, 17, 23, 18, 38]
+          [0, 0, 0, 0, 0, 0, 0]
         ]
       };
 
@@ -307,9 +307,9 @@ md = {
       /* ----------==========     Daily Sales Stripe Chart initialization    ==========---------- */
 
       dataDailySalesStripeChart = {
-        labels: ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do'],
+        labels: ['01', '02', '03', '04', '05', '06', '07'],
         series: [
-          [12, 17, 7, 17, 23, 18, 38]
+          [0, 0, 0, 0, 0, 0, 0]
         ]
       };
 
@@ -332,9 +332,9 @@ md = {
       /* ----------==========     Daily Sales E-Sitef Chart initialization    ==========---------- */
 
       dataDailySalesSitefChart = {
-        labels: ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do'],
+        labels: ['01', '02', '03', '04', '05', '06', '07'],
         series: [
-          [12, 17, 7, 17, 23, 18, 38]
+          [0, 0, 0, 0, 0, 0, 0]
         ]
       };
 
@@ -353,7 +353,8 @@ md = {
       var dailySalesSitefChart = new Chartist.Line('#dailySalesSitefChart', dataDailySalesSitefChart, optionsDailySalesSitefChart);
 
       md.startAnimationForLineChart(dailySalesSitefChart);
-
+      
+      updateData();
     }
   },
 

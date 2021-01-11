@@ -8,11 +8,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>Ctpaga</title>
   <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
-  <!--     Fonts and icons     -->
-  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
-  <!-- CSS Files -->
-  <link href="../../css/dashboard/material-dashboard.css?v=2.1.2" rel="stylesheet" />
+  @include('admin.bookshop')
 </head>
 
 <body class="">
@@ -126,11 +122,80 @@
   @include('admin.bookshopBottom')
   <script>
     var statusMenu = "{{$statusMenu}}";
-    $(document).ready(function() {
-      // Javascript method's body can be found in assets/js/demos.js
-      md.initDashboardPageCharts();
-
+    var listDay;
+    $.ajax({
+          url: "{{route('admin.dataGraphic')}}", 
+          type: "POST",
+          dataType: 'json',
+      }).done(function(data){
+        listDay = data;
+      }).fail(function(result){
     });
+    $(document).ready(function() {
+
+      md.initDashboardPageCharts();
+    });
+
+    function updateData()
+    {
+
+      setTimeout(function() {
+        var date=[];
+        var dayTotalSales=[];
+        var dayTotalStripe=[];
+        var dayTotalSitef=[];
+
+        $.each(listDay, function(i, item) {
+            date.push(item.dia);
+            dayTotalSales.push(item.totalSales);
+            dayTotalStripe.push(item.totalStripe);
+            dayTotalSitef.push(item.totalSitef);
+        });
+
+
+        dataDailySalesChart = {
+          labels: date,
+          series: [
+            dayTotalSales
+          ]
+        }; 
+
+        dataDailySalesStripeChart = {
+          labels: date,
+          series: [
+            dayTotalStripe
+          ]
+        };
+
+        dataDailySalesSitefChart = {
+          labels: date,
+          series: [
+            dayTotalSitef
+          ]
+        };
+
+        optionsDaily= {
+          lineSmooth: Chartist.Interpolation.cardinal({
+            tension: 0
+          }),
+          chartPadding: {
+            top: 20,
+            right: 0,
+            bottom: 0,
+            left: 0
+          },
+        }
+
+        var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
+        md.startAnimationForLineChart(dailySalesChart);
+
+        var dailySalesStripeChart = new Chartist.Line('#dailySalesStripeChart', dataDailySalesStripeChart, optionsDailySalesStripeChart);
+        md.startAnimationForLineChart(dailySalesStripeChart);
+
+        var dailySalesSitefChart = new Chartist.Line('#dailySalesSitefChart', dataDailySalesSitefChart, optionsDailySalesSitefChart);
+        md.startAnimationForLineChart(dailySalesSitefChart);
+      }, 2000);
+    }
   </script>
 </body>
 

@@ -34,6 +34,7 @@ Route::post('admin/logout/', 'AdminController@logout')->name('admin.logout');
 
 Route::group(['middleware'=>'admin'], function() {
     Route::get('/admin/', 'AdminController@dashboard')->name('admin.dashboard');
+    Route::post('/admin/dataGraphic', 'AdminController@dataGraphic')->name('admin.dataGraphic');
     Route::get('/admin/depositos', 'AdminController@index')->name('admin.balance');
     Route::get('/admin/comerciantes', 'AdminController@commerces')->name('admin.commerces');
     Route::get('/admin/comerciantes/{id}', 'AdminController@commercesShow')->name('admin.commercesShow');
