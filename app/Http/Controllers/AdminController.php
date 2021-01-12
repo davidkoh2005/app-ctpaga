@@ -26,6 +26,13 @@ class AdminController extends Controller
 {
     public function dashboard(Request $request)
     {
+        if (!Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('admin.login'));
+        }elseif (Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('commerce.dashboard'));
+        }
+
+        
         $totalShopping = 0;
         $totalShoppingStripe = 0;
         $totalShoppingSitef = 0;
@@ -41,10 +48,10 @@ class AdminController extends Controller
         }
 
         $statusMenu = "dashboard";
-        return view('admin.dashboard',compact("totalShopping", "totalShoppingStripe", "totalShoppingSitef", "statusMenu"));
+        return view('auth.dashboard',compact("totalShopping", "totalShoppingStripe", "totalShoppingSitef", "statusMenu"));
     }
 
-    public function dataGraphic()
+    public function dataGraphic(Request $request)
     {
         $month = Carbon::now()->format('m');
         $years = Carbon::now()->format('Y');
@@ -54,7 +61,12 @@ class AdminController extends Controller
             $totalShop = 0;
             $totalShopStripe = 0;
             $totalShopSitef = 0;
-            $paidAll = Paid::where("date", 'like', "%".Carbon::now()->format($years.'-'.$month.'-'.Carbon::now()->subDay(6-$i)->format('d'))."%")->get();
+            if(Auth::guard('admin')->check())
+                $paidAll = Paid::where("date", 'like', "%".Carbon::now()->format($years.'-'.$month.'-'.Carbon::now()->subDay(6-$i)->format('d'))."%")->get();
+            else
+            $paidAll = Paid::where("date", 'like', "%".Carbon::now()->format($years.'-'.$month.'-'.Carbon::now()->subDay(6-$i)->format('d'))."%")
+                            ->whereId(Auth::guard('web')->id())->get();
+            
             foreach ($paidAll as $paid)
             {
                 $totalShop += 1;
@@ -77,7 +89,7 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         $balances = array();
-        if (false == Auth::guard('admin')->check()) {
+        if (!Auth::guard('admin')->check()) {
             return redirect()->route('admin.login');
         }
 
@@ -134,15 +146,20 @@ class AdminController extends Controller
             return redirect()->intended(route('admin.dashboard'));
         }
 
-        Session::flash('message', "El Correo o la contraseña es incorrecta!");
+        Session::flash('message', "El correo o la contraseña es incorrecta!");
         return Redirect::back();
     }
 
 
     public function logout(Request $request)
     {
-        Auth::guard('admin')->logout();
-        return redirect()->route('admin.login');
+        if(Auth::guard('admin')->check()){
+            Auth::guard('admin')->logout();
+            return redirect()->route('admin.login');
+        }
+
+        Auth::guard('web')->logout();
+        return redirect()->route('commerce.login');
     } 
 
 

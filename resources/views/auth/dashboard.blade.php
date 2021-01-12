@@ -12,7 +12,7 @@
 </head>
 
 <body class="">
-  @include('admin.menu')
+  @include('auth.menu')
     <div class="main-panel">
       @include('admin.navbar')
       <div class="content">
@@ -129,6 +129,7 @@
           dataType: 'json',
       }).done(function(data){
         listDay = data;
+        updateData();
       }).fail(function(result){
     });
     $(document).ready(function() {
@@ -139,8 +140,7 @@
     function updateData()
     {
 
-      setTimeout(function() {
-        var date=[];
+      var date=[];
         var dayTotalSales=[];
         var dayTotalStripe=[];
         var dayTotalSitef=[];
@@ -194,7 +194,6 @@
 
         var dailySalesSitefChart = new Chartist.Line('#dailySalesSitefChart', dataDailySalesSitefChart, optionsDailySalesSitefChart);
         md.startAnimationForLineChart(dailySalesSitefChart);
-      }, 2000);
     }
   </script>
 </body>

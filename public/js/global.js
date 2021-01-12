@@ -3,6 +3,7 @@ var options = {minimumFractionDigits: 2, maximumFractionDigits: 2};
 var formatter = new Intl.NumberFormat(locale, options);
 var coinClient = 1;
 var rateToday=0;
+
 function showPrice(price, rate, coin, coinClient){
   rateToday = rate;
   if (price == "FREE")
@@ -14,6 +15,10 @@ function showPrice(price, rate, coin, coinClient){
 }
 
 function exchangeRate(price, rate, coin, coinClient){
+
+  if(price == "FREE")
+    price = 0;
+
   _coinClient = coinClient;
   _rate = rate;
 

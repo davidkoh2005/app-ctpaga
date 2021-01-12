@@ -11,6 +11,7 @@
     @include('bookshop')
     <!-- Style css -->
     <link rel="stylesheet" type="text/css" href="../landingPage/css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/login.css">
     
     <!-- Script js -->
     <script src="../../js/i18n/es.js"></script>
@@ -35,7 +36,12 @@
                     <!-- Welcome Intro Start -->
                     <div class="col-12 col-lg-7">
                         <div class="welcome-intro">
+                            @if($type == 0)
+                                <h1 class="text-white">Bienvenido</h1>
+                                <p class="text-white my-4">al Panel Administrativa de Ctpaga.</p>
+                            @else
                             <h1 class="text-white">Bienvenido a Ctpaga!</h1>
+                            @endif
                         </div>
                     </div>
                     <div class="col-12 col-md-8 col-lg-5">
@@ -47,7 +53,11 @@
                                 </div>
                             @endif    
                             <!-- Contact Form -->
-                            <form class="contact-form" id="login-form" method='POST' action="{{route('form.login')}}">
+                            @if($type == 0)
+                                <form class="contact-form" id="login-form" method='POST' action="{{route('formAdmin.login')}}">
+                            @else
+                                <form class="contact-form" id="login-form" method='POST' action="{{route('formCommerce.login')}}">
+                            @endif
                                 @csrf
                                 <div class="contact-top">
                                     <h3 class="contact-title">Iniciar Sesión</h3>
@@ -76,7 +86,7 @@
                                     </div>
                                     <div class="col-12">
                                         <button class="submit btn btn-bordered w-100 mt-3 mt-sm-4" type="submit">Ingresar</button>
-                                        <div id="loading">
+                                        <div class="hide" id="loading">
                                             <img class="justify-content-center" src="../images/loading.gif" style="max-width:80px !important;">
                                         </div>
                                     </div>

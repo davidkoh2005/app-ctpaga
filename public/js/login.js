@@ -1,5 +1,6 @@
 $(document).ready(function() {
-    $('#loading').hide();
+    $('#loading').removeClass("show");
+    $('#loading').addClass("hide");
     var $sections = $('.form-section');
 
     function navigateTo(index){
@@ -27,7 +28,8 @@ $(document).ready(function() {
             $("#login-form").submit();
             if($('#password').val().length >0){
                 $('.submit').hide();
-                $('#loading').show();
+                $('#loading').removeClass("hide");
+                $('#loading').addClass("show");
             }
         });
     });

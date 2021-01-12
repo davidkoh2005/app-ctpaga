@@ -11,7 +11,7 @@
     <script type="text/javascript" src="../../js/datatables.min.js"></script>
 </head>
 <body class="body-admin">
-@include('admin.menu')
+@include('auth.menu')
     <div class="main-panel">
       @include('admin.navbar')
         <div class="tableShow">

@@ -13,7 +13,7 @@
     @include('admin.bookshop')
 </head>
 <body>
-    @include('admin.menu')
+    @include('auth.menu')
     <div class="main-panel">
         @include('admin.navbar')
         <section>

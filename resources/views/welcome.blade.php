@@ -23,7 +23,7 @@
         <!--====== Scroll To Top Area End ======-->
 
         <div class="main">
-            @include('navbar')
+            @include('navbarMain')
 
             <!-- ***** Welcome Area Start ***** -->
             <section id="home" class="section welcome-area bg-overlay overflow-hidden d-flex align-items-center">

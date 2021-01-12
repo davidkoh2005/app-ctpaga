@@ -358,9 +358,8 @@ function calculateTotal(){
     total = total.replaceAll(",", ".");
 
     total = parseFloat(total);
-
     var percentage = parseInt($("#percentageSelect").val());
-    resultShipping = exchangeRate(shippingPrice, _rate, shippingCoin, _coinClient)
+    resultShipping = exchangeRate(shippingPrice, _rate, shippingCoin, _coinClient);
 
     if(_coinClient == 0)
         $(".showShipping").text("$ "+formatter.format(resultShipping));
@@ -378,8 +377,8 @@ function calculateTotal(){
     $("#totalAll").val(formatter.format((total-((total*percentage)/100)+resultShipping)));
     $(".totalGlobal").text(resulttotal);
 
-    if(formatter.format((total-((total*percentage)/100)+resultShipping)) == "NaN")
-        location.reload();
+    /* if(formatter.format((total-((total*percentage)/100)+resultShipping)) == "NaN")
+        location.reload(); */
     
 }
 

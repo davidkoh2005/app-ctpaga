@@ -43,9 +43,6 @@ class PaidController extends Controller
                         $message .= "- ".$service->postPurchase."\n";
                 }
 
-                $sale->statusSale = 1;
-                $sale->save();
-
             }
 
             $commerce = Commerce::where('userUrl',$request->userUrl)->first();

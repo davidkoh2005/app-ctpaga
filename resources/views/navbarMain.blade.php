@@ -17,11 +17,30 @@
                         <nav>
                             <ul class="navbar-nav" id="navbar-nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{route('welcome')}}">Inicio</a>
+                                    <a class="nav-link scroll" href="#home">Inicio</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{route('commerce.login')}}">Iniciar Sesión</a>
+                                    <a class="nav-link scroll" href="#features">Caracteristicas</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link scroll" href="#pricing">Comisiones</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link scroll" href="#contact">Contacto</a>
+                                </li>
+                                @if(Auth::guard('admin')->check())
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{route('admin.dashboard')}}">Ingresar</a>
+                                    </li>
+                                @elseif(Auth::guard('web')->check())
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{route('commerce.dashboard')}}">Ingresar</a>
+                                    </li>
+                                @else
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{route('commerce.login')}}">Iniciar Sesión</a>
+                                    </li>
+                                @endif
                             </ul>
                         </nav>
                     </div>

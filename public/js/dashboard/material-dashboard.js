@@ -295,9 +295,32 @@ md = {
         chartPadding: {
           top: 20,
           right: 0,
-          bottom: 0,
-          left: 0
+          bottom: 10,
+          left: 10
         },
+        plugins: [
+          Chartist.plugins.ctAxisTitle({
+            axisX: {
+              axisTitle: 'Dia',
+              axisClass: 'ct-axis-title',
+              offset: {
+                x: -20,
+                y: 40
+              },
+              textAnchor: 'middle',
+            },
+            axisY: {
+              axisTitle: 'Cantidad',
+              axisClass: 'ct-axis-title',
+              offset: {
+                x: 0,
+                y: 0
+              },
+              textAnchor: 'middle',
+              flipTitle: false
+            }
+          })
+        ],
       }
 
       var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
@@ -320,9 +343,32 @@ md = {
         chartPadding: {
           top: 20,
           right: 0,
-          bottom: 0,
-          left: 0
+          bottom: 10,
+          left: 10
         },
+        plugins: [
+          Chartist.plugins.ctAxisTitle({
+            axisX: {
+              axisTitle: 'Dia',
+              axisClass: 'ct-axis-title',
+              offset: {
+                x: -20,
+                y: 40
+              },
+              textAnchor: 'middle',
+            },
+            axisY: {
+              axisTitle: 'Cantidad',
+              axisClass: 'ct-axis-title',
+              offset: {
+                x: 0,
+                y: 0
+              },
+              textAnchor: 'middle',
+              flipTitle: false
+            }
+          })
+        ],
       }
 
       var dailySalesStripeChart = new Chartist.Line('#dailySalesStripeChart', dataDailySalesStripeChart, optionsDailySalesStripeChart);
@@ -345,9 +391,32 @@ md = {
         chartPadding: {
           top: 20,
           right: 0,
-          bottom: 0,
-          left: 0
+          bottom: 10,
+          left: 10
         },
+        plugins: [
+          Chartist.plugins.ctAxisTitle({
+            axisX: {
+              axisTitle: 'Dia',
+              axisClass: 'ct-axis-title',
+              offset: {
+                x: -20,
+                y: 40
+              },
+              textAnchor: 'middle',
+            },
+            axisY: {
+              axisTitle: 'Cantidad',
+              axisClass: 'ct-axis-title',
+              offset: {
+                x: 0,
+                y: 0
+              },
+              textAnchor: 'middle',
+              flipTitle: false
+            }
+          })
+        ],
       }
 
       var dailySalesSitefChart = new Chartist.Line('#dailySalesSitefChart', dataDailySalesSitefChart, optionsDailySalesSitefChart);

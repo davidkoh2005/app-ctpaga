@@ -12,7 +12,7 @@
     <script src="../../js/dashboard/script.js" type="text/javascript"></script>
 </head>
 <body class="body-admin">
-  @include('admin.menu')
+  @include('auth.menu')
     <div class="main-panel">
       @include('admin.navbar')
         

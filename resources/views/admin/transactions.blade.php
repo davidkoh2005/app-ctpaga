@@ -11,7 +11,7 @@
     <script type="text/javascript" src="../../js/transactions.js"></script>
 </head>
 <body class="body-admin">
-    @include('admin.menu')
+    @include('auth.menu')
     <div class="main-panel">
         @include('admin.navbar')
         <div class="justify-content-center" id="row">

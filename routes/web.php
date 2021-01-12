@@ -20,17 +20,26 @@ Route::fallback(function () {
     return redirect()->route('welcome');
 });
 
-Route::get('/admin/login', function () {
-    return view('admin.login');
-})->name('admin.login');
-
 Route::get('sockets/serve', function(){
     \Illuminate\Support\Facades\Artisan::call('websockets:serve');
 });
 
-Route::post('admin/login/', 'AdminController@login')->name('form.login');
-Route::get('admin/logout/', 'AdminController@logout')->name('admin.logout');
-Route::post('admin/logout/', 'AdminController@logout')->name('admin.logout');
+Route::get('/admin/login', function () {
+    return view('auth.login')->with('type', 0);
+})->name('admin.login');
+
+Route::get('/login', function () {
+    return view('auth.login')->with('type', 1);
+})->name('commerce.login');
+
+Route::post('login/form', 'CommerceController@login')->name('formCommerce.login');
+Route::post('admin/login/', 'AdminController@login')->name('formAdmin.login');
+Route::get('logout/', 'AdminController@logout')->name('logout');
+Route::post('logout/', 'AdminController@logout')->name('logout');
+
+Route::group(['middleware'=>'web'], function() {
+    Route::get('/inicio/', 'CommerceController@dashboard')->name('commerce.dashboard');
+});
 
 Route::group(['middleware'=>'admin'], function() {
     Route::get('/admin/', 'AdminController@dashboard')->name('admin.dashboard');
