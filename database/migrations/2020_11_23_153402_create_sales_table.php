@@ -33,7 +33,7 @@ class CreateSalesTable extends Migration
             $table->string("descriptionShipping")->nullable();
             $table->boolean("statusShipping");
             $table->timestamps();
-            $table->timestamp('expires_at');
+            $table->timestamp('expires_at')->nullable();// si aparece error eliminar nullable
         });
     }
 

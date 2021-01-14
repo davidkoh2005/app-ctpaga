@@ -1,5 +1,4 @@
 /node_modules
-/public/
 /public/hot
 /public/storage
 /public/js/Ctpaga_files
@@ -11,4 +10,3 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-/app/Providers/AppServiceProvider.php
