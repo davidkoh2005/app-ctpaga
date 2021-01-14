@@ -7,8 +7,8 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <title>ctpaga</title>
-        <!-- ***** All CSS Files 
-        ***** -->
+        <link rel="shortcut icon" type="image/x-icon" href="../../../images/logo/logoctpaga.ico" />
+        <!-- ***** All CSS Files ***** -->
 
         <!-- Style css -->
         <link rel="stylesheet" type="text/css" href="../landingPage/css/style.css">

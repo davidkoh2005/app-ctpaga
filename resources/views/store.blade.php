@@ -16,90 +16,97 @@
         <div class="container">
             <div class="Row">
                 <div class="col-md-6 col-sm-12 col-12 mx-auto">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="row float-left">
-                                <div class="col form-navigation">
-                                    <button type="button" class="previous btn">
-                                        <svg width="30px" height="30px" viewBox="0 0 16 16" class="bi bi-chevron-left" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <div class="col-md-auto col-sm-auto col-auto">
+                    <div class="row">
+                        <div class="col-2 form-navigation float-left">
+                            <button type="button" class="previous btn">
+                                <svg width="30px" height="30px" viewBox="0 0 16 16" class="bi bi-chevron-left" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="col-10">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-12 col-12">
                                     <h5 class="form-store"> Tienda </h5>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <input type="hidden" id="coinClient"  name="coinClient" value="{{$coinClient}}">
-                            <input type="hidden" id="userUrl"  name="userUrl" value="{{$userUrl}}">
-
-                            <div class= "form-section-store center">
-                                <img class="rounded-circle" src="{{$picture->url}}" width="100px" height="100px">
-                                <h3> {{$commerce->name}}</h3>
-                                <div class="button-circle">
-                                    <ul>
-                                        <li> <a href="https://api.whatsapp.com/send/?phone={{$whatsappNum}}"> <i class="fa fa-whatsapp" aria-hidden="true"></i><p>Whatsapp</p></a></li>
-                                        @if($statusShipping)<li> <a href="#"> <i class="fa fa-truck button-shipping" aria-hidden="true"></i><p class="shipping">Envíos</p></a> </li>@endif
-                                    </ul>
+                                <div class="col-md-2 col-sm-3 col-3">
+                                    <img class="rounded-circle" src="{{$picture->url}}" width="50px" height="50px">
                                 </div>
-                                <div class="row">&nbsp;</div>
-
-                                <div class="row" id="ProductsServices">
-                                    <div class="col">
-                                        <button type="button" class="btn btn-bottom btn-current" id="btn-products">Productos</button>
-                                    </div>
-                                    <div class="col">
-                                        <button type="button" class="btn btn-bottom" id="btn-services">Servicios</button>
-                                    </div>
+                                <div class="col" style="min-width:auto !important;">
+                                    <h3> {{$commerce->name}}</h3>
                                 </div>
-
-                                <hr class="category">
-
-                                <div class="row categories bold">Categorías</div>
-                                <div class="row">&nbsp;</div>
-                                <div class="row categories" id="showCategories"></div>
-                                <div class="row">&nbsp;</div>
-                                <hr>
-                                <div class="row categories bold" id="showTitleProductsServices"></div>
-                                <div class="row">&nbsp;</div>
-                                <div class="row categories" id="showProductsServices"></div>
-                            </div>
-
-                            @if (count($shippings)!=0)
-                            <div class="form-section-store">
-                                <input type="hidden" id="statusShipping" value="true">
-                                <p> Metodo de envío:</p>
-                                @foreach ($shippings as $shipping)
-                                    <div class="row shippings justify-content-center align-items-center minh-10">
-                                        <div class="description-shippings col">{{$shipping->description}}</div>
-                                        @if ($coinClient == 0) 
-                                            <div class="shipping-price col"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
-                                        @else
-                                            <div class="shipping-price col-md col-12"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
-                                        @endif
-                                    </div>
-                                @endforeach
-                            </div>
-                            @else
-                                <input type="hidden" id="statusShipping" value="false">
-                            @endif
-
-                            <div class="row">&nbsp;</div>
-
-                            <div class="form-navigation bottom">
-                                <button type="button" id="totalBtn" class="submit btn btn-bottom statusButton">Pagar</button>
-                            </div>
-                            <div class="row justify-content-center"id="loading">
-                                <img widht="80px" height="80px" class="justify-content-center" src="../images/loading.gif">
                             </div>
                         </div>
                     </div>
+                    <div class="row">&nbsp;</div>
+                    <input type="hidden" id="coinClient"  name="coinClient" value="{{$coinClient}}">
+                    <input type="hidden" id="userUrl"  name="userUrl" value="{{$userUrl}}">
+
+                    <div class= "form-section-store center">
+                        <div class="button-circle">
+                            <ul>
+                                <li> <a href="https://api.whatsapp.com/send/?phone={{$whatsappNum}}"> <i class="fa fa-whatsapp" aria-hidden="true"></i><p>Whatsapp</p></a></li>
+                                @if($statusShipping)<li> <a href="#"> <i class="fa fa-truck button-shipping" aria-hidden="true"></i><p class="shipping">Envíos</p></a> </li>@endif
+                            </ul>
+                        </div>
+                        <div class="row">&nbsp;</div>
+
+                        <div class="row" id="ProductsServices">
+                            <div class="col">
+                                <button type="button" class="btn btn-bottom btn-current" id="btn-products">Productos</button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="btn btn-bottom" id="btn-services">Servicios</button>
+                            </div>
+                        </div>
+
+                        <hr class="category">
+
+                        <div class="row categories bold">Categorías</div>
+                        <div class="row">&nbsp;</div>
+                        <div class="row categories" id="showCategories"></div>
+                        <div class="row">&nbsp;</div>
+                        <hr>
+                        <div class="row categories bold" id="showTitleProductsServices"></div>
+                        <div class="row">&nbsp;</div>
+                        <div class="row categories" id="showProductsServices"></div>
+                    </div>
+
+                    @if (count($shippings)!=0)
+                    <div class="form-section-store">
+                        <input type="hidden" id="statusShipping" value="true">
+                        <p> Metodo de envío:</p>
+                        @foreach ($shippings as $shipping)
+                            <div class="row shippings justify-content-center align-items-center minh-10">
+                                <div class="description-shippings col">{{$shipping->description}}</div>
+                                @if ($coinClient == 0) 
+                                    <div class="shipping-price col"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
+                                @else
+                                    <div class="shipping-price col-md col-12"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                    @else
+                        <input type="hidden" id="statusShipping" value="false">
+                    @endif
+
+                    <div class="row">&nbsp;</div>
                 </div>
             </div>
         </div>
     </Section>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-sm-12 col-12 mx-auto text-center fixed-item-payment ">
+            <div class="form-navigation bottom relative">
+                <button type="button" id="totalBtn" class="submit btn btn-bottom statusButton">Pagar</button>
+            </div>
+            <div class="row justify-content-center" id="loading">
+                <img widht="80px" height="80px" class="justify-content-center" src="../images/loading.gif">
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col text-right fixed-item" id="btnFloating">

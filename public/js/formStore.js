@@ -99,7 +99,7 @@ $(function(){
 
     $(".submit").on('click', function(){
         if(listCart.length != 0){
-            $('.submit').hide();
+            $('.submit').addClass("hide");
             $('#loading').show();
             sendData();
         }

@@ -1,5 +1,6 @@
-body {
-    background-color: #e6e6e6;
+.container{
+    padding-left: 0px !important;
+    padding-right: 0px !important;
 }
 
 .loader {
@@ -18,7 +19,7 @@ body {
 
 .btnFloating {
     border: 2px solid #00cc5f;
-    border-radius: 25%;
+    border-radius: 45%;
 }
 
 .fixed-item {
@@ -31,6 +32,11 @@ body {
     position: fixed;
     right: 0px;
     bottom: 60px;
+}
+
+.fixed-item-payment {
+    position: fixed;
+    bottom: 0px;
 }
 
 .relative {
@@ -67,6 +73,13 @@ section{
     padding-top: 50px;
     padding-bottom: 50px;
 }
+
+/* @media only screen and (max-width: 768px) {
+    section{
+        padding-top: 10px;
+        padding-bottom: 50px;
+    }
+} */
 
 div.result {
     position: absolute;
@@ -110,12 +123,14 @@ div.bold{
     border-radius: 100%;
     display: inline-block;
     font-size: 26px;
-    margin: 50px 20px;
-    width: 70px;
-    height: 70px;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 40px;
+    width: 60px;
+    height: 60px;
     line-height: 68px;
     text-align: center;
-    margin-top: 10px;
 }
 
 .button-circle li:hover {
@@ -127,10 +142,15 @@ div.bold{
     display:block;
 }
 
+.button-circle a i {
+    bottom: 5px;
+    position: relative;
+}
+
 .button-circle p{
     color: black;
     position: absolute;
-    font-size: 17px;
+    font-size: 15px;
 }
 .button-circle li:hover p {
     color: #00cc5f;
@@ -314,4 +334,8 @@ div.category-current div.category-circle {
 
 .productService {
     padding-top: 10px;
+}
+
+.hide {
+    display: none;
 }
