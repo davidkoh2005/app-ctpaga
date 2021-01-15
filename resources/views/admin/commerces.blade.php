@@ -35,8 +35,9 @@
                         <td>{{ $commerce->address }}</td>
                         <td>{{ $commerce->phone }}</td>
                         <td>
-                        <a class="btn btn-bottom" href="{{route('form.store', ['userUrl' => $commerce->userUrl])}}" target="_blank"><i class="fa fa-eye"></i> Ver Tienda</a>
-                            <a class="btn btn-bottom" href="{{route('admin.commercesShow', ['id' => $commerce->id])}}"><i class="fa fa-eye"></i> Ver Transacciones</a>
+                            <a class="btn btn-bottom" href="{{route('admin.show', ['id' => $commerce->id])}}" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Documentos"><i class="material-icons">verified_user</i></a>
+                            <a class="btn btn-bottom" href="{{route('admin.transactionsSearchId', ['id' => $commerce->id])}}" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Transacciones"><i class="material-icons">description</i></a>
+                            <a class="btn btn-bottom" href="{{route('form.store', ['userUrl' => $commerce->userUrl])}}" rel="tooltip" target="_blank" data-toggle="tooltip" data-placement="left" title="Ver Tienda"><i class="material-icons">store</i></a>
                         </td>
                     </tr>
                     @endforeach

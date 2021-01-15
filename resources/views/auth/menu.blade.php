@@ -36,6 +36,12 @@
                 <p>Transacciones</p>
               </a>
             </li>
+            <li class="nav-item" id="nav-transactions">
+              <a class="nav-link" href="">
+                <i class="material-icons">request_quote</i>
+                <p>Reporte depositos</p>
+              </a>
+            </li>
           @else
             <li class="nav-item" id="nav-dashboard">
               <a class="nav-link" href="{{route('commerce.dashboard')}}">

@@ -1,6 +1,6 @@
   <!--     Fonts and icons     -->
-  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="../../../css/dashboard/google-css.css" />
+  <link rel="stylesheet" href="../../../css/dashboard/font-awesome.min">
   <!-- CSS Files -->
   <link href="../../../css/dashboard/material-dashboard.css?v=2.1.2" rel="stylesheet" />
   

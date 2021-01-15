@@ -30,7 +30,10 @@
                                     <h5 class="form-store"> Tienda </h5>
                                 </div>
                                 <div class="col-md-2 col-sm-3 col-3">
-                                    <img class="rounded-circle" src="{{$picture->url}}" width="50px" height="50px">
+
+                                    @if($picture)
+                                        <img class="rounded-circle" src="{{$picture->url}}" width="50px" height="50px">
+                                    @endif
                                 </div>
                                 <div class="col" style="min-width:auto !important;">
                                     <h3> {{$commerce->name}}</h3>

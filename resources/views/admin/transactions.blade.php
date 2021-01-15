@@ -21,12 +21,18 @@
                         Filtro:
                     </div>
                     <div class="card-body has-success">
+                        @if($idCommerce >0)
+                        <form id="payment-form" class="contact-form" method='POST' action="{{route('admin.transactionsSearchId', ['id' => $idCommerce])}}">
+                        @else
                         <form id="payment-form" class="contact-form" method='POST' action="{{route('admin.transactionsSearch')}}">
+                        @endif
                             <div class="mb-3 row">
+                                @if($idCommerce == 0)
                                 <label class="col-md-2 col-12  col-form-label">Nombre Compañia</label>
                                 <div class="col">
                                     <input type="text" class="form-control" name="searchNameCompany" id="searchNameCompany" value="{{$searchNameCompany}}">
                                 </div>
+                                @endif
 
                                 <label class="col-md-2 col-12 col-form-label">Nombre Cliente</label>
                                 <div class="col">
@@ -84,37 +90,41 @@
             </div>
         </div>
         
-        <div class="tableShow">
-            <table id="table_id" class="table table-bordered mb-5 display">
-                <thead>
-                    <tr class="table-title">
-                        <th scope="col">#</th>
-                        <th scope="col">Nombre Compañia</th>
-                        <th scope="col">Nombre Cliente</th>
-                        <th scope="col">Total</th>
-                        <th scope="col">Pago</th>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($transactions as $transaction)
-                    <tr>
-                        <th scope="row">{{ $transaction->id }}</th>
-                        <td>{{ $transaction->name }}</td>
-                        <td>{{ $transaction->nameClient}}</td>
-                        <td>@if($transaction->coin == 0) $ @else Bs @endif {{ $transaction->total}}</td>
-                        <td> {{$transaction->nameCompanyPayments}}</td>
-                        <td> {{date('d/m/Y h:i A',strtotime($transaction->date))}}</td>
-                        <td>
-                            <button class="btn btn-bottom" onClick="showProduct({{$transaction->id}})">
-                                <i class="fa fa-eye"></i> Ver
-                            </button>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div class="col-12">
+            @if($idCommerce > 0)
+            <label for="" class="nameCompany"><strong>Nombre de Compañia:</strong> {{ $companyName}} </label>
+            @endif
+        
+            <div class="tableShow">
+                <table id="table_id" class="table table-bordered mb-5 display">
+                    <thead>
+                        <tr class="table-title">
+                            <th scope="col">#</th>
+                            @if($idCommerce == 0)<th scope="col">Nombre Compañia</th>@endif
+                            <th scope="col">Nombre Cliente</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Pago</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($transactions as $transaction)
+                        <tr>
+                            <th scope="row">{{ $transaction->id }}</th>
+                            @if($idCommerce == 0)<td>{{ $transaction->name }}</td>@endif
+                            <td>{{ $transaction->nameClient}}</td>
+                            <td>@if($transaction->coin == 0) $ @else Bs @endif {{ $transaction->total}}</td>
+                            <td> {{$transaction->nameCompanyPayments}}</td>
+                            <td> {{date('d/m/Y h:i A',strtotime($transaction->date))}}</td>
+                            <td>
+                                <button class="btn btnTransaction btn-bottom" onClick="showProduct({{$transaction->id}})" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Productos"><i class="material-icons">shopping_bag</i></button>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

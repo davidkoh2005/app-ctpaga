@@ -28,7 +28,7 @@
   <!-- Library for adding dinamically elements -->
   <script src="../../js/dashboard/plugins/arrive.min.js"></script>
   <!-- Chartist JS -->
-  <script src="../../js/dashboard/plugins/chartist.min.js"></script>
+  <script src="../../js/dashboard/plugins/chartist.js"></script>
   <script src="../../js/dashboard/plugins/plugin-chartist.js"></script>
   <!--  Notifications Plugin    -->
   <script src="../../js/dashboard/plugins/bootstrap-notify.js"></script>

@@ -1,4 +1,4 @@
-    <link rel="shortcut icon" type="image/x-icon" href="../../../images/logo/logoctpaga.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../images/logo/logoct.svg" />
     <!-- Bootstrap CSS -->
     <link href="../../../css/bookshop/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../../../css/bookshop/bootstrap-datepicker.min.css"/>

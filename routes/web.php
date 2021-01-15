@@ -49,8 +49,10 @@ Route::group(['middleware'=>'admin'], function() {
     Route::get('/admin/comerciantes/{id}', 'AdminController@commercesShow')->name('admin.commercesShow');
     Route::post('/admin/transacciones', 'AdminController@transactions')->name('admin.transactionsSearch');
     Route::get('/admin/transacciones', 'AdminController@transactions')->name('admin.transactions');
+    Route::get('/admin/transacciones/{id}', 'AdminController@transactions')->name('admin.transactionsSearchId');
     Route::get('/admin/transaccionesShow/', 'AdminController@transactionsShow')->name('admin.transactionsShow');
     Route::get('/admin/depositos/{id}', 'AdminController@show')->name('admin.show');
+    Route::post('/admin/payment', 'AdminController@showPayment')->name('admin.showPayment');
 });
 
 Route::post('/admin/removePicture', 'AdminController@removePicture')->name('admin.removePicture');

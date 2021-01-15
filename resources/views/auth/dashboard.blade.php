@@ -184,6 +184,9 @@
             bottom: 0,
             left: 0
           },
+          axisY: {
+            onlyInteger: true,
+          },
         }
 
         var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);

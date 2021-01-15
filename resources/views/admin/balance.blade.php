@@ -35,18 +35,9 @@
                         <td>@if($balance->coin == 0 )  USD @else Bs @endif</td>
                         <td>@if($balance->coin == 0 )  $ @else Bs @endif {{ $balance->total }}</td>
                         <td>
-
-                            <form method='POST' action="{{route('admin.transactionsSearch')}}">
-                                <div class="row">
-                                    <div class="col">
-                                        <a class="btn btn-bottom" href="{{route('admin.show', ['id' => $balance->id])}}"><i class="fa fa-eye"></i> Ver documentos</a>
-                                    </div>
-                                    <div class="col">
-                                        <input type="hidden" name="idCommerce" value="{{$balance->commerce_id}}">
-                                        <button type="submit" class="btn btn-bottom"><i class="fa fa-eye"></i> Ver transacciones</button>
-                                    </div>
-                                </div>
-                            </form>
+                            <botton class="pay btn btn-bottom" onclick="showDataPayment({{$balance->id}})" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Pagar Comerciante"><i class="material-icons">payment</i></botton>
+                            <a class="btn btn-bottom" href="{{route('admin.transactionsSearchId', ['id' => $balance->commerce_id])}}" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Transacciones"><i class="material-icons">description</i></a>
+                            <a class="btn btn-bottom" href="" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Generar reporte de pago"><i class="material-icons">get_app</i></a>
                         </td>
                     </tr>
                     @endforeach
@@ -54,21 +45,39 @@
             </table>
         </div>
     </div>
+    <div id="showPayment"></div>
     @include('admin.bookshopBottom')
     <script> 
         var statusMenu = "{{$statusMenu}}";
+        
+        function showDataPayment(id)
+        {
+            $.ajax({
+                url: "{{route('admin.showPayment')}}", 
+                data: {"id" : id},
+                type: "POST",
+            }).done(function(data){
+                console.log(data);
+                $('#showPayment').html(data.html);
+                $('#payModal').modal('show'); 
+            }).fail(function(result){
+                $('#payModal').modal('hide'); 
+                $('#showPayment').html();
+            });
+        }
+
         $(document).ready( function () {
             $('.main-panel').perfectScrollbar({suppressScrollX: true, maxScrollbarLength: 200}); 
             $('#table_id').DataTable({
                 language: {
                     "decimal": "",
                     "emptyTable": "No hay información",
-                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Balances",
-                    "infoEmpty": "Mostrando 0 to 0 of 0 Balances",
-                    "infoFiltered": "(Filtrado de _MAX_ total Balances)",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Depositos",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Depositos",
+                    "infoFiltered": "(Filtrado de _MAX_ total Depositos)",
                     "infoPostFix": "",
                     "thousands": ",",
-                    "lengthMenu": "Mostrar _MENU_ Balances",
+                    "lengthMenu": "Mostrar _MENU_ Depositos",
                     "loadingRecords": "Cargando...",
                     "processing": "Procesando...",
                     "search": "Buscar:",
@@ -80,8 +89,7 @@
                         "previous": "Anterior"
                     }
                 },
-            });            
-
+            });           
         });
         $(".main-panel").perfectScrollbar('update');
     </script>

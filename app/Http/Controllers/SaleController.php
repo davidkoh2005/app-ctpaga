@@ -30,7 +30,7 @@ class SaleController extends Controller
         else if($sales[0]->commerce_id != $commerce->id)
             return redirect()->route('welcome');
 
-        if($sales[0]->statusSale == 1 || Carbon::now()->format('Y-m-d 23:59:59') > $sales[0]->expires_at)
+        if($sales[0]->statusSale == 1 || Carbon::now() < $sales[0]->expires_at)
             return redirect()->route('form.store', ['userUrl' => $userUrl]);
 
 
@@ -108,7 +108,7 @@ class SaleController extends Controller
                     "rate"                  => $request->rate,
                     "statusShipping"        => $request->statusShipping,
                     "descriptionShipping"   => $request->descriptionShipping,
-                    "expires_at"            => Carbon::now()->format('Y-m-d 23:59:59'),
+                    "expires_at"            => Carbon::now()->addHour(6),
                 ]);
             }
 
@@ -138,7 +138,7 @@ class SaleController extends Controller
                     "rate"                  => $request->rate,
                     "statusShipping"        => $request->statusShipping,
                     "descriptionShipping"   => $request->descriptionShipping,
-                    "expires_at"            => Carbon::now()->format('Y-m-d 23:59:59'),
+                    "expires_at"            => Carbon::now()->addHour(6),
                 ]);
                 $totalPrice += $this->exchangeRate($price, $request->rate, $sale['data']['coin'], $request->coin);
             }

@@ -317,7 +317,8 @@ md = {
                 y: 0
               },
               textAnchor: 'middle',
-              flipTitle: false
+              flipTitle: false,
+              onlyInteger: true,
             }
           })
         ],
@@ -365,7 +366,8 @@ md = {
                 y: 0
               },
               textAnchor: 'middle',
-              flipTitle: false
+              flipTitle: false,
+              onlyInteger: true,
             }
           })
         ],
@@ -413,7 +415,8 @@ md = {
                 y: 0
               },
               textAnchor: 'middle',
-              flipTitle: false
+              flipTitle: false,
+              onlyInteger: true,
             }
           })
         ],

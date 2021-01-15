@@ -165,8 +165,7 @@ class AdminController extends Controller
 
     public function show($id)
     {
-        $balance = Balance::where('id', $id)->first();
-        $commerce = Commerce::where("id", $balance->commerce_id)->first();
+        $commerce = Commerce::where("id", $id)->first();
         $user = User::where("id", $commerce->user_id)->first();
         $pictures = Picture::where('user_id', $user->id)
                             ->where('commerce_id', $commerce->id)
@@ -174,17 +173,9 @@ class AdminController extends Controller
 
         $selfie = Picture::where('user_id', $user->id)
                         ->where('commerce_id', '=', null)->first();
-        
-        if($balance->coin == 0)
-            $coin = "USD";
-        else
-            $coin = "Bs";
 
-        $bank = Bank::where('user_id', $user->id)
-                    ->where('coin', $coin)->first();
-        
-        $statusMenu = "balance";
-        return view('admin.show', compact('commerce', 'user', 'pictures', 'selfie', 'balance', 'bank','statusMenu'));
+        $statusMenu = "commerces";
+        return view('admin.show', compact('commerce', 'user', 'pictures', 'selfie','statusMenu'));
     }
 
     public function removePicture(Request $request)
@@ -259,6 +250,25 @@ class AdminController extends Controller
         $selectPayment="Selecionar Tipo de Pago";
         $startDate="";
         $endDate="";
+        $idCommerce=0;
+
+        if($request->id){
+            $idCommerce=intVal($request->id);
+            
+            $commerce = Commerce::whereId($idCommerce)->first();
+            $companyName = $commerce->name;
+
+            $transactions = Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
+                        ->where('paids.commerce_id', 'like', "%".$request->id. "%" )
+                        ->orderBy('paids.id', 'desc')
+                        ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.coin', 'paids.total',
+                            'paids.date', 'paids.nameCompanyPayments');
+        }else{
+            $transactions = Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
+                        ->orderBy('paids.id', 'desc')
+                        ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.coin', 'paids.total',
+                            'paids.date', 'paids.nameCompanyPayments');
+        }
 
         if($request->all()){
             $idCommerce = $request->idCommerce;
@@ -270,10 +280,6 @@ class AdminController extends Controller
             $endDate=$request->endDate;
         }
 
-        $transactions = Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
-                        ->orderBy('paids.id', 'desc')
-                        ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.coin', 'paids.total',
-                            'paids.date', 'paids.nameCompanyPayments');
 
         if(!empty($request->idCommerce))
             $transactions->where('commerces.id', $request->idCommerce); 
@@ -297,7 +303,7 @@ class AdminController extends Controller
         $transactions = $transactions->get();
 
         $statusMenu = "transactions";
-        return view('admin.transactions', compact('transactions', 'searchNameCompany', 'searchNameClient', 'selectCoin', 'selectPayment', 'startDate', 'endDate', 'statusMenu'));
+        return view('admin.transactions', compact('transactions', 'searchNameCompany', 'searchNameClient', 'selectCoin', 'selectPayment', 'startDate', 'endDate', 'statusMenu','idCommerce', 'companyName'));
     }
 
     public function transactionsShow(Request $request)
@@ -307,6 +313,24 @@ class AdminController extends Controller
         $rate = $sales[0]->rate;
         $coinClient = $sales[0]->coinClient;
         $returnHTML=view('admin.dataProductService', compact('transaction','sales', 'rate', 'coinClient'))->render();
+        return response()->json(array('html'=>$returnHTML));
+    }
+
+    public function showPayment(Request $request)
+    {
+        $balance = Balance::where('id', $request->id)->first();
+        $commerce = Commerce::where("id", $balance->commerce_id)->first();
+        $user = User::where("id", $commerce->user_id)->first();
+        
+        if($balance->coin == 0)
+            $coin = "USD";
+        else
+            $coin = "Bs";
+
+        $bank = Bank::where('user_id', $user->id)
+                    ->where('coin', $coin)->first();
+        
+        $returnHTML=view('admin.modal.dataPayment', compact('balance', 'commerce', 'user', 'bank'))->render();
         return response()->json(array('html'=>$returnHTML));
     }
 }

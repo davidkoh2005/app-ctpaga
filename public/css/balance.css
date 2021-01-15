@@ -4,7 +4,7 @@ body.body-admin{
 
 .table-title {
     text-align: center;
-    background-color: #00cc5f;
+    background-color: #585858;
     color: white;
 }
 
@@ -22,8 +22,12 @@ table {
     padding-right: 20px;
 }
 
+.btn {
+    padding: 12px 12px !important;
+}
+
 .btn-bottom { 
-    border-radius: 60px  !important;
+    border-radius: 90px  !important;
     font-size: large;
     background-color: #00cc5f !important;
     color: white  !important;
@@ -73,4 +77,12 @@ table {
 
 #topBalance {
     padding-top: 20px;
+}
+
+.hide{
+    display: none !important;
+}
+
+.show{
+    display:show !important;
 }
