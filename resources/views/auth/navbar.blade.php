@@ -26,8 +26,8 @@
                   </div>
                 </div>
                 </a>
+                @if(count($commercesUser)>1)
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-                  @if(count($commercesUser)>1)
                     @foreach ($commercesUser as $commerceUser)   
                       @if($statusMenu == "dashboard")  
                         <a class="dropdown-item" href="{{route('commerce.dashboard', ['commerceId' => $commerceUser->id])}}">{{$commerceUser->name}}</a>
@@ -35,8 +35,8 @@
                         <a class="dropdown-item" href="{{route('commerce.transactions', ['commerceId' => $commerceUser->id])}}">{{$commerceUser->name}}</a>
                       @endif
                     @endforeach
-                  @endif
                 </div>
+                @endif
               </li>
             </ul>
           </div>

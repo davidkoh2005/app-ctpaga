@@ -47,6 +47,7 @@ class CommerceController extends Controller
         $totalShoppingStripe = 0;
         $totalShoppingSitef = 0;
         $idCommerce = 0;
+        $commerceName = "";
         
         if($request->all()){
             $idCommerce = $request->commerceId;
@@ -55,7 +56,8 @@ class CommerceController extends Controller
         }else{
             $commerceFirst = Commerce::where('user_id', Auth::guard('web')->id())
                             ->orderBy('name', 'asc')->first();
-            $idCommerce = $commerceFirst->id;
+            if($commerceFirst)
+                $idCommerce = $commerceFirst->id;
         }
 
         session()->put('commerce_id', $idCommerce);
@@ -65,7 +67,9 @@ class CommerceController extends Controller
                                 ->where('commerce_id',$idCommerce)
                                 ->where('description','Profile')->first();
 
-        $commerceName = Commerce::whereId($idCommerce)->first()->name;
+        $commerceData = Commerce::whereId($idCommerce)->first();
+        if($commerceData)
+            $commerceName = $commerceData->name;
 
 
         $paidAll = Paid::where("date", 'like', "%".Carbon::now()->format('Y-m-d')."%")
@@ -94,6 +98,9 @@ class CommerceController extends Controller
         $selectPayment="Selecionar Tipo de Pago";
         $startDate="";
         $endDate="";
+        $idCommerce = 0;
+        $companyName = "";
+        $commerceName = "";
 
         if($request->all()){
             $idCommerce = $request->commerceId;
@@ -104,7 +111,10 @@ class CommerceController extends Controller
         session()->put('commerce_id', $idCommerce);
             
         $commerce = Commerce::whereId($idCommerce)->first();
-        $companyName = $commerce->name;
+        if($commerce){
+            $companyName = $commerce->name;
+            $commerceName = $commerce->name;
+        }
 
         $commercesUser = Commerce::where('user_id', Auth::guard('web')->id())
                                 ->orderBy('name', 'asc')->get();
@@ -112,8 +122,6 @@ class CommerceController extends Controller
         $pictureUser = Picture::where('user_id', Auth::guard('web')->id())
                                 ->where('commerce_id',$idCommerce)
                                 ->where('description','Profile')->first();
-
-        $commerceName = $commerce->name;
 
         $transactions = Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
                     ->where('paids.commerce_id', 'like', "%".$idCommerce. "%" )
