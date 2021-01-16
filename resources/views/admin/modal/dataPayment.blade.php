@@ -72,6 +72,8 @@
         </div>
     </div>
     <script>
+        var idBalance = {{$balance->id}};
+        var totalBalance = {{$balance->total}};
         $(document).ready( function () {
             $('#submit').on('click', function() {
                 var status = true;
@@ -99,6 +101,5 @@
                 } 
                 
             });
-        
-
+        });
     </script>

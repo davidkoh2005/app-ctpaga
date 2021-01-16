@@ -15,7 +15,7 @@
 <body class="body-admin">
     @include('auth.menu')
     <div class="main-panel">
-        @include('admin.navbar')
+        @include('auth.navbar')
         <div class="showData" id="rowOther">
             <div class="col-md-6 col-12">
                 <div class="card text-center">

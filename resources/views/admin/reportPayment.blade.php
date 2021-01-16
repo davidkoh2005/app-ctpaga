@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ctpaga</title>
     @include('bookshop')
+    <link rel="stylesheet" type="text/css" href="../../css/styleForm.css">
     <link rel="stylesheet" type="text/css" href="../../css/balance.css">
-    <link rel="stylesheet" type="text/css" href="../../css/datatables.min.css"/>
     @include('admin.bookshop')
-    <script type="text/javascript" src="../../js/datatables.min.js"></script>
-    <script src="../../js/dashboard/script.js" type="text/javascript"></script>
 </head>
 <body class="body-admin">
   @include('auth.menu')
@@ -17,13 +15,25 @@
       @include('auth.navbar')
       <div class="justify-content-center" id="row">
             <div class="col-10">
-                <div class="card card-Balance">
+                <div class="card card-Report">
                     <div class="card-header">
                         Filtro:
                     </div>
                     <div class="card-body has-success">
-                        <form id="payment-form" class="contact-form" method='POST' action="{{route('admin.balance')}}">  
-                            <div class="mb-3 row">             
+                        <form id="payment-form" class="contact-form" method='POST' action="{{route('admin.reportPayment')}}">  
+                            <div class="mb-3 row">
+                                <label class="col-md-2 col-12  col-form-label">Nombre Compañia</label>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="searchNameCompany" id="searchNameCompany" value="{{$searchNameCompany}}">
+                                </div>
+
+                                <label class="col-md-2 col-12  col-form-label">Numero Referencia</label>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="numRef" id="numRef" value="{{$numRef}}">
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row">
                                 <label class="col-sm-2 col-form-label">Moneda</label>
                                 <div class="col">
                                     <select class="form-select form-control" name="selectCoin" id="selectCoin">
@@ -31,6 +41,18 @@
                                         <option value="0">USA $</option>
                                         <option value="1">VE BS</option>
                                     </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <label class="col-sm-2 col-form-label">Rango de Fecha</label>
+
+                                <div class="col">
+                                    <div class="input-daterange input-group" id="datepicker">
+                                        <input type="text" class="form-control" name="startDate" placeholder="Fechan Inicial" value="{{$startDate}}" autocomplete="off"/>
+                                        <span class="input-group-addon"> Hasta </span>
+                                        <input type="text" class="form-control" name="endDate" placeholder="Fecha Final" value="{{$endDate}}" autocomplete="off"/>
+                                    </div>
                                 </div>
                             </div>
                             
@@ -41,7 +63,7 @@
                                     <button type="submit" class="submit btn btn-bottom">Buscar</button>
                                 </div>
                                 <div class="col-6">
-                                    <a type="button" class="remove-balance btn" href="{{route('admin.balance')}}">Limpiar</a>
+                                    <a type="button" class="remove-report btn" href="{{route('admin.reportPayment')}}">Limpiar</a>
                                 </div>
                             </div>
 
@@ -56,23 +78,21 @@
                     <tr class="table-title">
                         <th scope="col">#</th>
                         <th scope="col">Nombre Compañia</th>
+                        <th scope="col">Numero Referencia</th>
                         <th scope="col">Moneda</th>
                         <th scope="col">Total</th>
-                        <th scope="col">Acciones</th>
+                        <th scope="col">Fecha</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($balances as $balance)
+                    @foreach($deposits as $deposit)
                     <tr>
-                        <th scope="row">{{ $balance->id }}</th>
-                        <td>{{ $balance->name }}</td>
-                        <td>@if($balance->coin == 0 )  USD @else Bs @endif</td>
-                        <td>@if($balance->coin == 0 )  $ @else Bs @endif {{ $balance->total }}</td>
-                        <td>
-                            <botton class="pay btn btn-bottom" onclick="showDataPayment({{$balance->id}})" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Pagar Comerciante"><i class="material-icons">payment</i></botton>
-                            <a class="btn btn-bottom" href="{{route('admin.transactionsSearchId', ['id' => $balance->commerce_id])}}" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Transacciones"><i class="material-icons">description</i></a>
-                            <a class="btn btn-bottom" href="" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Generar reporte de pago"><i class="material-icons">get_app</i></a>
-                        </td>
+                        <th scope="row">{{ $deposit->id }}</th>
+                        <td>{{ $deposit->name }}</td>
+                        <td>{{ $deposit->numRef }}</td>
+                        <td>@if($deposit->coin == 0 )  USD @else Bs @endif</td>
+                        <td>@if($deposit->coin == 0 )  $ @else Bs @endif {{ $deposit->total }}</td>
+                        <td>{{$deposit->date}}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -86,21 +106,6 @@
         var selectCoin = '{{$selectCoin}}';
         $("#selectCoin option[value='"+ selectCoin +"']").attr("selected",true);
 
-        function showDataPayment(id)
-        {
-            $.ajax({
-                url: "{{route('admin.showPayment')}}", 
-                data: {"id" : id},
-                type: "POST",
-            }).done(function(data){
-                console.log(data);
-                $('#showPayment').html(data.html);
-                $('#payModal').modal('show'); 
-            }).fail(function(result){
-                $('#payModal').modal('hide'); 
-                $('#showPayment').html();
-            });
-        }
 
         $(document).ready( function () {
             $('.main-panel').perfectScrollbar({suppressScrollX: true, maxScrollbarLength: 200}); 
@@ -125,7 +130,19 @@
                         "previous": "Anterior"
                     }
                 },
-            });           
+            });          
+
+            var date = new Date();
+            date.setMonth(date.getMonth()-3);
+            date.setDate(1);
+
+            $('.input-daterange').datepicker({
+                startDate: date,
+                endDate: new Date(),
+                language: "es",
+                todayHighlight: true,
+                orientation: "bottom auto",
+            });
         });
         $(".main-panel").perfectScrollbar('update');
     </script>

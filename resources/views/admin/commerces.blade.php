@@ -13,7 +13,7 @@
 <body class="body-admin">
 @include('auth.menu')
     <div class="main-panel">
-      @include('admin.navbar')
+      @include('auth.navbar')
         <div class="tableShow">
             <table id="table_id" class="table table-bordered mb-5 display">
                 <thead>

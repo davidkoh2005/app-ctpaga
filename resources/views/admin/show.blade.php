@@ -15,7 +15,7 @@
 <body>
     @include('auth.menu')
     <div class="main-panel">
-        @include('admin.navbar')
+        @include('auth.navbar')
         <section>
             <div class="row">
                 <div class="col-md-6 col-12">

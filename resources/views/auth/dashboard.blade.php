@@ -8,13 +8,15 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>Ctpaga</title>
   <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+  <script src="../../../js/bookshop/jquery.js"></script>
+  <script src="../../../js/bookshop/jquery.min.js"></script>
   @include('admin.bookshop')
 </head>
 
 <body class="">
   @include('auth.menu')
     <div class="main-panel">
-      @include('admin.navbar')
+      @include('auth.navbar')
       <div class="content">
         <div class="container-fluid">
           <div class="row">
@@ -40,7 +42,7 @@
                   <div class="card-icon">
                     <i class="material-icons">account_balance</i>
                   </div>
-                  <p class="card-category">Stripe</p>
+                  <p class="card-category">@if(Auth::guard('admin')->check()) Stripe @else $ USD @endif</p>
                   <h3 class="card-title">$ {{$totalShoppingStripe}}</h3>
                 </div>
                 <div class="card-footer">
@@ -56,7 +58,7 @@
                   <div class="card-icon">
                     <i class="material-icons">account_balance</i>
                   </div>
-                  <p class="card-category">E-sitef</p>
+                  <p class="card-category">@if(Auth::guard('admin')->check()) E-sitef @else Bs Venezuela @endif</p>
                   <h3 class="card-title">Bs {{$totalShoppingSitef}}</h3>
                 </div>
                 <div class="card-footer">
@@ -125,6 +127,7 @@
     var listDay;
     $.ajax({
           url: "{{route('admin.dataGraphic')}}", 
+          data: {"commerce_id" : "{{$idCommerce}}"},
           type: "POST",
           dataType: 'json',
       }).done(function(data){

@@ -36,10 +36,10 @@
                 <p>Transacciones</p>
               </a>
             </li>
-            <li class="nav-item" id="nav-transactions">
-              <a class="nav-link" href="">
+            <li class="nav-item" id="nav-reportPayment">
+              <a class="nav-link" href="{{route('admin.reportPayment')}}">
                 <i class="material-icons">request_quote</i>
-                <p>Reporte depositos</p>
+                <p>Reporte Depósitos</p>
               </a>
             </li>
           @else
@@ -50,7 +50,7 @@
               </a>
             </li>
             <li class="nav-item" id="nav-transactions">
-              <a class="nav-link" href="">
+              <a class="nav-link" href="{{route('commerce.transactions')}}">
                 <i class="material-icons">description</i>
                 <p>Transacciones</p>
               </a>

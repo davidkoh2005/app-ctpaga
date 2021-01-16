@@ -21,18 +21,9 @@
                         Filtro:
                     </div>
                     <div class="card-body has-success">
-                        @if($idCommerce >0)
-                        <form id="payment-form" class="contact-form" method='POST' action="{{route('admin.transactionsSearchId', ['id' => $idCommerce])}}">
-                        @else
-                        <form id="payment-form" class="contact-form" method='POST' action="{{route('admin.transactionsSearch')}}">
-                        @endif
+                        <form id="payment-form" class="contact-form" method='POST' action="{{route('commerce.transactions')}}">
+
                             <div class="mb-3 row">
-                                @if($idCommerce == 0)
-                                <label class="col-md-2 col-12  col-form-label">Nombre Compañia</label>
-                                <div class="col">
-                                    <input type="text" class="form-control" name="searchNameCompany" id="searchNameCompany" value="{{$searchNameCompany}}">
-                                </div>
-                                @endif
 
                                 <label class="col-md-2 col-12 col-form-label">Nombre Cliente</label>
                                 <div class="col">
@@ -45,8 +36,7 @@
                                 <div class="col">
                                     <select class="form-select form-control" name="selectPayment" id="selectPayment">
                                         <option value="Selecionar Tipo de Pago">Selecionar Tipo de Pago</option>
-                                        <option value="E-sitef">E-sitef</option>
-                                        <option value="Stripe">Stripe</option>
+                                        <option value="Tienda Web">Tienda Web</option>
                                         <option value="Pago en Efectivo">Pago en Efectivo</option>
                                         <option value="Tienda Fisica">Tienda Fisica</option>
                                     </select>
@@ -80,7 +70,7 @@
                                     <button type="submit" class="submit btn btn-bottom">Buscar</button>
                                 </div>
                                 <div class="col-6">
-                                    <a type="button" class="remove-transactions btn" href="{{route('admin.transactions')}}">Limpiar</a>
+                                    <a type="button" class="remove-transactions btn" href="{{route('commerce.transactions')}}">Limpiar</a>
                                 </div>
                             </div>
 
@@ -91,9 +81,6 @@
         </div>
         
         <div class="col-12">
-            @if($idCommerce > 0)
-            <label for="" class="nameCompany"><strong>Nombre de Compañia:</strong> {{ $companyName}} </label>
-            @endif
         
             <div class="tableShow">
                 <table id="table_id" class="table table-bordered mb-5 display">
@@ -115,7 +102,7 @@
                             @if($idCommerce == 0)<td>{{ $transaction->name }}</td>@endif
                             <td>{{ $transaction->nameClient}}</td>
                             <td>@if($transaction->coin == 0) $ @else Bs @endif {{ $transaction->total}}</td>
-                            <td> {{$transaction->nameCompanyPayments}}</td>
+                            <td>@if($transaction->nameCompanyPayments == "Stripe" || $transaction->nameCompanyPayments == "E-Sitef" ) Tienda Web @else {{$transaction->nameCompanyPayments}} @endif</td>
                             <td> {{date('d/m/Y h:i A',strtotime($transaction->date))}}</td>
                             <td>
                                 <button class="btn btnTransaction btn-bottom" onClick="showProduct({{$transaction->id}})" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Productos"><i class="material-icons">shopping_bag</i></button>

@@ -9,5 +9,7 @@ $(document).ready( function () {
         $("#title-navbar").html("Comerciantes");
     else if(statusMenu == "transactions")
         $("#title-navbar").html("Transacciones");
+    else if(statusMenu == "reportPayment")
+        $("#title-navbar").html("Reporte Depósitos");
     
 });

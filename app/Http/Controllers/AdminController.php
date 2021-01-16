@@ -64,8 +64,10 @@ class AdminController extends Controller
             if(Auth::guard('admin')->check())
                 $paidAll = Paid::where("date", 'like', "%".Carbon::now()->format($years.'-'.$month.'-'.Carbon::now()->subDay(6-$i)->format('d'))."%")->get();
             else
-            $paidAll = Paid::where("date", 'like', "%".Carbon::now()->format($years.'-'.$month.'-'.Carbon::now()->subDay(6-$i)->format('d'))."%")
-                            ->whereId(Auth::guard('web')->id())->get();
+                $paidAll = Paid::where("date", 'like', "%".Carbon::now()->format($years.'-'.$month.'-'.Carbon::now()->subDay(6-$i)->format('d'))."%")
+                                ->where('user_id',Auth::guard('web')->id())
+                                ->where('commerce_id',$request->commerce_id)
+                                ->get();
             
             foreach ($paidAll as $paid)
             {
@@ -88,6 +90,7 @@ class AdminController extends Controller
 
     public function index(Request $request)
     {
+        $selectCoin="Selecionar Moneda";
         $balances = array();
         if (!Auth::guard('admin')->check()) {
             return redirect()->route('admin.login');
@@ -99,8 +102,14 @@ class AdminController extends Controller
                 ->select('balances.id', 'balances.user_id', 'balances.commerce_id', 'balances.coin', 'balances.total',
                 'commerces.name')
                 ->orderBy('name', 'asc')
-                ->orderBy('coin', 'desc')
-                ->get();
+                ->orderBy('coin', 'desc');
+        
+        if($request->all()){
+            $selectCoin= $request->selectCoin;
+            $balancesAll = $balancesAll->where('balances.coin', $selectCoin);
+        }
+            
+        $balancesAll = $balancesAll->get();
 
         foreach ($balancesAll as $balance)
         {
@@ -131,7 +140,7 @@ class AdminController extends Controller
 
         $statusMenu = "balance";
 
-        return view('admin.balance', compact('balances',"statusMenu"));
+        return view('admin.balance', compact('balances',"statusMenu",'selectCoin'));
     }
 
     public function login(Request $request)
@@ -159,6 +168,7 @@ class AdminController extends Controller
         }
 
         Auth::guard('web')->logout();
+        $request->session()->flush();
         return redirect()->route('commerce.login');
     } 
 
@@ -209,7 +219,8 @@ class AdminController extends Controller
             "commerce_id"   => (int)$balance->commerce_id,
             "coin"          => $balance->coin,
             "total"         => $total,
-            "numRef"        => $request->numRef
+            "numRef"        => $request->numRef,
+            "date"          => Carbon::now(),
         ]);
 
         return response()->json([
@@ -332,5 +343,47 @@ class AdminController extends Controller
         
         $returnHTML=view('admin.modal.dataPayment', compact('balance', 'commerce', 'user', 'bank'))->render();
         return response()->json(array('html'=>$returnHTML));
+    }
+
+    public function reportPayment(Request $request)
+    {
+        $searchNameCompany="";
+        $numRef="";
+        $selectCoin="Selecionar Moneda";
+        $startDate="";
+        $endDate="";
+
+        if($request->all()){
+            $searchNameCompany=$request->searchNameCompany;
+            $numRef=$request->numRef;
+            $selectCoin=$request->selectCoin;
+            $startDate=$request->startDate;
+            $endDate=$request->endDate;
+        }
+
+        $deposits = DB::table('deposits')
+                ->join('commerces', 'commerces.id', '=', 'deposits.commerce_id')
+                ->select('deposits.id', 'deposits.user_id', 'deposits.commerce_id', 'deposits.coin', 'deposits.total', 'deposits.numRef', 'deposits.date', 'commerces.name');
+
+        if(!empty($request->searchNameCompany))
+            $deposits->where('commerces.name', 'ilike', "%" . $request->searchNameCompany . "%" );
+        
+        if(!empty($request->numRef))
+            $deposits->where('deposits.numRef', 'ilike', "%" . $request->numRef . "%" );
+
+        if(!empty($request->searchNameClient))
+            $deposits->where('deposits.nameClient', 'ilike', "%" . $request->searchNameClient . "%" );
+
+        if(!empty($request->selectCoin) && $request->selectCoin != "Selecionar Moneda")
+            $deposits->where('deposits.coin', $request->selectCoin);
+        
+        if(!empty($request->startDate) && !empty($request->endDate))
+            $deposits->where('deposits.date', ">=",$request->startDate)
+                        ->where('deposits.date', "<=",$request->endDate);
+
+        $deposits = $deposits->get();
+        
+        $statusMenu = "reportPayment";
+        return view('admin.reportPayment', compact('deposits', 'searchNameCompany', 'selectCoin', 'selectPayment', 'startDate', 'endDate', 'numRef', 'statusMenu'));
     }
 }

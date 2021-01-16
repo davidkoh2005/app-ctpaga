@@ -86,3 +86,42 @@ table {
 .show{
     display:show !important;
 }
+
+.card-Balance, .card-Report, .card-Balance .card-header, .card-Report .card-header{
+    background-color: #e6e6e6 !important;
+}
+
+.submit { 
+    width: 100%;
+    border-radius: 60px;
+    font-size: large;
+    background-color: #00cc5f !important;
+    color: white;
+}
+
+.submit:hover {
+    background-color: white !important;
+    border: 2px solid #00cc5f;
+    color: #00cc5f;
+}
+
+.input-group-addon{
+    color: white !important;
+    background-color: #00cc5f !important;
+    padding-top: 6px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+}
+
+.remove-balance, .remove-report { 
+    width: 100% !important;
+    border-radius: 60px !important;
+    background-color: red !important;
+    color: white!important;
+}
+
+.remove-balance:hover, .remove-report:hover  {
+    background-color: white !important;
+    border: 2px solid red !important;
+    color: red !important;
+}

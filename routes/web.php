@@ -39,12 +39,15 @@ Route::post('logout/', 'AdminController@logout')->name('logout');
 
 Route::group(['middleware'=>'web'], function() {
     Route::get('/inicio/', 'CommerceController@dashboard')->name('commerce.dashboard');
+    Route::post('/transacciones', 'CommerceController@transactions')->name('commerce.transactions');
+    Route::get('/transacciones', 'CommerceController@transactions')->name('commerce.transactions');
 });
 
 Route::group(['middleware'=>'admin'], function() {
     Route::get('/admin/', 'AdminController@dashboard')->name('admin.dashboard');
     Route::post('/admin/dataGraphic', 'AdminController@dataGraphic')->name('admin.dataGraphic');
     Route::get('/admin/depositos', 'AdminController@index')->name('admin.balance');
+    Route::post('/admin/depositos', 'AdminController@index')->name('admin.balance');
     Route::get('/admin/comerciantes', 'AdminController@commerces')->name('admin.commerces');
     Route::get('/admin/comerciantes/{id}', 'AdminController@commercesShow')->name('admin.commercesShow');
     Route::post('/admin/transacciones', 'AdminController@transactions')->name('admin.transactionsSearch');
@@ -53,6 +56,8 @@ Route::group(['middleware'=>'admin'], function() {
     Route::get('/admin/transaccionesShow/', 'AdminController@transactionsShow')->name('admin.transactionsShow');
     Route::get('/admin/depositos/{id}', 'AdminController@show')->name('admin.show');
     Route::post('/admin/payment', 'AdminController@showPayment')->name('admin.showPayment');
+    Route::get('/admin/reportPayment', 'AdminController@reportPayment')->name('admin.reportPayment');
+    Route::post('/admin/reportPayment', 'AdminController@reportPayment')->name('admin.reportPayment');
 });
 
 Route::post('/admin/removePicture', 'AdminController@removePicture')->name('admin.removePicture');

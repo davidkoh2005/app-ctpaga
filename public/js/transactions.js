@@ -26,9 +26,15 @@ $(document).ready( function () {
         },
     });
 
+    var date = new Date();
+    date.setMonth(date.getMonth()-3);
+    date.setDate(1);
+
     $('.input-daterange').datepicker({
-        endDate: "date.today()",
+        startDate: date,
+        endDate: new Date(),
         language: "es",
+        todayHighlight: true,
     });
 });
 $(".main-panel").perfectScrollbar('update');

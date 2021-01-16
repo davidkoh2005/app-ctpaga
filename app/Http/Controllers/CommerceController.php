@@ -6,6 +6,7 @@ use Session;
 use App\User;
 use App\Paid;
 use App\Commerce;
+use App\Picture;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -38,13 +39,38 @@ class CommerceController extends Controller
         }elseif (!Auth::guard('web')->check() && Auth::guard('admin')->check()){
             return redirect(route('admin.dashboard'));
         }
-        
+
+        $commercesUser = Commerce::where('user_id', Auth::guard('web')->id())
+                                ->orderBy('name', 'asc')->get();
+
         $totalShopping = 0;
         $totalShoppingStripe = 0;
         $totalShoppingSitef = 0;
+        $idCommerce = 0;
+        
+        if($request->all()){
+            $idCommerce = $request->commerceId;
+        }else if(session()->get('commerce_id')){
+            $idCommerce = session()->get('commerce_id');
+        }else{
+            $commerceFirst = Commerce::where('user_id', Auth::guard('web')->id())
+                            ->orderBy('name', 'asc')->first();
+            $idCommerce = $commerceFirst->id;
+        }
+
+        session()->put('commerce_id', $idCommerce);
+        
+
+        $pictureUser = Picture::where('user_id', Auth::guard('web')->id())
+                                ->where('commerce_id',$idCommerce)
+                                ->where('description','Profile')->first();
+
+        $commerceName = Commerce::whereId($idCommerce)->first()->name;
+
 
         $paidAll = Paid::where("date", 'like', "%".Carbon::now()->format('Y-m-d')."%")
-                        ->whereId(Auth::guard('web')->id())->get();
+                        ->where("commerce_id", $idCommerce)->get();
+
         foreach ($paidAll as $paid)
         {
             $totalShopping += 1;
@@ -56,7 +82,82 @@ class CommerceController extends Controller
         }
 
         $statusMenu = "dashboard";
-        return view('auth.dashboard',compact("totalShopping", "totalShoppingStripe", "totalShoppingSitef", "statusMenu"));
+        return view('auth.dashboard',compact("totalShopping", "totalShoppingStripe", "totalShoppingSitef", "statusMenu", "commercesUser", "pictureUser", "commerceName", "idCommerce"));
         
+    }
+
+    public function transactions(Request $request)
+    {
+        $searchNameCompany="";
+        $searchNameClient="";
+        $selectCoin="Selecionar Moneda";
+        $selectPayment="Selecionar Tipo de Pago";
+        $startDate="";
+        $endDate="";
+
+        if($request->all()){
+            $idCommerce = $request->commerceId;
+        }else if(session()->get('commerce_id')){
+            $idCommerce = session()->get('commerce_id');
+        }
+
+        session()->put('commerce_id', $idCommerce);
+            
+        $commerce = Commerce::whereId($idCommerce)->first();
+        $companyName = $commerce->name;
+
+        $commercesUser = Commerce::where('user_id', Auth::guard('web')->id())
+                                ->orderBy('name', 'asc')->get();
+
+        $pictureUser = Picture::where('user_id', Auth::guard('web')->id())
+                                ->where('commerce_id',$idCommerce)
+                                ->where('description','Profile')->first();
+
+        $commerceName = $commerce->name;
+
+        $transactions = Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
+                    ->where('paids.commerce_id', 'like', "%".$idCommerce. "%" )
+                    ->orderBy('paids.id', 'desc')
+                    ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.coin', 'paids.total',
+                        'paids.date', 'paids.nameCompanyPayments');
+
+        if($request->all()){
+            $searchNameCompany=$request->searchNameCompany;
+            $searchNameClient=$request->searchNameClient;
+            $selectCoin=$request->selectCoin;
+            $selectPayment=$request->selectPayment;
+            $startDate=$request->startDate;
+            $endDate=$request->endDate;
+        }
+
+
+        if(!empty($request->idCommerce))
+            $transactions->where('commerces.id', $idCommerce); 
+
+        if(!empty($request->searchNameCompany))
+            $transactions->where('commerces.name', 'ilike', "%" . $request->searchNameCompany . "%" );
+        
+        if(!empty($request->searchNameClient))
+            $transactions->where('paids.nameClient', 'ilike', "%" . $request->searchNameClient . "%" );
+
+        if(!empty($request->selectCoin) && $request->selectCoin != "Selecionar Moneda")
+            $transactions->where('paids.coin', $request->selectCoin);
+        
+        if(!empty($request->selectPayment) && $request->selectPayment != "Selecionar Tipo de Pago"){
+            if($request->selectPayment == "Tienda Web")
+                $transactions->where('paids.nameCompanyPayments', "Stripe")->orWhere('paids.nameCompanyPayments',  "E-sitef" );
+            else
+                $transactions->where('paids.nameCompanyPayments',  'ilike', "%" . $request->selectPayment . "%" );
+        }
+
+        if(!empty($request->startDate) && !empty($request->endDate))
+            $transactions->where('paids.date', ">=",$request->startDate)
+                        ->where('paids.date', "<=",$request->endDate);
+
+        $transactions = $transactions->get();
+
+        $statusMenu = "transactions";
+        return view('auth.transactions', compact('transactions', 'searchNameCompany', 'searchNameClient', 'selectCoin', 'selectPayment', 'startDate', 'endDate', 'statusMenu', "commercesUser", "pictureUser", "commerceName", 'idCommerce', 'companyName'));
+
     }
 }

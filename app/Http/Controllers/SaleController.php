@@ -29,8 +29,8 @@ class SaleController extends Controller
             return redirect()->route('welcome');
         else if($sales[0]->commerce_id != $commerce->id)
             return redirect()->route('welcome');
-
-        if($sales[0]->statusSale == 1 || Carbon::now() < $sales[0]->expires_at)
+            
+        if($sales[0]->statusSale == 1 || Carbon::now() > $sales[0]->expires_at)
             return redirect()->route('form.store', ['userUrl' => $userUrl]);
 
 
