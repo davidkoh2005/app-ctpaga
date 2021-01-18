@@ -55,6 +55,12 @@
                 <p>Transacciones</p>
               </a>
             </li>
+            <li class="nav-item" id="nav-depositHistory">
+              <a class="nav-link" href="{{route('commerce.depositHistory')}}">
+                <i class="material-icons">description</i>
+                <p>Historial de Depositos</p>
+              </a>
+            </li>
           @endif
           <li class="nav-item active-pro">
             <a class="nav-link" href="{{route('logout')}}">

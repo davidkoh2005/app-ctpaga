@@ -49,7 +49,7 @@
                         <div class="button-circle">
                             <ul>
                                 <li> <a href="https://api.whatsapp.com/send/?phone={{$whatsappNum}}"> <i class="fa fa-whatsapp" aria-hidden="true"></i><p>Whatsapp</p></a></li>
-                                @if($statusShipping)<li> <a href="#"> <i class="fa fa-truck button-shipping" aria-hidden="true"></i><p class="shipping">Envíos</p></a> </li>@endif
+                                @if($statusShipping)<li> <a class ="button-shipping" href="javascript:;"> <i class="fa fa-truck" aria-hidden="true"></i><p class="shipping">Envíos</p></a> </li>@endif
                             </ul>
                         </div>
                         <div class="row">&nbsp;</div>

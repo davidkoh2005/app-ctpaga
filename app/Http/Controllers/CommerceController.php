@@ -6,6 +6,7 @@ use Session;
 use App\User;
 use App\Paid;
 use App\Commerce;
+use App\Deposits;
 use App\Picture;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
@@ -96,8 +97,8 @@ class CommerceController extends Controller
         $searchNameClient="";
         $selectCoin="Selecionar Moneda";
         $selectPayment="Selecionar Tipo de Pago";
-        $startDate="";
-        $endDate="";
+        $startDate = "";
+        $endDate = "";
         $idCommerce = 0;
         $companyName = "";
         $commerceName = "";
@@ -167,5 +168,109 @@ class CommerceController extends Controller
         $statusMenu = "transactions";
         return view('auth.transactions', compact('transactions', 'searchNameCompany', 'searchNameClient', 'selectCoin', 'selectPayment', 'startDate', 'endDate', 'statusMenu', "commercesUser", "pictureUser", "commerceName", 'idCommerce', 'companyName'));
 
+    }
+
+    public function depositHistory(Request $request)
+    {
+        $selectCoin = 0;
+        $idCommerce = 0;
+        $companyName = "";
+        $commerceName = "";
+        $startDate = "";
+        $endDate = "";
+        $historyAll = array();
+        
+        if($request->all()){
+            $selectCoin=$request->selectCoin? $request->selectCoin : 0;
+            $startDate=$request->startDate;
+            $endDate=$request->endDate;
+        }
+
+
+        if($request->commerceId){
+            $idCommerce = $request->commerceId;
+        }else if(session()->get('commerce_id')){
+            $idCommerce = session()->get('commerce_id');
+        }else{
+            $commerceFirst = Commerce::where('user_id', Auth::guard('web')->id())
+                            ->orderBy('name', 'asc')->first();
+            if($commerceFirst)
+                $idCommerce = $commerceFirst->id;
+        }
+
+
+        session()->put('commerce_id', $idCommerce);
+        
+        $commercesUser = Commerce::where('user_id', Auth::guard('web')->id())
+                                ->orderBy('name', 'asc')->get();
+
+        $pictureUser = Picture::where('user_id', Auth::guard('web')->id())
+                                ->where('commerce_id',$idCommerce)
+                                ->where('description','Profile')->first();
+
+        $commerceData = Commerce::whereId($idCommerce)->first();
+        if($commerceData)
+            $commerceName = $commerceData->name;
+    
+        $historyPaids = Paid::where("commerce_id", $idCommerce)
+                            ->where("coin", $selectCoin)
+                            ->orderBy('date', 'asc')
+                            ->select("date", "total")
+                            ->where("date", ">=", Carbon::now()->subMonth(3));
+
+        if($selectCoin == 0)
+            $historyPaids = $historyPaids->where("nameCompanyPayments", "Stripe")->get();
+        else
+            $historyPaids = $historyPaids->where("nameCompanyPayments", "E-sitef")->get();
+
+        $historyDeposits = Deposits::where("commerce_id", $idCommerce)
+                                ->where("coin", $selectCoin)
+                                ->select("date", "total", "numRef")
+                                ->where("date", ">=", Carbon::now()->subMonth(3))
+                                ->orderBy('date', 'asc')->get();
+
+        $total = 0.00;
+        if(count($historyPaids)>0)
+        {
+            $dateStart = Carbon::parse($historyPaids[0]->date)->subDays(1);
+            $dateFinal = Carbon::parse($historyPaids[0]->date);
+            $startDate = Carbon::parse($historyPaids[0]->date)->format('Y-m-d');
+            $endDate = Carbon::now()->format('Y-m-d');
+            foreach ($historyPaids as $history)
+            {
+
+                if($dateFinal->diffInDays(Carbon::parse($history->date)) == 0 )
+                {
+                    $total += floatval($history->total); 
+                }else{
+                    array_push($historyAll, array("total"=>$total, "date" => $dateFinal->format('Y-m-d'), "numRef" => ""));
+                    
+                    foreach ($historyDeposits as $deposits)
+                    {
+                        $dateFinal = Carbon::parse($history->date);
+                        if(Carbon::parse($deposits->date)->greaterThan($dateStart) && Carbon::parse($deposits->date)->lessThan($dateFinal))
+                        {
+                            array_push($historyAll, array("total"=>'-'.$deposits->total, "date" => $dateFinal->format('Y-m-d'), "numRef"=>$deposits->numRef));
+                            $dateStart = Carbon::parse($history->date);
+                        }
+                    }
+
+                    $total = floatval($history->total);
+                }
+            }
+
+            array_push($historyAll, array("total"=>$total, "date" => $dateFinal->format('Y-m-d'), "numRef" => ""));
+            foreach ($historyDeposits as $deposits)
+            {
+                if(Carbon::parse($deposits->date)->greaterThan($dateStart) && Carbon::parse($deposits->date)->lessThanOrEqualto(Carbon::now()))
+                {
+                    array_push($historyAll, array("total"=>'-'.$deposits->total, "date" => $dateFinal->format('Y-m-d'), "numRef"=>$deposits->numRef));
+                }
+            }
+        }
+        
+        
+        $statusMenu = "depositHistory";
+        return view('auth.depositHistory',compact("historyAll" ,'selectCoin', 'selectPayment', 'startDate', 'endDate' ,"statusMenu", "commercesUser", "pictureUser", "commerceName", "idCommerce"));
     }
 }

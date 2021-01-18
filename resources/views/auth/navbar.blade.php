@@ -31,8 +31,10 @@
                     @foreach ($commercesUser as $commerceUser)   
                       @if($statusMenu == "dashboard")  
                         <a class="dropdown-item" href="{{route('commerce.dashboard', ['commerceId' => $commerceUser->id])}}">{{$commerceUser->name}}</a>
-                      @else
+                      @elseif($statusMenu == "transactions")  
                         <a class="dropdown-item" href="{{route('commerce.transactions', ['commerceId' => $commerceUser->id])}}">{{$commerceUser->name}}</a>
+                      @elseif($statusMenu == "depositHistory")  
+                        <a class="dropdown-item" href="{{route('commerce.depositHistory', ['commerceId' => $commerceUser->id])}}">{{$commerceUser->name}}</a>
                       @endif
                     @endforeach
                 </div>

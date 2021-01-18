@@ -312,6 +312,27 @@ div#card_number, div#card_expiry, div#card_cvc{
     outline: 2px solid #f00;
 } 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* style transactions */
 .card-Transactions, .card-Transactions .card-header{
     background-color: #e6e6e6 !important;
@@ -350,4 +371,34 @@ div#card_number, div#card_expiry, div#card_cvc{
 
 .btnTransaction {
     padding: 12px 12px !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* style depositHistory */
+.received {
+    color: green;
+    font-weight: bold;
+}
+
+.deposit {
+    color: red;
+    font-weight: bold;
+}
+
+.depositNumRef {
+    color: black;
+    font-weight: bold;
 }

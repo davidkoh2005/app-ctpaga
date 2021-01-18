@@ -11,5 +11,7 @@ $(document).ready( function () {
         $("#title-navbar").html("Transacciones");
     else if(statusMenu == "reportPayment")
         $("#title-navbar").html("Reporte Depósitos");
+    else if(statusMenu == "depositHistory")
+    $("#title-navbar").html("Historial de Depositos");
     
 });

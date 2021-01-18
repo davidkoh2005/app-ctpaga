@@ -20,7 +20,7 @@ Route::fallback(function () {
     return redirect()->route('welcome');
 });
 
-Route::get('sockets/serve', function(){
+Route::get('activate/sockets', function(){
     \Illuminate\Support\Facades\Artisan::call('websockets:serve');
 });
 
@@ -41,6 +41,8 @@ Route::group(['middleware'=>'web'], function() {
     Route::get('/inicio/', 'CommerceController@dashboard')->name('commerce.dashboard');
     Route::post('/transacciones', 'CommerceController@transactions')->name('commerce.transactions');
     Route::get('/transacciones', 'CommerceController@transactions')->name('commerce.transactions');
+    Route::get('/historial', 'CommerceController@depositHistory')->name('commerce.depositHistory');
+    Route::post('/historial', 'CommerceController@depositHistory')->name('commerce.depositHistory');
 });
 
 Route::group(['middleware'=>'admin'], function() {

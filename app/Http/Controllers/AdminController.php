@@ -48,7 +48,8 @@ class AdminController extends Controller
         }
 
         $statusMenu = "dashboard";
-        return view('auth.dashboard',compact("totalShopping", "totalShoppingStripe", "totalShoppingSitef", "statusMenu"));
+        $idCommerce = 0;
+        return view('auth.dashboard',compact("totalShopping", "totalShoppingStripe", "totalShoppingSitef", "statusMenu", 'idCommerce'));
     }
 
     public function dataGraphic(Request $request)
