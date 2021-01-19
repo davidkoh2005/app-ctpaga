@@ -8,6 +8,7 @@
                     </button>
                 </div>              
                 <div class="modal-body">
+                @if($statusID)
                     <label><strong>Datos del Bancaria:</strong></label>
                     <div class="dataPay">
                         @if($balance->coin == 0)
@@ -34,8 +35,9 @@
                     </div>
                     <div class="row">&nbsp;</div>
                     <div class="row">&nbsp;</div>
+                @endif
                     <label><strong>Datos del Pago:</strong></label>
-                    <div class="dataPay">
+                    <div class="dataPay has-success">
                         <div class="row g-3 align-items-center">
                             <div class="col-auto">
                                 <label for="refPay" classs="col-form-label">Nº Referencia del Pago:</label>
@@ -44,6 +46,7 @@
                                 <input type="tel" name="numRef"  id="numRef" class="form-control" placeholder="123456789" />
                             </div>
                         </div>
+                        @if($statusID)
                         <div class="row">&nbsp;</div>
                         <div class="row g-3 align-items-center">
                             <div class="col-auto">
@@ -56,6 +59,7 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
                     </div>              
                 </div>
                 <div class="modal-footer">
@@ -72,8 +76,6 @@
         </div>
     </div>
     <script>
-        var idBalance = {{$balance->id}};
-        var totalBalance = {{$balance->total}};
         $(document).ready( function () {
             $('#submit').on('click', function() {
                 var status = true;
@@ -90,7 +92,7 @@
                     $('#loading').addClass("show");
                     $.ajax({
                         url: "{{route('admin.saveDeposits')}}", 
-                        data: {"id" : idBalance, "numRef": numRef, "total": totalBalance},
+                        data: {"numRef": numRef},
                         type: "POST",
                     }).done(function(result){
                         $('#payModal').modal('hide');  

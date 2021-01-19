@@ -54,6 +54,7 @@
             <table id="table_id" class="table table-bordered mb-5 display">
                 <thead>
                     <tr class="table-title">
+                        <th scope="col"><input type="checkbox" class="selectAll" id="selectAllCheck-Payment" name="selectAllCheck-Payment"></th>
                         <th scope="col">#</th>
                         <th scope="col">Nombre Compañia</th>
                         <th scope="col">Moneda</th>
@@ -64,12 +65,13 @@
                 <tbody>
                     @foreach($balances as $balance)
                     <tr>
-                        <th scope="row">{{ $balance->id }}</th>
+                        <td><input type="checkbox" class="check-Payment" data-id="{{ $balance->id }}"></td>
+                        <td>{{ $balance->id }}</td>
                         <td>{{ $balance->name }}</td>
                         <td>@if($balance->coin == 0 )  USD @else Bs @endif</td>
                         <td>@if($balance->coin == 0 )  $ @else Bs @endif {{ $balance->total }}</td>
                         <td>
-                            <botton class="pay btn btn-bottom" onclick="showDataPayment({{$balance->id}})" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Pagar Comerciante"><i class="material-icons">payment</i></botton>
+                            <botton class="pay btn btn-bottom" onclick="showDataPayment({{$balance->id}}, true)" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Pagar Comerciante"><i class="material-icons">payment</i></botton>
                             <a class="btn btn-bottom" href="{{route('admin.transactionsSearchId', ['id' => $balance->commerce_id])}}" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Transacciones"><i class="material-icons">description</i></a>
                             <a class="btn btn-bottom" href="" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Generar reporte de pago"><i class="material-icons">get_app</i></a>
                         </td>
@@ -77,29 +79,57 @@
                     @endforeach
                 </tbody>
             </table>
+
+            <div class="row">&nbsp;</div>
+            <div class="row">
+                <div class="col-3" style="top:12px;">
+                    <input type="checkbox" class="selectAll" id="selectAllCheck-Payment" name="selectAllCheck-Payment"> Seleccionar Todos 
+                </div>
+                <div class="col-4">
+                <strong>Acciones:</strong> &nbsp;&nbsp;&nbsp; <botton class="pay btn btn-bottom" onclick="showDataPayment(0, false)" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Pagar todos Comerciantes con Banco de Venezuela"><i class="material-icons">payment</i></botton>
+                </div>
+            </div>
         </div>
     </div>
     <div id="showPayment"></div>
     @include('admin.bookshopBottom')
     <script> 
+        var rowSelect;
         var statusMenu = "{{$statusMenu}}";
         var selectCoin = '{{$selectCoin}}';
         $("#selectCoin option[value='"+ selectCoin +"']").attr("selected",true);
 
-        function showDataPayment(id)
+        function showDataPayment(id, status)
         {
-            $.ajax({
-                url: "{{route('admin.showPayment')}}", 
-                data: {"id" : id},
-                type: "POST",
-            }).done(function(data){
-                console.log(data);
-                $('#showPayment').html(data.html);
-                $('#payModal').modal('show'); 
-            }).fail(function(result){
-                $('#payModal').modal('hide'); 
-                $('#showPayment').html();
-            });
+            var selectID = [];
+            if(!status){
+                $("input:checked.check-Payment").each(function () {
+                    var id = $(this).data("id");
+                    selectID.push(id);
+                });
+            }else{
+                selectID.push(id);
+            }
+
+            if(selectID.length >0)
+                $.ajax({
+                    url: "{{route('admin.showPayment')}}", 
+                    data: {"selectId" : selectID, "status" : status },
+                    type: "POST",
+                }).done(function(data){
+                    if(data.status == 1)
+                    {
+                        alertify.error('Selección incorrecto, valido solo para cuenta de Venezuela');
+                    }else{
+                        $('#showPayment').html(data.html);
+                        $('#payModal').modal('show'); 
+                    }
+                }).fail(function(result){
+                    $('#payModal').modal('hide'); 
+                    $('#showPayment').html();
+                }); 
+            else
+                alertify.error('Debe seleccionar depositos');
         }
 
         $(document).ready( function () {
@@ -126,6 +156,18 @@
                     }
                 },
             });           
+
+            $(".selectAll").on( "click", function(e) {
+                $('input:checkbox').prop('checked', this.checked);  
+            });
+
+            $('input:checkbox').on( "click", function(e) {
+                if($(".check-Payment").length == $(".check-Payment:checked").length) { 
+                    $(".selectAll").prop("checked", true);
+                }else {
+                    $(".selectAll").prop("checked", false);            
+                }
+            });
         });
         $(".main-panel").perfectScrollbar('update');
     </script>

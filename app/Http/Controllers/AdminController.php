@@ -24,6 +24,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class AdminController extends Controller
 {
+   
     public function dashboard(Request $request)
     {
         if (!Auth::guard('web')->check() && !Auth::guard('admin')->check()){
@@ -32,7 +33,6 @@ class AdminController extends Controller
             return redirect(route('commerce.dashboard'));
         }
 
-        
         $totalShopping = 0;
         $totalShoppingStripe = 0;
         $totalShoppingSitef = 0;
@@ -91,11 +91,14 @@ class AdminController extends Controller
 
     public function index(Request $request)
     {
+        if (!Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('admin.login'));
+        }elseif (Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('commerce.dashboard'));
+        }
+
         $selectCoin="Selecionar Moneda";
         $balances = array();
-        if (!Auth::guard('admin')->check()) {
-            return redirect()->route('admin.login');
-        }
 
         $balancesAll = DB::table('balances')
                 ->join('commerces', 'commerces.id', '=', 'balances.commerce_id')
@@ -176,6 +179,12 @@ class AdminController extends Controller
 
     public function show($id)
     {
+        if (!Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('admin.login'));
+        }elseif (Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('commerce.dashboard'));
+        }
+
         $commerce = Commerce::where("id", $id)->first();
         $user = User::where("id", $commerce->user_id)->first();
         $pictures = Picture::where('user_id', $user->id)
@@ -210,28 +219,38 @@ class AdminController extends Controller
 
     public function saveDeposits(Request $request)
     {
-        $balance = Balance::where('id', $request->id)->first();
-        $total = $request->total;
-        $balance->total -= $request->total;
-        $balance->save(); 
+        foreach (Session::get('dataSelectID') as $id)
+        {
 
-        Deposits::create([
-            "user_id"       => $balance->user_id,
-            "commerce_id"   => (int)$balance->commerce_id,
-            "coin"          => $balance->coin,
-            "total"         => $total,
-            "numRef"        => $request->numRef,
-            "date"          => Carbon::now(),
-        ]);
+            $balance = Balance::where('id', $id['id'])->first();
+            $balance->total -= $id['total'];
+            $balance->save(); 
+
+            Deposits::create([
+                "user_id"       => $balance->user_id,
+                "commerce_id"   => (int)$balance->commerce_id,
+                "coin"          => $balance->coin,
+                "total"         => $id['total'],
+                "numRef"        => $request->numRef,
+                "date"          => Carbon::now(),
+            ]);
+        }
+
+        Session::forget('dataSelectID');
 
         return response()->json([
             'status' => 201
         ]);
-        
     }
 
     public function commerces(Request $request)
     {
+        if (!Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('admin.login'));
+        }elseif (Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('commerce.dashboard'));
+        }
+
         $commerces = Commerce::all()
                     ->whereNotNull("name")
                     ->whereNotNull("rif")
@@ -246,6 +265,12 @@ class AdminController extends Controller
 
     public function commercesShow($id)
     {
+        if (!Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('admin.login'));
+        }elseif (Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('commerce.dashboard'));
+        }
+
         $commerce = Commerce::where('id', $id)->first();
         $user = User::where('id',$commerce->user_id)->first();
         $transactions = Paid::where('commerce_id', $id)->orderBy('date', 'asc')->get();
@@ -256,6 +281,12 @@ class AdminController extends Controller
 
     public function transactions(Request $request)
     {
+        if (!Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('admin.login'));
+        }elseif (Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('commerce.dashboard'));
+        }
+
         $searchNameCompany="";
         $searchNameClient="";
         $selectCoin="Selecionar Moneda";
@@ -330,24 +361,75 @@ class AdminController extends Controller
 
     public function showPayment(Request $request)
     {
-        $balance = Balance::where('id', $request->id)->first();
-        $commerce = Commerce::where("id", $balance->commerce_id)->first();
-        $user = User::where("id", $commerce->user_id)->first();
-        
-        if($balance->coin == 0)
-            $coin = "USD";
-        else
-            $coin = "Bs";
+        $balance = null;
+        $commerce = null;
+        $user = null;
+        $coin = "";    
+        $bank = null;
+        $selectId = $request->selectId;
+        $dataId = [];
+        if($request->status == "true")
+        {
+            $statusID = true;
+            $balance = Balance::where('id', $selectId[0])->first();
+            $commerce = Commerce::where("id", $balance->commerce_id)->first();
+            $user = User::where("id", $commerce->user_id)->first();
+            
+            if($balance->coin == 0)
+                $coin = "USD";
+            else
+                $coin = "Bs";
 
-        $bank = Bank::where('user_id', $user->id)
-                    ->where('coin', $coin)->first();
-        
-        $returnHTML=view('admin.modal.dataPayment', compact('balance', 'commerce', 'user', 'bank'))->render();
-        return response()->json(array('html'=>$returnHTML));
+            $bank = Bank::where('user_id', $user->id)
+                        ->where('coin', $coin)->first();
+            
+            $dataId = array(
+                "id" => $balance->id,
+                "total" => $balance->total,
+            );
+        }else{
+            $statusID = false;
+            $countUSD = 0;
+            $countBS = 0;
+            foreach ($selectId as $id)
+            {
+                $balance = Balance::where('id', $id)->first();
+                if($balance->coin == 0)
+                    $countUSD += 1;
+                else
+                    $countBS +=1;
+
+                array_push($dataId, array(
+                    "id" => $balance->id,
+                    "total" => $balance->total,
+                ));
+            }
+            Session::put('dataSelectID', $dataId);          
+
+            if($countUSD == 0 && $countBS >0)
+            {
+                $returnHTML=view('admin.modal.dataPayment', compact('balance', 'commerce', 'user', 'bank', 'statusID'))->render();
+                return response()->json(array('html'=>$returnHTML, 'status' => 0));
+            }else{
+                $returnHTML=view('admin.modal.dataPayment', compact('balance', 'commerce', 'user', 'bank', 'statusID'))->render();
+                return response()->json(array('html'=>$returnHTML, 'status' => 1));
+            }
+        }
+
+        Session::put('dataSelectID', $dataId);
+
+        $returnHTML=view('admin.modal.dataPayment', compact('balance', 'commerce', 'user', 'bank', 'statusID'))->render();
+        return response()->json(array('html'=>$returnHTML, 'status' => 0));
     }
 
     public function reportPayment(Request $request)
     {
+        if (!Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('admin.login'));
+        }elseif (Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('commerce.dashboard'));
+        }
+
         $searchNameCompany="";
         $numRef="";
         $selectCoin="Selecionar Moneda";

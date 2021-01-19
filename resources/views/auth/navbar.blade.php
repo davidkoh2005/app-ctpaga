@@ -13,8 +13,8 @@
           @if(Auth::guard('web')->check())
           <div class="collapse navbar-collapse justify-content-end">
             <ul class="navbar-nav">
-              <li class="nav-item dropdown">
-                <a class="nav-link" href="javascript:;" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <li class="nav-item dropdown" style="cursor: pointer;">
+                <a class="nav-link" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="row px-3"> 
                   @if($pictureUser)
                     <img class="mr-3 profile-pic" src="{{$pictureUser->url}}">

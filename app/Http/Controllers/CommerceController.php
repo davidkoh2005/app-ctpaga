@@ -93,6 +93,12 @@ class CommerceController extends Controller
 
     public function transactions(Request $request)
     {
+        if (!Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('commerce.login'));
+        }elseif (!Auth::guard('web')->check() && Auth::guard('admin')->check()){
+            return redirect(route('admin.dashboard'));
+        }
+
         $searchNameCompany="";
         $searchNameClient="";
         $selectCoin="Selecionar Moneda";
@@ -172,6 +178,12 @@ class CommerceController extends Controller
 
     public function depositHistory(Request $request)
     {
+        if (!Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('commerce.login'));
+        }elseif (!Auth::guard('web')->check() && Auth::guard('admin')->check()){
+            return redirect(route('admin.dashboard'));
+        }
+
         $selectCoin = 0;
         $idCommerce = 0;
         $companyName = "";

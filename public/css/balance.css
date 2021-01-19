@@ -125,3 +125,7 @@ table {
     border: 2px solid red !important;
     color: red !important;
 }
+
+.ajs-message {
+    color: white !important;
+}
