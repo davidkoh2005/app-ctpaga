@@ -12,6 +12,8 @@ $(document).ready( function () {
     else if(statusMenu == "reportPayment")
         $("#title-navbar").html("Reporte Depósitos");
     else if(statusMenu == "depositHistory")
-    $("#title-navbar").html("Historial de Depositos");
+        $("#title-navbar").html("Historial de Depositos");
+    else if(statusMenu == "rateHistory")
+        $("#title-navbar").html("Tasa Historial");
     
 });

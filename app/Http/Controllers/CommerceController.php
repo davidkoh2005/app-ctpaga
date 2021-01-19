@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Session;
 use App\User;
 use App\Paid;
+use App\Rate;
 use App\Commerce;
 use App\Deposits;
 use App\Picture;
@@ -284,5 +285,64 @@ class CommerceController extends Controller
         
         $statusMenu = "depositHistory";
         return view('auth.depositHistory',compact("historyAll" ,'selectCoin', 'selectPayment', 'startDate', 'endDate' ,"statusMenu", "commercesUser", "pictureUser", "commerceName", "idCommerce"));
+    }
+
+    public function rate(Request $request)
+    {
+        if (!Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('commerce.login'));
+        }elseif (!Auth::guard('web')->check() && Auth::guard('admin')->check()){
+            return redirect(route('admin.dashboard'));
+        }
+
+        $idCommerce = 0;
+        $companyName = "";
+        $commerceName = "";
+        $startDate = "";
+        $endDate = "";
+        
+        if($request->all()){
+            $selectCoin=$request->selectCoin? $request->selectCoin : 0;
+            $startDate=$request->startDate;
+            $endDate=$request->endDate;
+        }
+
+
+        if($request->commerceId){
+            $idCommerce = $request->commerceId;
+        }else if(session()->get('commerce_id')){
+            $idCommerce = session()->get('commerce_id');
+        }else{
+            $commerceFirst = Commerce::where('user_id', Auth::guard('web')->id())
+                            ->orderBy('name', 'asc')->first();
+            if($commerceFirst)
+                $idCommerce = $commerceFirst->id;
+        }
+
+
+        session()->put('commerce_id', $idCommerce);
+        
+        $commercesUser = Commerce::where('user_id', Auth::guard('web')->id())
+                                ->orderBy('name', 'asc')->get();
+
+        $pictureUser = Picture::where('user_id', Auth::guard('web')->id())
+                                ->where('commerce_id',$idCommerce)
+                                ->where('description','Profile')->first();
+
+        $commerceData = Commerce::whereId($idCommerce)->first();
+        if($commerceData)
+            $commerceName = $commerceData->name;
+    
+
+        $rates = Rate::where('user_id', Auth::guard('web')->id())->orderBy('date', 'desc');
+        
+        if(!empty($request->startDate) && !empty($request->endDate))
+            $rates = $rates->where('date', ">=",$request->startDate)
+                        ->where('date', "<=",$request->endDate);
+
+        $rates = $rates->get();
+        
+        $statusMenu = "rateHistory";
+        return view('auth.rateHistory',compact("rates", 'startDate', 'endDate' ,"statusMenu", "commercesUser", "pictureUser", "commerceName", "idCommerce")); 
     }
 }

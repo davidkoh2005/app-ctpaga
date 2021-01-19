@@ -26,6 +26,56 @@ $(document).ready( function () {
         },
     });
 
+    
+
+    $('#table_Rate').DataTable({
+        "ordering": false,
+        language: {
+            "decimal": "",
+            "emptyTable": "No hay información",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Tasas",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Tasas",
+            "infoFiltered": "(Filtrado de _MAX_ total Tasas)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Tasas",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        },
+    });
+
+    $('#table_Deposits').DataTable({
+        "ordering": false,
+        language: {
+            "decimal": "",
+            "emptyTable": "No hay información",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Depositos",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Depositos",
+            "infoFiltered": "(Filtrado de _MAX_ total Depositos)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Depositos",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        },
+    });
+
     var date = new Date();
     date.setMonth(date.getMonth()-3);
     date.setDate(1);

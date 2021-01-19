@@ -262,8 +262,14 @@ class SaleController extends Controller
                             ->where('commerce_id', $commerce->id)
                             ->where('publish', 1)->orderBy('name', 'asc')->get();
 
-        $whatsappNum = env('WHATSAPP_NUM');
+        $whatsappNum = $this->validateNum($user->phone);
         return view('store', compact('userUrl','commerce','picture','coinClient', 'shippings', 'rate', 'statusShipping', 'whatsappNum'));
+    }
+
+    public function validateNum($phone)
+    {
+        $phone = substr($phone, 1, strlen($phone));
+        return "58".$phone;
     }
 
     public function showCategories(Request $request)

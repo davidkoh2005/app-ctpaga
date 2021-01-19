@@ -1,5 +1,5 @@
   <div class="wrapper ">
-    <div class="sidebar" data-color="green" data-background-color="white" data-image="../images/logo/logo.png">
+    <div class="sidebar" data-color="green" data-background-color="white">
       <!--
         Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
 
@@ -53,6 +53,12 @@
               <a class="nav-link" href="{{route('commerce.transactions')}}">
                 <i class="material-icons">description</i>
                 <p>Transacciones</p>
+              </a>
+            </li>
+            <li class="nav-item" id="nav-rateHistory">
+              <a class="nav-link" href="{{route('commerce.rate')}}">
+              <i class="material-icons">attach_money</i>
+                <p>Tasas</p>
               </a>
             </li>
             <li class="nav-item" id="nav-depositHistory">

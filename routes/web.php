@@ -25,10 +25,22 @@ Route::get('activate/sockets', function(){
 });
 
 Route::get('/admin/login', function () {
+    if (Auth::guard('web')->check()){
+        return redirect(route('commerce.dashboard'));
+    }elseif (Auth::guard('admin')->check()){
+        return redirect(route('admin.dashboard'));
+    }
+
     return view('auth.login')->with('type', 0);
 })->name('admin.login');
 
 Route::get('/login', function () {
+    if (Auth::guard('web')->check()){
+        return redirect(route('commerce.dashboard'));
+    }elseif (Auth::guard('admin')->check()){
+        return redirect(route('admin.dashboard'));
+    }
+
     return view('auth.login')->with('type', 1);
 })->name('commerce.login');
 
@@ -43,6 +55,8 @@ Route::group(['middleware'=>'web'], function() {
     Route::get('/transacciones', 'CommerceController@transactions')->name('commerce.transactions');
     Route::get('/historial', 'CommerceController@depositHistory')->name('commerce.depositHistory');
     Route::post('/historial', 'CommerceController@depositHistory')->name('commerce.depositHistory');
+    Route::get('/tasa', 'CommerceController@rate')->name('commerce.rate');
+    Route::post('/tasa', 'CommerceController@rate')->name('commerce.rate');
 });
 
 Route::group(['middleware'=>'admin'], function() {

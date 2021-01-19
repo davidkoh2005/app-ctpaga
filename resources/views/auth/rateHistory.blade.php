@@ -10,6 +10,9 @@
     @include('admin.bookshop')
     <script type="text/javascript" src="../../js/transactions.js"></script>
 </head>
+@php
+    use Carbon\Carbon;
+@endphp
 <body class="body-admin">
     @include('auth.menu')
     <div class="main-panel">
@@ -21,18 +24,8 @@
                         Filtro:
                     </div>
                     <div class="card-body has-success">
-                        <form class="contact-form" method='POST' action="{{route('commerce.depositHistory')}}">
+                        <form class="contact-form" method='POST' action="{{route('commerce.rate')}}">
 
-                            <div class="mb-3 row">
-
-                                <label class="col-sm-2 col-form-label">Moneda</label>
-                                <div class="col">
-                                    <select class="form-select form-control" name="selectCoin" id="selectCoin">
-                                        <option value="0">USA $</option>
-                                        <option value="1">VE BS</option>
-                                    </select>
-                                </div>
-                            </div>
                             <div class="mb-3 row">
                                 <label class="col-sm-2 col-form-label">Rango de Fecha</label>
 
@@ -52,7 +45,7 @@
                                     <button type="submit" class="submit btn btn-bottom">Buscar</button>
                                 </div>
                                 <div class="col-6">
-                                    <a type="button" class="remove-transactions btn" href="{{route('commerce.depositHistory')}}">Limpiar</a>
+                                    <a type="button" class="remove-transactions btn" href="{{route('commerce.rate')}}">Limpiar</a>
                                 </div>
                             </div>
 
@@ -65,28 +58,18 @@
         <div class="col-12">
         
             <div class="tableShow">
-                <table id="table_Deposits" class="table table-bordered mb-5 display">
+                <table id="table_Rate" class="table table-bordered mb-5 display">
                     <thead>
                         <tr class="table-title">
                             <th scope="col">Fecha</th>
-                            <th scope="col">Total</th>
-                            <th scope="col">Estado</th>
-                            <th scope="col">Número de Referencia</th>
+                            <th scope="col">Monto</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($historyAll as $history)
+                        @foreach($rates as $rate)
                         <tr>
-                            <td>{{$history['date'] }}</td>
-                            @if(empty($history['numRef']))
-                                <td class="received">{{$history['total']}}</td>
-                                <td class="received">RECIBIDO</td>
-                                <td></td>
-                            @else 
-                                <td class="deposit">{{$history['total']}}</td>
-                                <td class="deposit">DEPOSITO</td>
-                                <td class="depositNumRef">{{$history['numRef']}}</td>
-                            @endif
+                            <td>{{Carbon::parse($rate->date)->format('Y-m-d g:i A') }}</td>
+                            <td>Bs {{number_format($rate->rate, 2, ',', '.') }}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -99,8 +82,6 @@
     @include('admin.bookshopBottom')
     <script> 
         var statusMenu = "{{$statusMenu}}";
-        var selectCoin = '{{$selectCoin}}';
-        $("#selectCoin option[value='"+ selectCoin +"']").attr("selected",true);
     </script>
 </body>
 </html>
