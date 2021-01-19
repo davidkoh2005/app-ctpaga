@@ -223,7 +223,7 @@ class AdminController extends Controller
         {
 
             $balance = Balance::where('id', $id['id'])->first();
-            $balance->total -= $id['total'];
+            $balance->total -= floatval($id['total']);
             $balance->save(); 
 
             Deposits::create([
