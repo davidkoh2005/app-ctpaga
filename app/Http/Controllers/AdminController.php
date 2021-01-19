@@ -221,7 +221,6 @@ class AdminController extends Controller
     {
         foreach (Session::get('dataSelectID') as $id)
         {
-
             $balance = Balance::where('id', $id['id'])->first();
             $balance->total -= floatval($id['total']);
             $balance->save(); 
@@ -230,7 +229,7 @@ class AdminController extends Controller
                 "user_id"       => $balance->user_id,
                 "commerce_id"   => (int)$balance->commerce_id,
                 "coin"          => $balance->coin,
-                "total"         => $id['total'],
+                "total"         => floatval($id['total']),
                 "numRef"        => $request->numRef,
                 "date"          => Carbon::now(),
             ]);
@@ -383,10 +382,13 @@ class AdminController extends Controller
             $bank = Bank::where('user_id', $user->id)
                         ->where('coin', $coin)->first();
             
-            $dataId = array(
+            array_push($dataId, array(
                 "id" => $balance->id,
                 "total" => $balance->total,
-            );
+            ));
+
+            Session::put('dataSelectID', $dataId);
+
         }else{
             $statusID = false;
             $countUSD = 0;
@@ -415,8 +417,6 @@ class AdminController extends Controller
                 return response()->json(array('html'=>$returnHTML, 'status' => 1));
             }
         }
-
-        Session::put('dataSelectID', $dataId);
 
         $returnHTML=view('admin.modal.dataPayment', compact('balance', 'commerce', 'user', 'bank', 'statusID'))->render();
         return response()->json(array('html'=>$returnHTML, 'status' => 0));
