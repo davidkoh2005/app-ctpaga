@@ -381,4 +381,14 @@ class PaidController extends Controller
 
         return response()->json(['statusCode' => 401,'message' => "No se encuentra en nuestra base de datos"]);
     }
+
+    public function changeStatus(Request $request)
+    {
+        $paids = Paid::where('codeUrl', $request->codeUrl)->first();
+        $paids->statusShipping = $request->statusShipping;
+        $paids->save();
+
+        return response()->json(['statusCode' => 201,'data' =>['paid'=>$paids]]);
+
+    }
 }

@@ -83,7 +83,7 @@
             <div class="row">&nbsp;</div>
             <div class="row">
                 <div class="col-3" style="top:12px;">
-                    <input type="checkbox" class="selectAll" id="selectAllCheck-Payment" name="selectAllCheck-Payment"> Seleccionar Todos 
+                    <label style="color:black;"><input type="checkbox" class="selectAll" id="selectAllCheck-Payment" name="selectAllCheck-Payment"> Seleccionar Todos </label>
                 </div>
                 <div class="col-4">
                 <strong>Acciones:</strong> &nbsp;&nbsp;&nbsp; <botton class="pay btn btn-bottom" onclick="showDataPayment(0, false)" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Pagar todos Comerciantes con Banco de Venezuela"><i class="material-icons">payment</i></botton>
