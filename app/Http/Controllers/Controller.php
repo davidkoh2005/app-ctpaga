@@ -43,8 +43,7 @@ class Controller extends BaseController
     {
         $price = str_replace("$ ","",$price);
         $price = str_replace("Bs ","",$price);
-        $price = intVal($price) / 100;
-        $price = floatval($price);
+        $price = str_replace(",",".",$price);
         
         return "$price";
     }
