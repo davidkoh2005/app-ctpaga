@@ -5,6 +5,7 @@ use App\Events\NewNotification;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use App\Notifications\PostPurchase;
+use App\Notifications\ShippingNotification;
 use Carbon\Carbon;
 use App\User;
 use App\Sale;
