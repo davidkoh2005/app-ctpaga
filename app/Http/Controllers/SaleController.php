@@ -106,7 +106,7 @@ class SaleController extends Controller
                     "coin"                  => (int)$sale['data'][0]['coin'],
                     "quantity"              => (int)$sale['quantity'],
                     "rate"                  => $request->rate,
-                    "statusShipping"        => $request->statusShipping,
+                    "statusShipping"        => $request->statusShipping? 1 : 0,
                     "descriptionShipping"   => $request->descriptionShipping,
                     "expires_at"            => Carbon::now()->addHour(6),
                 ]);

@@ -110,6 +110,42 @@ $(function(){
         $('.form-navigation .next').toggle(!arTheEnd && index != 0 && index != 1);
 
         $('.form-navigation [type=submit]').toggle(arTheEnd);
+        
+        switch (index) {
+            case 0:
+                $(".form-sales").text("");
+                break;
+            case 1:
+                $(".form-sales").text("Modificar Cantidad");
+                break;
+            case 2:
+                $(".form-sales").text("Correo Electrónico");
+                break;
+            case 3:
+                $(".form-sales").text("Seleccionar Envio");
+                break;
+            case 4:
+                $(".form-sales").text("Dirección de Envio");
+                break;
+            case 5:
+                $(".form-sales").text("Información del Pago");
+                break;
+            case 6:
+                $(".form-sales").text("Descuento");
+                if($("#switchDiscount").is(':checked')){
+                    $("#discount" ).prop( "disabled", $(this).is(':checked'));
+                    $('#discount').val('');
+                    $('#percentageSelect').val(0);
+                    $('.next').show();
+                }
+                break;
+            case 7:
+                $(".form-sales").text("Facturación");
+                break;
+            default: 
+                alert("error");
+        }
+
 
         if(index == 3){
             if(statusShippingClient)
@@ -154,7 +190,6 @@ $(function(){
             group: 'block-' + curIndex()
         }).done(function(){
             navigateTo(curIndex()+2);
-            $(".form-sales").text("Formulario");
         })
     })
 
@@ -311,7 +346,6 @@ $(function(){
             $('#saleQuantity').text($(this).find('#desingQuantity').text());
             _selectSale = $(this).find('#idSale').val();
             navigateTo(1);
-            $(".form-sales").text("Modificar Cantidad");
         }
     });
     
@@ -377,8 +411,8 @@ function calculateTotal(){
     $("#totalAll").val(formatter.format((total-((total*percentage)/100)+resultShipping)));
     $(".totalGlobal").text(resulttotal);
 
-    /* if(formatter.format((total-((total*percentage)/100)+resultShipping)) == "NaN")
-        location.reload(); */
+    if(formatter.format((total-((total*percentage)/100)+resultShipping)) == "NaN")
+        location.reload(); 
     
 }
 

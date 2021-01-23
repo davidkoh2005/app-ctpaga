@@ -31,7 +31,6 @@ class CreatePaidsTable extends Migration
             $table->string("selectShipping")->nullable();
             $table->string("priceShipping")->nullable();
             $table->integer("statusShipping")->default(0); // 0: no retirado producto 1: retirado producto 2: entregado
-            $table->string('totalShipping');
             $table->integer("percentage");
             $table->String("nameCompanyPayments", 10);
             $table->String("date");
