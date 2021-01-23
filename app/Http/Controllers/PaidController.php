@@ -400,6 +400,11 @@ class PaidController extends Controller
             $userCommerce = User::whereId($paids->user_id)->first();
             (new User)->forceFill([
                 'email' => $paids->email,
+            ])->notify(
+                new ShippingNotification("los productos de Número de compra ".$paids->codeUrl." fue entregado a su destino.")
+            );
+
+            (new User)->forceFill([
                 'email' => $userCommerce->email,
             ])->notify(
                 new ShippingNotification("los productos de Número de compra ".$paids->codeUrl." fue entregado a su destino.")
