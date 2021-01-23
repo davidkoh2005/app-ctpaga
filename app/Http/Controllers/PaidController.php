@@ -394,7 +394,7 @@ class PaidController extends Controller
             (new User)->forceFill([
                 'email' => $paids->email,
             ])->notify(
-                new Shipping("los productos fue retirado desde la tienda llegará al destino no mas tardar de 1 hora.")
+                new ShippingNotification("los productos fue retirado desde la tienda llegará al destino no mas tardar de 1 hora.")
             );
         }elseif($request->statusShipping == 2){
             $userCommerce = User::whereId($paids->user_id)->first();
@@ -402,7 +402,7 @@ class PaidController extends Controller
                 'email' => $paids->email,
                 'email' => $userCommerce->email,
             ])->notify(
-                new Shipping("los productos de Número de compra ".$paids->codeUrl." fue entregado a su destino.")
+                new ShippingNotification("los productos de Número de compra ".$paids->codeUrl." fue entregado a su destino.")
             );
         }
 
