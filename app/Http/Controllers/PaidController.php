@@ -83,7 +83,7 @@ class PaidController extends Controller
             (new User)->forceFill([
                 'email' => $request->email,
             ])->notify(
-                new PostPurchase($message, $userUrl, $commerce->name)
+                new PostPurchase($message, $userUrl, $commerce->name, $request->codeUrl)
             );
 
             return view('result', compact('userUrl'));
@@ -200,7 +200,7 @@ class PaidController extends Controller
                             (new User)->forceFill([
                                 'email' => $request->email,
                             ])->notify(
-                                new PostPurchase($message, $userUrl, $commerce->name)
+                                new PostPurchase($message, $userUrl, $commerce->name, $request->codeUrl)
                             );
 
                             return view('result', compact('userUrl'));
@@ -348,7 +348,7 @@ class PaidController extends Controller
                 (new User)->forceFill([
                     'email' => $request->email,
                 ])->notify(
-                    new PostPurchase($message, $userUrl, $commerce->name)
+                    new PostPurchase($message, $userUrl, $commerce->name, $request->codeUrl)
                 );
 
                 return view('result', compact('userUrl'));
@@ -370,14 +370,15 @@ class PaidController extends Controller
         return response()->json(['statusCode' => 201,'data' => $paids]);
     }
 
-    public function showPaid(Request $request)
+    public function showPaidDelivery(Request $request)
     {
         $paids = Paid::where('codeUrl', $request->codeUrl)->first();
-        if($paids){
+        if($paids && $paids->statusShipping <2){
             $sales = Sale::where('codeUrl',$request->codeUrl)->orderBy('name', 'asc')->get();
             $commerce = Commerce::whereId($paids->commerce_id)->first();
             return response()->json(['statusCode' => 201,'data' =>['paid'=>$paids, 'commerce'=>$commerce, 'sales'=>$sales]]);
-        }
+        }else if($paids && $paids->statusShipping == 2)
+            return response()->json(['statusCode' => 401,'message' => "Este Código de compra ya fue entregado los productos"]);
 
         return response()->json(['statusCode' => 401,'message' => "No se encuentra en nuestra base de datos"]);
     }
@@ -386,6 +387,24 @@ class PaidController extends Controller
     {
         $paids = Paid::where('codeUrl', $request->codeUrl)->first();
         $paids->statusShipping = $request->statusShipping;
+        $paids->save();
+
+        if($request->statusShipping == 1){
+            (new User)->forceFill([
+                'email' => $paids->email,
+            ])->notify(
+                new Shipping("los productos fue retirado desde la tienda llegará al destino no mas tardar de 1 hora.")
+            );
+        }elseif($request->statusShipping == 2){
+            $userCommerce = User::whereId($paids->user_id)->first();
+            (new User)->forceFill([
+                'email' => $paids->email,
+                'email' => $userCommerce->email,
+            ])->notify(
+                new Shipping("los productos de Número de compra ".$paids->codeUrl." fue entregado a su destino.")
+            );
+        }
+
         $paids->save();
 
         return response()->json(['statusCode' => 201,'data' =>['paid'=>$paids]]);

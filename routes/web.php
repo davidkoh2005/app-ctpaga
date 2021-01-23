@@ -72,8 +72,8 @@ Route::group(['middleware'=>'admin'], function() {
     Route::get('/admin/transaccionesShow/', 'AdminController@transactionsShow')->name('admin.transactionsShow');
     Route::get('/admin/depositos/{id}', 'AdminController@show')->name('admin.show');
     Route::post('/admin/payment', 'AdminController@showPayment')->name('admin.showPayment');
-    Route::get('/admin/reportPayment', 'AdminController@reportPayment')->name('admin.reportPayment');
-    Route::post('/admin/reportPayment', 'AdminController@reportPayment')->name('admin.reportPayment');
+    Route::get('/admin/historial', 'AdminController@reportPayment')->name('admin.reportPayment');
+    Route::post('/admin/historial', 'AdminController@reportPayment')->name('admin.reportPayment');
 });
 
 Route::post('/admin/removePicture', 'AdminController@removePicture')->name('admin.removePicture');
@@ -95,7 +95,7 @@ Route::post('showCategories', 'SaleController@showCategories')->name('show.categ
 Route::post('showProductsServices', 'SaleController@showProductsServices')->name('show.productsServices');
 
 Route::post('update', 'Auth\PasswordResetController@updatePassword')->name('user.updatePassword');
-Route::post('pay', 'PaidController@formSubmit')->name('form.formSubmit');
+Route::post('pagar', 'PaidController@formSubmit')->name('form.formSubmit');
 Route::post('newSales', 'SaleController@new')->name('sale.newSale');
 Route::post('modifysale', 'SaleController@modifysale')->name('sale.modifysale');
 Route::post('removeSale', 'SaleController@removeSale')->name('sale.removeSale');

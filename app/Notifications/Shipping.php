@@ -7,21 +7,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class PostPurchase extends Notification
+class Shipping extends Notification
 {
     use Queueable;
-    protected $message, $userUrl, $name, $codeUrl;
+    protected $message;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($message, $userUrl, $name, $codeUrl)
+    public function __construct($message)
     {
         $this->message = $message;
-        $this->userUrl = $userUrl;
-        $this->name = $name;
-        $this->codeUrl = $codeUrl;
     }
 
     /**
@@ -42,13 +39,11 @@ class PostPurchase extends Notification
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
-    {   
-        $url = url($this->userUrl);
-        return (new MailMessage)  
-            ->subject('Gracias por realizar tu compra')
-            ->markdown(
-            'email.postPurchase', ['url' => $url, 'message' => $this->message, "name" => $this->name, "codeUrl" => $this->codeUrl]
-        );
+    {
+        return (new MailMessage)
+            ->subject('Aviso Delivery Ctpaga');
+            ->line('Estás recibiendo este correo electrónico porque estamos informando.')
+            ->line('¡Gracias por usar nuestra aplicación y confiar en nosotros!');
     }
 
     /**

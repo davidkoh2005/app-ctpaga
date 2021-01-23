@@ -14,6 +14,8 @@ Gracias por realizar la compra. Espero que lo disfrute!<p></p>
     <p>{{$message}}</p>
 @endif
 <br>
+<strong>Númuero de compra: </strong> {{$codeUrl}}
+<br>
 Para ver mas Producto o Servicio de <strong>{{$name}}</strong> ingrese a la tienda online.
 @component('mail::button', ['url'=> $url])
     Tienda
