@@ -41,8 +41,8 @@ class ShippingNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Aviso Delivery Ctpaga');
-            ->line('Estás recibiendo este correo electrónico porque estamos informando.')
+            ->subject('Aviso Delivery Ctpaga')
+            ->line('Estás recibiendo este correo electrónico porque estamos informando que '.$this->message)
             ->line('¡Gracias por usar nuestra aplicación y confiar en nosotros!');
     }
 
