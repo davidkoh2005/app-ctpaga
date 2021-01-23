@@ -12,6 +12,7 @@ use App\Paid;
 use App\Commerce;
 use App\Product;
 use App\Balance;
+use App\Shipping;
 use Session;
 
 class PaidController extends Controller
