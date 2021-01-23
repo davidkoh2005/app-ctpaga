@@ -26,7 +26,7 @@ class ShippingController extends Controller
         Shipping::create([
             "user_id"       => $user->id,
             "description"   => $request->description,
-            "price"         => $price,
+            "price"         => strval($price),
             "coin"          => $request->coin,
         ]);
 
