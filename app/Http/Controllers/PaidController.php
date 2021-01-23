@@ -389,7 +389,6 @@ class PaidController extends Controller
     {
         $paids = Paid::where('codeUrl', $request->codeUrl)->first();
         $paids->statusShipping = $request->statusShipping;
-        $paids->save();
 
         if($request->statusShipping == 1){
             (new User)->forceFill([
