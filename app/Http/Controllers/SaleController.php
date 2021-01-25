@@ -254,16 +254,15 @@ class SaleController extends Controller
         $rateUser = Rate::where('user_id', $user->id)->orderBy('date', 'desc')->first();
         $rate = $rateUser->rate;
 
-        $products = Product::where('user_id', $user->id)
-                            ->where('commerce_id', $commerce->id)
-                            ->where('publish', 1)->orderBy('name', 'asc')->get();
-
         $services = Service::where('user_id', $user->id)
                             ->where('commerce_id', $commerce->id)
                             ->where('publish', 1)->orderBy('name', 'asc')->get();
 
         $whatsappNum = $this->validateNum($user->phone);
-        return view('store', compact('userUrl','commerce','picture','coinClient', 'shippings', 'rate', 'statusShipping', 'whatsappNum'));
+
+        $services = count($services);
+
+        return view('store', compact('userUrl','commerce','picture','coinClient', 'shippings', 'rate', 'statusShipping', 'whatsappNum', 'services'));
     }
 
     public function validateNum($phone)

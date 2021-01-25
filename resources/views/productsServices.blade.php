@@ -1,20 +1,19 @@
 @if($products != null)
     @if(count($products) != 0)
         @foreach($products as $product)
-        <div class="col justify-content-sm-center productService">
+        <div class="col justify-content-center productService">
             <div class="card">
-                <img class="card-img-top" src="{{$product->url}}">
+                <img class="card-img-top" style="padding:10px;" src="{{$product->url}}">
                 <div class="card-body">
                     <h5 class="card-title">{{$product->name}}</h5>
-                    <p class="card-text"><small class="text-muted">@if($product->description != null) {{$product->description}} @endif</small></p>
-                    <p class="card-text right">@php showPrice($product->price, $rate, $product->coin, $coinClient); @endphp</p>
+                    <p class="card-text">@php showPrice($product->price, $rate, $product->coin, $coinClient); @endphp</p>
                     <button type="button" class="btn btn-bottom" onclick="addCart({{$product}}, 0)">Agregar al carrito</button>
                 </div>
             </div>
         </div>
         @endforeach
     @else
-        <div class="col justify-content-sm-center">
+        <div class="col justify-content-center">
             <div class="card">
                 <h5 class="card-title">No hay Producto</h5>
             </div>
@@ -23,13 +22,12 @@
 @else
     @if(count($services) != 0)
         @foreach($services as $service)
-        <div class="col justify-content-sm-center productService">
-            <div class="card"
-                <img class="card-img-top" src="{{$services->url}}">
+        <div class="col justify-content-center productService">
+            <div class="card">
+                <img class="card-img-top" style="padding:10px;" src="{{$services->url}}">
                 <div class="card-body">
                     <h5 class="card-title">{{$service->name}}</h5>
-                    <p class="card-text"><small class="text-muted">@if($service->description != null) {{$service->description}} @endif</small></p>
-                    <p class="card-text right">@php showPrice($service->price, $rate, $service->coin, $coinClient); @endphp</p>
+                    <p class="card-text">@php showPrice($service->price, $rate, $service->coin, $coinClient); @endphp</p>
                     <button type="button" class="btn btn-bottom" onclick="addCart({{$service}} 1)">Agregar al carrito</button>
                 </div>
             </div>

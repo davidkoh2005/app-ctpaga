@@ -5,39 +5,73 @@ var listCart = [];
 $(function(){
     var $sections = $('.form-section-store');
     var statusBtn = false;
+    var statusMenu = false;
+    var indexPrevios = 1;
 
-    $('#videoUSD').hide();
     $('#loading').hide();
 
-    $('#btnFloating').click(function(){
-        if(coinClient == 0 && !statusBtn){
-            statusBtn = true;
-            $('#videoUSD').get(0).play();
-        }else if(coinClient == 1 && !statusBtn){
-            statusBtn = true;
-            $('#videoBs').get(0).play();
+    $('.menuStore').click(function(){
+        if(!statusMenu)
+        {   
+            indexPrevios = curIndex();
+            statusMenu = true;
+            $('#barMenu').removeClass("colorGrey");
+            $('#barMenu').addClass("colorGreyInverse");
+            $('#titleMenu').removeClass("menuStore");
+            $('#titleMenu').addClass("menuStoreInverse");
+            navigateTo(0);
+        }
+        else
+        {
+            statusMenu = false;
+            $('#barMenu').removeClass("colorGreyInverse");
+            $('#barMenu').addClass("colorGrey");
+            $('#titleMenu').removeClass("menuStore");
+            $('#titleMenu').addClass("menuStoreInverse");
+            $('#totalBtn').show();
+            navigateTo(indexPrevios);
         }
     });
 
-    $("#videoUSD").bind("ended", function() {
-        $('#videoUSD').hide();
-        $('#videoBs').show();
-        $('#videoUSD').get(0).load(); 
-        coinClient = 1;
-        statusBtn = false;
+    $('.perfilStore').click(function(){
+        statusMenu = false;
+        $('#barMenu').removeClass("colorGreyInverse");
+        $('#barMenu').addClass("colorGrey");
+        navigateTo(1);
+    });
+
+    $('#btnFloating').click(function(){
+
+        if(!statusBtn)
+        {
+            statusBtn = true;
+            $('.divisaExpanded').removeClass("hide");
+            $('.divisa').css("background-color", "white");
+        }
+        else
+        {
+            statusBtn = false;
+            $('.divisaExpanded').addClass("hide");
+            $('.divisa').css("background-color", "#e6e6e6");
+        }
+    });
+
+    $('#btnEEUU').click(function(){
+        coinClient = 0;
+        $('.divisaExpanded').addClass("hide");
+        $('.divisa').css("background-color", "#e6e6e6");
         showProductsServices(categorySelect);
         showTotalBtn();
     });
 
-    $("#videoBs").bind("ended", function() {
-        $('#videoBs').hide();
-        $('#videoUSD').show(); 
-        $('#videoBs').get(0).load();
-        coinClient = 0;
-        statusBtn = false;
+    $('#btnVE').click(function(){
+        coinClient = 1;
+        $('.divisaExpanded').addClass("hide");
+        $('.divisa').css("background-color", "#e6e6e6");
         showProductsServices(categorySelect);
         showTotalBtn();
     });
+
     
     $(window).keydown(function(event){
         if(event.keyCode == 13) {
@@ -48,16 +82,34 @@ $(function(){
 
     function navigateTo(index){
         $sections.removeClass('current').eq(index).addClass('current');
-        $('.form-navigation .previous').toggle(index>0);
+        $('.form-navigation .previous').toggle(index>1);
         var arTheEnd = index >= $sections.length -1;
-        $('.form-navigation [type=submit]').toggle(index==0);
+        $('.form-navigation [type=submit]').toggle(index==1);
 
-        if(index == 1){
-            $(".form-store").text("Envio");
-            $('#totalBtn').hide();
-        }else{
-            $('#totalBtn').show();
-            $('.form-navigation .next').toggle(!arTheEnd);
+        if (index != 0){
+            statusMenu = false;
+            $('#barMenu').removeClass("colorGreyInverse");
+            $('#barMenu').addClass("colorGrey");
+            $('#titleMenu').removeClass("menuStoreInverse");
+            $('#titleMenu').addClass("menuStore");
+        }
+
+
+        switch (index) {
+            case 1:
+                $("#form-store").text(commerceName);
+                break;
+            case 2:
+                $("#form-store").text("Método de pago");
+                break;
+            case 3:
+                $("#form-store").text("Envíos");
+                break;
+            case 4:
+                $("#form-store").text("Categorías");
+                break;
+            default:
+                console.log("error");
         }
 
     }
@@ -68,7 +120,7 @@ $(function(){
     }
 
     $('.form-navigation .previous').click(function(){
-        navigateTo(curIndex()-1);
+        navigateTo(1);
         showTotalBtn();
     });
 
@@ -77,10 +129,14 @@ $(function(){
         $(section).find(':input').attr('data-parsley-group', 'block-'+index);
     });
 
-    navigateTo(0);
+    navigateTo(1);
 
     $('.button-shipping').click(function(){
-        navigateTo(curIndex()+1);
+        $('#barMenu').removeClass("colorGreyInverse");
+        $('#barMenu').addClass("colorGrey");
+        $('#titleMenu').removeClass("menuStoreInverse");
+        $('#titleMenu').addClass("menuStore");
+        navigateTo(3);
     });
 
     showCategories(0)
@@ -151,7 +207,6 @@ function addCart(productService, type){
     }
     alertify.success('Se agrego al carrito');
     showTotalBtn();
-    $('#totalBtn').removeClass('statusButton');
 
 }
 
