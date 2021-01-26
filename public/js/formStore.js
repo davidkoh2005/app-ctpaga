@@ -33,13 +33,6 @@ $(function(){
         }
     });
 
-    $('.perfilStore').click(function(){
-        statusMenu = false;
-        $('#barMenu').removeClass("colorGreyInverse");
-        $('#barMenu').addClass("colorGrey");
-        navigateTo(1);
-    });
-
     $('#btnFloating').click(function(){
 
         if(!statusBtn)
@@ -100,12 +93,15 @@ $(function(){
                 $("#form-store").text(commerceName);
                 break;
             case 2:
-                $("#form-store").text("Método de pago");
+                $("#form-store").text("Perfil del vendedor");
                 break;
             case 3:
-                $("#form-store").text("Envíos");
+                $("#form-store").text("Método de pago");
                 break;
             case 4:
+                $("#form-store").text("Envíos");
+                break;
+            case 5:
                 $("#form-store").text("Categorías");
                 break;
             default:
@@ -131,12 +127,58 @@ $(function(){
 
     navigateTo(1);
 
-    $('.button-shipping').click(function(){
+    $('.perfilStore').click(function(){
+        $('#barMenu').removeClass("colorGreyInverse");
+        $('#barMenu').addClass("colorGrey");
+        navigateTo(2);
+    });
+
+    $('.button-store').click(function(){
+        $('#barMenu').removeClass("colorGreyInverse");
+        $('#barMenu').addClass("colorGrey");
+        $('#titleMenu').removeClass("menuStoreInverse");
+        $('#titleMenu').addClass("menuStore");
+        navigateTo(1);
+    });
+
+    $('.button-payment').click(function(){
         $('#barMenu').removeClass("colorGreyInverse");
         $('#barMenu').addClass("colorGrey");
         $('#titleMenu').removeClass("menuStoreInverse");
         $('#titleMenu').addClass("menuStore");
         navigateTo(3);
+    });
+
+    $('.button-shipping').click(function(){
+        $('#barMenu').removeClass("colorGreyInverse");
+        $('#barMenu').addClass("colorGrey");
+        $('#titleMenu').removeClass("menuStoreInverse");
+        $('#titleMenu').addClass("menuStore");
+        navigateTo(4);
+    });
+
+    $('.button-whatsapp').click(function(){
+        $('#barMenu').removeClass("colorGreyInverse");
+        $('#barMenu').addClass("colorGrey");
+        $('#titleMenu').removeClass("menuStoreInverse");
+        $('#titleMenu').addClass("menuStore");
+        navigateTo(1);
+    });
+
+    $('.button-categories').click(function(){
+        $('#barMenu').removeClass("colorGreyInverse");
+        $('#barMenu').addClass("colorGrey");
+        $('#titleMenu').removeClass("menuStoreInverse");
+        $('#titleMenu').addClass("menuStore");
+        navigateTo(5);
+    });
+
+    $('.button-closeMenu').click(function(){
+        $('#barMenu').removeClass("colorGreyInverse");
+        $('#barMenu').addClass("colorGrey");
+        $('#titleMenu').removeClass("menuStoreInverse");
+        $('#titleMenu').addClass("menuStore");
+        navigateTo(indexPrevios);
     });
 
     showCategories(0)

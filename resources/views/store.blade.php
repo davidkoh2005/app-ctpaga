@@ -15,7 +15,7 @@
     <Section>
         <div class="container">
             <div class="Row">
-                <div class="col-md-6 col-sm-12 col-12 mx-auto paddingZero">
+                <div class="col-md-6 col-sm-12 col-12 mx-auto">
                     <div class="row colorGrey">
                         <div class="col-12">
                             <div class="row">
@@ -26,7 +26,7 @@
                                         </svg>
                                     </button>
                                 </div>
-                                <div class="col-md-8 col-sm-8 col-8">
+                                <div class="float-left">
                                     <h5 class="form-store" id="form-store"> {{$commerce->name}} </h5>
                                 </div>
                                 <div class="col text-right" id="btnFloatingShipping">
@@ -49,13 +49,19 @@
                         <div class="col-md-12 col-sm-12 col-12">
                             <ul class="nav flex-column" id="showMenu" >
                                 <li class="nav-item">
+                                    <a class="nav-link button-store" href="javascript:;">
+                                        <img class="rounded-circle" src="../images/ICON-TIENDA.png" width="40px" height="40px">
+                                        <label>Tienda</label>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link perfilStore" href="javascript:;">
                                         <img class="rounded-circle" src="../images/ICON-PERFIL.png" width="40px" height="40px">
                                         <label>Perfil del vendedor</label>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="javascript:;">
+                                    <a class="nav-link button-payment" href="javascript:;">
                                         <img class="rounded-circle" src="../images/ICON-METODOS-DE-PAGO.png" width="40px" height="40px">
                                         <label>Método de pago</label>
                                     </a>
@@ -69,19 +75,19 @@
                                 </li>
                                 @endif
                                 <li class="nav-item">
-                                    <a class="nav-link" href="javascript:;">
+                                    <a class="nav-link button-whatsapp" href="https://api.whatsapp.com/send/?phone={{$whatsappNum}}">
                                         <img class="rounded-circle" src="../images/ICON-CENTRO-DE-MENSAJERIA.png" width="40px" height="40px">
                                         <label>Centro de mensajería</label>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="javascript:;">
+                                    <a class="nav-link button-categories" href="javascript:;">
                                         <img class="rounded-circle" src="../images/ICON-CATEGORIAS.png" width="40px" height="40px">
                                         <label>Categorías</label>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="javascript:;">
+                                    <a class="nav-link button-closeMenu" href="javascript:;">
                                         <img class="rounded-circle" src="../images/ICON-CERRAR-SESION.png" width="40px" height="40px">
                                         <label>Salir del menú</label>
                                     </a>
@@ -102,7 +108,7 @@
                                 @endif
                                 </div>
                             </div>
-                            <div class="row" style="margin-left:10px; curso:point;">
+                            <div class="row" style="curso:point;">
                                 <div class="divisaExpanded hide">
                                     <a href="javascript:;" id="btnEEUU">
                                         <img class="rounded-circle" style="margin:5px;" src="../images/eeuu.png" width="30px" height="30px">
@@ -143,30 +149,97 @@
                         </div>
                     </div>
 
+                    <div class= "form-section-store">
+                    <div class="col-md-12 col-sm-12 col-12">
+                            <div class="row">
+                                <div class="profile">
+                                @if($picture)
+                                    <img class="rounded-circle" src="{{$picture->url}}" width="150px" height="150px">
+                                @else
+                                    <img class="rounded-circle" src="../images/perfil.png" width="150px" height="150px">
+                                @endif
+                                </div>
+                            </div>
+
+                            <div class="row">&nbsp;</div>
+                            <div class="row">&nbsp;</div>
+
+                        </div>
+                    </div>
+
                     <div class= "form-section-store center">
-                        Método de pago
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-12 mx-auto text-center">
+                                <label class="titleCoin">Moneda</label>
+                            </div>
+                            <div class="row">&nbsp;</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mx-auto text-center">
+                                <img class="rounded-circle" src="../images/eeuu.png" width="80px" height="80px">
+                                <br>
+                                <label class="textDivisa">USA $</label>
+                            </div>
+                            <div class="col-6 mx-auto text-center">
+                                <img class="rounded-circle" src="../images/venezuela.png" width="80px" height="80px">
+                                <br>
+                                <label class="textDivisa">VE Bs</label>
+                            </div>
+                        </div>
+                        <div class="row">&nbsp;</div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-12 mx-auto text-center">
+                                <label class="titleCoin">Con Tarjeta</label>
+                            </div>
+                            <div class="row">&nbsp;</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mx-auto text-center">
+                                <img src="../images/visa.png" width="100px" height="80px">
+                            </div>
+                            <div class="col-6 mx-auto text-center">
+                                <img src="../images/MasterCard.png" width="100px" height="80px">
+                            </div>
+                        </div>
+                        <div class="row">&nbsp;</div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-12 mx-auto text-center">
+                                <label class="titleCoin">O Recibimos en </label>
+                            </div>
+                            <div class="row">&nbsp;</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mx-auto text-center">
+                                <img src="../images/paypal.png" width="150px" height="80px">
+                            </div>
+                            <div class="col-6 mx-auto text-center">
+                                <img src="../images/bitcoin.png" width="140px" height="60px">
+                            </div>
+                        </div>
                     </div>
 
                     @if (count($shippings)!=0)
                     <div class="form-section-store">
-                        <input type="hidden" id="statusShipping" value="true">
-                        @foreach ($shippings as $shipping)
-                            <div class="row shippings justify-content-center align-items-center minh-10">
-                                <div class="description-shippings col">{{$shipping->description}}</div>
-                                @if ($coinClient == 0) 
-                                    <div class="shipping-price col"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
-                                @else
-                                    <div class="shipping-price col-md col-12"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
-                                @endif
-                            </div>
-                        @endforeach
+                        <div class="col-11" style="margin:auto;">
+                            <input type="hidden" id="statusShipping" value="true">
+                            @foreach ($shippings as $shipping)
+                                <div class="row shippings justify-content-center align-items-center minh-10">
+                                    <div class="description-shippings col">{{$shipping->description}}</div>
+                                    @if ($coinClient == 0) 
+                                        <div class="shipping-price col-6"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
+                                    @else
+                                        <div class="shipping-price col-6"><script> document.write(showPrice("{{$shipping->price}}", {{$rate}}, {{$shipping->coin}}, {{$coinClient}}))</script></div>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                     @else
                         <input type="hidden" id="statusShipping" value="false">
                     @endif
 
-                    <div class= "form-section-store center" id="showProduct">
-                        Categorías
+                    <div class= "form-section-store">
+                        <div class="row categories" id="showCategories"></div>
                     </div>
 
                     <div class="row">&nbsp;</div>

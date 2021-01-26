@@ -283,15 +283,23 @@ div.description-shippings{
     padding-top: 5px;
     padding-left: 0px;
     text-align: left;
+    margin:auto;
 }
 
 div.shipping-price{
     padding: 5px;
     text-align: right;
+    margin:auto;
 }
 
+.form-navigation {
+    margin-left: 2px;
+    margin: auto;
+}
 
 .form-navigation.bottom {
+    padding-left: 15px;
+    padding-right: 15px;
     padding-top: 20px;
 }
 
@@ -361,10 +369,9 @@ hr {
     margin-bottom: 20px;
 }
 
-div.category-circle {
-    background: #e6e6e6 none repeat scroll 0 0;
-    border-radius: 100%;
-    border: 2px solid #00cc5f;
+div.category-image {
+    background: #585858 none repeat scroll 0 0;
+    border: 2px solid white;
     display: inline-block;
     font-size: 26px;
     width: 70px;
@@ -373,12 +380,17 @@ div.category-circle {
     text-align: center;
     margin-top: 10px;
     margin-bottom: 10px;
+    color: white;
+    font-family: 'Montserrat-Bold', sans-serif;
+    font-weight: bold;
+}
+
+a.listCategories label.category-name {
     color: black;
 }
 
-div.listCategories:hover div.category-circle {
+a.listCategories:hover div.category-image {
     background: #00cc5f none repeat scroll 0 0;
-    border-radius: 100%;
     display: inline-block;
     font-size: 26px;
     width: 70px;
@@ -388,15 +400,16 @@ div.listCategories:hover div.category-circle {
     margin-top: 10px;
     margin-bottom: 10px;
     color: white;
+    font-family: 'Montserrat-Bold', sans-serif;
+    font-weight: bold;
 }
 
-div.listCategories:hover div.category-name {
+a.listCategories:hover label.category-name {
     color: #00cc5f;
 }
 
-div.category-current div.category-circle {
+a.category-current div.category-image {
     background: #00cc5f;
-    border-radius: 100%;
     display: inline-block;
     font-size: 26px;
     width: 70px;
@@ -406,10 +419,22 @@ div.category-current div.category-circle {
     margin-top: 10px;
     margin-bottom: 10px;
     color: white;
+    font-family: 'Montserrat-Bold', sans-serif;
+    font-weight: bold;
 }
 
-.category-current div.category-name {
+.category-current label.category-name {
     color: #00cc5f;
+}
+
+#showCategories li {
+    background-color: #e6e6e6;
+    margin: 5px;
+}
+
+.listCategories label {
+    margin-left: 50px;
+    font-size: 20px;
 }
 
 .card-text {
@@ -481,4 +506,10 @@ div.category-current div.category-circle {
     font-family: 'Montserrat-Bold', sans-serif;
     margin-left: 10px;
     color: #585858; 
+}
+
+.titleCoin {
+    font-family: 'Montserrat-Bold', sans-serif;
+    font-weight: bold;
+    font-size: 20px;
 }

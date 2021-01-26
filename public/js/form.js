@@ -113,25 +113,25 @@ $(function(){
         
         switch (index) {
             case 0:
-                $(".form-sales").text("");
+                $(".title-sales").text("Ventas");
                 break;
             case 1:
-                $(".form-sales").text("Modificar Cantidad");
+                $(".title-sales").text("Modificar Cantidad");
                 break;
             case 2:
-                $(".form-sales").text("Correo Electrónico");
+                $(".title-sales").text("Correo Electrónico");
                 break;
             case 3:
-                $(".form-sales").text("Seleccionar Envio");
+                $(".title-sales").text("Envio");
                 break;
             case 4:
-                $(".form-sales").text("Dirección de Envio");
+                $(".title-sales").text("Dirección de Envio");
                 break;
             case 5:
-                $(".form-sales").text("Información del Pago");
+                $(".title-sales").text("Información del Pago");
                 break;
             case 6:
-                $(".form-sales").text("Descuento");
+                $(".title-sales").text("Descuento");
                 if($("#switchDiscount").is(':checked')){
                     $("#discount" ).prop( "disabled", $(this).is(':checked'));
                     $('#discount').val('');
@@ -140,7 +140,7 @@ $(function(){
                 }
                 break;
             case 7:
-                $(".form-sales").text("Facturación");
+                $(".title-sales").text("Facturación");
                 break;
             default: 
                 alert("error");
@@ -172,9 +172,6 @@ $(function(){
     $('.form-navigation .previous').click(function(){
 
         if(!statusLoading){
-            if(curIndex()-1 == 0)
-                $(".form-sales").text("Ventas");
-
             if(curIndex()==5 && $('#statusShipping').val() =='false')
                 navigateTo(curIndex()-3);
             else if(curIndex()==2)

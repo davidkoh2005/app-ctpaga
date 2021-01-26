@@ -1,24 +1,26 @@
-<div class="col">
-    <div class="card listCategories category-current">
-        <div class="card-body">
-            <div class="category-circle">{{strtoupper(substr('Todos',0,1))}}</div>
-            <div class="category-name">Todos</div>
-            <input type="hidden" id="category-id" value="">
-        </div>
-    </div>
-</div>
+<div class="row">&nbsp;</div>
 
-@foreach ($categories as $category)
-<div class="col">
-    <div class="card listCategories">
-        <div class="card-body">
-            <div class="category-circle">{{strtoupper(substr($category->name,0,1))}}</div>
-            <div class="category-name" id="category-name">{{$category->name}}</div>
-            <input type="hidden" id="category-id" value="{{$category->id}}">
-        </div>
-    </div>
+<div class="col-md-12 col-sm-12 col-12">
+    <ul class="nav flex-column" >
+        <li class="nav-item">
+            <a class="nav-link listCategories category-current" href="javascript:;">
+                <div class="category-image">{{strtoupper(substr('Todos',0,1))}}</div>
+                <input type="hidden" id="category-id" value="">
+                <label class="category-name">Todos</label>
+            </a>
+        </li>
+
+        @foreach ($categories as $category)
+            <li class="nav-item">
+                <a class="nav-link listCategories" href="javascript:;">
+                    <div class="category-image">{{strtoupper(substr($category->name,0,1))}}</div>
+                    <input type="hidden" id="category-id" value="{{$category->id}}">
+                    <label class="category-name">{{$category->name}}</label>
+                </a>
+            </li>
+        @endforeach 
+    </ul>
 </div>
-@endforeach 
 
 <script>
 $(function(){

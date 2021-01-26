@@ -109,6 +109,7 @@ class SaleController extends Controller
                     "statusShipping"        => $request->statusShipping? 1 : 0,
                     "descriptionShipping"   => $request->descriptionShipping,
                     "expires_at"            => Carbon::now()->addHour(6),
+                    "image"                 => $sale['data'][0]['url'],
                 ]);
             }
 
@@ -117,11 +118,16 @@ class SaleController extends Controller
             $user_id = $request->user()->id;
 
             foreach($request->sales as $sale){
+                $url= "";
 
-                if($sale['data']['id'] == 0)
+                if($sale['data']['id'] == 0){
                     $price = app('App\Http\Controllers\Controller')->getPriceAmount($sale['data']['price']);
-                else
+                    $url = "";
+                }
+                else{
                     $price = app('App\Http\Controllers\Controller')->getPriceSales($sale['data']['price']);
+                    $url = $sale['data']['url'];
+                }
                 
                 Sale::create([
                     "user_id"               => $user_id,
@@ -139,6 +145,7 @@ class SaleController extends Controller
                     "statusShipping"        => $request->statusShipping,
                     "descriptionShipping"   => $request->descriptionShipping,
                     "expires_at"            => Carbon::now()->addHour(6),
+                    "image"                 => $url,
                 ]);
                 $totalPrice += $this->exchangeRate($price, $request->rate, $sale['data']['coin'], $request->coin);
             }

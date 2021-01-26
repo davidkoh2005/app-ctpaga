@@ -18,21 +18,31 @@
         <div class="container">
             <div class="Row">
                 <div class="col-md-6 col-sm-12 col-12 mx-auto">
-                    <div class="card-header-form">
-                        <div class="row float-left">
-                            <div class="col form-navigation">
-                                <button type="button" class="previous btn">
-                                    <svg width="30px" height="30px" viewBox="0 0 16 16" class="bi bi-chevron-left" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                            <div class="col-md-auto col-sm-auto col-auto">
-                                <h5 class="form-sales"> Ventas </h5>
+                    <div class="row colorGrey">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="form-navigation float-left">
+                                    <button type="button" class="previous btn">
+                                        <svg width="45px" height="45px" viewBox="0 0 16 16" class="bi bi-chevron-left" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="float-left">
+                                    <h5 class="form-sales" id="form-sales"> {{$commerce->name}} </h5>
+                                </div>
+                                <div class="col text-right profile">
+                                    @if($picture)
+                                        <img class="rounded-circle" src="{{$picture->url}}" width="60px" height="60px">
+                                    @else
+                                        <img class="rounded-circle" src="../images/perfil.png" width="60px" height="60px">
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">&nbsp;</div>
+                    <h5 class="title-sales"> Ventas </h5>
                     <div class="row">&nbsp;</div>
                     <div class="card-body">
                         @if (Session::has('message'))
@@ -44,23 +54,32 @@
                             <input type="hidden" id="STRIPE_KEY" value="{{env('STRIPE_KEY')}}">
                             @csrf
                             <div class= "form-section center">
-                                <img class="rounded-circle" src="{{$picture->url}}" width="100px" height="100px">
-                                <h3> {{$commerce->name}}</h3>
-                                <div class="row">&nbsp;</div>
                                 <span id="coin">@if ($coinClient == 0) $ @else Bs @endif</span> <span id="total"> {{$total}}</span>
-                                <div class="row">&nbsp;</div>
-                                <h3> Por </h3>
+                                <h5 class="styleText"> Monto Total </h5>
                                 <div class="row">&nbsp;</div>
                                 @foreach ($sales as $sale)
                                     <div class="row sales justify-content-center align-items-center minh-10" id="listSale">
-                                        <div class="quantity col-md-2 col-sm-2 col-3"><div id="desingQuantity">{{$sale->quantity}}</div></div>
+                                        <div class="float-left">
+                                            @if($sale->image != "")    
+                                                <img src="{{$sale->image}}" width="100px" height="80px"></div>
+                                            @else
+                                                <img src="../images/adicionales.png" width="100px" height="80px"></div>
+                                            @endif
+                                        <div class="quantity" id="desingQuantity">{{$sale->quantity}}</div>
+                                        <div class="verticalLine"></div>
                                         <input type="hidden" name="idSale" id="idSale" value="{{$sale->id}}">
-                                        <div class="name col">{{$sale->name}}<br> <script> document.write(showPrice("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}))</script></div>
+                                        <div class="name"><label>{{$sale->name}}</label><br> <script> document.write(showPrice("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}))</script></div>
+                                        <div class="verticalLine"></div>
                                         @if ($coinClient == 0) 
-                                            <div class="total col"><script> document.write(showTotal("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}, {{$sale->quantity}}))</script></div>
+                                            <div class="total"><script> document.write(showTotal("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}, {{$sale->quantity}}))</script></div>
                                         @else
-                                            <div class="total bold col-12 d-block d-sm-none"> Total:</div>
-                                            <div class="total col-md col-12"> <script> document.write(showTotal("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}, {{$sale->quantity}}))</script></div>
+                                            <div class="total d-none d-md-block d-lg-block"> <script> document.write(showTotal("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}, {{$sale->quantity}}))</script></div>
+                                        @endif
+                                    </div>
+                                    <div class="row sales justify-content-center align-items-center minh-10">
+                                        @if ($coinClient == 1)
+                                            <div class="total bold d-block d-sm-none"> Total:</div>
+                                            <div class="total d-block d-sm-none"> <script> document.write(showTotal("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}, {{$sale->quantity}}))</script></div>
                                         @endif
                                     </div>
                                 @endforeach
@@ -69,9 +88,9 @@
                                 <input type="hidden" id="coinClient"  name="coinClient" value="{{$coinClient}}">
                                 <input type="hidden" id="userUrl"  name="userUrl" value="{{$userUrl}}">
                                 <input type="hidden" id="codeUrl"  name="codeUrl" value="{{$codeUrl}}">
-                            </div>
+                            </>
                             <div class= "form-section center">
-                                <div id="saleQuantity" ></div>
+                                <div id="saleQuantity"></div>
                                 <button type="button" class="remove btn btn-remove"><i class="fa fa-trash" aria-hidden="true"></i> Eliminar</button>
                                 <div class="numPad">
                                     <div class="row">
@@ -312,6 +331,7 @@
     </Section>
 
     <script> 
+        var commerceName = "{{$commerce->name}}";
         var statusModification = {{$statusModification}};
         $(function(){
             function delay(callback, ms) {
