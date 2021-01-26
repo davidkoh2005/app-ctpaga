@@ -463,12 +463,6 @@ a.category-current div.category-image {
     margin: auto;
 }
 
-.productService {
-    margin: 5px;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-}
-
 .hide {
     display: none !important;
 } 

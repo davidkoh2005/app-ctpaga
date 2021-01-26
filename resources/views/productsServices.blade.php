@@ -1,9 +1,9 @@
 @if($products != null)
     @if(count($products) != 0)
         @foreach($products as $product)
-        <div class="col justify-content-center productService">
+        <div class="col-md-6 col-12 justify-content-start productService">
             <div class="card">
-                <img class="card-img-top" style="padding:10px;" src="{{$product->url}}">
+                <img class="card-img-top" style="padding:10px;" height="250px" width="260px" src="{{$product->url}}">
                 <div class="card-body">
                     <h5 class="card-title">{{$product->name}}</h5>
                     <p class="card-text">@php showPrice($product->price, $rate, $product->coin, $coinClient); @endphp</p>
@@ -13,7 +13,7 @@
         </div>
         @endforeach
     @else
-        <div class="col justify-content-center">
+        <div class="col justify-content-center mx-auto">
             <div class="card">
                 <h5 class="card-title">No hay Producto</h5>
             </div>
@@ -22,9 +22,9 @@
 @else
     @if(count($services) != 0)
         @foreach($services as $service)
-        <div class="col justify-content-center productService">
+        <div class="col-md-6 col-12 justify-content-start productService">
             <div class="card">
-                <img class="card-img-top" style="padding:10px;" src="{{$services->url}}">
+                <img class="card-img-top" style="padding:10px;" height="250px" width="260px" src="{{$services->url}}">
                 <div class="card-body">
                     <h5 class="card-title">{{$service->name}}</h5>
                     <p class="card-text">@php showPrice($service->price, $rate, $service->coin, $coinClient); @endphp</p>
@@ -34,7 +34,7 @@
         </div>
         @endforeach
     @else
-        <div class="col justify-content-sm-center">
+        <div class="col justify-content-center mx-auto">
             <div class="card">
                 <h5 class="card-title">No hay Servicio</h5>
             </div>
