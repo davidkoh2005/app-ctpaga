@@ -86,5 +86,14 @@ $(document).ready( function () {
         language: "es",
         todayHighlight: true,
     });
+
+    $('#btnPDF').on('click', function() {
+        $('#statusFile').val("PDF");
+        $('#payment-form').submit();
+    });
+
+    $('#btnExcel').on('click', function() {
+        $('#statusFile').val("EXCEL");
+        $('#payment-form').submit();
+    });
 });
-$(".main-panel").perfectScrollbar('update');

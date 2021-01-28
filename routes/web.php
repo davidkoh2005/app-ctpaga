@@ -12,9 +12,11 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome'); 
+
 
 Route::fallback(function () {
     return redirect()->route('welcome');
@@ -75,6 +77,7 @@ Route::group(['middleware'=>'admin'], function() {
     Route::post('/admin/status', 'AdminController@changeStatus')->name('admin.changeStatus');
     Route::get('/admin/historial', 'AdminController@reportPayment')->name('admin.reportPayment');
     Route::post('/admin/historial', 'AdminController@reportPayment')->name('admin.reportPayment');
+    Route::post('/admin/txt', 'AdminController@downloadTxt')->name('admin.downloadTxt');
 });
 
 Route::post('/admin/removePicture', 'AdminController@removePicture')->name('admin.removePicture');

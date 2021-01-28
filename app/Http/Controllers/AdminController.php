@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use Session;
+use PDF;
 use App\User;
 use App\Bank;
 use App\Paid;
@@ -16,11 +17,15 @@ use App\Deposits;
 use Carbon\Carbon;
 use App\Notifications\PictureRemove;
 use App\Http\Controllers\Controller;
+use App\Exports\DepositsExport;
+use App\Exports\TransactionsExport;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminController extends Controller
 {
@@ -255,7 +260,7 @@ class AdminController extends Controller
         $startDate="";
         $endDate="";
         $idCommerce=0;
-
+        $companyName = "";
         if($request->id){
             $idCommerce=intVal($request->id);
             
@@ -275,7 +280,7 @@ class AdminController extends Controller
         }
 
         if($request->all()){
-            $idCommerce = $request->idCommerce;
+            $idCommerce = $idCommerce == 0? $request->idCommerce : $idCommerce;
             $searchNameCompany=$request->searchNameCompany;
             $searchNameClient=$request->searchNameClient;
             $selectCoin=$request->selectCoin;
@@ -305,6 +310,15 @@ class AdminController extends Controller
                         ->where('paids.date', "<=",$request->endDate);
 
         $transactions = $transactions->get();
+
+        if($request->statusFile == "PDF"){
+            $today = Carbon::now()->format('Y-m-d');
+            $pdf = \PDF::loadView('report.transactionsPDF', compact('transactions', 'today', 'idCommerce', 'companyName'));
+            return $pdf->download('ctpaga_transacciones.pdf');
+        }elseif($request->statusFile == "EXCEL"){
+            $today = Carbon::now()->format('Y-m-d');
+            return Excel::download(new TransactionsExport($transactions, $today, $idCommerce, $companyName), 'ctpaga_transacciones.xlsx');
+        }
 
         $statusMenu = "transactions";
         return view('admin.transactions', compact('transactions', 'searchNameCompany', 'searchNameClient', 'selectCoin', 'selectPayment', 'startDate', 'endDate', 'statusMenu','idCommerce', 'companyName'));
@@ -440,8 +454,36 @@ class AdminController extends Controller
                         ->where('deposits.date', "<=",$request->endDate);
 
         $deposits = $deposits->get();
-        
+
+        if($request->statusFile == "PDF"){
+            $today = Carbon::now()->format('Y-m-d');
+            $pdf = \PDF::loadView('report.depositsPDF', compact('deposits', 'today'));
+            return $pdf->download('ctpaga_depositos.pdf');
+        }elseif($request->statusFile == "EXCEL"){
+            $today = Carbon::now()->format('Y-m-d');
+            return Excel::download(new DepositsExport($deposits, $today), 'ctpaga_depositos.xlsx');
+        }
+
         $statusMenu = "balance";
         return view('admin.reportPayment', compact('deposits', 'searchNameCompany', 'selectCoin', 'selectPayment', 'startDate', 'endDate', 'numRef', 'statusMenu'));
     }
+
+    public function downloadTxt(Request $request)
+    {
+        if(file_exists("ctpaga.txt"))
+            unlink("ctpaga.txt");
+        
+        $file=fopen("ctpaga.txt","a") or die("Problemas");
+        fputs($file,"primera linea 1");
+        fputs($file,"\n");
+        fputs($file,"segunda linea 2");
+        fputs($file,"\n");
+        fputs($file,"tercera linea 3");
+        fclose($file); 
+
+        $url = 'http://'.$_SERVER['HTTP_HOST'].'/ctpaga.txt';
+        return response()->json(array('url'=>$url, 'status' => 201));
+
+    }
+
 }

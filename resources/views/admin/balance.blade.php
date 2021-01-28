@@ -68,7 +68,9 @@
                         <td>
                             <botton class="pay btn btn-bottom" onclick="showDataPayment({{$deposit->id}}, true)" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Pagar Comerciante"><i class="material-icons">payment</i></botton>
                             <a class="btn btn-bottom" href="{{route('admin.transactionsSearchId', ['id' => $deposit->commerce_id])}}" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Transacciones"><i class="material-icons">description</i></a>
-                            <a class="btn btn-bottom" href="" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Generar reporte de pago"><i class="material-icons">get_app</i></a>
+                            @if($selectCoin == 1)
+                            <a class="btn btn-bottom" onclick="downloadTxt({{$deposit->id}}, true)" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Generar reporte de pago"><i class="material-icons">get_app</i></a>
+                            @endif
                         </td>
                     </tr>
                     @endforeach
@@ -84,7 +86,7 @@
                     <strong class="addMarginRight">Acciones:</strong>
                     <botton class="pay btn btn-bottom" onclick="showDataPayment(0, false)" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Pagar comerciantes seleccionados"><i class="material-icons">payment</i></botton>
                     @if($selectCoin == 1)
-                        <a class="btn btn-bottom" href="" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Generar reporte de pago seleccionados"><i class="material-icons">get_app</i></a>
+                    <a class="btn btn-bottom" onclick="downloadTxt(0, false)" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Generar reporte de pago seleccionados"><i class="material-icons">get_app</i></a>
                     @endif
                     <label class="content-select">
                         <select class="addMargin" name="changeStatus" id="changeStatus">
@@ -134,6 +136,41 @@
             }
             
         });
+
+        function downloadTxt(id, status)
+        {
+            var selectID = [];
+            if(!status){
+                $("input:checked.check-Payment").each(function () {
+                    var id = $(this).data("id");
+                    selectID.push(id);
+                });
+            }else{
+                selectID.push(id);
+            }
+
+            if(selectID.length >0)
+                $.ajax({
+                    url: "{{route('admin.downloadTxt')}}", 
+                    data: {"selectId" : selectID, "status" : status},
+                    type: "POST",
+                }).done(function(data){
+                    if(data.status != 201)
+                    {
+                        alertify.error('Selección incorrecto, valido solo para cuenta de Venezuela');
+                    }else{
+                        console.log(data.url);
+                        var link = document.createElement("a");
+                        link.download = "ctpaga";
+                        link.href = data.url;
+                        link.click();
+                    }
+                }).fail(function(result){
+
+                }); 
+            else
+                alertify.error('Debe seleccionar depositos');
+        }
 
         function showDataPayment(id, status)
         {

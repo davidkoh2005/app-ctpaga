@@ -20,9 +20,9 @@
                     <div class="card-header">
                         Filtro:
                     </div>
-                    <div class="card-body has-success">
+                    <div class="card-body has-success" style="margin:15px;">
                         @if($idCommerce >0)
-                        <form id="payment-form" class="contact-form" method='POST' action="{{route('admin.transactionsSearchId', ['id' => $idCommerce])}}">
+                        <form id="payment-form" class="contact-form" method='GET' action="{{route('admin.transactionsSearchId', ['id' => $idCommerce])}}">
                         @else
                         <form id="payment-form" class="contact-form" method='POST' action="{{route('admin.transactionsSearch')}}">
                         @endif
@@ -83,7 +83,7 @@
                                     <a type="button" class="remove-transactions btn" href="{{route('admin.transactions')}}">Limpiar</a>
                                 </div>
                             </div>
-
+                            <input type="hidden" name="statusFile" id="statusFile" value="">
                         </form>
                     </div>
                 </div>
@@ -94,6 +94,16 @@
             @if($idCommerce > 0)
             <label for="" class="nameCompany"><strong>Nombre de Compañia:</strong> {{ $companyName}} </label>
             @endif
+
+            <div class="row">&nbsp;</div>
+        
+            <div class="row justify-content-center">
+                <div class="col-11">
+                    <strong class="download">Descargar Reporte en:</strong>
+                    <input type="image" id="btnPDF" src="../../images/pdf.png" width="45px" height="50px">
+                    <input type="image" id="btnExcel" src="../../images/excel.png" width="50px" height="60px" style="margin-left:20px">
+                </div>
+            </div>
         
             <div class="tableShow">
                 <table id="table_id" class="table table-bordered mb-5 display">
@@ -166,6 +176,8 @@
                 $('#showProducts').html();
             });
         }
+
+        $(".main-panel").perfectScrollbar('update');
     </script>
 </body>
 </html>

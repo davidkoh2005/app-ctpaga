@@ -28,7 +28,7 @@
                   <form id="formUSA"  method='POST' action="{{route('admin.balance')}}">
                     <input type="hidden" name="selectCoin" value="0">
                     <a href="javascript:$('#formUSA').submit();" class="nav-link">
-                      <img src="../images/eeuu.png" width="20px" height="20px">
+                      <img src="../../images/eeuu.png" width="20px" height="20px">
                       <label class="coinText">Moneda USA $</label>
                     </a>
                   </form>
@@ -37,7 +37,7 @@
                   <form id="formVE" method='POST' action="{{route('admin.balance')}}"> 
                     <input type="hidden" name="selectCoin" value="1">
                     <a href="javascript:$('#formVE').submit();" class="nav-link">
-                      <img src="../images/venezuela.png" width="20px" height="20px">
+                      <img src="../../images/venezuela.png" width="20px" height="20px">
                       <label class="coinText">Moneda VE Bs</label>
                     </a>
                 </form>

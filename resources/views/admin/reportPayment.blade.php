@@ -12,8 +12,8 @@
 <body class="body-admin">
   @include('auth.menu')
     <div class="main-panel">
-      @include('auth.navbar')
-      <div class="justify-content-center" id="row">
+        @include('auth.navbar')
+        <div class="justify-content-center" id="row">
             <div class="col-10">
                 <div class="card card-Report">
                     <div class="card-header">
@@ -66,12 +66,23 @@
                                     <a type="button" class="remove-report btn" href="{{route('admin.reportPayment')}}">Limpiar</a>
                                 </div>
                             </div>
-
+                            <input type="hidden" name="statusFile" id="statusFile" value="">
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+        
+        <div class="row">&nbsp;</div>
+        
+        <div class="row justify-content-center">
+            <div class="col-11">
+                <strong class="download">Descargar Reporte en:</strong>
+                <input type="image" id="btnPDF" src="../images/pdf.png" width="45px" height="50px">
+                <input type="image" id="btnExcel" src="../images/excel.png" width="50px" height="60px" style="margin-left:20px">
+            </div>
+        </div>
+
         <div class="tableShow" id="topBalance">
             <table id="table_id" class="table table-bordered mb-5 display">
                 <thead>
@@ -82,7 +93,7 @@
                         <th scope="col">Moneda</th>
                         <th scope="col">Total</th>
                         <th scope="col">Fecha</th>
-                        <th scope="col">Fecha</th>
+                        <th scope="col">Estado</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -144,6 +155,16 @@
                 language: "es",
                 todayHighlight: true,
                 orientation: "bottom auto",
+            });
+
+            $('#btnPDF').on('click', function() {
+                $('#statusFile').val("PDF");
+                $('#payment-form').submit();
+            });
+
+            $('#btnExcel').on('click', function() {
+                $('#statusFile').val("EXCEL");
+                $('#payment-form').submit();
             });
         });
         $(".main-panel").perfectScrollbar('update');
