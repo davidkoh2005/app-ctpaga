@@ -72,6 +72,7 @@ Route::group(['middleware'=>'admin'], function() {
     Route::get('/admin/transaccionesShow/', 'AdminController@transactionsShow')->name('admin.transactionsShow');
     Route::get('/admin/depositos/{id}', 'AdminController@show')->name('admin.show');
     Route::post('/admin/payment', 'AdminController@showPayment')->name('admin.showPayment');
+    Route::post('/admin/status', 'AdminController@changeStatus')->name('admin.changeStatus');
     Route::get('/admin/historial', 'AdminController@reportPayment')->name('admin.reportPayment');
     Route::post('/admin/historial', 'AdminController@reportPayment')->name('admin.reportPayment');
 });

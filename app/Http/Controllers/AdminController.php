@@ -97,54 +97,24 @@ class AdminController extends Controller
             return redirect(route('commerce.dashboard'));
         }
 
-        $selectCoin="Selecionar Moneda";
-        $balances = array();
+        $selectCoin=0;
 
-        $balancesAll = DB::table('balances')
-                ->join('commerces', 'commerces.id', '=', 'balances.commerce_id')
-                ->where('balances.total', '>=', 1)
-                ->select('balances.id', 'balances.user_id', 'balances.commerce_id', 'balances.coin', 'balances.total',
+        $deposits = DB::table('deposits')
+                ->join('commerces', 'commerces.id', '=', 'deposits.commerce_id')
+                ->where('deposits.total', '>=', 1)
+                ->select('deposits.id', 'deposits.user_id', 'deposits.commerce_id', 'deposits.coin', 'deposits.total', 'deposits.status',
                 'commerces.name')
-                ->orderBy('name', 'asc')
-                ->orderBy('coin', 'desc');
+                ->orderBy('name', 'asc');
         
         if($request->all()){
             $selectCoin= $request->selectCoin;
-            $balancesAll = $balancesAll->where('balances.coin', $selectCoin);
+            $deposits = $deposits->where('deposits.coin', $selectCoin);
         }
             
-        $balancesAll = $balancesAll->get();
-
-        foreach ($balancesAll as $balance)
-        {
-            $pictures = Picture::where('user_id', '=', $balance->user_id)
-                            ->where('commerce_id', '=', null)
-                            ->orwhere('commerce_id', $balance->commerce_id)->get();
-            
-            $count= 0;
-            foreach($pictures as $picture)
-            {
-                if (in_array($picture->description, array('Selfie','RIF','Identification'))) {
-                    $count +=1;
-                }
-
-            }
-            
-            if($balance->coin == 0)
-                $coin = "USD";
-            else
-                $coin = "Bs";
-
-            $bank = Bank::where('user_id', $balance->user_id)
-                        ->where('coin', $coin)->first();
-
-            if($count == 3 && $bank)
-                $balances[] = $balance;
-        }
-
+        $deposits = $deposits->get();
         $statusMenu = "balance";
 
-        return view('admin.balance', compact('balances',"statusMenu",'selectCoin'));
+        return view('admin.balance', compact('deposits',"statusMenu",'selectCoin'));
     }
 
     public function login(Request $request)
@@ -221,18 +191,10 @@ class AdminController extends Controller
     {
         foreach (Session::get('dataSelectID') as $id)
         {
-            $balance = Balance::where('id', $id['id'])->first();
-            $balance->total -= floatval($id['total']);
-            $balance->save(); 
-
-            Deposits::create([
-                "user_id"       => $balance->user_id,
-                "commerce_id"   => (int)$balance->commerce_id,
-                "coin"          => $balance->coin,
-                "total"         => floatval($id['total']),
-                "numRef"        => $request->numRef,
-                "date"          => Carbon::now(),
-            ]);
+            $deposits = Deposits::where('id', $id['id'])->first(); 
+            $deposits->status = 2;
+            $deposits->numref = $request->numRef;
+            $deposits->save();
         }
 
         Session::forget('dataSelectID');
@@ -358,6 +320,21 @@ class AdminController extends Controller
         return response()->json(array('html'=>$returnHTML));
     }
 
+    public function changeStatus(Request $request)
+    {
+
+        foreach ($request->selectId as $id)
+        {
+            $deposits = Deposits::where('id', $id)->first();
+            $deposits->status = $request->status;
+            $deposits->save();
+        }
+        
+        return response()->json(array('status' => 201));
+    }
+
+
+
     public function showPayment(Request $request)
     {
         $balance = null;
@@ -366,15 +343,17 @@ class AdminController extends Controller
         $coin = "";    
         $bank = null;
         $selectId = $request->selectId;
+        $selectCoin = $request->selectCoin;
+        $statusSelect = true;
         $dataId = [];
         if($request->status == "true")
         {
             $statusID = true;
-            $balance = Balance::where('id', $selectId[0])->first();
-            $commerce = Commerce::where("id", $balance->commerce_id)->first();
+            $deposit = Deposits::where('id', $selectId[0])->first();
+            $commerce = Commerce::where("id", $deposit->commerce_id)->first();
             $user = User::where("id", $commerce->user_id)->first();
             
-            if($balance->coin == 0)
+            if($deposit->coin == 0)
                 $coin = "USD";
             else
                 $coin = "Bs";
@@ -383,42 +362,38 @@ class AdminController extends Controller
                         ->where('coin', $coin)->first();
             
             array_push($dataId, array(
-                "id" => $balance->id,
-                "total" => $balance->total,
+                "id" => $deposit->id,
+                "total" => $deposit->total,
             ));
 
             Session::put('dataSelectID', $dataId);
 
         }else{
             $statusID = false;
-            $countUSD = 0;
-            $countBS = 0;
             foreach ($selectId as $id)
             {
-                $balance = Balance::where('id', $id)->first();
-                if($balance->coin == 0)
-                    $countUSD += 1;
-                else
-                    $countBS +=1;
+                $deposit = Deposits::where('id', $id)->first();
+                if($deposit->coin != $selectCoin)
+                    $statusSelect = false;
 
                 array_push($dataId, array(
-                    "id" => $balance->id,
-                    "total" => $balance->total,
+                    "id" => $deposit->id,
+                    "total" => $deposit->total,
                 ));
             }
             Session::put('dataSelectID', $dataId);          
 
-            if($countUSD == 0 && $countBS >0)
+            if($statusSelect)
             {
-                $returnHTML=view('admin.modal.dataPayment', compact('balance', 'commerce', 'user', 'bank', 'statusID'))->render();
+                $returnHTML=view('admin.modal.dataPayment', compact('deposit', 'commerce', 'user', 'bank', 'statusID'))->render();
                 return response()->json(array('html'=>$returnHTML, 'status' => 0));
             }else{
-                $returnHTML=view('admin.modal.dataPayment', compact('balance', 'commerce', 'user', 'bank', 'statusID'))->render();
+                $returnHTML=view('admin.modal.dataPayment', compact('deposit', 'commerce', 'user', 'bank', 'statusID'))->render();
                 return response()->json(array('html'=>$returnHTML, 'status' => 1));
             }
         }
 
-        $returnHTML=view('admin.modal.dataPayment', compact('balance', 'commerce', 'user', 'bank', 'statusID'))->render();
+        $returnHTML=view('admin.modal.dataPayment', compact('deposit', 'commerce', 'user', 'bank', 'statusID'))->render();
         return response()->json(array('html'=>$returnHTML, 'status' => 0));
     }
 
@@ -446,8 +421,8 @@ class AdminController extends Controller
 
         $deposits = DB::table('deposits')
                 ->join('commerces', 'commerces.id', '=', 'deposits.commerce_id')
-                ->select('deposits.id', 'deposits.user_id', 'deposits.commerce_id', 'deposits.coin', 'deposits.total', 'deposits.numRef', 'deposits.date', 'commerces.name');
-
+                ->select('deposits.id', 'deposits.user_id', 'deposits.commerce_id', 'deposits.coin', 'deposits.total', 'deposits.numRef', 'deposits.date', 'commerces.name')
+                ->where("deposits.status",3);
         if(!empty($request->searchNameCompany))
             $deposits->where('commerces.name', 'ilike', "%" . $request->searchNameCompany . "%" );
         
@@ -466,7 +441,7 @@ class AdminController extends Controller
 
         $deposits = $deposits->get();
         
-        $statusMenu = "reportPayment";
+        $statusMenu = "balance";
         return view('admin.reportPayment', compact('deposits', 'searchNameCompany', 'selectCoin', 'selectPayment', 'startDate', 'endDate', 'numRef', 'statusMenu'));
     }
 }

@@ -15,42 +15,27 @@
   @include('auth.menu')
     <div class="main-panel">
       @include('auth.navbar')
-      <div class="justify-content-center" id="row">
-            <div class="col-10">
-                <div class="card card-Balance">
-                    <div class="card-header">
-                        Filtro:
-                    </div>
-                    <div class="card-body has-success">
-                        <form id="payment-form" class="contact-form" method='POST' action="{{route('admin.balance')}}">  
-                            <div class="mb-3 row">             
-                                <label class="col-sm-2 col-form-label">Moneda</label>
-                                <div class="col">
-                                    <select class="form-select form-control" name="selectCoin" id="selectCoin">
-                                        <option value="Selecionar Moneda">Selecionar Moneda</option>
-                                        <option value="0">USA $</option>
-                                        <option value="1">VE BS</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="row">&nbsp;</div>
 
-                            <div class="row">
-                                <div class="col-6">
-                                    <button type="submit" class="submit btn btn-bottom">Buscar</button>
-                                </div>
-                                <div class="col-6">
-                                    <a type="button" class="remove-balance btn" href="{{route('admin.balance')}}">Limpiar</a>
-                                </div>
-                            </div>
-
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="tableShow" id="topBalance">
+            <div class="row">&nbsp;</div>
+            <div class="row">
+                @if($selectCoin == 0)
+                    <label>
+                        <strong>Moneda:</strong>
+                        <img src="../images/eeuu.png" width="20px" height="20px">
+                        USA $ 
+                    </label>
+                @else
+                    <label>
+                        <strong>Moneda:</strong>
+                        <img src="../images/venezuela.png" width="20px" height="20px">
+                        VE Bs 
+                    </label>
+                @endif
+            </div>
+
+            <div class="row">&nbsp;</div>
+
             <table id="table_id" class="table table-bordered mb-5 display">
                 <thead>
                     <tr class="table-title">
@@ -59,20 +44,30 @@
                         <th scope="col">Nombre Compañia</th>
                         <th scope="col">Moneda</th>
                         <th scope="col">Total</th>
+                        <th scope="col">Estado</th>
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($balances as $balance)
+                    @foreach($deposits as $deposit)
                     <tr>
-                        <td><input type="checkbox" class="check-Payment" data-id="{{ $balance->id }}"></td>
-                        <td>{{ $balance->id }}</td>
-                        <td>{{ $balance->name }}</td>
-                        <td>@if($balance->coin == 0 )  USD @else Bs @endif</td>
-                        <td>@if($balance->coin == 0 )  $ @else Bs @endif {{ $balance->total }}</td>
+                        <td><input type="checkbox" class="check-Payment" data-id="{{ $deposit->id }}"></td>
+                        <td>{{ $deposit->id }}</td>
+                        <td>{{ $deposit->name }}</td>
+                        <td>@if($deposit->coin == 0 )  USD @else Bs @endif</td>
+                        <td>@if($deposit->coin == 0 )  $ @else Bs @endif {{ $deposit->total }}</td>
                         <td>
-                            <botton class="pay btn btn-bottom" onclick="showDataPayment({{$balance->id}}, true)" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Pagar Comerciante"><i class="material-icons">payment</i></botton>
-                            <a class="btn btn-bottom" href="{{route('admin.transactionsSearchId', ['id' => $balance->commerce_id])}}" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Transacciones"><i class="material-icons">description</i></a>
+                            @if($deposit->status == 0)
+                                <div class="pending">Pendiente</div>
+                            @elseif($deposit->status == 1)
+                                <div class="inProcess">En Proceso</div>
+                            @else
+                                <div class="completed">Completado</div>
+                            @endif
+                        </td>
+                        <td>
+                            <botton class="pay btn btn-bottom" onclick="showDataPayment({{$deposit->id}}, true)" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Pagar Comerciante"><i class="material-icons">payment</i></botton>
+                            <a class="btn btn-bottom" href="{{route('admin.transactionsSearchId', ['id' => $deposit->commerce_id])}}" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Transacciones"><i class="material-icons">description</i></a>
                             <a class="btn btn-bottom" href="" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Generar reporte de pago"><i class="material-icons">get_app</i></a>
                         </td>
                     </tr>
@@ -82,11 +77,24 @@
 
             <div class="row">&nbsp;</div>
             <div class="row">
-                <div class="col-3" style="top:12px;">
+                <div class="text-left" style="margin-top:12px; margin-left:25px">
                     <label style="color:black;"><input type="checkbox" class="selectAll" id="selectAllCheck-Payment" name="selectAllCheck-Payment"> Seleccionar Todos </label>
                 </div>
-                <div class="col-4">
-                <strong>Acciones:</strong> &nbsp;&nbsp;&nbsp; <botton class="pay btn btn-bottom" onclick="showDataPayment(0, false)" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Pagar todos Comerciantes con Banco de Venezuela"><i class="material-icons">payment</i></botton>
+                <div class="text-left" style="margin-left:40px;">
+                    <strong class="addMarginRight">Acciones:</strong>
+                    <botton class="pay btn btn-bottom" onclick="showDataPayment(0, false)" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Pagar comerciantes seleccionados"><i class="material-icons">payment</i></botton>
+                    @if($selectCoin == 1)
+                        <a class="btn btn-bottom" href="" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Generar reporte de pago seleccionados"><i class="material-icons">get_app</i></a>
+                    @endif
+                    <label class="content-select">
+                        <select class="addMargin" name="changeStatus" id="changeStatus">
+                            <option value="0">Cambiar Estado</option>
+                            <option value="1">Pendiente</option>
+                            <option value="2">En Proceso</option>
+                            <option value="3">Completado</option>
+                        </select>
+                    </label>
+                    
                 </div>
             </div>
         </div>
@@ -97,7 +105,35 @@
         var rowSelect;
         var statusMenu = "{{$statusMenu}}";
         var selectCoin = '{{$selectCoin}}';
-        $("#selectCoin option[value='"+ selectCoin +"']").attr("selected",true);
+        
+        $('#changeStatus').change(function(){
+            var selectID = [];
+            var status = $(this).val();
+            if (status != 0){
+                $("input:checked.check-Payment").each(function () {
+                    var id = $(this).data("id");
+                    selectID.push(id);
+                });
+
+                if(selectID.length >0)
+                    $.ajax({
+                        url: "{{route('admin.changeStatus')}}", 
+                        data: {"selectId" : selectID, "status" : status },
+                        type: "POST",
+                    }).done(function(data){
+                        $("#changeStatus option[value='']").attr("selected",true);
+                        if(data.status == 201)
+                            alertify.success('Estado ha sido cambiado correctamente');
+                    
+                        location.reload()
+                    }).fail(function(result){}); 
+                else{
+                    alertify.error('Debe seleccionar depositos');
+                    $("#changeStatus option[value='']").attr("selected",true);
+                }
+            }
+            
+        });
 
         function showDataPayment(id, status)
         {
@@ -114,7 +150,7 @@
             if(selectID.length >0)
                 $.ajax({
                     url: "{{route('admin.showPayment')}}", 
-                    data: {"selectId" : selectID, "status" : status },
+                    data: {"selectId" : selectID, "status" : status, "selectCoin" : selectCoin },
                     type: "POST",
                 }).done(function(data){
                     if(data.status == 1)

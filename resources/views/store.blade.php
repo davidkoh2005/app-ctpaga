@@ -31,7 +31,7 @@
                                 </div>
                                 <div class="col text-right" id="btnFloatingShipping">
                                     <div class="relative">
-                                        <div> <img class="logoCart" widht="80px" height="80px" class="justify-content-center" src="../images/logoCarrito-white.png"> </div>
+                                        <div> <img class="logoCart" widht="70px" height="70px" class="justify-content-center" src="../images/logoCarrito-white.png"> </div>
                                         <div class="circleGreen">0</div>
                                     </div>
                                 </div>
@@ -150,7 +150,7 @@
                     </div>
 
                     <div class= "form-section-store">
-                    <div class="col-md-12 col-sm-12 col-12">
+                        <div class="col-md-12 col-sm-12 col-12">
                             <div class="row">
                                 <div class="profile">
                                 @if($picture)
@@ -163,6 +163,12 @@
 
                             <div class="row">&nbsp;</div>
                             <div class="row">&nbsp;</div>
+
+                            <div class="col-12">
+                                <p><strong>Rif: </strong> {{$commerce->rif}}</p>
+                                <p><strong>Teléfono: </strong> {{$commerce->phone}}</p>
+                                <p><strong>Dirección: </strong> {{$commerce->address}}</p>
+                            </div>
 
                         </div>
                     </div>

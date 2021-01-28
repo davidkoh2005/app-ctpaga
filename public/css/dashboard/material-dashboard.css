@@ -19763,4 +19763,34 @@ Copyright (c) 2015 Daniel Eden
   }
 }
 
+
+.hide{
+  display:none !important;
+}
+
+#subMenuDeposits {
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 0px;
+}
+
+#subMenuDeposits li, #subMenuDeposits li a {
+  cursor: pointer;
+}
+
+#subMenuDeposits li:hover {
+  background-color: #e9ecef;
+}
+
+.coinText {
+  cursor: pointer;
+  margin: 0;
+  line-height: 30px;
+  font-size: 14px;
+  position: relative;
+  height: auto;
+  white-space: nowrap;
+  top: 2px;
+  color: #3C4858;
+}
 /*# sourceMappingURL=dashboard-free.css.map */

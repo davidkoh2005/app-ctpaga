@@ -129,3 +129,77 @@ table {
 .ajs-message {
     color: white !important;
 }
+
+.pending {
+    border-radius: 5px;
+    background-color: red;
+    color: white
+}
+
+.inProcess {
+    border-radius: 5px;
+    background-color: #3f8ac8;
+    color: white
+}
+
+.completed {
+    border-radius: 5px;
+    background-color: #00cc5f;
+    color: white
+}
+
+.addMarginRight {
+    margin-right: 15px;;
+}
+
+.addMargin {
+    margin-left: 15px;
+}
+
+.content-select select{
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+}
+
+.content-select select::-ms-expand {
+    display: none;
+}
+
+.content-select{
+	max-width: 250px;
+	position: relative;
+}
+ 
+.content-select select{
+	display: inline-block;
+	width: 160px;
+	cursor: pointer;
+  	padding: 7px 10px;
+  	height: 42px;
+  	outline: 0; 
+  	border: 0;
+	border-radius: 0;
+	background: #f0f0f0;
+	color: #7b7b7b;
+	font-size: 1em;
+	color: black;
+	font-family: 'Montserrat-Bold', sans-serif;
+	border:2px solid rgba(0,0,0,0.2);
+    border-radius: 12px;
+    position: relative;
+    transition: all 0.25s ease;
+}
+
+.content-select select {
+    padding: 10px;
+    padding-right: 30px;
+    background-image: url('../images/arrow-down.png');
+    background-repeat: no-repeat, repeat;
+    background-position: right .7em top 50%, 0 0;
+    background-size: 1em auto, 100%;
+  }
+ 
+.content-select:hover i{
+	margin-top: 3px;
+}

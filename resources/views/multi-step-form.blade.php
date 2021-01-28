@@ -88,7 +88,7 @@
                                 <input type="hidden" id="coinClient"  name="coinClient" value="{{$coinClient}}">
                                 <input type="hidden" id="userUrl"  name="userUrl" value="{{$userUrl}}">
                                 <input type="hidden" id="codeUrl"  name="codeUrl" value="{{$codeUrl}}">
-                            </>
+                            </div>
                             <div class= "form-section center">
                                 <div id="saleQuantity"></div>
                                 <button type="button" class="remove btn btn-remove"><i class="fa fa-trash" aria-hidden="true"></i> Eliminar</button>
@@ -275,7 +275,7 @@
 
                             <div class="form-section">
                                 <p>Revisa y paga:</p>
-                                <div class="row sales justify-content-center align-items-center minh-10">
+                                <div class="row sales justify-content-center align-items-center minh-10 addPadding">
                                     <div class="col-md-2 col-sm-2 col-3">
                                         <svg width="30px" height="30px" viewBox="0 0 16 16" class="bi bi-cart2" fill="currentColor">
                                             <path fill-rule="evenodd" d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
@@ -292,7 +292,7 @@
                                     <input type="hidden" id="totalProductService" name="totalProductService" value="{{$total}}">
                                     <input type="hidden" id="percentageSelect" name="percentageSelect">
                                 </div>
-                                <div class="row sales justify-content-center align-items-center minh-10">
+                                <div class="row sales justify-content-center align-items-center minh-10 addPadding">
                                     <div class="col-md-2 col-sm-2 col-3">
                                         <img src="/images/envios.png" class="figure-img img-fluid rounded" width="50px" height="50px">
                                     </diV>

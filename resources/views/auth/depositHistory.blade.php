@@ -20,7 +20,7 @@
                     <div class="card-header">
                         Filtro:
                     </div>
-                    <div class="card-body has-success">
+                    <div class="card-body has-success" style="margin:15px;">
                         <form class="contact-form" method='POST' action="{{route('commerce.depositHistory')}}">
 
                             <div class="mb-3 row">
@@ -78,7 +78,7 @@
                         @foreach($historyAll as $history)
                         <tr>
                             <td>{{$history['date'] }}</td>
-                            @if(empty($history['numRef']))
+                            @if($history['status']==0)
                                 <td class="received">{{$history['total']}}</td>
                                 <td class="received">RECIBIDO</td>
                                 <td></td>

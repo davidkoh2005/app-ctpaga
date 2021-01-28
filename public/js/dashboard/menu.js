@@ -12,8 +12,19 @@ $(document).ready( function () {
     else if(statusMenu == "reportPayment")
         $("#title-navbar").html("Reporte Depósitos");
     else if(statusMenu == "depositHistory")
-        $("#title-navbar").html("Historial de Depositos");
+        $("#title-navbar").html("Historial");
     else if(statusMenu == "rateHistory")
         $("#title-navbar").html("Tasa Historial");
     
+
+    $('#nav-balance').click(function() {
+        if($('#subMenuDeposits').hasClass("hide"))
+            $('#subMenuDeposits').removeClass("hide");
+        else
+            $('#subMenuDeposits').addClass("hide")
+    });
+
+    $('#subMenuDeposits li').click(function() {
+        $('#subMenuDeposits').addClass("hide")
+    });
 });

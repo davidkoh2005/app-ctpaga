@@ -1,6 +1,4 @@
-<div class="row">&nbsp;</div>
-
-<div class="col-md-12 col-sm-12 col-12">
+<div class="col-12 mx-auto">
     <ul class="nav flex-column" >
         <li class="nav-item">
             <a class="nav-link listCategories category-current" href="javascript:;">

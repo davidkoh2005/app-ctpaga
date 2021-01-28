@@ -11,7 +11,7 @@
                 @if($statusID)
                     <label><strong>Datos del Bancaria:</strong></label>
                     <div class="dataPay">
-                        @if($balance->coin == 0)
+                        @if($deposit->coin == 0)
 
                             <label><strong>País: </strong>{{$bank->country}}</label> <br> 
                             <label><strong>Nombre de la cuenta: </strong>{{$bank->accountName}}</label> <br> 
@@ -54,8 +54,8 @@
                             </div>
                             <div class="col-auto">
                                 <div class="input-group">
-                                    <div class="input-group-text">@if($balance->coin == 0) $ @else Bs @endif</div>
-                                    <input type="tel" name="amount" id="amount" class="form-control" value="{{$balance->total}}" readonly/>
+                                    <div class="input-group-text">@if($deposit->coin == 0) $ @else Bs @endif</div>
+                                    <input type="tel" name="amount" id="amount" class="form-control" value="{{$deposit->total}}" readonly/>
                                 </div>
                             </div>
                         </div>

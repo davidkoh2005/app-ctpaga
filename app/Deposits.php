@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Deposits extends Model
 {
     protected $fillable = [
-        'id', 'user_id', 'commerce_id', 'coin', 'total', 'numRef', 'date',
+        'id', 'user_id', 'commerce_id', 'coin', 'total', 'numRef', 'date', 'status',
     ]; 
 
     public function user()

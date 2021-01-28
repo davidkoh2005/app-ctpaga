@@ -238,7 +238,7 @@ class CommerceController extends Controller
 
         $historyDeposits = Deposits::where("commerce_id", $idCommerce)
                                 ->where("coin", $selectCoin)
-                                ->select("date", "total", "numRef")
+                                ->select("date", "total", "numRef","status")
                                 ->where("date", ">=", Carbon::now()->subMonth(3))
                                 ->orderBy('date', 'asc')->get();
 
@@ -256,14 +256,14 @@ class CommerceController extends Controller
                 {
                     $total += floatval($history->total); 
                 }else{
-                    array_push($historyAll, array("total"=>$total, "date" => $dateFinal->format('Y-m-d'), "numRef" => ""));
+                    array_push($historyAll, array("total"=>$total, "date" => $dateFinal->format('Y-m-d'), "numRef" => "", "status"=>0));
                     
                     foreach ($historyDeposits as $deposits)
                     {
                         $dateFinal = Carbon::parse($history->date);
                         if(Carbon::parse($deposits->date)->greaterThan($dateStart) && Carbon::parse($deposits->date)->lessThan($dateFinal))
                         {
-                            array_push($historyAll, array("total"=>'-'.$deposits->total, "date" => $dateFinal->format('Y-m-d'), "numRef"=>$deposits->numRef));
+                            array_push($historyAll, array("total"=>'-'.$deposits->total, "date" => $dateFinal->format('Y-m-d'), "numRef"=>$deposits->numRef, "status" =>$deposits->status));
                             $dateStart = Carbon::parse($history->date);
                         }
                     }
@@ -272,12 +272,12 @@ class CommerceController extends Controller
                 }
             }
 
-            array_push($historyAll, array("total"=>$total, "date" => $dateFinal->format('Y-m-d'), "numRef" => ""));
+            array_push($historyAll, array("total"=>$total, "date" => $dateFinal->format('Y-m-d'), "numRef" => "", "status" =>0));
             foreach ($historyDeposits as $deposits)
             {
                 if(Carbon::parse($deposits->date)->greaterThan($dateStart) && Carbon::parse($deposits->date)->lessThanOrEqualto(Carbon::now()))
                 {
-                    array_push($historyAll, array("total"=>'-'.$deposits->total, "date" => $dateFinal->format('Y-m-d'), "numRef"=>$deposits->numRef));
+                    array_push($historyAll, array("total"=>'-'.$deposits->total, "date" => $dateFinal->format('Y-m-d'), "numRef"=>$deposits->numRef, "status"=>$deposits->status));
                 }
             }
         }

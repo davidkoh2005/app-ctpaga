@@ -19,7 +19,7 @@
                     <div class="card-header">
                         Filtro:
                     </div>
-                    <div class="card-body has-success">
+                    <div class="card-body has-success" style="margin:15px;">
                         <form id="payment-form" class="contact-form" method='POST' action="{{route('admin.reportPayment')}}">  
                             <div class="mb-3 row">
                                 <label class="col-md-2 col-12  col-form-label">Nombre Compañia</label>
@@ -82,6 +82,7 @@
                         <th scope="col">Moneda</th>
                         <th scope="col">Total</th>
                         <th scope="col">Fecha</th>
+                        <th scope="col">Fecha</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -93,6 +94,7 @@
                         <td>@if($deposit->coin == 0 )  USD @else Bs @endif</td>
                         <td>@if($deposit->coin == 0 )  $ @else Bs @endif {{ $deposit->total }}</td>
                         <td>{{$deposit->date}}</td>
+                        <td><div class="completed">Completado</div></td>
                     </tr>
                     @endforeach
                 </tbody>
