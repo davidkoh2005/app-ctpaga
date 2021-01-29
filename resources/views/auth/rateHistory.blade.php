@@ -23,8 +23,8 @@
                     <div class="card-header">
                         Filtro:
                     </div>
-                    <div class="card-body has-success">
-                        <form class="contact-form" method='POST' action="{{route('commerce.rate')}}">
+                    <div class="card-body has-success" style="margin:15px;">
+                        <form id="rate-form" class="contact-form" method='POST' action="{{route('commerce.rate')}}">
 
                             <div class="mb-3 row">
                                 <label class="col-sm-2 col-form-label">Rango de Fecha</label>
@@ -48,7 +48,7 @@
                                     <a type="button" class="remove-transactions btn" href="{{route('commerce.rate')}}">Limpiar</a>
                                 </div>
                             </div>
-
+                            <input type="hidden" name="statusFile" id="statusFile" value="">
                         </form>
                     </div>
                 </div>
@@ -56,7 +56,11 @@
         </div>
         
         <div class="col-12">
-        
+            <div class="col-11">
+                <strong class="download">Descargar Reporte en:</strong>
+                <input type="image" id="btnPDF" src="../../images/pdf.png" width="45px" height="50px">
+                <input type="image" id="btnExcel" src="../../images/excel.png" width="50px" height="60px" style="margin-left:20px">
+            </div>
             <div class="tableShow">
                 <table id="table_Rate" class="table table-bordered mb-5 display">
                     <thead>
@@ -82,6 +86,15 @@
     @include('admin.bookshopBottom')
     <script> 
         var statusMenu = "{{$statusMenu}}";
+        $('#btnPDF').on('click', function() {
+            $('#statusFile').val("PDF");
+            $('#rate-form').submit();
+        });
+
+        $('#btnExcel').on('click', function() {
+            $('#statusFile').val("EXCEL");
+            $('#rate-form').submit();
+        });
     </script>
 </body>
 </html>

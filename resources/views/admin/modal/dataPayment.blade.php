@@ -75,6 +75,10 @@
             </div>
         </div>
     </div>
+
+
+
+
     <script>
         $(document).ready( function () {
             $('#submit').on('click', function() {
@@ -85,8 +89,9 @@
                     status = false;
                     alertify.error('Debe ingresar el numero de referencia correctamente');
                 }
+                console.log(statusSelect);
 
-                if(status){
+                if(status && !statusSelect){
                     $('#submit').hide();
                     $('#loading').removeClass("hide");
                     $('#loading').addClass("show");
@@ -100,7 +105,22 @@
                             location.reload();
                         }
                     }).fail(function(result){});
-                } 
+                }else if(status && statusSelect) {
+                    $('#submit').hide();
+                    $('#loading').removeClass("hide");
+                    $('#loading').addClass("show");
+                    $.ajax({
+                        url: "{{route('admin.changeStatus')}}", 
+                        data: {"selectId" : "", "status" : 3, "numRef": numRef },
+                        type: "POST",
+                    }).done(function(data){
+                        $("#changeStatus option[value='']").attr("selected",true);
+                        if(data.status == 201)
+                            alertify.success('Estado ha sido cambiado correctamente');
+                    
+                        location.reload()
+                    }).fail(function(result){}); 
+                }
                 
             });
         });

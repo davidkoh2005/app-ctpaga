@@ -24,7 +24,7 @@
         }
 
         #table_id td, #table_id th {
-
+            text-align: center;
             border: 1px solid #ddd;
             padding: 8px;
         }
@@ -37,29 +37,52 @@
             color: white;
         }
 
-        .completed {
-            border-radius: 5px;
-            background-color: #00cc5f;
-            color: white
+        .received {
+            color: green;
+            font-weight: bold;
+        }
+
+        .deposit {
+            color: red;
+            font-weight: bold;
+        }
+
+        .depositNumRef {
+            color: black;
+            font-weight: bold;
         }
     </style>
 </head>
 <body style="margin: 50px;">
+    @php
+        use Carbon\Carbon;
+    @endphp
     <div class="row">
         <div class="styleText">
             <strong>Fecha:</strong> {{$today}}<br>
-            <strong>Direccion:</strong> Los Dos Caminos.<br>
-            <strong>Telefono:</strong> 0212-555-5555<br>
+            <strong>Nombre de la compañia:</strong> {{$commerceData->name}}<br>
+            <strong>Direccion:</strong> {{$commerceData->address}}<br>
+            <strong>Telefono:</strong> {{$commerceData->phone}}<br>
         </div>
 
+        @if($startDate && $endDate)
+            <div class="row">&nbsp;</div>
+            <div class="row">&nbsp;</div>
+
+            <strong>Fecha:</strong> {{$startDate}} al {{$endDate}}<br>
+        @endif
         <div class="positionImage">
         @php
-            $path = public_path('/images/logo/logo.png');
+            if($pictureUser)
+                $path = public_path($pictureUser->url);
+            else
+                $path = public_path('/images/perfil.png');
+
             $type = pathinfo($path, PATHINFO_EXTENSION);
             $data = file_get_contents($path);
             $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
         @endphp
-            <img src="{{$base64}}" width="140px">
+            <img src="{{$base64}}" width="100px">
         </div>
     </div>
 
@@ -70,38 +93,19 @@
         <table id="table_id" class="table table-bordered mb-5 display">
             <thead>
                 <tr class="table-title">
-                    <th scope="col">Nombre Compañia</th>
                     <th scope="col">Fecha</th>
-                    <th scope="col">Moneda</th>
-                    <th scope="col">Total</th>
-                    <th scope="col">Numero Referencia</th>
-                    <th scope="col">Estado</th>
+                    <th scope="col">Monto</th>
                 </tr>
             </thead>
             <tbody>
-                @php $totalBs=0; $totalUSD=0; @endphp
-                @foreach($deposits ?? '' as $deposit)
+                @foreach($rates as $rate)
                 <tr>
-                    <td>{{ $deposit->name }}</td>
-                    <td>{{$deposit->date}}</td>
-                    <td>@if($deposit->coin == 0 )  USD @else Bs @endif</td>
-                    <td>@if($deposit->coin == 0 )  $ @else Bs @endif {{ $deposit->total }}</td>
-                    <td>{{ $deposit->numRef }}</td>
-                    <td><div class="completed">Completado</div></td>
-                    @php 
-                        if($deposit->coin == 0 )
-                            $totalUSD += $deposit->total;
-                        else
-                            $totalBs += $deposit->total;
-                    @endphp
+                    <td>{{Carbon::parse($rate->date)->format('Y-m-d g:i A') }}</td>
+                    <td>Bs {{number_format($rate->rate, 2, ',', '.') }}</td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
-        <div class="styleText"  style="margin: 20px; text-align: right;">
-            <strong>Total USA:</strong> $ {{$totalUSD}} <br>
-            <strong>Total VE:</strong> Bs {{$totalBs}}<br>
-        </div>
     </div>
 </body>
 </html>

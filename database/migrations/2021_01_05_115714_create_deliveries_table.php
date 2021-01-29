@@ -19,7 +19,7 @@ class CreateDeliveriesTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('phone', 20);
-            $table->boolean('status')->default(0); //0 no confirmado y 1 confirmado
+            $table->boolean('status')->default(0); //0 not active and 1 active
             $table->rememberToken();
             $table->timestamps();
         });

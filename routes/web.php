@@ -78,6 +78,7 @@ Route::group(['middleware'=>'admin'], function() {
     Route::get('/admin/historial', 'AdminController@reportPayment')->name('admin.reportPayment');
     Route::post('/admin/historial', 'AdminController@reportPayment')->name('admin.reportPayment');
     Route::post('/admin/txt', 'AdminController@downloadTxt')->name('admin.downloadTxt');
+    Route::get('/admin/delivery', 'AdminController@delivery')->name('admin.delivery');
 });
 
 Route::post('/admin/removePicture', 'AdminController@removePicture')->name('admin.removePicture');

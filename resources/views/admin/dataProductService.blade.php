@@ -17,16 +17,13 @@
 <div class="row">&nbsp;</div>
 <div id="title"><h5 class="center">Productos y/o Servicios </h5></div>
 @foreach ($sales as $sale)
-    <div class="row sales justify-content-center align-items-center minh-10" id="listSale">
-        <div class="quantity col-md-2 col-sm-2 col-3"><div id="desingQuantity">{{$sale->quantity}}</div></div>
+    <div class="row sales justify-content-center align-items-center minh-10" id="listSale" style="cursor: context-menu;">
+        <div class="quantity"><div id="desingQuantity">{{$sale->quantity}}</div></div>
+        <div class="verticalLine"></div>
         <input type="hidden" name="idSale" id="idSale" value="{{$sale->id}}">
         <div class="name col">{{$sale->name}}<br> @php showPrice($sale->price, $rate, $sale->coin, $coinClient); @endphp</div>
-        @if ($coinClient == 0) 
-            <div class="total col"> @php showTotal($sale->price, $rate, $sale->coin, $coinClient, $sale->quantity); @endphp</div>
-        @else
-            <div class="total bold col-12 d-block d-sm-none"> Total:</div>
-            <div class="total col-md col-12"> @php showTotal($sale->price, $rate, $sale->coin, $coinClient, $sale->quantity); @endphp</div>
-        @endif
+        <div class="verticalLine"></div>
+        <div class="total" style="padding-bottom:13px" > @php showTotal($sale->price, $rate, $sale->coin, $coinClient, $sale->quantity); @endphp</div>
     </div>
 @endforeach
 

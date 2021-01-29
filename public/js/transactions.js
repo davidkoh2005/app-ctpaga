@@ -77,12 +77,19 @@ $(document).ready( function () {
     });
 
     var date = new Date();
-    date.setMonth(date.getMonth()-3);
+    date.setMonth(date.getMonth()-4);
     date.setDate(1);
 
-    $('.input-daterange').datepicker({
+    $('#datepicker').datepicker({
+        orientation: "bottom auto",
         startDate: date,
         endDate: new Date(),
+        language: "es",
+        todayHighlight: true,
+    });
+
+    $('#datepicker-admin').datepicker({
+        orientation: "bottom auto",
         language: "es",
         todayHighlight: true,
     });

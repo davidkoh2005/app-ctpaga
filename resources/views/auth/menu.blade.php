@@ -62,6 +62,12 @@
                 <p>Transacciones</p>
               </a>
             </li>
+            <li class="nav-item" id="nav-delivery">
+              <a class="nav-link" href="{{route('admin.delivery')}}">
+                <i class="material-icons">local_shipping</i>
+                <p>Delivery</p>
+              </a>
+            </li>
           @else
             <li class="nav-item" id="nav-dashboard">
               <a class="nav-link" href="{{route('commerce.dashboard')}}">

@@ -11,31 +11,6 @@
             color: black;
         }
 
-        .positionImage {
-            position: absolute;
-            right: 40px;
-            top: 0px;
-        }
-
-        #table_id {
-            font-family: Arial, Helvetica, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        #table_id td, #table_id th {
-
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-
-        #table_id th {
-            padding-top: 12px;
-            padding-bottom: 12px;
-            text-align: center;
-            background-color: #585858;
-            color: white;
-        }
     </style>
 </head>
 <body style="margin: 50px;">
@@ -54,24 +29,24 @@
         <table id="table_id" class="table table-bordered mb-5 display">
             <thead>
                 <tr class="table-title">
-                    <th scope="col">Nombre Compañia</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Moneda</th>
-                    <th scope="col">Total</th>
-                    <th scope="col">Numero Referencia</th>
-                    <th scope="col">Estado</th>
+                    <th scope="col" width="20" style="background-color: #585858; color:white; text-align:center;">Nombre Compañia</th>
+                    <th scope="col" width="20" style="background-color: #585858; color:white; text-align:center;">Fecha</th>
+                    <th scope="col" width="10" style="background-color: #585858; color:white; text-align:center;">Moneda</th>
+                    <th scope="col" width="15" style="background-color: #585858; color:white; text-align:center;">Total</th>
+                    <th scope="col" width="25" style="background-color: #585858; color:white; text-align:center;">Numero Referencia</th>
+                    <th scope="col" width="15" style="background-color: #585858; color:white; text-align:center;">Estado</th>
                 </tr>
             </thead>
             <tbody>
                 @php $totalBs=0; $totalUSD=0; @endphp
                 @foreach($deposits ?? '' as $deposit)
                 <tr>
-                    <td>{{ $deposit->name }}</td>
-                    <td>{{$deposit->date}}</td>
-                    <td>@if($deposit->coin == 0 )  USD @else Bs @endif</td>
-                    <td>@if($deposit->coin == 0 )  $ @else Bs @endif {{ $deposit->total }}</td>
-                    <td>{{ $deposit->numRef }}</td>
-                    <td><div class="completed">Completado</div></td>
+                    <td style="text-align:center;">{{ $deposit->name }}</td>
+                    <td style="text-align:center;">{{$deposit->date}}</td>
+                    <td style="text-align:center;">@if($deposit->coin == 0 )  USD @else Bs @endif</td>
+                    <td style="text-align:center;">@if($deposit->coin == 0 )  $ @else Bs @endif {{ $deposit->total }}</td>
+                    <td style="text-align:center;">{{ $deposit->numRef }}</td>
+                    <td style="text-align:center; color:green;">Completado</td>
                     @php 
                         if($deposit->coin == 0 )
                             $totalUSD += $deposit->total;

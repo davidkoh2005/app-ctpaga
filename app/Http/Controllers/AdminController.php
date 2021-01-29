@@ -197,8 +197,8 @@ class AdminController extends Controller
         foreach (Session::get('dataSelectID') as $id)
         {
             $deposits = Deposits::where('id', $id['id'])->first(); 
-            $deposits->status = 2;
-            $deposits->numref = $request->numRef;
+            $deposits->status = 3;
+            $deposits->numRef = $request->numRef;
             $deposits->save();
         }
 
@@ -257,8 +257,8 @@ class AdminController extends Controller
         $searchNameClient="";
         $selectCoin="Selecionar Moneda";
         $selectPayment="Selecionar Tipo de Pago";
-        $startDate="";
-        $endDate="";
+        $startDate = Carbon::now()->setDay(1)->subMonth(4)->format('Y-m-d');
+        $endDate = Carbon::now()->format('Y-m-d');
         $idCommerce=0;
         $companyName = "";
         if($request->id){
@@ -305,9 +305,8 @@ class AdminController extends Controller
             if(!empty($request->selectPayment) && $request->selectPayment != "Selecionar Tipo de Pago")
             $transactions->where('paids.nameCompanyPayments',  'ilike', "%" . $request->selectPayment . "%" );
 
-        if(!empty($request->startDate) && !empty($request->endDate))
-            $transactions->where('paids.date', ">=",$request->startDate)
-                        ->where('paids.date', "<=",$request->endDate);
+        $transactions->where('paids.date', ">=",$startDate)
+            ->where('paids.date', "<=",$endDate);
 
         $transactions = $transactions->get();
 
@@ -336,12 +335,22 @@ class AdminController extends Controller
 
     public function changeStatus(Request $request)
     {
-
-        foreach ($request->selectId as $id)
-        {
-            $deposits = Deposits::where('id', $id)->first();
-            $deposits->status = $request->status;
-            $deposits->save();
+        if($request->selectId == ""){
+            foreach (Session::get('dataSelectID') as $id)
+            {
+                $deposits = Deposits::where('id', $id['id'])->first(); 
+                $deposits->status = 3;
+                $deposits->numRef = $request->numRef;
+                $deposits->save();
+            }
+        }else{
+            foreach ($request->selectId as $id)
+            {
+                $deposits = Deposits::where('id', $id)->first();
+                $deposits->status = $request->status;
+                $deposits->numRef = "";
+                $deposits->save();
+            }
         }
         
         return response()->json(array('status' => 201));
@@ -422,8 +431,8 @@ class AdminController extends Controller
         $searchNameCompany="";
         $numRef="";
         $selectCoin="Selecionar Moneda";
-        $startDate="";
-        $endDate="";
+        $startDate = Carbon::now()->setDay(1)->subMonth(4)->format('Y-m-d');
+        $endDate = Carbon::now()->format('Y-m-d');
 
         if($request->all()){
             $searchNameCompany=$request->searchNameCompany;
@@ -449,9 +458,8 @@ class AdminController extends Controller
         if(!empty($request->selectCoin) && $request->selectCoin != "Selecionar Moneda")
             $deposits->where('deposits.coin', $request->selectCoin);
         
-        if(!empty($request->startDate) && !empty($request->endDate))
-            $deposits->where('deposits.date', ">=",$request->startDate)
-                        ->where('deposits.date', "<=",$request->endDate);
+        $deposits->where('deposits.date', ">=",$startDate)
+                        ->where('deposits.date', "<=",$endDate);
 
         $deposits = $deposits->get();
 
@@ -484,6 +492,71 @@ class AdminController extends Controller
         $url = 'http://'.$_SERVER['HTTP_HOST'].'/ctpaga.txt';
         return response()->json(array('url'=>$url, 'status' => 201));
 
+    }
+
+    public function delivery(Request $request)
+    {
+        if (!Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('admin.login'));
+        }elseif (Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('commerce.dashboard'));
+        }
+
+        $searchNameCompany="";
+        $searchNameClient="";
+        $startDate = Carbon::now()->setDay(1)->subMonth(4)->format('Y-m-d');
+        $endDate = Carbon::now()->format('Y-m-d');
+        $idCommerce=0;
+        $companyName = "";
+        $code="";
+
+        if($request->id){
+            $idCommerce=intVal($request->id);
+            
+            $commerce = Commerce::whereId($idCommerce)->first();
+            $companyName = $commerce->name;
+
+            $transactions = Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
+                        ->where('paids.commerce_id', 'like', "%".$request->id. "%" )
+                        ->orderBy('paids.id', 'desc')
+                        ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.selectShipping', 'paids.total',
+                            'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.alarm');
+        }else{
+            $transactions = Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
+                        ->orderBy('paids.id', 'desc')
+                        ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.selectShipping', 'paids.total',
+                            'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.alarm');
+        }
+
+        if($request->all()){
+            $idCommerce = $idCommerce == 0? $request->idCommerce : $idCommerce;
+            $searchNameCompany=$request->searchNameCompany;
+            $searchNameClient=$request->searchNameClient;
+            $startDate=$request->startDate;
+            $endDate=$request->endDate;
+            $code = $request->code;
+        }
+
+
+        if(!empty($request->idCommerce))
+            $transactions->where('commerces.id', $request->idCommerce); 
+
+        if(!empty($request->searchNameCompany))
+            $transactions->where('commerces.name', 'ilike', "%" . $request->searchNameCompany . "%" );
+        
+        if(!empty($request->searchNameClient))
+            $transactions->where('paids.nameClient', 'ilike', "%" . $request->searchNameClient . "%" );
+
+        if(!empty($request->code))
+            $transactions->where('paids.codeurl', 'ilike', "%" . $request->code . "%" );
+
+        $transactions->where('paids.date', ">=",$startDate)
+            ->where('paids.date', "<=",$endDate);
+
+        $transactions = $transactions->get();
+
+        $statusMenu = "delivery";
+        return view('admin.delivery', compact('transactions', 'searchNameCompany', 'searchNameClient', 'startDate', 'endDate', 'statusMenu','idCommerce', 'companyName', 'code'));
     }
 
 }

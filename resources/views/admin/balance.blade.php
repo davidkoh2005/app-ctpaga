@@ -12,7 +12,8 @@
     <script src="../../js/dashboard/script.js" type="text/javascript"></script>
 </head>
 <body class="body-admin">
-  @include('auth.menu')
+    <div class="loader"></div>
+    @include('auth.menu')
     <div class="main-panel">
       @include('auth.navbar')
 
@@ -57,9 +58,9 @@
                         <td>@if($deposit->coin == 0 )  USD @else Bs @endif</td>
                         <td>@if($deposit->coin == 0 )  $ @else Bs @endif {{ $deposit->total }}</td>
                         <td>
-                            @if($deposit->status == 0)
+                            @if($deposit->status == 1)
                                 <div class="pending">Pendiente</div>
-                            @elseif($deposit->status == 1)
+                            @elseif($deposit->status == 2)
                                 <div class="inProcess">En Proceso</div>
                             @else
                                 <div class="completed">Completado</div>
@@ -107,7 +108,8 @@
         var rowSelect;
         var statusMenu = "{{$statusMenu}}";
         var selectCoin = '{{$selectCoin}}';
-        
+        var statusSelect = false;
+        $( ".loader" ).fadeOut("slow"); 
         $('#changeStatus').change(function(){
             var selectID = [];
             var status = $(this).val();
@@ -118,17 +120,28 @@
                 });
 
                 if(selectID.length >0)
-                    $.ajax({
-                        url: "{{route('admin.changeStatus')}}", 
-                        data: {"selectId" : selectID, "status" : status },
-                        type: "POST",
-                    }).done(function(data){
-                        $("#changeStatus option[value='']").attr("selected",true);
-                        if(data.status == 201)
-                            alertify.success('Estado ha sido cambiado correctamente');
-                    
-                        location.reload()
-                    }).fail(function(result){}); 
+                    if(status == 3){
+                        statusSelect = true;
+                        showDataPayment(0, false)
+                    }
+                    else{
+                        $( ".loader" ).fadeIn("slow"); 
+                        $.ajax({
+                            url: "{{route('admin.changeStatus')}}", 
+                            data: {"selectId" : selectID, "status" : status },
+                            type: "POST",
+                        }).done(function(data){
+                            $( ".loader" ).fadeOut("slow"); 
+                            $("#changeStatus option[value='']").attr("selected",true);
+                            if(data.status == 201)
+                                alertify.success('Estado ha sido cambiado correctamente');
+                        
+                            location.reload()
+                        }).fail(function(result){
+                            $( ".loader" ).fadeOut("slow"); 
+                            alertify.error('Error');
+                        }); 
+                    }
                 else{
                     alertify.error('Debe seleccionar depositos');
                     $("#changeStatus option[value='']").attr("selected",true);
@@ -159,7 +172,6 @@
                     {
                         alertify.error('Selección incorrecto, valido solo para cuenta de Venezuela');
                     }else{
-                        console.log(data.url);
                         var link = document.createElement("a");
                         link.download = "ctpaga";
                         link.href = data.url;

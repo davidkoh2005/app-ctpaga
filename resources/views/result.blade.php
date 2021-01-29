@@ -6,6 +6,11 @@
     <title>Ctpaga</title>
     @include('bookshop')
     <link rel="stylesheet" type="text/css" href="../css/styleForm.css">
+    <style>
+        .btn-bottom {
+            width: 100%;
+        }
+    </style>
 <body>
     <Section>
         <div class="container result">

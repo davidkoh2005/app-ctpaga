@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Session;
+use PDF;
 use App\User;
 use App\Paid;
 use App\Rate;
@@ -11,11 +12,15 @@ use App\Deposits;
 use App\Picture;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
+use App\Exports\DepositsCommerceExport;
+use App\Exports\RatesExport;
+use App\Exports\TransactionsCommerceExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CommerceController extends Controller
 {
@@ -63,7 +68,6 @@ class CommerceController extends Controller
         }
 
         session()->put('commerce_id', $idCommerce);
-        
 
         $pictureUser = Picture::where('user_id', Auth::guard('web')->id())
                                 ->where('commerce_id',$idCommerce)
@@ -104,13 +108,13 @@ class CommerceController extends Controller
         $searchNameClient="";
         $selectCoin="Selecionar Moneda";
         $selectPayment="Selecionar Tipo de Pago";
-        $startDate = "";
-        $endDate = "";
+        $startDate = Carbon::now()->setDay(1)->subMonth(4)->format('Y-m-d');
+        $endDate = Carbon::now()->format('Y-m-d');
         $idCommerce = 0;
         $companyName = "";
         $commerceName = "";
 
-        if($request->all()){
+        if($request->commerceId){
             $idCommerce = $request->commerceId;
         }else if(session()->get('commerce_id')){
             $idCommerce = session()->get('commerce_id');
@@ -136,8 +140,9 @@ class CommerceController extends Controller
                     ->orderBy('paids.id', 'desc')
                     ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.coin', 'paids.total',
                         'paids.date', 'paids.nameCompanyPayments');
-
-        if($request->all()){
+        
+        
+        if($request->all() && !$request->commerceId){
             $searchNameCompany=$request->searchNameCompany;
             $searchNameClient=$request->searchNameClient;
             $selectCoin=$request->selectCoin;
@@ -145,7 +150,6 @@ class CommerceController extends Controller
             $startDate=$request->startDate;
             $endDate=$request->endDate;
         }
-
 
         if(!empty($request->idCommerce))
             $transactions->where('commerces.id', $idCommerce); 
@@ -166,11 +170,19 @@ class CommerceController extends Controller
                 $transactions->where('paids.nameCompanyPayments',  'ilike', "%" . $request->selectPayment . "%" );
         }
 
-        if(!empty($request->startDate) && !empty($request->endDate))
-            $transactions->where('paids.date', ">=",$request->startDate)
-                        ->where('paids.date', "<=",$request->endDate);
+        $transactions->where('paids.date', ">=",$startDate)
+                        ->where('paids.date', "<=",$endDate);
 
         $transactions = $transactions->get();
+
+        if($request->statusFile == "PDF"){
+            $today = Carbon::now()->format('Y-m-d');
+            $pdf = \PDF::loadView('report.transactionsCommercePDF', compact('transactions', 'today', 'commerce', 'pictureUser', 'startDate', 'endDate'));
+            return $pdf->download('ctpaga_transacciones.pdf');
+        }elseif($request->statusFile == "EXCEL"){
+            $today = Carbon::now()->format('Y-m-d');
+            return Excel::download(new TransactionsCommerceExport($transactions, $today, $commerce, $pictureUser, $startDate, $endDate), 'ctpaga_transacciones.xlsx');
+        }
 
         $statusMenu = "transactions";
         return view('auth.transactions', compact('transactions', 'searchNameCompany', 'searchNameClient', 'selectCoin', 'selectPayment', 'startDate', 'endDate', 'statusMenu', "commercesUser", "pictureUser", "commerceName", 'idCommerce', 'companyName'));
@@ -189,8 +201,8 @@ class CommerceController extends Controller
         $idCommerce = 0;
         $companyName = "";
         $commerceName = "";
-        $startDate = "";
-        $endDate = "";
+        $startDate = Carbon::now()->setDay(1)->subMonth(4)->format('Y-m-d');
+        $endDate = Carbon::now()->format('Y-m-d');
         $historyAll = array();
         
         if($request->all()){
@@ -229,7 +241,7 @@ class CommerceController extends Controller
                             ->where("coin", $selectCoin)
                             ->orderBy('date', 'asc')
                             ->select("date", "total")
-                            ->where("date", ">=", Carbon::now()->subMonth(3));
+                            ->where("date", ">=", Carbon::now()->subMonth(4));
 
         if($selectCoin == 0)
             $historyPaids = $historyPaids->where("nameCompanyPayments", "Stripe")->get();
@@ -239,7 +251,7 @@ class CommerceController extends Controller
         $historyDeposits = Deposits::where("commerce_id", $idCommerce)
                                 ->where("coin", $selectCoin)
                                 ->select("date", "total", "numRef","status")
-                                ->where("date", ">=", Carbon::now()->subMonth(3))
+                                ->where("date", ">=", Carbon::now()->subMonth(4))
                                 ->orderBy('date', 'asc')->get();
 
         $total = 0.00;
@@ -281,10 +293,19 @@ class CommerceController extends Controller
                 }
             }
         }
+
+        if($request->statusFile == "PDF"){
+            $today = Carbon::now()->format('Y-m-d');
+            $pdf = \PDF::loadView('report.depositsCommercePDF', compact("historyAll" ,'today' ,'selectCoin', 'startDate', 'endDate', "commerceData", 'pictureUser'));
+            return $pdf->download('ctpaga_depositos.pdf');
+        }elseif($request->statusFile == "EXCEL"){
+            $today = Carbon::now()->format('Y-m-d');
+            return Excel::download(new DepositsCommerceExport($historyAll, $today, $startDate, $endDate, $commerceData, $pictureUser), 'ctpaga_depositos.xlsx');
+        }
         
         
         $statusMenu = "depositHistory";
-        return view('auth.depositHistory',compact("historyAll" ,'selectCoin', 'selectPayment', 'startDate', 'endDate' ,"statusMenu", "commercesUser", "pictureUser", "commerceName", "idCommerce"));
+        return view('auth.depositHistory',compact("historyAll" ,'selectCoin', 'startDate', 'endDate' ,"statusMenu", "commercesUser", "pictureUser", "commerceName", "idCommerce"));
     }
 
     public function rate(Request $request)
@@ -298,10 +319,10 @@ class CommerceController extends Controller
         $idCommerce = 0;
         $companyName = "";
         $commerceName = "";
-        $startDate = "";
-        $endDate = "";
+        $startDate = Carbon::now()->setDay(1)->subMonth(4)->format('Y-m-d');
+        $endDate = Carbon::now()->format('Y-m-d');
         
-        if($request->all()){
+        if($request->all() && !$request->commerceId){
             $selectCoin=$request->selectCoin? $request->selectCoin : 0;
             $startDate=$request->startDate;
             $endDate=$request->endDate;
@@ -336,12 +357,20 @@ class CommerceController extends Controller
 
         $rates = Rate::where('user_id', Auth::guard('web')->id())->orderBy('date', 'desc');
         
-        if(!empty($request->startDate) && !empty($request->endDate))
-            $rates = $rates->where('date', ">=",$request->startDate)
-                        ->where('date', "<=",$request->endDate);
+        $rates = $rates->where('date', ">=",$startDate)
+                        ->where('date', "<=",$endDate);
 
         $rates = $rates->get();
-        
+
+        if($request->statusFile == "PDF"){
+            $today = Carbon::now()->format('Y-m-d');
+            $pdf = \PDF::loadView('report.ratesPDF', compact('rates', 'today', 'commerceData', 'pictureUser', 'startDate', 'endDate'));
+            return $pdf->download('ctpaga_tasas.pdf');
+        }elseif($request->statusFile == "EXCEL"){
+            $today = Carbon::now()->format('Y-m-d');
+            return Excel::download(new RatesExport($rates, $today, $commerceData, $pictureUser, $startDate, $endDate), 'ctpaga_transacciones.xlsx');
+        }
+
         $statusMenu = "rateHistory";
         return view('auth.rateHistory',compact("rates", 'startDate', 'endDate' ,"statusMenu", "commercesUser", "pictureUser", "commerceName", "idCommerce")); 
     }

@@ -6,6 +6,11 @@
     <title>Ctpaga</title>
     @include('bookshop')
     <link rel="stylesheet" type="text/css" href="../../css/styleForm.css">
+    <style>
+        .btn-bottom {
+            width: 100%;
+        }
+    </style>
     <script src="../../js/form.js"></script>
     <script src="../../js/i18n/es.js"></script>
     <script src="../../js/global.js"></script>
@@ -70,11 +75,7 @@
                                         <input type="hidden" name="idSale" id="idSale" value="{{$sale->id}}">
                                         <div class="name"><label>{{$sale->name}}</label><br> <script> document.write(showPrice("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}))</script></div>
                                         <div class="verticalLine"></div>
-                                        @if ($coinClient == 0) 
-                                            <div class="total"><script> document.write(showTotal("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}, {{$sale->quantity}}))</script></div>
-                                        @else
-                                            <div class="total d-none d-md-block d-lg-block"> <script> document.write(showTotal("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}, {{$sale->quantity}}))</script></div>
-                                        @endif
+                                        <div class="total"><script> document.write(showTotal("{{$sale->price}}", {{$rate}}, {{$sale->coin}}, {{$coinClient}}, {{$sale->quantity}}))</script></div>
                                     </div>
                                     <div class="row sales justify-content-center align-items-center minh-10">
                                         @if ($coinClient == 1)

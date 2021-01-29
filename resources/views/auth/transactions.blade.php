@@ -20,7 +20,7 @@
                     <div class="card-header">
                         Filtro:
                     </div>
-                    <div class="card-body has-success">
+                    <div class="card-body has-success" style="margin:15px;">
                         <form id="payment-form" class="contact-form" method='POST' action="{{route('commerce.transactions')}}">
 
                             <div class="mb-3 row">
@@ -73,7 +73,7 @@
                                     <a type="button" class="remove-transactions btn" href="{{route('commerce.transactions')}}">Limpiar</a>
                                 </div>
                             </div>
-
+                            <input type="hidden" name="statusFile" id="statusFile" value="">
                         </form>
                     </div>
                 </div>
@@ -81,6 +81,14 @@
         </div>
         
         <div class="col-12">
+        
+            <div class="row justify-content-center">
+                <div class="col-11">
+                    <strong class="download">Descargar Reporte en:</strong>
+                    <input type="image" id="btnPDF" src="../../images/pdf.png" width="45px" height="50px">
+                    <input type="image" id="btnExcel" src="../../images/excel.png" width="50px" height="60px" style="margin-left:20px">
+                </div>
+            </div>
         
             <div class="tableShow">
                 <table id="table_id" class="table table-bordered mb-5 display">
@@ -105,7 +113,7 @@
                             <td>@if($transaction->nameCompanyPayments == "Stripe" || $transaction->nameCompanyPayments == "E-Sitef" ) Tienda Web @else {{$transaction->nameCompanyPayments}} @endif</td>
                             <td> {{date('d/m/Y h:i A',strtotime($transaction->date))}}</td>
                             <td>
-                                <button class="btn btnTransaction btn-bottom" onClick="showProduct({{$transaction->id}})" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Productos"><i class="material-icons">shopping_bag</i></button>
+                                <button class="btn btn-bottom" onClick="showProduct({{$transaction->id}})" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Productos"><i class="material-icons">shopping_bag</i></button>
                             </td>
                         </tr>
                         @endforeach
@@ -153,6 +161,16 @@
                 $('#showProducts').html();
             });
         }
+
+        $('#btnPDF').on('click', function() {
+            $('#statusFile').val("PDF");
+            $('#payment-form').submit();
+        });
+
+        $('#btnExcel').on('click', function() {
+            $('#statusFile').val("EXCEL");
+            $('#payment-form').submit();
+        });
     </script>
 </body>
 </html>

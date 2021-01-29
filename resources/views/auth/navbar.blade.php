@@ -33,6 +33,8 @@
                         <a class="dropdown-item" href="{{route('commerce.dashboard', ['commerceId' => $commerceUser->id])}}">{{$commerceUser->name}}</a>
                       @elseif($statusMenu == "transactions")  
                         <a class="dropdown-item" href="{{route('commerce.transactions', ['commerceId' => $commerceUser->id])}}">{{$commerceUser->name}}</a>
+                      @elseif($statusMenu == "rateHistory")  
+                      <a class="dropdown-item" href="{{route('commerce.rate', ['commerceId' => $commerceUser->id])}}">{{$commerceUser->name}}</a>
                       @elseif($statusMenu == "depositHistory")  
                         <a class="dropdown-item" href="{{route('commerce.depositHistory', ['commerceId' => $commerceUser->id])}}">{{$commerceUser->name}}</a>
                       @endif

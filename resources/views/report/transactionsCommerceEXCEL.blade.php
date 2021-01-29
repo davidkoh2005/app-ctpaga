@@ -10,23 +10,50 @@
             font-family: 'Montserrat-Bold', sans-serif;
             color: black;
         }
+
+        .positionImage {
+            position: absolute;
+            right: 40px;
+            top: 0px;
+        }
+
+        #table_id {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #table_id td, #table_id th {
+            text-align: center;
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #table_id th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: center;
+            background-color: #585858;
+            color: white;
+        }
     </style>
 </head>
 <body style="margin: 50px;">
     <div class="row">
         <div class="styleText">
             <strong>Fecha:</strong> {{$today}}<br>
-            <strong>Direccion:</strong> Los Dos Caminos.<br>
-            <strong>Telefono:</strong> 0212-555-5555<br>
+            <strong>Nombre de la compañia:</strong> {{$commerce->name}}<br>
+            <strong>Direccion:</strong> {{$commerce->address}}<br>
+            <strong>Telefono:</strong> {{$commerce->phone}}<br>
         </div>
     </div>
+    
+    @if($startDate && $endDate)
+    <p></p>
+    <p></p>
 
-    @if($idCommerce > 0)
-        <p></p>
-        <p></p>
-        <label for="" class="nameCompany"><strong>Nombre de Compañia:</strong> {{ $companyName}} </label>
+    <strong>Fecha:</strong> {{$startDate}} al {{$endDate}}<br>
     @endif
-
     <p></p>
     <p></p>
 
@@ -34,7 +61,6 @@
         <table id="table_id" class="table table-bordered mb-5 display">
             <thead>
                 <tr class="table-title">
-                    @if($idCommerce == 0)<th scope="col" width="20" style="background-color: #585858; color:white; text-align:center;">Nombre Compañia</th>@endif
                     <th scope="col" width="20" style="background-color: #585858; color:white; text-align:center;">Nombre Cliente</th>
                     <th scope="col" width="15" style="background-color: #585858; color:white; text-align:center;">Total</th>
                     <th scope="col" width="15" style="background-color: #585858; color:white; text-align:center;">Pago</th>
@@ -42,30 +68,16 @@
                 </tr>
             </thead>
             <tbody>
-                @php $totalBs=0; $totalUSD=0; @endphp
-                @foreach($transactions ?? '' as $transaction)
+                @foreach($transactions as $transaction)
                 <tr>
-                    @if($idCommerce == 0)<td style="text-align:center;">{{ $transaction->name }}</td>@endif
                     <td style="text-align:center;">{{ $transaction->nameClient}}</td>
                     <td style="text-align:center;">@if($transaction->coin == 0) $ @else Bs @endif {{ $transaction->total}}</td>
-                    <td style="text-align:center;"> {{$transaction->nameCompanyPayments}}</td>
+                    <td style="text-align:center;">@if($transaction->nameCompanyPayments == "Stripe" || $transaction->nameCompanyPayments == "E-Sitef" ) Tienda Web @else {{$transaction->nameCompanyPayments}} @endif</td>
                     <td style="text-align:center;"> {{date('d/m/Y h:i A',strtotime($transaction->date))}}</td>
                 </tr>
-                @php 
-                    if($transaction->coin == 0 )
-                        $totalUSD += floatval($transaction->total);
-                    else
-                        $totalBs += floatval($transaction->total);
-                    @endphp
                 @endforeach
             </tbody>
         </table>
-        <p></p>
-        <p></p>
-        <div class="styleText"  style="margin: 20px; text-align: right;">
-            <strong>Total USA:</strong> $ {{$totalUSD}} <br>
-            <strong>Total VE:</strong> Bs {{$totalBs}}<br>
-        </div>
     </div>
 </body>
 </html>

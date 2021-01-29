@@ -203,3 +203,111 @@ table {
 .content-select:hover i{
 	margin-top: 3px;
 }
+
+.loader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url('../images/loading.gif') 50% 50% no-repeat rgb(249,249,249);
+}
+
+
+
+
+
+
+
+
+
+
+/* style transactions */
+
+
+.card-Transactions, .card-Transactions .card-header{
+    background-color: #e6e6e6 !important;
+}
+
+#showProducts{
+    margin: 10px !important;
+}
+
+.input-group-addon{
+    color: white !important;
+    background-color: #00cc5f !important;
+    padding-top: 6px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+}
+
+.remove-transactions { 
+    width: 100% !important;
+    border-radius: 60px !important;
+    background-color: red !important;
+    color: white!important;
+}
+
+.remove-transactions:hover {
+    background-color: white !important;
+    border: 2px solid red !important;
+    color: red !important;
+}
+
+.nameCompany{
+    color: black !important;
+    margin-left: 60px;
+    margin-top: 30px;
+}
+
+.btnTransaction {
+    width: 0;
+    padding: 12px 12px !important;
+}
+
+div.colorGrey {
+    background-color: #585858;
+}
+
+
+
+
+
+
+/* style delivery */
+
+.pendingDelivery {
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 5px;
+    background-color: red;
+    color: white
+}
+
+.sendDelivery {
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 5px;
+    background-color: #00cc5f;
+    color: white
+}
+
+
+.activatedAlarm {
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 5px;
+    background-color: #3f8ac8;
+    color: white
+}
+
+.disabledAlarm {
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 5px;
+    background-color: #585858;
+    color: white
+}
+
+
