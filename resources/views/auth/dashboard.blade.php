@@ -126,14 +126,15 @@
     var statusMenu = "{{$statusMenu}}";
     var listDay;
     $.ajax({
-          url: "{{route('admin.dataGraphic')}}", 
-          data: {"commerce_id" : "{{$idCommerce}}"},
-          type: "POST",
-          dataType: 'json',
-      }).done(function(data){
-        listDay = data;
-        updateData();
-      }).fail(function(result){
+        url: "{{route('admin.dataGraphic')}}", 
+        data: {"commerce_id" : "{{$idCommerce}}"},
+        type: "POST",
+        dataType: 'json',
+    }).done(function(data){
+      listDay = data;
+      updateData();
+    }).fail(function(result){
+      alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
     });
     $(document).ready(function() {
 

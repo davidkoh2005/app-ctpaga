@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/test', 'DeliveryController@test');
+
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome'); 
@@ -79,6 +81,8 @@ Route::group(['middleware'=>'admin'], function() {
     Route::post('/admin/historial', 'AdminController@reportPayment')->name('admin.reportPayment');
     Route::post('/admin/txt', 'AdminController@downloadTxt')->name('admin.downloadTxt');
     Route::get('/admin/delivery', 'AdminController@delivery')->name('admin.delivery');
+    Route::post('/admin/deliverySendCode', 'AdminController@deliverySendCode')->name('admin.deliverySendCode');
+    
 });
 
 Route::post('/admin/removePicture', 'AdminController@removePicture')->name('admin.removePicture');

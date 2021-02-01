@@ -288,6 +288,7 @@
                 $('#showCategories').html(data.html);
                 showProductsServices(null);  
             }).fail(function(){  
+                alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                 $('#showCategories').html();                 
             });
         }
@@ -304,6 +305,7 @@
                 $('#showProductsServices').html(data.html);
                 setTimeout(removeLoader, 100);
             }).fail(function(){  
+                alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                 $('#showProductsServices').html();                 
             });
         }
@@ -321,7 +323,9 @@
                 type: "POST",
             }).done(function(result){
                 window.location=result.url;
-            }).fail(function(result){});
+            }).fail(function(result){
+                alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+            });
         }
     </script>
 </body>

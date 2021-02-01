@@ -139,7 +139,7 @@
                             location.reload()
                         }).fail(function(result){
                             $( ".loader" ).fadeOut("slow"); 
-                            alertify.error('Error');
+                            alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                         }); 
                     }
                 else{
@@ -178,7 +178,7 @@
                         link.click();
                     }
                 }).fail(function(result){
-
+                    alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                 }); 
             else
                 alertify.error('Debe seleccionar depositos');
@@ -210,6 +210,7 @@
                         $('#payModal').modal('show'); 
                     }
                 }).fail(function(result){
+                    alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                     $('#payModal').modal('hide'); 
                     $('#showPayment').html();
                 }); 

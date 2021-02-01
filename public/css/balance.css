@@ -310,4 +310,15 @@ div.colorGrey {
     color: white
 }
 
+.showCount, #countDeliveries{
+    font-family: 'Montserrat', sans-serif; 
+    font-weight: bold;
+    color: black !important; 
+}
 
+#countDeliveries{
+    font-family: 'Montserrat', sans-serif !important;
+    color: black !important; 
+    font-size: 18px !important;
+    padding-left: 10px !important;
+}

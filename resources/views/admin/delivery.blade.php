@@ -65,9 +65,10 @@
                 </div>
             </div>
         </div>
-        
+
+
         <div class="col-12">
-        
+            <div class="col-11 d-flex justify-content-end showCount" ><strong>Delivery Disponible:</strong> <label id="countDeliveries">{{$countDeliveries}}</label></div>       
             <div class="tableShow">
                 <table id="table_id" class="table table-bordered mb-5 display">
                     <thead>
@@ -93,7 +94,7 @@
                             <td>@if($transaction->idDelivery != null) <div class="sendDelivery">Enviado</div> @else  <div class="pendingDelivery">Pendiente</div> @endif </td>
                             <td>@if($transaction->alarm) <div class="activatedAlarm">Activado</div> @else <div class="disabledAlarm">Desactivado</div> @endif</td>
                             <td>
-                                <button class="btn btn-bottom" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Enviar Código"><i class="material-icons">send</i></button>
+                                <button class="btn btn-bottom" onClick="sendCode('{{$transaction->codeUrl}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Enviar Código"><i class="material-icons">send</i></button>
                                 <button class="btn btn-bottom" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Recordatorio"><i class="material-icons">alarm</i></button>
                             </td>
                         </tr>
@@ -108,9 +109,24 @@
     @include('admin.bookshopBottom')
     <script> 
         var statusMenu = "{{$statusMenu}}";
-
-
         $(".main-panel").perfectScrollbar('update');
+
+        function sendCode(codeUrl){
+            $.ajax({
+                url: "{{route('admin.deliverySendCode')}}", 
+                data: {"codeUrl" : codeUrl},
+                type: "POST",
+            }).done(function(data){
+                if(data.status == 201){
+                    alertify.success('Estado ha sido cambiado correctamente');
+                    location.reload();
+                }
+                else
+                    alertify.error('No hay delivery disponible');
+            }).fail(function(result){
+                alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+            });
+        }
     </script>
 </body>
 </html>

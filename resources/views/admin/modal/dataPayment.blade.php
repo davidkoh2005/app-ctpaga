@@ -104,7 +104,9 @@
                         if(result.status == 201){
                             location.reload();
                         }
-                    }).fail(function(result){});
+                    }).fail(function(result){
+                        alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                    });
                 }else if(status && statusSelect) {
                     $('#submit').hide();
                     $('#loading').removeClass("hide");
@@ -119,7 +121,9 @@
                             alertify.success('Estado ha sido cambiado correctamente');
                     
                         location.reload()
-                    }).fail(function(result){}); 
+                    }).fail(function(result){
+                        alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                    }); 
                 }
                 
             });

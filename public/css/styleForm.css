@@ -378,7 +378,9 @@ div#card_number, div#card_expiry, div#card_cvc{
 }
 
 
-
+.ajs-message {
+    color: white !important;
+}
 
 
 

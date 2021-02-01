@@ -357,6 +357,7 @@
                     $('.next').show();       
                     },
                 ).fail(function(result){  
+                    alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                     $('#percentageSelect').val(0);
                     $('.next').hide();                    
                 });
@@ -372,7 +373,9 @@
                         type: "POST",
                     }).done(function(result){
                         window.location=result.url;
-                    }).fail(function(result){});
+                    }).fail(function(result){
+                        alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                    });
                 }
             });
 
@@ -383,7 +386,9 @@
                     type: "POST",
                 }).done(function(result){
                     window.location=result.url;
-                }).fail(function(result){});
+                }).fail(function(result){
+                    alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                });
             });
             
         });

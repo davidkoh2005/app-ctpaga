@@ -157,6 +157,7 @@
                 $('#productsModal').modal('show'); 
                 $('#showProducts').html(data.html);
             }).fail(function(result){
+                alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                 $('#productsModal').modal('hide'); 
                 $('#showProducts').html();
             });

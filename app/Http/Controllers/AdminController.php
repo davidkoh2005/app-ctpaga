@@ -14,8 +14,11 @@ use App\Picture;
 use App\Balance;
 use App\Commerce;
 use App\Deposits;
+use App\Delivery;
 use Carbon\Carbon;
 use App\Notifications\PictureRemove;
+use App\Events\SendCode;
+use App\Events\StatusDelivery;
 use App\Http\Controllers\Controller;
 use App\Exports\DepositsExport;
 use App\Exports\TransactionsExport;
@@ -525,7 +528,7 @@ class AdminController extends Controller
             $transactions = Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
                         ->orderBy('paids.id', 'desc')
                         ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.selectShipping', 'paids.total',
-                            'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.alarm');
+                            'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.codeUrl', 'paids.alarm');
         }
 
         if($request->all()){
@@ -555,8 +558,31 @@ class AdminController extends Controller
 
         $transactions = $transactions->get();
 
+        $countDeliveries = Delivery::where("status", true)->get()->count();
+
         $statusMenu = "delivery";
-        return view('admin.delivery', compact('transactions', 'searchNameCompany', 'searchNameClient', 'startDate', 'endDate', 'statusMenu','idCommerce', 'companyName', 'code'));
+        return view('admin.delivery', compact('transactions', 'searchNameCompany', 'searchNameClient', 'startDate', 'endDate', 'statusMenu','idCommerce', 'companyName', 'code', 'countDeliveries'));
+    }
+
+    public function deliverySendCode(Request $request)
+    {   
+        $paid = Paid::where("codeUrl",$request->codeUrl)->first();
+        $delivery = delivery::where('status',true)->orderBy('updated_at', 'desc')->first();
+        if($delivery){
+            $notification['delivery_id'] = $delivery->id;
+            $notification['codeUrl'] = $request->codeUrl;
+
+            $paid->idDelivery = $delivery->id;
+            $paid->save();
+
+            $delivery->status = false;
+            $delivery->save();
+
+            $success = event(new SendCode($notification));
+            return response()->json(array('status' => 201));
+        }else{
+            return response()->json(array('status' => 401));
+        }
     }
 
 }

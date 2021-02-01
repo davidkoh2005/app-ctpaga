@@ -505,3 +505,7 @@ a.category-current div.category-image {
     font-weight: bold;
     font-size: 20px;
 }
+
+.ajs-message {
+    color: white !important;
+}

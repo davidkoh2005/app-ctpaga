@@ -199,7 +199,9 @@
                             if(result.status == 201){
                                 location.reload();
                             }
-                        }).fail(function(result){});
+                        }).fail(function(result){
+                            alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                        });
                     }else{
                         $.ajax({
                             url: "{{route('admin.removePicture')}}", 
@@ -210,7 +212,9 @@
                             if(result.status == 201){
                                 location.reload();
                             }
-                        }).fail(function(result){});
+                        }).fail(function(result){
+                            alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                        });
                     }
                 }
             });		
