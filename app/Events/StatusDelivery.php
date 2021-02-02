@@ -23,7 +23,7 @@ class StatusDelivery implements ShouldBroadcast
 
     public function broadcastOn()
     {
-      return ['channel-ctpagaDeliveryStatus'];
+      return new Channel('channel-ctpagaDeliveryStatus');
     }
     
     public function broadcastAs()

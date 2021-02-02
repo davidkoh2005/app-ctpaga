@@ -10,12 +10,12 @@
     <title>Iniciar Sesión</title>
     @include('bookshop')
     <!-- Style css -->
-    <link rel="stylesheet" type="text/css" href="../landingPage/css/style.css">
-    <link rel="stylesheet" type="text/css" href="../css/login.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('landingPage/css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/login.css') }}">
     
     <!-- Script js -->
-    <script src="../../js/i18n/es.js"></script>
-    <script src="../../js/login.js"></script>
+    <script src="{{ asset('js/i18n/es.js') }}"></script>
+    <script src="{{ asset('js/login.js') }}"></script>
 
 </head>
 
@@ -87,7 +87,7 @@
                                     <div class="col-12">
                                         <button class="submit btn btn-bordered w-100 mt-3 mt-sm-4" type="submit">Ingresar</button>
                                         <div class="hide" id="loading">
-                                            <img class="justify-content-center" src="../images/loading.gif" style="max-width:80px !important;">
+                                            <img class="justify-content-center" src="{{ asset('images/loading.gif') }}" style="max-width:80px !important;">
                                         </div>
                                     </div>
                                 </div>
@@ -111,15 +111,16 @@
     <!-- ***** All jQuery Plugins ***** -->
 
     <!-- Bootstrap js -->
-    <script src="../landingPage/js/bootstrap/popper.min.js"></script>
-    <script src="../landingPage/js/bootstrap/bootstrap.min.js"></script>
+    <script src="{{ asset('landingPage/js/bootstrap/popper.min.js') }}"></script>
+    <script src="{{ asset('landingPage/js/bootstrap/bootstrap.min.js') }}"></script>
 
     <!-- Plugins js -->
-    <script src="../landingPage/js/plugins/plugins.min.js"></script>
+    <script src="{{ asset('landingPage/js/plugins/plugins.min.js') }}"></script>
 
     <!-- Active js -->
-    <script src="../landingPage/js/active.js"></script>
+    <script src="{{ asset('landingPage/js/active.js') }}"></script>
 
+   
 </body>
 
 </html>

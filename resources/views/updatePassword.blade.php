@@ -8,9 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Cambiar Contraseña</title>
     @include('bookshop')
-    <script src="../../../js/formPassword.js"></script>
-    <script src="../../../js/i18n/es.js"></script>
-    <link rel="stylesheet" type="text/css" href="../../../landingPage/css/style.css">
+    <script src="{{ asset('js/formPassword.js') }}"></script>
+    <script src="{{ asset('js/i18n/es.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('landingPage/css/style.css') }}">
 </head>
 
 <body class="homepage-5 accounts">
@@ -84,7 +84,7 @@
                                     <div class="col-12 form-navigation">
                                         <button class="submit btn btn-bordered w-100 mt-3 mt-sm-4" type="submit">Guardar Contraseña</button>
                                         <div id="loading">
-                                            <img class="justify-content-center" src="../../../images/loading.gif" style="max-width:80px !important;">
+                                            <img class="justify-content-center" src="{{ asset('images/loading.gif') }}" style="max-width:80px !important;">
                                         </div>
                                     </div>
                                 </div>
@@ -109,11 +109,11 @@
     <!-- ***** All jQuery Plugins ***** -->
 
     <!-- Bootstrap js -->
-    <script src="../../../landingPage/js/bootstrap/popper.min.js"></script>
-    <script src="../../../landingPage/js/bootstrap/bootstrap.min.js"></script>
+    <script src="{{ asset('landingPage/js/bootstrap/popper.min.js') }}"></script>
+    <script src="{{ asset('landingPage/js/bootstrap/bootstrap.min.js') }}"></script>
 
     <!-- Plugins js -->
-    <script src="../../../landingPage/js/plugins/plugins.min.js"></script>
+    <script src="{{ asset('landingPage/js/plugins/plugins.min.js') }}"></script>
 
     <!-- Active js -->
 </body>

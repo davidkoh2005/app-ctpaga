@@ -23,7 +23,7 @@ class DeliveryController extends Controller
     }
 
     public function test(){
-        $messageNotification['data'] = "probando";
+        $messageNotification = "probando";
         $success = event(new StatusDelivery($messageNotification));
         dd($success);
     }

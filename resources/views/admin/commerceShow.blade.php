@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ctpaga</title>
     @include('bookshop')
-    <link rel="stylesheet" type="text/css" href="../../css/show.css">
-    <link rel="stylesheet" type="text/css" href="../../css/balance.css">
-    <link rel="stylesheet" type="text/css" href="../../css/commerceShow.css">
-    <link rel="stylesheet" type="text/css" href="../../css/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/show.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/commerceShow.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/datatables.min.css') }}"/>
     @include('admin.bookshop')
-    <script type="text/javascript" src="../../js/datatables.min.js"></script>
+    <script type="text/javascript" src="{{ asset('js/datatables.min.js"></script>
 </head>
 <body class="body-admin">
     @include('auth.menu')

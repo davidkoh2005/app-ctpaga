@@ -66,7 +66,7 @@
                     <div class="marginAuto">
                         <input type="input" class="btn btn-bottom btn-current" id="submit" value="Guardar Referencia">
                         <div class="row marginAuto hide"id="loading">
-                            <img widht="80px" height="80px" class="justify-content-center" src="../images/loading.gif">
+                            <img widht="80px" height="80px" class="justify-content-center" src="{{ asset('mages/loading.gif') }}">
                         </div>
                     </div>
 

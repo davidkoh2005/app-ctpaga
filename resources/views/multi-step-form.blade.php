@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ctpaga</title>
     @include('bookshop')
-    <link rel="stylesheet" type="text/css" href="../../css/styleForm.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/styleForm.css">
     <style>
         .btn-bottom {
             width: 100%;
         }
     </style>
-    <script src="../../js/form.js"></script>
-    <script src="../../js/i18n/es.js"></script>
-    <script src="../../js/global.js"></script>
+    <script src="{{ asset('js/form.js"></script>
+    <script src="{{ asset('js/i18n/es.js"></script>
+    <script src="{{ asset('js/global.js"></script>
     @if($coinClient == 0)
         <script src="https://js.stripe.com/v3/"></script>
     @endif
@@ -40,7 +40,7 @@
                                     @if($picture)
                                         <img class="rounded-circle" src="{{$picture->url}}" width="60px" height="60px">
                                     @else
-                                        <img class="rounded-circle" src="../images/perfil.png" width="60px" height="60px">
+                                        <img class="rounded-circle" src="{{ asset('images/perfil.png') }}" width="60px" height="60px">
                                     @endif
                                 </div>
                             </div>
@@ -68,7 +68,7 @@
                                             @if($sale->image != "")    
                                                 <img src="{{$sale->image}}" width="100px" height="80px"></div>
                                             @else
-                                                <img src="../images/adicionales.png" width="100px" height="80px"></div>
+                                                <img src="{{ asset('images/adicionales.png') }}" width="100px" height="80px"></div>
                                             @endif
                                         <div class="quantity" id="desingQuantity">{{$sale->quantity}}</div>
                                         <div class="verticalLine"></div>
@@ -112,7 +112,7 @@
                                     <div class="row">
                                         <div class="col"> </div>
                                         <div class="col" onclick="addNum(0)">0</div>
-                                        <div class="col" onclick="removeNum()"><img src="../../images/delete.png" class="img-fluid" width="30px" height="30px"></div>
+                                        <div class="col" onclick="removeNum()"><img src="{{ asset('images/delete.png') }}" class="img-fluid" width="30px" height="30px"></div>
                                     </div>
                                 </div>
                             </div>
@@ -167,10 +167,10 @@
                                 @if ($coinClient ==0)
                                     <div class="row center" id="card-element">
                                         <div class="col">
-                                            <img src="{{url('/images/visa.png')}}" class="img-fluid" width="150px" height="150px">
+                                            <img src="{{ asset('images/visa.png') }}" class="img-fluid" width="150px" height="150px">
                                         </div>
                                         <div class="col">
-                                            <img src="{{url('/images/MasterCard.png')}}" class="img-fluid" width="100px" height="100px">
+                                            <img src="{{ asset('images/MasterCard.png') }}" class="img-fluid" width="100px" height="100px">
                                         </div>
                                     </div>
                                 @endif
@@ -213,25 +213,25 @@
                                             <div class="col">
                                                 <label>
                                                     <input type="radio" name="typeCard" id="typeCard" value="1">
-                                                    <img src="../images/visa.png" width="70px" height="60px">
+                                                    <img src="{{ asset('images/visa.png') }}" width="70px" height="60px">
                                                 </label>
                                             </div>
                                             <div class="col">
                                                 <label>
                                                     <input type="radio" name="typeCard" id="typeCard" value="2">
-                                                    <img src="../images/MasterCard.png" width="60px" height="60px">
+                                                    <img src="{{ asset('images/MasterCard.png') }}" width="60px" height="60px">
                                                 </label>
                                             </div>
                                             <div class="col">
                                                 <label>
                                                     <input type="radio" name="typeCard" id="typeCard" value="3">
-                                                    <img src="../images/americanExpress.png" width="60px" height="60px">
+                                                    <img src="{{ asset('images/americanExpress.png') }}" width="60px" height="60px">
                                                 </label>
                                             </div>
                                             <div class="col">
                                                 <label>
                                                     <input type="radio" name="typeCard" id="typeCard" value="33" required data-parsley-required>
-                                                    <img src="../images/diners.png" width="60px" height="60px">
+                                                    <img src="{{ asset('images/diners.png" width="60px" height="60px">
                                                 </label>
                                             </div>
                                         </div>
@@ -295,7 +295,7 @@
                                 </div>
                                 <div class="row sales justify-content-center align-items-center minh-10 addPadding">
                                     <div class="col-md-2 col-sm-2 col-3">
-                                        <img src="/images/envios.png" class="figure-img img-fluid rounded" width="50px" height="50px">
+                                        <img src="{{ asset('images/envios.png') }}" class="figure-img img-fluid rounded" width="50px" height="50px">
                                     </diV>
                                     <div class="name col">Envio</div>
                                     
@@ -322,7 +322,7 @@
                                 <button type="submit" class="submit btn btn-bottom">Realizar Pago</button>
                             </div>
                             <div class="row justify-content-center"id="loading">
-                                <img widht="80px" height="80px" class="justify-content-center" src="{{url('/images/loading.gif')}}">
+                                <img widht="80px" height="80px" class="justify-content-center" src="{{ asset('/images/loading.gif') }}">
                             </div>
                         </form>
                     </div>

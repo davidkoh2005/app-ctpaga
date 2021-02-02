@@ -23,7 +23,7 @@ class SendCode implements ShouldBroadcast
    
     public function broadcastOn()
     {
-      return ['channel-ctpagaDelivery'];
+      return new Channel('channel-ctpagaDelivery'); 
     }
     
     public function broadcastAs()
