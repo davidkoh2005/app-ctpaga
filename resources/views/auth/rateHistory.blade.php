@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ctpaga</title>
     @include('bookshop')
-    <link rel="stylesheet" type="text/css" href="../../css/styleForm.css">
-    <link rel="stylesheet" type="text/css" href="../../css/balance.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/styleForm.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css') }}">
     @include('admin.bookshop')
-    <script type="text/javascript" src="../../js/transactions.js"></script>
+    <script type="text/javascript" src="{{ asset('js/transactions.js') }}"></script>
 </head>
 @php
     use Carbon\Carbon;
@@ -60,8 +60,8 @@
         <div class="col-12">
             <div class="col-11">
                 <strong class="download">Descargar Reporte en:</strong>
-                <input type="image" id="btnPDF" src="../../images/pdf.png" width="45px" height="50px">
-                <input type="image" id="btnExcel" src="../../images/excel.png" width="50px" height="60px" style="margin-left:20px">
+                <input type="image" id="btnPDF" src="{{ asset('images/pdf.png') }}" width="45px" height="50px">
+                <input type="image" id="btnExcel" src="{{ asset('images/excel.png') }}" width="50px" height="60px" style="margin-left:20px">
             </div>
             <div class="tableShow">
                 <table id="table_Rate" class="table table-bordered mb-5 display">

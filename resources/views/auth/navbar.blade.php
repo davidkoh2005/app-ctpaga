@@ -19,7 +19,7 @@
                   @if($pictureUser)
                     <img class="mr-3 profile-pic" src="{{$pictureUser->url}}">
                   @else
-                    <img class="mr-3 profile-pic" src="../images/perfil.png">
+                    <img class="mr-3 profile-pic" src="{{ asset('images/perfil.png') }}">
                   @endif
                   <div class="flex-column">
                         <h5 class="mb-0 profile-name">{{$commerceName}}</h5> 

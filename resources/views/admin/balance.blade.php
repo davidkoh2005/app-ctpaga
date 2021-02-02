@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ctpaga</title>
     @include('bookshop')
-    <link rel="stylesheet" type="text/css" href="../../css/balance.css">
-    <link rel="stylesheet" type="text/css" href="../../css/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/datatables.min.css') }}"/>
     @include('admin.bookshop')
-    <script type="text/javascript" src="../../js/datatables.min.js"></script>
-    <script src="../../js/dashboard/script.js" type="text/javascript"></script>
+    <script type="text/javascript" src="{{ asset('js/datatables.min.js') }}"></script>
+    <script src="{{ asset('js/dashboard/script.js') }}" type="text/javascript"></script>
 </head>
 <body class="body-admin">
     <div class="loader"></div>
@@ -23,13 +23,13 @@
                 @if($selectCoin == 0)
                     <label>
                         <strong>Moneda:</strong>
-                        <img src="../images/eeuu.png" width="20px" height="20px">
+                        <img src="{{ asset('images/eeuu.png') }}" width="20px" height="20px">
                         USA $ 
                     </label>
                 @else
                     <label>
                         <strong>Moneda:</strong>
-                        <img src="../images/venezuela.png" width="20px" height="20px">
+                        <img src="{{ asset('images/venezuela.png') }}" width="20px" height="20px">
                         VE Bs 
                     </label>
                 @endif

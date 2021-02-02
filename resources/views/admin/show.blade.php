@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ctpaga</title>
     @include('bookshop')
-    <link rel="stylesheet" type="text/css" href="../../css/show.css">
-    <link rel="stylesheet" type="text/css" href="../../css/datatables.min.css"/>
-    <script type="text/javascript" src="../../js/show.js"></script>
-    <script type="text/javascript" src="../../js/rotate.js"></script>
-    <script type="text/javascript" src="../../js/datatables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/show.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/datatables.min.css') }}"/>
+    <script type="text/javascript" src="{{ asset('js/show.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/rotate.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/datatables.min.js') }}"></script>
     @include('admin.bookshop')
 </head>
 <body>
@@ -150,7 +150,7 @@
                     <div class="marginAuto">
                         <input type="input" class="btn btn-bottom btn-current" id="submitReason" value="Enviar Razón">
                         <div class="row marginAuto"id="loadingReason">
-                            <img widht="80px" height="80px" class="justify-content-center" src="../images/loading.gif">
+                            <img widht="80px" height="80px" class="justify-content-center" src="{{ asset('images/loading.gif') }}">
                         </div>
                     </div>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ctpaga</title>
     @include('bookshop')
-    <link rel="stylesheet" type="text/css" href="../css/styleStore.css">
-    <script src="../../js/formStore.js"></script>
-    <script src="../../js/i18n/es.js"></script>
-    <script src="../../js/global.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/styleStore.css') }}">
+    <script src="{{ asset('js/formStore.js') }}"></script>
+    <script src="{{ asset('js/i18n/es.js') }}"></script>
+    <script src="{{ asset('js/global.js') }}"></script>
 </head>
 <body>
     <div class="loader"></div>
@@ -31,7 +31,7 @@
                                 </div>
                                 <div class="col text-right" id="btnFloatingShipping">
                                     <div class="relative">
-                                        <div> <img class="logoCart" widht="70px" height="70px" class="justify-content-center" src="../images/logoCarrito-white.png"> </div>
+                                        <div> <img class="logoCart" widht="70px" height="70px" class="justify-content-center" src="{{ asset('images/logoCarrito-white.png"> </div>
                                         <div class="circleGreen">0</div>
                                     </div>
                                 </div>
@@ -50,45 +50,45 @@
                             <ul class="nav flex-column" id="showMenu" >
                                 <li class="nav-item">
                                     <a class="nav-link button-store" href="javascript:;">
-                                        <img class="rounded-circle" src="../images/ICON-TIENDA.png" width="40px" height="40px">
+                                        <img class="rounded-circle" src="{{ asset('images/ICON-TIENDA.png') }}" width="40px" height="40px">
                                         <label>Tienda</label>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link perfilStore" href="javascript:;">
-                                        <img class="rounded-circle" src="../images/ICON-PERFIL.png" width="40px" height="40px">
+                                        <img class="rounded-circle" src="{{ asset('images/ICON-PERFIL.png') }}" width="40px" height="40px">
                                         <label>Perfil del vendedor</label>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link button-payment" href="javascript:;">
-                                        <img class="rounded-circle" src="../images/ICON-METODOS-DE-PAGO.png" width="40px" height="40px">
+                                        <img class="rounded-circle" src="{{ asset('images/ICON-METODOS-DE-PAGO.png') }}" width="40px" height="40px">
                                         <label>Método de pago</label>
                                     </a>
                                 </li>
                                 @if($statusShipping)
                                 <li class="nav-item">
                                     <a class="nav-link button-shipping" href="javascript:;">
-                                        <img class="rounded-circle" src="../images/ICON-ENVIOS.png" width="40px" height="40px">
+                                        <img class="rounded-circle" src="{{ asset('images/ICON-ENVIOS.png') }}" width="40px" height="40px">
                                         <label>Envíos</label>
                                     </a>
                                 </li>
                                 @endif
                                 <li class="nav-item">
                                     <a class="nav-link button-whatsapp" href="https://api.whatsapp.com/send/?phone={{$whatsappNum}}">
-                                        <img class="rounded-circle" src="../images/ICON-CENTRO-DE-MENSAJERIA.png" width="40px" height="40px">
+                                        <img class="rounded-circle" src="{{ asset('images/ICON-CENTRO-DE-MENSAJERIA.png') }}" width="40px" height="40px">
                                         <label>Centro de mensajería</label>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link button-categories" href="javascript:;">
-                                        <img class="rounded-circle" src="../images/ICON-CATEGORIAS.png" width="40px" height="40px">
+                                        <img class="rounded-circle" src="{{ asset('images/ICON-CATEGORIAS.png') }}" width="40px" height="40px">
                                         <label>Categorías</label>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link button-closeMenu" href="javascript:;">
-                                        <img class="rounded-circle" src="../images/ICON-CERRAR-SESION.png" width="40px" height="40px">
+                                        <img class="rounded-circle" src="{{ asset('images/ICON-CERRAR-SESION.png') }}" width="40px" height="40px">
                                         <label>Salir del menú</label>
                                     </a>
                                 </li>
@@ -104,25 +104,25 @@
                                 @if($picture)
                                     <img class="rounded-circle" src="{{$picture->url}}" width="150px" height="150px">
                                 @else
-                                    <img class="rounded-circle" src="../images/perfil.png" width="150px" height="150px">
+                                    <img class="rounded-circle" src="{{ asset('images/perfil.png') }}" width="150px" height="150px">
                                 @endif
                                 </div>
                             </div>
                             <div class="row" style="curso:point;">
                                 <div class="divisaExpanded hide">
                                     <a href="javascript:;" id="btnEEUU">
-                                        <img class="rounded-circle" style="margin:5px;" src="../images/eeuu.png" width="30px" height="30px">
+                                        <img class="rounded-circle" style="margin:5px;" src="{{ asset('images/eeuu.png') }}" width="30px" height="30px">
                                         <br>
                                         <div class="textDivisa">USA $</div>
                                     </a>
                                     <a href="javascript:;" id="btnVE">
-                                        <img class="rounded-circle" style="margin:5px;" src="../images/venezuela.png" width="30px" height="30px">
+                                        <img class="rounded-circle" style="margin:5px;" src="{{ asset('images/venezuela.png') }}" width="30px" height="30px">
                                         <br>
                                         <div class="textDivisa">VE Bs</div>
                                     </a>
                                 </div>
                                 <div class="divisa">
-                                    <a href="javascript:;" id="btnFloating" ><img class="rounded-circle" style="margin:5px;" src="../images/divisa.png" width="40px" height="40px"></a>
+                                    <a href="javascript:;" id="btnFloating" ><img class="rounded-circle" style="margin:5px;" src="{{ asset('images/divisa.png') }}" width="40px" height="40px"></a>
                                 </div>
                             </div>
                         </div>
@@ -156,7 +156,7 @@
                                 @if($picture)
                                     <img class="rounded-circle" src="{{$picture->url}}" width="150px" height="150px">
                                 @else
-                                    <img class="rounded-circle" src="../images/perfil.png" width="150px" height="150px">
+                                    <img class="rounded-circle" src="{{ asset('images/perfil.png') }}" width="150px" height="150px">
                                 @endif
                                 </div>
                             </div>
@@ -182,12 +182,12 @@
                         </div>
                         <div class="row">
                             <div class="col-6 mx-auto text-center">
-                                <img class="rounded-circle" src="../images/eeuu.png" width="80px" height="80px">
+                                <img class="rounded-circle" src="{{ asset('images/eeuu.png') }}" width="80px" height="80px">
                                 <br>
                                 <label class="textDivisa">USA $</label>
                             </div>
                             <div class="col-6 mx-auto text-center">
-                                <img class="rounded-circle" src="../images/venezuela.png" width="80px" height="80px">
+                                <img class="rounded-circle" src="{{ asset('images/venezuela.png') }}" width="80px" height="80px">
                                 <br>
                                 <label class="textDivisa">VE Bs</label>
                             </div>
@@ -201,10 +201,10 @@
                         </div>
                         <div class="row">
                             <div class="col-6 mx-auto text-center">
-                                <img src="../images/visa.png" width="100px" height="80px">
+                                <img src="{{ asset('images/visa.png" width="100px" height="80px">
                             </div>
                             <div class="col-6 mx-auto text-center">
-                                <img src="../images/MasterCard.png" width="100px" height="80px">
+                                <img src="{{ asset('images/MasterCard.png" width="100px" height="80px">
                             </div>
                         </div>
                         <div class="row">&nbsp;</div>
@@ -216,10 +216,10 @@
                         </div>
                         <div class="row">
                             <div class="col-6 mx-auto text-center">
-                                <img src="../images/paypal.png" width="150px" height="80px">
+                                <img src="{{ asset('images/paypal.png') }}" width="150px" height="80px">
                             </div>
                             <div class="col-6 mx-auto text-center">
-                                <img src="../images/bitcoin.png" width="140px" height="60px">
+                                <img src="{{ asset('images/bitcoin.png') }}" width="140px" height="60px">
                             </div>
                         </div>
                     </div>
@@ -259,7 +259,7 @@
                     <button type="submit" id="totalBtn" class="submit btn statusButton">Pagar</button>
                 </div>
                 <div class="row justify-content-center" id="loading">
-                    <img widht="80px" height="80px" class="justify-content-center" src="../images/loadingTransparent.gif">
+                    <img widht="80px" height="80px" class="justify-content-center" src="{{ asset('images/loadingTransparent.gif') }}">
                 </div>
             </div>
         </div>

@@ -7,11 +7,11 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <title>ctpaga</title>
-        <link rel="shortcut icon" type="image/x-icon" href="../../../images/logo/logoct.svg" />
+        <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo/logoct.svg') }}" />
         <!-- ***** All CSS Files ***** -->
 
         <!-- Style css -->
-        <link rel="stylesheet" type="text/css" href="../landingPage/css/style.css">
+        <link rel="stylesheet" type="text/css" href="{{ asset('landingPage/css/style.css') }}">
     
     </head>
     <body>
@@ -37,10 +37,10 @@
                                 <!-- Store Buttons -->
                                 <div class="button-group store-buttons d-flex">
                                     <a href="#">
-                                        <img src="../landingPage/img/icon/google-play.png" alt="">
+                                        <img src="{{ asset('landingPage/img/icon/google-play.png') }}" alt="">
                                     </a>
                                     <a href="#">
-                                        <img src="../landingPage/img/icon/app-store.png" alt="">
+                                        <img src="{{ asset('landingPage/img/icon/app-store.png') }}" alt="">
                                     </a>
                                 </div>
                                 <span class="d-inline-block text-white fw-3 font-italic mt-3">* Disponible en iPhone, iPad y todos los dispositivos Android</span>
@@ -49,7 +49,7 @@
                         <div class="col-12 col-md-6 col-lg-6">
                             <!-- Welcome Thumb -->
                             <div class="welcome-thumb mx-auto" data-aos="fade-left" data-aos-delay="500" data-aos-duration="1000">
-                                <img class="img-mobile" src="../images/mobile.png" alt="">
+                                <img class="img-mobile" src="{{ asset('images/mobile.png') }}" alt="">
                             </div>
                         </div>
                     </div>
@@ -116,7 +116,7 @@
                             <div class="image-box text-center icon-1 p-5 wow fadeInLeft" data-wow-delay="0.4s">
                                 <!-- Featured Image -->
                                 <div class="featured-img mb-3">
-                                    <img class="avatar-sm" src="../landingPage/img/icon/featured-img/layers.png" alt="">
+                                    <img class="avatar-sm" src="{{ asset('landingPage/img/icon/featured-img/layers.png') }}" alt="">
                                 </div>
                                 <!-- Icon Text -->
                                 <div class="icon-text">
@@ -130,7 +130,7 @@
                             <div class="image-box text-center icon-1 p-5 wow fadeInUp" data-wow-delay="0.2s">
                                 <!-- Featured Image -->
                                 <div class="featured-img mb-3">
-                                    <img class="avatar-sm" src="../landingPage/img/icon/featured-img/speak.png" alt="">
+                                    <img class="avatar-sm" src="{{ asset('landingPage/img/icon/featured-img/speak.png') }}" alt="">
                                 </div>
                                 <!-- Icon Text -->
                                 <div class="icon-text">
@@ -144,7 +144,7 @@
                             <div class="image-box text-center icon-1 p-5 wow fadeInRight" data-wow-delay="0.4s">
                                 <!-- Featured Image -->
                                 <div class="featured-img mb-3">
-                                    <img class="avatar-sm" src="../landingPage/img/icon/featured-img/lock.png" alt="">
+                                    <img class="avatar-sm" src="{{ asset('landingPage/img/icon/featured-img/lock.png') }}" alt="">
                                 </div>
                                 <!-- Icon Text -->
                                 <div class="icon-text">
@@ -210,7 +210,7 @@
                         <div class="col-12 col-lg-4 order-1 order-lg-2 d-none d-lg-block">
                             <!-- Service Thumb -->
                             <div class="service-thumb mx-auto">
-                                <img src="../images/perfil.png" alt="">
+                                <img src="{{ asset('images/perfil.png') }}" alt="">
                             </div>
                         </div>
                     </div>
@@ -225,7 +225,7 @@
                         <div class="col-12 col-lg-6 order-2 order-lg-1">
                             <!-- Discover Thumb -->
                             <div class="service-thumb discover-thumb mx-auto pt-5 pt-lg-0">
-                                <img src="../images/ws.png" alt="">
+                                <img src="{{ asset('images/ws.png') }}" alt="">
                             </div>
                         </div>
                         <div class="col-12 col-lg-6 order-1 order-lg-2">
@@ -279,7 +279,7 @@
                                     </li>
                                 </ul>
                                 <div class="icon-box d-flex justify-content-center">
-                                    <img src="../images/redes.png" alt="image">
+                                    <img src="{{ asset('images/redes.png') }}" alt="image">
                                 </div>
                             </div>
                         </div>
@@ -307,7 +307,7 @@
                             <div class="single-work text-center p-3">
                                 <!-- Work Icon -->
                                 <div class="work-icon">
-                                    <img class="avatar-md" src="../landingPage/img/icon/work/download.png" alt="">
+                                    <img class="avatar-md" src="{{ asset('landingPage/img/icon/work/download.png') }}" alt="">
                                 </div>
                                 <h3 class="text-white py-3">Instala la aplicación</h3>
                                 <p class="text-white">Disponible en iPhone, iPad y todos los dispositivos Android</p>
@@ -318,7 +318,7 @@
                             <div class="single-work text-center p-3">
                                 <!-- Work Icon -->
                                 <div class="work-icon">
-                                    <img class="avatar-md" src="../landingPage/img/icon/work/settings.png" alt="">
+                                    <img class="avatar-md" src="{{ asset('landingPage/img/icon/work/settings.png') }}" alt="">
                                 </div>
                                 <h3 class="text-white py-3">Configurar tu cuenta</h3>
                                 <p class="text-white">Rellena los datos de la empresa, bancaria y Agrega tus productos</p>
@@ -329,7 +329,7 @@
                             <div class="single-work text-center p-3">
                                 <!-- Work Icon -->
                                 <div class="work-icon">
-                                    <img class="avatar-md" src="../landingPage/img/icon/work/app.png" alt="">
+                                    <img class="avatar-md" src="{{ asset('landingPage/img/icon/work/app.png') }}" alt="">
                                 </div>
                                 <h3 class="text-white py-3">Disfruta las funciones!</h3>
                                 <p class="text-white">Envia enlance a través de las redes sociales y recibe pagos en Dolares y Bolivares</p>
@@ -361,7 +361,7 @@
                                     <div class="single-price-plan text-center p-5 wow fadeInLeft" data-aos-duration="2s" data-wow-delay="0.4s">
                                         <!-- Plan Thumb -->
                                         <div class="plan-thumb">
-                                            <img class="avatar-lg" src="../images/eeuu.png" alt="">
+                                            <img class="avatar-lg" src="{{ asset('images/eeuu.png') }}" alt="">
                                         </div>
                                         <!-- Plan Title -->
                                         <div class="plan-title my-2 my-sm-3">
@@ -378,7 +378,7 @@
                                     <div class="single-price-plan text-center p-5 wow fadeInRight" data-aos-duration="2s" data-wow-delay="0.4s">
                                         <!-- Plan Thumb -->
                                         <div class="plan-thumb">
-                                            <img class="avatar-lg" src="../images/venezuela.png" alt="">
+                                            <img class="avatar-lg" src="{{ asset('images/venezuela.png') }}" alt="">
                                         </div>
                                         <!-- Plan Title -->
                                         <div class="plan-title my-2 my-sm-3">
@@ -475,10 +475,10 @@
                                 <!-- Store Buttons -->
                                 <div class="button-group store-buttons d-flex justify-content-center">
                                     <a href="#">
-                                        <img src="../landingPage/img/icon/google-play.png" alt="">
+                                        <img src="{{ asset('landingPage/img/icon/google-play.png') }}" alt="">
                                     </a>
                                     <a href="#">
-                                        <img src="../landingPage/img/icon/app-store.png" alt="">
+                                        <img src="{{ asset('landingPage/img/icon/app-store.png') }}" alt="">
                                     </a>
                                 </div>
                                 <span class="d-inline-block text-white fw-3 font-italic mt-3">* Disponible en iPhone, iPad y todos los dispositivos Android</span>
@@ -565,7 +565,7 @@
                                 <div class="footer-items">
                                     <!-- Logo -->
                                     <a class="navbar-brand" href="#">
-                                        <img class="logo" src="../images/logo/logo.png" alt="">
+                                        <img class="logo" src="{{ asset('images/logo/logo.png') }}" alt="">
                                     </a>
                                     <p class="mt-2 mb-3">Comparte tus aplicaciones móviles favoritas con tus amigos.</p>
                                     <!-- Social Icons -->
@@ -617,10 +617,10 @@
                                     <!-- Store Buttons -->
                                     <div class="button-group store-buttons store-black d-flex flex-wrap">
                                         <a href="#">
-                                            <img src="../landingPage/img/icon/google-play-black.png" alt="">
+                                            <img src="{{ asset('landingPage/img/icon/google-play-black.png') }}" alt="">
                                         </a>
                                         <a href="#">
-                                            <img src="../landingPage/img/icon/app-store-black.png" alt="">
+                                            <img src="{{ asset('landingPage/img/icon/app-store-black.png') }}" alt="">
                                         </a>
                                     </div>
                                 </div>
@@ -647,19 +647,28 @@
         </div>
         <!-- ***** All jQuery Plugins ***** -->
         <!-- jQuery(necessary for all JavaScript plugins) -->
-        <script src="../landingPage/js/jquery/jquery.min.js"></script>
+        <script src="{{ asset('landingPage/js/jquery/jquery.min.js') }}"></script>
 
         <!-- Bootstrap js -->
-        <script src="../landingPage/js/bootstrap/popper.min.js"></script>
-        <script src="../landingPage/js/bootstrap/bootstrap.min.js"></script>
+        <script src="{{ asset('landingPage/js/bootstrap/popper.min.js') }}"></script>
+        <script src="{{ asset('landingPage/js/bootstrap/bootstrap.min.js') }}"></script>
         <!-- Bootstrap js -->
-        <script src="../landingPage/js/bootstrap/popper.min.js"></script>
+        <script src="{{ asset('landingPage/js/bootstrap/popper.min.js') }}"></script>
 
         <!-- Plugins js -->
-        <script src="../landingPage/js/plugins/plugins.min.js"></script>
+        <script src="{{ asset('landingPage/js/plugins/plugins.min.js') }}"></script>
 
         <!-- Active js -->
-        <script src="../landingPage/js/active.js"></script>
+        <script src="{{ asset('landingPage/js/active.js') }}"></script>
+           <!-- laravel app.js  -->
+        <script src="{{ asset('js/app.js') }}"></script>
+        <script>
+            
+window.Echo.channel('channel-ctpagaDeliveryStatus').listen('.event-ctpagaDeliveryStatus', (data) => {
+       const parsed = JSON.parse(JSON.stringify(data));
+       alert(parsed.data);
+    });
+        </script>
     </body>
 
 </html>
