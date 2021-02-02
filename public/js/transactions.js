@@ -85,13 +85,23 @@ $(document).ready( function () {
         startDate: date,
         endDate: new Date(),
         language: "es",
-        todayHighlight: true,
+        autoclose: true,
+        todayHighlight: true
     });
 
     $('#datepicker-admin').datepicker({
         orientation: "bottom auto",
         language: "es",
-        todayHighlight: true,
+        autoclose: true,
+        todayHighlight: true
+    });
+
+    $('#alarm').datepicker({
+        orientation: "bottom auto",
+        startDate: date,
+        language: "es",
+        autoclose: true,
+        todayHighlight: true
     });
 
     $('#btnPDF').on('click', function() {

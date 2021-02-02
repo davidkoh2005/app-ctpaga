@@ -521,12 +521,14 @@ class AdminController extends Controller
 
             $transactions = Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
                         ->where('paids.commerce_id', 'like', "%".$request->id. "%" )
-                        ->orderBy('paids.id', 'desc')
+                        ->orderBy('paids.idDelivery', 'desc')
+                        ->orderBy('paids.alarm', 'asc')
                         ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.selectShipping', 'paids.total',
                             'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.alarm');
         }else{
             $transactions = Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
-                        ->orderBy('paids.id', 'desc')
+                        ->orderBy('paids.idDelivery', 'desc')
+                        ->orderBy('paids.alarm', 'asc')
                         ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.selectShipping', 'paids.total',
                             'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.codeUrl', 'paids.alarm');
         }

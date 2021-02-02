@@ -40,12 +40,14 @@
                         
                             <div class="mb-3 row">
                                 <label class="col-sm-2 col-form-label">Rango de Fecha</label>
-
+                                @php
+                                    use Carbon\Carbon;
+                                @endphp
                                 <div class="col">
                                     <div class="input-daterange input-group" id="datepicker-admin">
-                                        <input type="text" class="form-control" name="startDate" placeholder="Fechan Inicial" value="{{$startDate}}" autocomplete="off"/>
+                                        <input type="text" class="form-control" name="startDate" placeholder="Fechan Inicial" value="{{Carbon::parse($startDate)->format('d/m/Y')}}" autocomplete="off"/>
                                         <span class="input-group-addon"> Hasta </span>
-                                        <input type="text" class="form-control" name="endDate" placeholder="Fecha Final" value="{{$endDate}}" autocomplete="off"/>
+                                        <input type="text" class="form-control" name="endDate" placeholder="Fecha Final" value="{{Carbon::parse($endDate)->format('d/m/Y')}}" autocomplete="off"/>
                                     </div>
                                 </div>
                             </div>
@@ -93,9 +95,9 @@
                             <td>{{$transaction->selectShipping}}</td>
                             <td>@if($transaction->idDelivery != null) <div class="sendDelivery">Enviado</div> @else  <div class="pendingDelivery">Pendiente</div> @endif </td>
                             <td>@if($transaction->alarm) <div class="activatedAlarm">Activado</div> @else <div class="disabledAlarm">Desactivado</div> @endif</td>
-                            <td>
+                            <td width="100px">
                                 <button class="btn btn-bottom" onClick="sendCode('{{$transaction->codeUrl}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Enviar Código"><i class="material-icons">send</i></button>
-                                <button class="btn btn-bottom" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Recordatorio"><i class="material-icons">alarm</i></button>
+                                <button class="btn btn-bottom" id="btnAlarm" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Recordatorio"><i class="material-icons">alarm</i></button>
                             </td>
                         </tr>
                         @endforeach
@@ -105,11 +107,58 @@
         </div>
     </div>
 
+    <!--- Modal  -->
+    <div class="modal fade" id="alarmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>Alarma</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>              
+                <div class="modal-body">
+                    <div class="justify-content-center has-success">
+                        <div class="mb-3 row">
+                            <label class="col-md-2 col-12  col-form-label">Fecha</label>
+                            <div class="col">
+                                <input type="text" class="form-control" name="alarm" id="alarm" value="{{Carbon::parse($endDate)->format('d/m/Y')}}" autocomplete="off"/>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-md-2 col-12  col-form-label">Hora</label>
+                            <div class="col">
+                                <input type="text" class="form-control" name="alarm" id="alarm" value="{{Carbon::parse($endDate)->format('d/m/Y')}}" autocomplete="off"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="marginAuto">
+                        <input type="input" class="btn btn-bottom btn-current" id="submitAlarm" value="Guardar Alarma">
+                        <div class="row marginAuto hide"id="loading">
+                            <img widht="80px" height="80px" class="justify-content-center" src="../images/loading.gif">
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     
     @include('admin.bookshopBottom')
     <script> 
         var statusMenu = "{{$statusMenu}}";
         $(".main-panel").perfectScrollbar('update');
+
+        $(function () {
+
+            $('#btnAlarm').on('click', function() {
+                $('#alarmModal').modal('show');
+            });
+        });
 
         function sendCode(codeUrl){
             $.ajax({
