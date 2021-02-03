@@ -14,7 +14,7 @@ class DeliveryController extends Controller
         Delivery::whereId($delivery->id)->update($request->all());
         
 
-        if(!empty($request->status))
+        if(isset($request->status))
             $success = event(new StatusDelivery());
 
         return response()->json([

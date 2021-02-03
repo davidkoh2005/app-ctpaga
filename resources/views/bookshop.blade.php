@@ -9,9 +9,9 @@
     <link rel="stylesheet" href="{{ asset('css/bookshop/animate.min.css') }}">
 
     <!-- Google Fonts -->
-    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,300,700' rel='stylesheet' type='text/css'>
+<!--     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,300,700' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
-
+ -->
     <!-- alertify -->
     <link rel="stylesheet" href="{{ asset('css/bookshop/alertify.css') }}">
     <script src="{{ asset('js/bookshop/alertify.js') }}"></script>

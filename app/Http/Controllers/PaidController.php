@@ -15,6 +15,7 @@ use App\Product;
 use App\Balance;
 use App\Shipping;
 use Session;
+use AWS;
 
 class PaidController extends Controller
 {
@@ -389,27 +390,44 @@ class PaidController extends Controller
     {
         $paids = Paid::where('codeUrl', $request->codeUrl)->first();
         $paids->statusShipping = $request->statusShipping;
-
+        $phone = '+'.app('App\Http\Controllers\Controller')->validateNum($paids->numberShipping);
         if($request->statusShipping == 1){
+            $message = "los productos de código de compra: ".$paids->codeUrl." fue retirado desde la tienda llegará al destino no mas tardar de 1 hora.";
             (new User)->forceFill([
                 'email' => $paids->email,
             ])->notify(
-                new ShippingNotification("los productos fue retirado desde la tienda llegará al destino no mas tardar de 1 hora.")
-            );
-        }elseif($request->statusShipping == 2){
-            $userCommerce = User::whereId($paids->user_id)->first();
-            (new User)->forceFill([
-                'email' => $paids->email,
-            ])->notify(
-                new ShippingNotification("los productos de Número de compra ".$paids->codeUrl." fue entregado a su destino.")
+                new ShippingNotification($message)
             );
 
+        }elseif($request->statusShipping == 2){
+            $message = "los productos de código de compra ".$paids->codeUrl." fue entregado a su destino.";
+            $userCommerce = User::whereId($paids->user_id)->first();
+    
             (new User)->forceFill([
                 'email' => $userCommerce->email,
             ])->notify(
-                new ShippingNotification("los productos de Número de compra ".$paids->codeUrl." fue entregado a su destino.")
+                new ShippingNotification($message)
             );
+
         }
+
+        (new User)->forceFill([
+            'email' => $paids->email,
+        ])->notify(
+            new ShippingNotification($message)
+        );
+
+        $sms = AWS::createClient('sns');
+        $sms->publish([
+            'Message' => $message,
+            'PhoneNumber' => $phone,
+            'MessageAttributes' => [
+                'AWS.SNS.SMS.SMSType'  => [
+                    'DataType'    => 'String',
+                    'StringValue' => 'Transactional',
+                ]
+            ],
+        ]);
 
         $paids->save();
 

@@ -17,6 +17,7 @@ use App\Discount;
 use App\Product;
 use App\Service;
 use App\Category;
+
 class SaleController extends Controller
 {
     public function index($userUrl, $codeUrl, $statusModification = 0)
@@ -265,7 +266,7 @@ class SaleController extends Controller
                             ->where('commerce_id', $commerce->id)
                             ->where('publish', 1)->orderBy('name', 'asc')->get();
 
-        $whatsappNum = $this->validateNum($user->phone);
+        $whatsappNum = app('App\Http\Controllers\Controller')->validateNum($user->phone);
 
         $services = count($services);
 

@@ -48,4 +48,10 @@ class Controller extends BaseController
         
         return $price;
     }
+
+    public function validateNum($phone)
+    {
+        $phone = substr($phone, 1, strlen($phone));
+        return "58".$phone;
+    }
 }

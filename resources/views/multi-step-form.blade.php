@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ctpaga</title>
     @include('bookshop')
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/styleForm.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/styleForm.css') }}">
     <style>
         .btn-bottom {
             width: 100%;
         }
     </style>
-    <script src="{{ asset('js/form.js"></script>
-    <script src="{{ asset('js/i18n/es.js"></script>
-    <script src="{{ asset('js/global.js"></script>
+    <script src="{{ asset('js/form.js') }}"></script>
+    <script src="{{ asset('js/i18n/es.js') }}"></script>
+    <script src="{{ asset('js/global.js') }}"></script>
     @if($coinClient == 0)
         <script src="https://js.stripe.com/v3/"></script>
     @endif
@@ -231,7 +231,7 @@
                                             <div class="col">
                                                 <label>
                                                     <input type="radio" name="typeCard" id="typeCard" value="33" required data-parsley-required>
-                                                    <img src="{{ asset('images/diners.png" width="60px" height="60px">
+                                                    <img src="{{ asset('images/diners.png') }}" width="60px" height="60px">
                                                 </label>
                                             </div>
                                         </div>

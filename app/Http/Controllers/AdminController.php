@@ -17,6 +17,7 @@ use App\Deposits;
 use App\Delivery;
 use Carbon\Carbon;
 use App\Notifications\PictureRemove;
+use App\Notifications\NewCode;
 use App\Events\SendCode;
 use App\Events\StatusDelivery;
 use App\Http\Controllers\Controller;
@@ -523,14 +524,18 @@ class AdminController extends Controller
                         ->where('paids.commerce_id', 'like', "%".$request->id. "%" )
                         ->orderBy('paids.idDelivery', 'desc')
                         ->orderBy('paids.alarm', 'asc')
+                        ->orderBy('paids.date', 'asc')
                         ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.selectShipping', 'paids.total',
-                            'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.alarm');
+                            'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.alarm')
+                        ->whereNotNull('paids.selectShipping');
         }else{
             $transactions = Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
                         ->orderBy('paids.idDelivery', 'desc')
                         ->orderBy('paids.alarm', 'asc')
+                        ->orderBy('paids.date', 'asc')
                         ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.selectShipping', 'paids.total',
-                            'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.codeUrl', 'paids.alarm');
+                            'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.codeUrl', 'paids.alarm')
+                        ->whereNotNull('paids.selectShipping');
         }
 
         if($request->all()){
@@ -581,6 +586,12 @@ class AdminController extends Controller
 
             $paid->idDelivery = $delivery->id;
             $paid->save();
+
+            (new User)->forceFill([
+                'email' => $delivery->email,
+            ])->notify(
+                new NewCode($request->codeUrl)
+            );
 
             $delivery->status = false;
             $delivery->save();

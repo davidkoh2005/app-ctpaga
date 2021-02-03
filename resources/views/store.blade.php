@@ -31,7 +31,7 @@
                                 </div>
                                 <div class="col text-right" id="btnFloatingShipping">
                                     <div class="relative">
-                                        <div> <img class="logoCart" widht="70px" height="70px" class="justify-content-center" src="{{ asset('images/logoCarrito-white.png"> </div>
+                                        <div> <img class="logoCart" widht="70px" height="70px" class="justify-content-center" src="{{ asset('images/logoCarrito-white.png')}}"> </div>
                                         <div class="circleGreen">0</div>
                                     </div>
                                 </div>
@@ -201,10 +201,10 @@
                         </div>
                         <div class="row">
                             <div class="col-6 mx-auto text-center">
-                                <img src="{{ asset('images/visa.png" width="100px" height="80px">
+                                <img src="{{ asset('images/visa.png')}}" width="100px" height="80px">
                             </div>
                             <div class="col-6 mx-auto text-center">
-                                <img src="{{ asset('images/MasterCard.png" width="100px" height="80px">
+                                <img src="{{ asset('images/MasterCard.png')}}" width="100px" height="80px">
                             </div>
                         </div>
                         <div class="row">&nbsp;</div>
