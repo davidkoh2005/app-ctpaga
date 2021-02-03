@@ -81,8 +81,9 @@ Route::group(['middleware'=>'admin'], function() {
     Route::post('/admin/historial', 'AdminController@reportPayment')->name('admin.reportPayment');
     Route::post('/admin/txt', 'AdminController@downloadTxt')->name('admin.downloadTxt');
     Route::get('/admin/delivery', 'AdminController@delivery')->name('admin.delivery');
+    Route::post('/admin/countDeliveries', 'AdminController@countDeliveries')->name('admin.countDeliveries');
     Route::post('/admin/deliverySendCode', 'AdminController@deliverySendCode')->name('admin.deliverySendCode');
-    
+    Route::post('/admin/saveAlarm', 'AdminController@saveAlarm')->name('admin.saveAlarm');
 });
 
 Route::post('/admin/removePicture', 'AdminController@removePicture')->name('admin.removePicture');

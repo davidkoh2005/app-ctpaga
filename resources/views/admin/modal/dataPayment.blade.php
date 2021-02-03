@@ -66,7 +66,7 @@
                     <div class="marginAuto">
                         <input type="input" class="btn btn-bottom btn-current" id="submit" value="Guardar Referencia">
                         <div class="row marginAuto hide"id="loading">
-                            <img widht="80px" height="80px" class="justify-content-center" src="{{ asset('mages/loading.gif') }}">
+                            <img widht="80px" height="80px" class="justify-content-center" src="{{ asset('images/loading.gif') }}">
                         </div>
                     </div>
 
@@ -102,9 +102,13 @@
                     }).done(function(result){
                         $('#payModal').modal('hide');  
                         if(result.status == 201){
+                            alertify.success("Guardado Correctamente!");
                             location.reload();
                         }
                     }).fail(function(result){
+                        $('#submit').show();
+                        $('#loading').removeClass("show");
+                        $('#loading').addClass("hide");
                         alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                     });
                 }else if(status && statusSelect) {
@@ -122,6 +126,9 @@
                     
                         location.reload()
                     }).fail(function(result){
+                        $('#submit').show();
+                        $('#loading').removeClass("show");
+                        $('#loading').addClass("hide");
                         alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                     }); 
                 }

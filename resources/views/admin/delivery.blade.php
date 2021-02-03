@@ -97,7 +97,11 @@
                             <td>@if($transaction->alarm) <div class="activatedAlarm">Activado</div> @else <div class="disabledAlarm">Desactivado</div> @endif</td>
                             <td width="100px">
                                 <button class="btn btn-bottom" onClick="sendCode('{{$transaction->codeUrl}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Enviar Código"><i class="material-icons">send</i></button>
-                                <button class="btn btn-bottom" id="btnAlarm" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Recordatorio"><i class="material-icons">alarm</i></button>
+                                @if($transaction->alarm)
+                                    <button class="btn btn-bottom" id="btnAlarm" onClick="showAlarm('{{$transaction->id}}', '{{Carbon::parse($transaction->alarm)->format('d/m/Y')}}', {{Carbon::parse($transaction->alarm)->format('g')}}, {{Carbon::parse($transaction->alarm)->format('i')}}, '{{Carbon::parse($transaction->alarm)->format('A')}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Recordatorio"><i class="material-icons">alarm</i></button>
+                                @else
+                                    <button class="btn btn-bottom" id="btnAlarm" onClick="showAlarm('{{$transaction->id}}', '{{$endDate}}', 1, 0, 'AM')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Recordatorio"><i class="material-icons">alarm</i></button>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
@@ -122,13 +126,33 @@
                         <div class="mb-3 row">
                             <label class="col-md-2 col-12  col-form-label">Fecha</label>
                             <div class="col">
-                                <input type="text" class="form-control" name="alarm" id="alarm" value="{{Carbon::parse($endDate)->format('d/m/Y')}}" autocomplete="off"/>
+                                <input type="text" class="form-control" name="dateAlarm" id="dateAlarm" value="{{Carbon::parse($endDate)->format('d/m/Y')}}" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="mb-3 row">
                             <label class="col-md-2 col-12  col-form-label">Hora</label>
                             <div class="col">
-                                <input type="text" class="form-control" name="alarm" id="alarm" value="{{Carbon::parse($endDate)->format('d/m/Y')}}" autocomplete="off"/>
+                                <label class="content-select">
+                                    <select class="addMargin" name="hours" id="hours">
+                                        @for ($hours=1; $hours<=12; $hours++) 
+                                            <option value="{{str_pad($hours,2,'0',STR_PAD_LEFT)}}">{{str_pad($hours,2,'0',STR_PAD_LEFT)}}</option>
+                                        @endfor
+                                    </select>
+                                </label>
+                                <label style="color:black; font-size: 30px; padding-left:10px;"> : </label>
+                                <label class="content-select">
+                                    <select class="addMargin" name="min" id="min">
+                                        @for ($mins=0; $mins<=59; $mins++) 
+                                            <option value="{{str_pad($mins,2,'0',STR_PAD_LEFT)}}">{{str_pad($mins,2,'0',STR_PAD_LEFT)}} </option>
+                                        @endfor
+                                    </select>
+                                </label>
+                                <label class="content-select">
+                                    <select class="addMargin" name="anteMeridiem" id="anteMeridiem">
+                                        <option value="AM">AM</option>
+                                        <option value="PM">PM</option>
+                                    </select>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -137,7 +161,7 @@
                     <div class="marginAuto">
                         <input type="input" class="btn btn-bottom btn-current" id="submitAlarm" value="Guardar Alarma">
                         <div class="row marginAuto hide"id="loading">
-                            <img widht="80px" height="80px" class="justify-content-center" src="../images/loading.gif">
+                            <img widht="80px" height="80px" class="justify-content-center" src="asset('images/loading.gif')">
                         </div>
                     </div>
 
@@ -151,13 +175,20 @@
     @include('admin.bookshopBottom')
     <script> 
         var statusMenu = "{{$statusMenu}}";
+        var idSelect;
         $(".main-panel").perfectScrollbar('update');
 
-        $(function () {
+        window.Echo.channel('channel-ctpagaDeliveryStatus').listen('.event-ctpagaDeliveryStatus', (data) => {
+            alert("entro");
+            $.ajax({
+                url: "{{route('admin.countDeliveries')}}", 
+                type: "POST",
+            }).done(function(data){
+                if(data.status == 201){
+                    $('#countDeliveries').text(data.count);
+                }
 
-            $('#btnAlarm').on('click', function() {
-                $('#alarmModal').modal('show');
-            });
+            }).fail(function(result){});
         });
 
         function sendCode(codeUrl){
@@ -176,6 +207,51 @@
                 alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
             });
         }
+
+        function showAlarm(id, date, hours, min, anteMeridiem){
+            idSelect = id;
+            $('#dateAlarm').val(date);
+            $("#hours option[value='"+ hours +"']").attr("selected",true);
+            $("#min option[value='"+ min +"']").attr("selected",true);
+            $("#anteMeridiem option[value='"+ anteMeridiem +"']").attr("selected",true);
+            $('#alarmModal').modal('show');
+        }
+
+        
+        $(function () {
+            $('#submitAlarm').on('click', function() {
+                var dateAlarm = $('#dateAlarm').val();
+                var hours = $('#hours').val();
+                var min = $('#min').val();
+                var anteMeridiem = $('#anteMeridiem').val();
+                var dateAlarmJS = dateAlarm + " a la " + hours +" : "+ min + " " + anteMeridiem;
+                var dateAlarmPHP = dateAlarm + " " + hours +":"+ min + " " + anteMeridiem;
+                alertify.confirm('Confirmar Alarma', 'Activar alarma el '+dateAlarmJS, function(){
+                    $('#submitAlarm').hide();
+                    $('#loading').removeClass("hide");
+                    $('#loading').addClass("show");
+                    console.log(idSelect);
+                    console.log(dateAlarmPHP);
+                    $.ajax({
+                        url: "{{route('admin.saveAlarm')}}", 
+                        data: {"id": idSelect, "dateAlarm": dateAlarmPHP},
+                        type: "POST",
+                    }).done(function(result){
+                        $('#alarmModal').modal('hide');
+                        if(result.status == 201){
+                            alertify.success("Guardado Correctamente!");
+                            location.reload();
+                        }
+                    }).fail(function(result){
+                        $('#submitAlarm').show();
+                        $('#loading').removeClass("show");
+                        $('#loading').addClass("hide");
+                        alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                    });
+                }, function(){});
+            });
+
+        });
     </script>
 </body>
 </html>

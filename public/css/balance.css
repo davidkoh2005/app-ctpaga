@@ -170,10 +170,13 @@ table {
 	max-width: 250px;
 	position: relative;
 }
+
+.content-select select #changeStatus{
+    width: 160px;
+}
  
 .content-select select{
 	display: inline-block;
-	width: 160px;
 	cursor: pointer;
   	padding: 7px 10px;
   	height: 42px;
@@ -322,3 +325,41 @@ div.colorGrey {
     font-size: 18px !important;
     padding-left: 10px !important;
 }
+
+
+
+
+
+
+
+
+
+
+
+/* style delivery  */
+
+button.ajs-button.ajs-ok {
+    border-radius: 60px !important;
+    border: 2px solid #00cc5f !important;
+    background-color: #00cc5f !important;
+    color: white !important;
+}
+
+button.ajs-button.ajs-ok:hover {
+    border-radius: 60px !important;
+    background-color: white !important;
+    border: 2px solid #00cc5f !important;
+    color: #00cc5f !important;
+}
+
+button.ajs-button.ajs-cancel {
+    border-radius: 60px !important;
+    border: 2px solid #ffffff80 !important;
+    color: black !important;
+}
+
+button.ajs-button.ajs-cancel:hover {
+    border-radius: 60px !important;
+    background-color: #ffffff80 !important;
+    border: 2px solid #ffffff80 !important;
+    color: black !important;

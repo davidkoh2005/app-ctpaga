@@ -566,6 +566,11 @@ class AdminController extends Controller
         return view('admin.delivery', compact('transactions', 'searchNameCompany', 'searchNameClient', 'startDate', 'endDate', 'statusMenu','idCommerce', 'companyName', 'code', 'countDeliveries'));
     }
 
+    public function countDeliveries(){
+        $countDeliveries = Delivery::where("status", true)->get()->count();
+        return response()->json(array('status' => 201, 'count'=> $countDeliveries));
+    }
+
     public function deliverySendCode(Request $request)
     {   
         $paid = Paid::where("codeUrl",$request->codeUrl)->first();
@@ -587,4 +592,11 @@ class AdminController extends Controller
         }
     }
 
+    public function saveAlarm(Request $request)
+    {
+        $paid = Paid::whereId($request->id)->first();
+        $paid->alarm = Carbon::parse($request->dateAlarm);
+        $paid->save();
+        return response()->json(array('status' => 201));
+    }
 }

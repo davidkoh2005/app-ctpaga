@@ -12,8 +12,9 @@ class DeliveryController extends Controller
     {   
         $delivery = $request->user();
         Delivery::whereId($delivery->id)->update($request->all());
+        
 
-        if($request->status)
+        if(!empty($request->status))
             $success = event(new StatusDelivery());
 
         return response()->json([
@@ -23,8 +24,7 @@ class DeliveryController extends Controller
     }
 
     public function test(){
-        $messageNotification = "probando";
-        $success = event(new StatusDelivery($messageNotification));
+        $success = event(new StatusDelivery());
         dd($success);
     }
 }
