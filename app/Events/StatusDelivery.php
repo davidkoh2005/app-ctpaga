@@ -13,13 +13,6 @@ use Illuminate\Queue\SerializesModels;
 class StatusDelivery implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    
-    public $data;
-
-    public function __construct($data)
-    {
-      $this->data = $data;
-    }
 
     public function broadcastOn()
     {
