@@ -662,6 +662,12 @@
         <script src="{{ asset('landingPage/js/active.js') }}"></script>
            <!-- laravel app.js  -->
         <script src="{{ asset('js/app.js') }}"></script>
+
+        <script>            
+            window.Echo.channel('channel-ctpagaDeliveryStatus').listen('.event-ctpagaDeliveryStatus', (data) => {
+                alert('LLego el evento usando https');
+            });
+        </script>
     </body>
 
 </html>
