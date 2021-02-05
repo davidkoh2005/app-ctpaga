@@ -59,7 +59,7 @@
             <strong>Fecha:</strong> {{$today}}<br>
             <strong>Nombre de la compañia:</strong> {{$commerce->name}}<br>
             <strong>Direccion:</strong> {{$commerce->address}}<br>
-            <strong>Telefono:</strong> {{$commerce->phone}}<br>
+            <strong>Teléfono:</strong> {{$commerce->phone}}<br>
         </div>
 
         @if($startDate && $endDate)

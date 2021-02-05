@@ -44,7 +44,7 @@
             <strong>Fecha:</strong> {{$today}}<br>
             <strong>Nombre de la compañia:</strong> {{$commerceData->name}}<br>
             <strong>Direccion:</strong> {{$commerceData->address}}<br>
-            <strong>Telefono:</strong> {{$commerceData->phone}}<br>
+            <strong>Teléfono:</strong> {{$commerceData->phone}}<br>
         </div>
     </div>
 

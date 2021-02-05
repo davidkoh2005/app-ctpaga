@@ -313,7 +313,6 @@ class AdminController extends Controller
             ->where('paids.date', "<=",$endDate);
 
         $transactions = $transactions->get();
-
         if($request->statusFile == "PDF"){
             $today = Carbon::now()->format('Y-m-d');
             $pdf = \PDF::loadView('report.transactionsPDF', compact('transactions', 'today', 'idCommerce', 'companyName'));
@@ -466,18 +465,16 @@ class AdminController extends Controller
                         ->where('deposits.date', "<=",$endDate);
 
         $deposits = $deposits->get();
-
+        $today = Carbon::now()->format('Y-m-d');
         if($request->statusFile == "PDF"){
-            $today = Carbon::now()->format('Y-m-d');
             $pdf = \PDF::loadView('report.depositsPDF', compact('deposits', 'today'));
             return $pdf->download('ctpaga_depositos.pdf');
         }elseif($request->statusFile == "EXCEL"){
-            $today = Carbon::now()->format('Y-m-d');
             return Excel::download(new DepositsExport($deposits, $today), 'ctpaga_depositos.xlsx');
         }
 
         $statusMenu = "balance";
-        return view('admin.reportPayment', compact('deposits', 'searchNameCompany', 'selectCoin', 'selectPayment', 'startDate', 'endDate', 'numRef', 'statusMenu'));
+        return view('admin.reportPayment', compact('deposits', 'searchNameCompany', 'selectCoin', 'selectPayment', 'startDate', 'endDate', 'numRef', 'statusMenu', 'today'));
     }
 
     public function downloadTxt(Request $request)
@@ -512,7 +509,7 @@ class AdminController extends Controller
         $endDate = Carbon::now()->format('Y-m-d');
         $idCommerce=0;
         $companyName = "";
-        $code="";
+        $searchCodeUrl="";
 
         if($request->id){
             $idCommerce=intVal($request->id);
@@ -527,7 +524,7 @@ class AdminController extends Controller
                         ->orderBy('paids.date', 'asc')
                         ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.selectShipping', 'paids.total',
                             'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.alarm')
-                        ->whereNotNull('paids.selectShipping');
+                        ->where('paids.selectShipping','!=', '');
         }else{
             $transactions = Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
                         ->orderBy('paids.idDelivery', 'desc')
@@ -535,7 +532,7 @@ class AdminController extends Controller
                         ->orderBy('paids.date', 'asc')
                         ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.selectShipping', 'paids.total',
                             'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.codeUrl', 'paids.alarm')
-                        ->whereNotNull('paids.selectShipping');
+                        ->where('paids.selectShipping','!=', '');
         }
 
         if($request->all()){
@@ -544,7 +541,7 @@ class AdminController extends Controller
             $searchNameClient=$request->searchNameClient;
             $startDate=$request->startDate;
             $endDate=$request->endDate;
-            $code = $request->code;
+            $searchCodeUrl = $request->searchCodeUrl;
         }
 
 
@@ -557,8 +554,8 @@ class AdminController extends Controller
         if(!empty($request->searchNameClient))
             $transactions->where('paids.nameClient', 'ilike', "%" . $request->searchNameClient . "%" );
 
-        if(!empty($request->code))
-            $transactions->where('paids.codeurl', 'ilike', "%" . $request->code . "%" );
+        if(!empty($request->searchCodeUrl))
+            $transactions->where('paids.codeurl', 'ilike', "%" . $request->searchCodeUrl . "%" );
 
         $transactions->where('paids.date', ">=",$startDate)
             ->where('paids.date', "<=",$endDate);
@@ -568,7 +565,7 @@ class AdminController extends Controller
         $countDeliveries = Delivery::where("status", true)->get()->count();
 
         $statusMenu = "delivery";
-        return view('admin.delivery', compact('transactions', 'searchNameCompany', 'searchNameClient', 'startDate', 'endDate', 'statusMenu','idCommerce', 'companyName', 'code', 'countDeliveries'));
+        return view('admin.delivery', compact('transactions', 'searchNameCompany', 'searchNameClient', 'startDate', 'endDate', 'statusMenu','idCommerce', 'companyName', 'searchCodeUrl', 'countDeliveries'));
     }
 
     public function countDeliveries(){

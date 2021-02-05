@@ -93,7 +93,7 @@
             </div>
         
             <div class="tableShow">
-                <table id="table_id" class="table table-bordered mb-5 display">
+                <table id="table_id" class="table table-bordered mb-5 display" width="100%">
                     <thead>
                         <tr class="table-title">
                             <th scope="col">#</th>

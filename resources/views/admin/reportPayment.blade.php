@@ -86,7 +86,7 @@
         </div>
 
         <div class="tableShow" id="topBalance">
-            <table id="table_id" class="table table-bordered mb-5 display">
+            <table id="table_id" class="table table-bordered mb-5 display" width="100%">
                 <thead>
                     <tr class="table-title">
                         <th scope="col">#</th>
@@ -116,6 +116,12 @@
     </div>
     <div id="showPayment"></div>
     @include('admin.bookshopBottom')
+    @php
+            $path = public_path('/images/logo/logo.png');
+            $type = pathinfo($path, PATHINFO_EXTENSION);
+            $data = file_get_contents($path);
+            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+        @endphp
     <script> 
         var statusMenu = "{{$statusMenu}}";
         var selectCoin = '{{$selectCoin}}';
@@ -145,6 +151,10 @@
                         "previous": "Anterior"
                     }
                 },
+                dom: 'Bfrtip',
+                buttons: [
+                    'columnsToggle'
+                ]
             });          
 
             $('.input-daterange').datepicker({

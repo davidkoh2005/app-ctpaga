@@ -28,9 +28,6 @@
 
                             <div class="mb-3 row">
                                 <label class="col-sm-2 col-form-label">Rango de Fecha</label>
-                                @php
-                                    use Carbon\Carbon;
-                                @endphp
                                 <div class="col">
                                     <div class="input-daterange input-group" id="datepicker">
                                     <input type="text" class="form-control" name="startDate" placeholder="Fechan Inicial" value="{{Carbon::parse($startDate)->format('d/m/Y')}}" autocomplete="off"/>

@@ -6,6 +6,10 @@ div.result {
     transform: translate(-50%, -50%);
 }
 
+div.colorGrey {
+    background-color: #585858;
+}
+
 a.store {
     width: 70%;
 }

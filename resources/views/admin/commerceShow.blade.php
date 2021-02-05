@@ -51,7 +51,7 @@
         <div id="title" style="margin-left: 60px; margin-right: 60px;"><h5 class="center">Transacciones</h5></div>
         
         <div class="tableShow">
-            <table id="table_id" class="table table-bordered mb-5 display">
+            <table id="table_id" class="table table-bordered mb-5 display" width="100%">
                 <thead>
                     <tr class="table-title">
                         <th scope="col">#</th>

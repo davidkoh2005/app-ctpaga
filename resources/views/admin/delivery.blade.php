@@ -31,9 +31,9 @@
                                     <input type="text" class="form-control" name="searchNameCompany" id="searchNameCompany" value="{{$searchNameCompany}}">
                                 </div>
 
-                                <label class="col-md-2 col-12 col-form-label">Nombre Cliente</label>
+                                <label class="col-md-2 col-12 col-form-label">Código</label>
                                 <div class="col">
-                                    <input type="text" class="form-control" name="searchNameClient" id="searchNameClient" value="{{$searchNameClient}}">
+                                    <input type="text" class="form-control" name="searchCodeUrl" id="searchCodeUrl" value="{{$searchCodeUrl}}">
                                 </div>
                             </div>
 
@@ -72,12 +72,12 @@
         <div class="col-12">
             <div class="col-11 d-flex justify-content-end showCount" ><strong>Delivery Disponible:</strong> <label id="countDeliveries">{{$countDeliveries}}</label></div>       
             <div class="tableShow">
-                <table id="table_id" class="table table-bordered mb-5 display">
+                <table id="table_id" class="table table-bordered mb-5 display" width="100%">
                     <thead>
                         <tr class="table-title">
                             <th scope="col">#</th>
                             <th scope="col">Nombre Compañia</th>
-                            <th scope="col">Nombre Cliente</th>
+                            <th scope="col">Código</th> 
                             <th scope="col">Fecha</th>
                             <th scope="col">Envio</th>
                             <th scope="col">Estado</th>
@@ -90,7 +90,7 @@
                         <tr>
                             <th scope="row">{{ $transaction->id }}</th>
                             <td>{{ $transaction->name }}</td>
-                            <td>{{ $transaction->nameClient}}</td>
+                            <td>{{ $transaction->codeUrl}}</td> 
                             <td> {{date('d/m/Y h:i A',strtotime($transaction->date))}}</td>
                             <td>{{$transaction->selectShipping}}</td>
                             <td>@if($transaction->idDelivery != null) <div class="sendDelivery">Enviado</div> @else  <div class="pendingDelivery">Pendiente</div> @endif </td>

@@ -37,13 +37,12 @@
 
             <div class="row">&nbsp;</div>
 
-            <table id="table_id" class="table table-bordered mb-5 display">
+            <table id="table_id" class="table table-bordered mb-5 display" width="100%">
                 <thead>
                     <tr class="table-title">
                         <th scope="col"><input type="checkbox" class="selectAll" id="selectAllCheck-Payment" name="selectAllCheck-Payment"></th>
                         <th scope="col">#</th>
                         <th scope="col">Nombre Compañia</th>
-                        <th scope="col">Moneda</th>
                         <th scope="col">Total</th>
                         <th scope="col">Estado</th>
                         <th scope="col">Acciones</th>
@@ -55,7 +54,6 @@
                         <td><input type="checkbox" class="check-Payment" data-id="{{ $deposit->id }}"></td>
                         <td>{{ $deposit->id }}</td>
                         <td>{{ $deposit->name }}</td>
-                        <td>@if($deposit->coin == 0 )  USD @else Bs @endif</td>
                         <td>@if($deposit->coin == 0 )  $ @else Bs @endif {{ $deposit->total }}</td>
                         <td>
                             @if($deposit->status == 1)

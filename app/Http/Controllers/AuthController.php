@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Notifications\NewUser;
+use App\Events\StatusDelivery;
 use Carbon\Carbon;
 use App\User;
 use App\Bank;
@@ -89,7 +90,18 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()->token()->revoke();
+        $request->user()->token()->revoke(); 
+        return response()->json([
+            'statusCode' => 201,
+            'message' => 'Successfully logged out'
+        ]);
+    }
+
+    public function logoutDelivery(Request $request)
+    {
+        $user = Delivery::whereId($request->user()->id)->update(array('status' => false));
+        $success = event(new StatusDelivery());
+        $request->user()->token()->revoke(); 
         return response()->json([
             'statusCode' => 201,
             'message' => 'Successfully logged out'
