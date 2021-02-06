@@ -1,11 +1,11 @@
   <div class="wrapper ">
-    <div class="sidebar" data-color="green" data-background-color="white">
+    <div class="sidebar" data-color="green" data-background-color="white" style="background-color: white;">
       <!--
         Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
 
         Tip 2: you can also add an image using data-image tag
     -->
-      <div class="logo"><a href="{{route('admin.dashboard')}}" class="simple-text logo-normal">
+      <div class="logo" style="background-color: white;"><a href="{{route('admin.dashboard')}}" class="simple-text logo-normal">
         <img src="{{ asset('images/logo/logo.png') }}" alt="image" width="160px" height="60px">
         </a>
       </div>
@@ -103,3 +103,17 @@
         </ul>
       </div>
     </div>
+@if(Auth::guard('admin')->check())
+  <script>
+  window.Echo.channel('channel-ctpagaAdmin').listen('.event-ctpagaAdmin', (data) => {
+    
+    var audio = new Audio("{{asset('sounds/alarma.mp3')}}"); 
+    audio.play(); 
+
+    alertify.alert('<span class="fa fa-exclamation-circle fa-2x" '
+                  +    'style="vertical-align:middle;color:#e10000;">'
+                  + '</span> Alerta!', 'Tiene una alarma Activa! Por favor revisar Delivery', function(){  });
+
+  });
+  </script>
+@endif

@@ -100,7 +100,7 @@
                                 @if($transaction->alarm)
                                     <button class="btn btn-bottom" id="btnAlarm" onClick="showAlarm('{{$transaction->id}}', '{{Carbon::parse($transaction->alarm)->format('d/m/Y')}}', {{Carbon::parse($transaction->alarm)->format('g')}}, {{Carbon::parse($transaction->alarm)->format('i')}}, '{{Carbon::parse($transaction->alarm)->format('A')}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Recordatorio"><i class="material-icons">alarm</i></button>
                                 @else
-                                    <button class="btn btn-bottom" id="btnAlarm" onClick="showAlarm('{{$transaction->id}}', '{{$endDate}}', 1, 0, 'AM')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Recordatorio"><i class="material-icons">alarm</i></button>
+                                    <button class="btn btn-bottom" id="btnAlarm" onClick="showAlarm('{{$transaction->id}}', '{{Carbon::parse($endDate)->format('d/m/Y')}}', 1, 0, 'AM')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Recordatorio"><i class="material-icons">alarm</i></button>
                                 @endif
                             </td>
                         </tr>
@@ -126,7 +126,7 @@
                         <div class="mb-3 row">
                             <label class="col-md-2 col-12  col-form-label">Fecha</label>
                             <div class="col">
-                                <input type="text" class="form-control" name="dateAlarm" id="dateAlarm" value="{{Carbon::parse($endDate)->format('d/m/Y')}}" autocomplete="off"/>
+                                <input type="text" class="form-control" name="dateAlarm" id="dateAlarm" value="{{Carbon::parse($endDate)->format('d/m/Y')}}" />
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -179,7 +179,8 @@
         $(".main-panel").perfectScrollbar('update');
 
         window.Echo.channel('channel-ctpagaDeliveryStatus').listen('.event-ctpagaDeliveryStatus', (data) => {
-            alert("entro");
+            var audio = new Audio("{{asset('sounds/notificacion.mp3')}}"); 
+            audio.play();
             $.ajax({
                 url: "{{route('admin.countDeliveries')}}", 
                 type: "POST",

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Delivery;
 use App\Events\StatusDelivery;
+use App\Events\AlarmUrgent;
 
 class DeliveryController extends Controller
 {
@@ -24,7 +25,8 @@ class DeliveryController extends Controller
     }
 
     public function test(){
-        $success = event(new StatusDelivery());
+        $success = event(new AlarmUrgent());
+        /* $success = event(new StatusDelivery()); */
         dd($success);
     }
 }

@@ -96,7 +96,7 @@ $(document).ready( function () {
         todayHighlight: true
     });
 
-    $('#alarm').datepicker({
+    $('#dateAlarm').datepicker({
         orientation: "bottom auto",
         startDate: date,
         language: "es",
