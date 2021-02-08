@@ -108,11 +108,14 @@
   window.Echo.channel('channel-ctpagaAdmin').listen('.event-ctpagaAdmin', (data) => {
     
     var audio = new Audio("{{asset('sounds/alarma.mp3')}}"); 
-    audio.play(); 
+    audio.play();
+    audio.loop=true; 
 
     alertify.alert('<span class="fa fa-exclamation-circle fa-2x" '
                   +    'style="vertical-align:middle;color:#e10000;">'
-                  + '</span> Alerta!', 'Tiene una alarma Activa! Por favor revisar Delivery', function(){  });
+                  + '</span> Alerta!', 'Tiene una alarma Activa! Por favor revisar Delivery', function(){ 
+                    audio.pause();
+                   });
 
   });
   </script>

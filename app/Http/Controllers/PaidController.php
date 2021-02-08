@@ -417,6 +417,18 @@ class PaidController extends Controller
             new ShippingNotification($message)
         );
 
+        /* $url = 'mensajesms.com.ve/sms2/API/api.php?cel='.$phone.'&men='.str_replace(" ","%20",$message).'&u=demo&t=D3M04P1';
+        $ch = curl_init($url);
+
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array( 
+            "Content-Type: application/json",
+        ));
+        
+        $resultSms = json_decode(curl_exec($ch), true);
+        curl_close($ch); */
+
         $sms = AWS::createClient('sns');
         $sms->publish([
             'Message' => $message,
@@ -427,7 +439,7 @@ class PaidController extends Controller
                     'StringValue' => 'Transactional',
                 ]
             ],
-        ]);
+        ]); 
 
         $paids->save();
 
