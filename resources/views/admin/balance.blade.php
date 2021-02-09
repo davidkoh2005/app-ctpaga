@@ -16,9 +16,48 @@
     @include('auth.menu')
     <div class="main-panel">
       @include('auth.navbar')
+      <div class="justify-content-center" id="row">
+            <div class="col-10">
+                <div class="card card-Transactions">
+                    <div class="card-header">
+                        Filtro:
+                    </div>
+                    <div class="card-body has-success" style="margin:15px;">
+                        <form method='POST' action="{{route('admin.balance')}}">
+                            <input type="hidden" name="selectCoin" value="{{$selectCoin}}">
+                            <div class="mb-3 row">
+                                <label class="col-sm-2 col-form-label">Buscar Estado</label>
+                                <label class="content-select">
+                                    <select class="addMargin" name="searchStatus" id="searchStatus">
+                                        <option value="0">Estado</option>
+                                        <option value="1">Pendiente</option>
+                                        <option value="2">En Proceso</option>
+                                        <option value="3">Completado</option>
+                                    </select>
+                                </label>
+                            </div>
+
+
+                            <div class="row">&nbsp;</div>
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <button type="submit" class="submit btn btn-bottom">Buscar</button>
+                                </div>
+                        </form>
+                                <div class="col-6">
+                                    <form id="formRemove" method='POST' action="{{route('admin.balance')}}"> 
+                                    <input type="hidden" name="selectCoin" value="{{$selectCoin}}">
+                                    <a type="button" class="remove-transactions btn" href="javascript:$('#formRemove').submit();">Limpiar</a>
+                                    </form>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="tableShow" id="topBalance">
-            <div class="row">&nbsp;</div>
             <div class="row">
                 @if($selectCoin == 0)
                     <label>
@@ -51,7 +90,7 @@
                 <tbody>
                     @foreach($deposits as $deposit)
                     <tr>
-                        <td><input type="checkbox" class="check-Payment" data-id="{{ $deposit->id }}"></td>
+                        <td><input type="checkbox" class="check-Payment" data-id="{{ $deposit->id }}" data-status="{{$deposit->status}}"></td>
                         <td>{{ $deposit->id }}</td>
                         <td>{{ $deposit->name }}</td>
                         <td>@if($deposit->coin == 0 )  $ @else Bs @endif {{ $deposit->total }}</td>
@@ -107,22 +146,33 @@
         var statusMenu = "{{$statusMenu}}";
         var selectCoin = '{{$selectCoin}}';
         var statusSelect = false;
+
+        var searchStatus ='{{$searchStatus}}';
+        $("#searchStatus option[value='"+ searchStatus +"']").attr("selected",true);
+
         $( ".loader" ).fadeOut("slow"); 
         $('#changeStatus').change(function(){
             var selectID = [];
+            var error = false;
             var status = $(this).val();
             if (status != 0){
                 $("input:checked.check-Payment").each(function () {
                     var id = $(this).data("id");
+                    var statuscheck = $(this).data("status");
+                    if(statuscheck > status || statuscheck == status || (statuscheck+1 != status)){
+                        error = true;
+                    }
                     selectID.push(id);
                 });
 
-                if(selectID.length >0)
+                if(selectID.length >0 && !error)
                     if(status == 3){
+                        $("#changeStatus option[value='0']").attr("selected",true);
                         statusSelect = true;
                         showDataPayment(0, false)
                     }
                     else{
+                         $("#changeStatus option[value='0']").attr("selected",true);
                         $( ".loader" ).fadeIn("slow"); 
                         $.ajax({
                             url: "{{route('admin.changeStatus')}}", 
@@ -130,7 +180,7 @@
                             type: "POST",
                         }).done(function(data){
                             $( ".loader" ).fadeOut("slow"); 
-                            $("#changeStatus option[value='']").attr("selected",true);
+                            $("#changeStatus option[value='0']").attr("selected",true);
                             if(data.status == 201)
                                 alertify.success('Estado ha sido cambiado correctamente');
                         
@@ -140,9 +190,13 @@
                             alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                         }); 
                     }
-                else{
+                else if (selectID.length == 0 && !error){
                     alertify.error('Debe seleccionar depositos');
-                    $("#changeStatus option[value='']").attr("selected",true);
+                    $("#changeStatus option[value='0']").attr("selected",true);
+                }
+                else{
+                    alertify.error('Debe seleccionar depositos con estado correctamente');
+                    $("#changeStatus option[value='0']").attr("selected",true);
                 }
             }
             
@@ -178,7 +232,7 @@
                 }).fail(function(result){
                     alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                 }); 
-            else
+            else 
                 alertify.error('Debe seleccionar depositos');
         }
 

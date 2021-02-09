@@ -392,7 +392,7 @@ class PaidController extends Controller
         $paids->statusShipping = $request->statusShipping;
         $phone = '+'.app('App\Http\Controllers\Controller')->validateNum($paids->numberShipping);
         if($request->statusShipping == 1){
-            $message = "los productos de código de compra: ".$paids->codeUrl." fue retirado desde la tienda llegará al destino no mas tardar de 1 hora.";
+            $message = "Delivery Ctpaga informa que los productos de código de compra: ".$paids->codeUrl." fue retirado desde la tienda llegará al destino no mas tardar de 1 hora.";
             (new User)->forceFill([
                 'email' => $paids->email,
             ])->notify(
@@ -400,7 +400,7 @@ class PaidController extends Controller
             );
 
         }elseif($request->statusShipping == 2){
-            $message = "los productos de código de compra ".$paids->codeUrl." fue entregado a su destino.";
+            $message = "Delivery Ctpaga informa que los productos de código de compra ".$paids->codeUrl." fue entregado a su destino.";
             $userCommerce = User::whereId($paids->user_id)->first();
     
             (new User)->forceFill([

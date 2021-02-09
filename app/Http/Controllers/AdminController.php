@@ -107,23 +107,28 @@ class AdminController extends Controller
         }
 
         $selectCoin=0;
+        $searchStatus=0;
 
         $deposits = DB::table('deposits')
                 ->join('commerces', 'commerces.id', '=', 'deposits.commerce_id')
                 ->where('deposits.total', '>=', 1)
                 ->select('deposits.id', 'deposits.user_id', 'deposits.commerce_id', 'deposits.coin', 'deposits.total', 'deposits.status',
                 'commerces.name')
-                ->orderBy('name', 'asc');
+                ->orderBy('commerces.name', 'asc');
         
         if($request->all()){
             $selectCoin= $request->selectCoin;
+            $searchStatus = $request->searchStatus;
             $deposits = $deposits->where('deposits.coin', $selectCoin);
         }
+
+        if(!empty($request->searchStatus))
+            $deposits = $deposits->where('deposits.status', $searchStatus);
             
         $deposits = $deposits->get();
         $statusMenu = "balance";
 
-        return view('admin.balance', compact('deposits',"statusMenu",'selectCoin'));
+        return view('admin.balance', compact('deposits',"statusMenu",'selectCoin','searchStatus'));
     }
 
     public function login(Request $request)

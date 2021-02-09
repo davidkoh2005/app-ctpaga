@@ -151,10 +151,6 @@
                         "previous": "Anterior"
                     }
                 },
-                dom: 'Bfrtip',
-                buttons: [
-                    'columnsToggle'
-                ]
             });          
 
             $('.input-daterange').datepicker({

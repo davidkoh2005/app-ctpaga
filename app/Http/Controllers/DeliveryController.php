@@ -25,10 +25,18 @@ class DeliveryController extends Controller
     }
 
     public function test(){
+
+        /* $message = "Delivery Ctpaga informa que los productos de código de compra: ".$paids->codeUrl." fue retirado desde la tienda llegará al destino no mas tardar de 1 hora.";
+        (new User)->forceFill([
+            'email' => 'angelgoitia1995@gmail.com',
+        ])->notify(
+            new ShippingNotification($message)
+        ); */
+
         /* $phone = "04129851722";
         $message = "los productos de código de compra: test123 fue retirado desde la tienda llegará al destino no mas tardar de 1 hora.";
         
-        $url = 'mensajesms.com.ve/sms2/API/api.php?cel=04129851722&men=test&u=demo&t=D3M04P1';
+        $url = 'mensajesms.com.ve/sms2/API/api.php?cel='.$phone.'&men='.str_replace(' ','_',$message).'&u=demo&t=DEM04P2';
         //$ch = curl_init($url);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -37,10 +45,10 @@ class DeliveryController extends Controller
         $resultSms = json_decode(curl_exec($ch), true);
         curl_close($ch);
 
-        dd($resultSms); */
+        dd($resultSms);  */ 
 
         $success = event(new AlarmUrgent());
-        // /* $success = event(new StatusDelivery()); */
-        dd($success);
+        //$success = event(new StatusDelivery());
+        dd($success); 
     }
 }
