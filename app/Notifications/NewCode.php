@@ -43,8 +43,8 @@ class NewCode extends Notification
     {
         return (new MailMessage)
             ->line('Estás recibiendo este correo electrónico porque recibiste nuevo código de compra.')
-            ->line('Código:'+$this->codeUrl)
-            ->line('Si no recibiste notificación, copia y pega en la aplicación Delivery Ctpaga.');
+            ->line('Código: '.$this->codeUrl)
+            ->line('Si no recibiste notificación, copia y pega en la aplicación Delivery Ctpaga.')
             ->subject('Aviso Delivery Ctpaga');
     }
 

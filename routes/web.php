@@ -55,7 +55,7 @@ Route::post('logout/', 'AdminController@logout')->name('logout');
 
 Route::group(['middleware'=>'web'], function() {
     Route::get('/inicio/', 'CommerceController@dashboard')->name('commerce.dashboard');
-    Route::post('/transacciones', 'CommerceController@transactions')->name('commerce.transactions');
+    Route::post('/delivery', 'CommerceController@transactions')->name('commerce.transactions');
     Route::get('/transacciones', 'CommerceController@transactions')->name('commerce.transactions');
     Route::get('/historial', 'CommerceController@depositHistory')->name('commerce.depositHistory');
     Route::post('/historial', 'CommerceController@depositHistory')->name('commerce.depositHistory');
@@ -81,6 +81,7 @@ Route::group(['middleware'=>'admin'], function() {
     Route::post('/admin/historial', 'AdminController@reportPayment')->name('admin.reportPayment');
     Route::post('/admin/txt', 'AdminController@downloadTxt')->name('admin.downloadTxt');
     Route::get('/admin/delivery', 'AdminController@delivery')->name('admin.delivery');
+    Route::post('/admin/delivery', 'AdminController@delivery')->name('admin.deliverySearch');
     Route::post('/admin/countDeliveries', 'AdminController@countDeliveries')->name('admin.countDeliveries');
     Route::post('/admin/deliverySendCode', 'AdminController@deliverySendCode')->name('admin.deliverySendCode');
     Route::post('/admin/saveAlarm', 'AdminController@saveAlarm')->name('admin.saveAlarm');

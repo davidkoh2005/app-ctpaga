@@ -509,58 +509,35 @@ class AdminController extends Controller
         }
 
         $searchNameCompany="";
-        $searchNameClient="";
         $startDate = Carbon::now()->setDay(1)->subMonth(4)->format('Y-m-d');
         $endDate = Carbon::now()->format('Y-m-d');
         $idCommerce=0;
         $companyName = "";
         $searchCodeUrl="";
 
-        if($request->id){
-            $idCommerce=intVal($request->id);
-            
-            $commerce = Commerce::whereId($idCommerce)->first();
-            $companyName = $commerce->name;
-
-            $transactions = Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
-                        ->where('paids.commerce_id', 'like', "%".$request->id. "%" )
-                        ->orderBy('paids.idDelivery', 'desc')
-                        ->orderBy('paids.alarm', 'asc')
-                        ->orderBy('paids.date', 'asc')
-                        ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.selectShipping', 'paids.total',
-                            'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.alarm')
-                        ->where('paids.selectShipping','!=', '');
-        }else{
-            $transactions = Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
+        $transactions = Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
                         ->orderBy('paids.idDelivery', 'desc')
                         ->orderBy('paids.alarm', 'asc')
                         ->orderBy('paids.date', 'asc')
                         ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.selectShipping', 'paids.total',
                             'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.codeUrl', 'paids.alarm')
                         ->where('paids.selectShipping','!=', '');
-        }
 
         if($request->all()){
-            $idCommerce = $idCommerce == 0? $request->idCommerce : $idCommerce;
             $searchNameCompany=$request->searchNameCompany;
-            $searchNameClient=$request->searchNameClient;
             $startDate=$request->startDate;
             $endDate=$request->endDate;
             $searchCodeUrl = $request->searchCodeUrl;
         }
 
-
-        if(!empty($request->idCommerce))
-            $transactions->where('commerces.id', $request->idCommerce); 
-
-        if(!empty($request->searchNameCompany))
+        if(!empty($request->searchNameCompany)){
             $transactions->where('commerces.name', 'ilike', "%" . $request->searchNameCompany . "%" );
-        
-        if(!empty($request->searchNameClient))
-            $transactions->where('paids.nameClient', 'ilike', "%" . $request->searchNameClient . "%" );
+        }
 
-        if(!empty($request->searchCodeUrl))
-            $transactions->where('paids.codeurl', 'ilike', "%" . $request->searchCodeUrl . "%" );
+
+        if(!empty($request->searchCodeUrl)){
+            $transactions->where('paids.codeUrl', 'ilike', "%" . $request->searchCodeUrl . "%" );
+        }
 
         $transactions->where('paids.date', ">=",$startDate)
             ->where('paids.date', "<=",$endDate);

@@ -10,21 +10,18 @@
     <script type="text/javascript" src="{{ asset('js/transactions.js') }}"></script>
 </head>
 <body class="body-admin">
+<div class="loader"></div>
     @include('auth.menu')
     <div class="main-panel">
         @include('auth.navbar')
-        <div class="justify-content-center" id="row">
-            <div class="col-10">
+        <!--<div class="justify-content-center" id="row">
+             <div class="col-10">
                 <div class="card card-Transactions">
                     <div class="card-header">
                         Filtro:
                     </div>
                     <div class="card-body has-success" style="margin:15px;">
-                        @if($idCommerce >0)
-                        <form id="payment-form" class="contact-form" method='GET' action="{{route('admin.transactionsSearchId', ['id' => $idCommerce])}}">
-                        @else
-                        <form id="payment-form" class="contact-form" method='POST' action="{{route('admin.transactionsSearch')}}">
-                        @endif
+                        <form id="payment-form" class="contact-form" method='POST' action="{{route('admin.deliverySearch')}}">  
                             <div class="mb-3 row">
                                 <label class="col-md-2 col-12  col-form-label">Nombre Compañia</label>
                                 <div class="col">
@@ -59,16 +56,16 @@
                                     <button type="submit" class="submit btn btn-bottom">Buscar</button>
                                 </div>
                                 <div class="col-6">
-                                    <a type="button" class="remove-transactions btn" href="{{route('admin.transactions')}}">Limpiar</a>
+                                    <a type="button" class="remove-transactions btn" href="{{route('admin.delivery')}}">Limpiar</a>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
-
+        <div class="row">&nbsp;</div><div class="row">&nbsp;</div>
         <div class="col-12">
             <div class="col-11 d-flex justify-content-end showCount" ><strong>Delivery Disponible:</strong> <label id="countDeliveries">{{$countDeliveries}}</label></div>       
             <div class="tableShow">
@@ -96,11 +93,11 @@
                             <td>@if($transaction->idDelivery != null) <div class="sendDelivery">Enviado</div> @else  <div class="pendingDelivery">Pendiente</div> @endif </td>
                             <td>@if($transaction->alarm) <div class="activatedAlarm">Activado</div> @else <div class="disabledAlarm">Desactivado</div> @endif</td>
                             <td width="100px">
-                                <button class="btn btn-bottom" onClick="sendCode('{{$transaction->codeUrl}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Enviar Código"><i class="material-icons">send</i></button>
+                                <button class="btn btn-bottom" onClick="sendCode('{{$transaction->codeUrl}}', '{{$transaction->idDelivery}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Enviar Código"><i class="material-icons">send</i></button>
                                 @if($transaction->alarm)
-                                    <button class="btn btn-bottom" id="btnAlarm" onClick="showAlarm('{{$transaction->id}}', '{{Carbon::parse($transaction->alarm)->format('d/m/Y')}}', {{Carbon::parse($transaction->alarm)->format('g')}}, {{Carbon::parse($transaction->alarm)->format('i')}}, '{{Carbon::parse($transaction->alarm)->format('A')}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Recordatorio"><i class="material-icons">alarm</i></button>
+                                    <button class="btn btn-bottom" id="btnAlarm" onClick="showAlarm('{{$transaction->id}}', '{{Carbon::parse($transaction->alarm)->format('d/m/Y')}}', {{Carbon::parse($transaction->alarm)->format('g')}}, {{Carbon::parse($transaction->alarm)->format('i')}}, '{{Carbon::parse($transaction->alarm)->format('A')}}', '{{$transaction->idDelivery}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Recordatorio"><i class="material-icons">alarm</i></button>
                                 @else
-                                    <button class="btn btn-bottom" id="btnAlarm" onClick="showAlarm('{{$transaction->id}}', '{{Carbon::parse($endDate)->format('d/m/Y')}}', 1, 0, 'AM')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Recordatorio"><i class="material-icons">alarm</i></button>
+                                    <button class="btn btn-bottom" id="btnAlarm" onClick="showAlarm('{{$transaction->id}}', '{{Carbon::parse($endDate)->format('d/m/Y')}}', 1, 0, 'AM', '{{$transaction->idDelivery}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Recordatorio"><i class="material-icons">alarm</i></button>
                                 @endif
                             </td>
                         </tr>
@@ -174,6 +171,7 @@
     
     @include('admin.bookshopBottom')
     <script> 
+        $( ".loader" ).fadeOut("slow"); 
         var statusMenu = "{{$statusMenu}}";
         var idSelect;
         $(".main-panel").perfectScrollbar('update');
@@ -192,30 +190,44 @@
             }).fail(function(result){});
         });
 
-        function sendCode(codeUrl){
-            $.ajax({
+        function sendCode(codeUrl, idDelivery){
+
+            if(parseInt(idDelivery) > 0)
+                alertify.error('Esta transacción ya fue enviado');
+            else{
+                $( ".loader" ).fadeIn("slow"); 
+                $.ajax({
                 url: "{{route('admin.deliverySendCode')}}", 
                 data: {"codeUrl" : codeUrl},
                 type: "POST",
-            }).done(function(data){
-                if(data.status == 201){
-                    alertify.success('Estado ha sido cambiado correctamente');
-                    location.reload();
-                }
-                else
-                    alertify.error('No hay delivery disponible');
-            }).fail(function(result){
-                alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
-            });
+                }).done(function(data){
+                    if(data.status == 201){
+                        $( ".loader" ).fadeOut("slow"); 
+                        alertify.success('Estado ha sido cambiado correctamente');
+                        location.reload();
+                    }
+                    else{
+                        $( ".loader" ).fadeOut("slow"); 
+                        alertify.error('No hay delivery disponible');
+                    }
+                }).fail(function(result){
+                    $( ".loader" ).fadeOut("slow"); 
+                    alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                }); 
+            }
         }
 
-        function showAlarm(id, date, hours, min, anteMeridiem){
+        function showAlarm(id, date, hours, min, anteMeridiem, idDelivery){
             idSelect = id;
-            $('#dateAlarm').val(date);
-            $("#hours option[value='"+ hours +"']").attr("selected",true);
-            $("#min option[value='"+ min +"']").attr("selected",true);
-            $("#anteMeridiem option[value='"+ anteMeridiem +"']").attr("selected",true);
-            $('#alarmModal').modal('show');
+            if(parseInt(idDelivery) > 0)
+                alertify.error('No se puede agregar alarma porque esta transacción ya fue enviado');
+            else{
+                $('#dateAlarm').val(date);
+                $("#hours option[value='"+ hours +"']").attr("selected",true);
+                $("#min option[value='"+ min +"']").attr("selected",true);
+                $("#anteMeridiem option[value='"+ anteMeridiem +"']").attr("selected",true);
+                $('#alarmModal').modal('show');
+            }
         }
 
         
