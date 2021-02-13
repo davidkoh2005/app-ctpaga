@@ -9,7 +9,7 @@
         <img src="{{ asset('images/logo/logo.png') }}" alt="image" width="160px" height="60px">
         </a>
       </div>
-      <div class="sidebar-wrapper">
+      <div class="sidebar-wrapper" style="background-color: white;">
         <ul class="nav">
           @if(Auth::guard('admin')->check())
             <li class="nav-item" id="nav-dashboard">
