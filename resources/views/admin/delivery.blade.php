@@ -65,9 +65,9 @@
             </div>
         </div> -->
 
-        <div class="row">&nbsp;</div><div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
         <div class="col-12">
-            <div class="col-11 d-flex justify-content-end showCount" ><strong>Delivery Disponible:</strong> <label id="countDeliveries">{{$countDeliveries}}</label></div>       
             <div class="tableShow">
                 <table id="table_id" class="table table-bordered mb-5 display" width="100%">
                     <thead>
@@ -90,10 +90,10 @@
                             <td>{{ $transaction->codeUrl}}</td> 
                             <td> {{date('d/m/Y h:i A',strtotime($transaction->date))}}</td>
                             <td>{{$transaction->selectShipping}}</td>
-                            <td>@if($transaction->idDelivery != null) <div class="sendDelivery">Enviado</div> @else  <div class="pendingDelivery">Pendiente</div> @endif </td>
+                            <td>@if($transaction->statusDelivery==0) <div class="pendingDelivery">Pendiente</div> @elseif($transaction->statusDelivery==1) <div class="publicDelivery">Publicado</div> @else <div class="sendDelivery">Ordenado</div>  @endif </td>
                             <td>@if($transaction->alarm) <div class="activatedAlarm">Activado</div> @else <div class="disabledAlarm">Desactivado</div> @endif</td>
                             <td width="100px">
-                                <button class="btn btn-bottom" onClick="sendCode('{{$transaction->codeUrl}}', '{{$transaction->idDelivery}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Enviar Código"><i class="material-icons">send</i></button>
+                                <button class="btn btn-bottom" onClick="publicCode('{{$transaction->codeUrl}}', '{{$transaction->statusDelivery}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Publicar Orden"><i class="material-icons">send</i></button>
                                 @if($transaction->alarm)
                                     <button class="btn btn-bottom" id="btnAlarm" onClick="showAlarm('{{$transaction->id}}', '{{Carbon::parse($transaction->alarm)->format('d/m/Y')}}', {{Carbon::parse($transaction->alarm)->format('g')}}, {{Carbon::parse($transaction->alarm)->format('i')}}, '{{Carbon::parse($transaction->alarm)->format('A')}}', '{{$transaction->idDelivery}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Recordatorio"><i class="material-icons">alarm</i></button>
                                 @else
@@ -158,7 +158,7 @@
                     <div class="marginAuto">
                         <input type="input" class="btn btn-bottom btn-current" id="submitAlarm" value="Guardar Alarma">
                         <div class="row marginAuto hide"id="loading">
-                            <img widht="80px" height="80px" class="justify-content-center" src="asset('images/loading.gif')">
+                            <img widht="80px" height="80px" class="justify-content-center" src="{{ asset('images/loading.gif')  }}">
                         </div>
                     </div>
 
@@ -176,24 +176,12 @@
         var idSelect;
         $(".main-panel").perfectScrollbar('update');
 
-        window.Echo.channel('channel-ctpagaDeliveryStatus').listen('.event-ctpagaDeliveryStatus', (data) => {
-            var audio = new Audio("{{asset('sounds/notificacion.mp3')}}"); 
-            audio.play();
-            $.ajax({
-                url: "{{route('admin.countDeliveries')}}", 
-                type: "POST",
-            }).done(function(data){
-                if(data.status == 201){
-                    $('#countDeliveries').text(data.count);
-                }
+        function publicCode(codeUrl, idDelivery){
 
-            }).fail(function(result){});
-        });
-
-        function sendCode(codeUrl, idDelivery){
-
-            if(parseInt(idDelivery) > 0)
-                alertify.error('Esta transacción ya fue enviado');
+            if(parseInt(idDelivery) == 1)
+                alertify.error('Esta transacción ya fue publicado');
+            else if(parseInt(idDelivery) == 2)
+                alertify.error('Esta transacción ya fue ordenado');
             else{
                 $( ".loader" ).fadeIn("slow"); 
                 $.ajax({
@@ -239,6 +227,7 @@
                 var anteMeridiem = $('#anteMeridiem').val();
                 var dateAlarmJS = dateAlarm + " a la " + hours +" : "+ min + " " + anteMeridiem;
                 var dateAlarmPHP = dateAlarm + " " + hours +":"+ min + " " + anteMeridiem;
+                dateAlarmPHP = dateAlarmPHP.replaceAll("/","-");
                 alertify.confirm('Confirmar Alarma', 'Activar alarma el '+dateAlarmJS, function(){
                     $('#submitAlarm').hide();
                     $('#loading').removeClass("hide");

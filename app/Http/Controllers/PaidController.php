@@ -375,15 +375,21 @@ class PaidController extends Controller
 
     public function showPaidDelivery(Request $request)
     {
-        $paids = Paid::where('codeUrl', $request->codeUrl)->first();
-        if($paids && $paids->statusShipping <2){
+        $delivery = $request->user();
+        $paids = Paid::where('codeUrl', $request->codeUrl)
+                ->whereNull("idDelivery")->first();
+
+        if($paids && ($paids->idDelivery == null || $paids->idDelivery == $delivery->id)){
+            $paids->idDelivery = $delivery->id;
+            $paids->statusDelivery = 2;
             $sales = Sale::where('codeUrl',$request->codeUrl)->orderBy('name', 'asc')->get();
             $commerce = Commerce::whereId($paids->commerce_id)->first();
+            $paids->save();
             return response()->json(['statusCode' => 201,'data' =>['paid'=>$paids, 'commerce'=>$commerce, 'sales'=>$sales]]);
-        }else if($paids && $paids->statusShipping == 2)
-            return response()->json(['statusCode' => 401,'message' => "Este Código de compra ya fue entregado los productos"]);
+        }
+        else
+            return response()->json(['statusCode' => 401,'message' => "Este orden ya no se encuentra disponible"]);
 
-        return response()->json(['statusCode' => 401,'message' => "No se encuentra en nuestra base de datos"]);
     }
 
     public function changeStatus(Request $request)

@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Delivery;
+use App\Paid;
 use App\Events\StatusDelivery;
 use App\Events\AlarmUrgent;
+use Carbon\Carbon;
 
 class DeliveryController extends Controller
 {
@@ -24,8 +26,24 @@ class DeliveryController extends Controller
         ]);
     }
 
-    public function test(){
+    public function showPaidAll(Request $request)
+    {   
+        $delivery = $request->user();
+        $paids =Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
+                    ->where('paids.statusDelivery',1)
+                    ->whereNull('paids.idDelivery')
+                    ->select('paids.id', 'paids.codeUrl', 'commerces.name', 'commerces.address')
+                    ->get();
+    
+        return response()->json([
+            'statusCode' => 201,
+            'data' => $paids
+        ]);
+    }
 
+    public function test()
+    {
+        dd(Carbon::parse("13-02-2021 03:45 PM")->format('Y-m-d H:m:s'));
         /* $message = "Delivery Ctpaga informa que los productos de código de compra: ".$paids->codeUrl." fue retirado desde la tienda llegará al destino no mas tardar de 1 hora.";
         (new User)->forceFill([
             'email' => 'angelgoitia1995@gmail.com',
@@ -47,8 +65,8 @@ class DeliveryController extends Controller
 
         dd($resultSms);  */ 
 
-        $success = event(new AlarmUrgent());
+        // $success = event(new AlarmUrgent());
         //$success = event(new StatusDelivery());
-        dd($success); 
+        // dd($success); 
     }
 }

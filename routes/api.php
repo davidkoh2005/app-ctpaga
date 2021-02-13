@@ -38,6 +38,8 @@ Route::group(['prefix' => 'auth'], function () {
 
         Route::post('showPaidDelivery', 'PaidController@showPaidDelivery');
         Route::post('changeStatus', 'PaidController@changeStatus');
+
+        Route::post('showPaidAll', 'DeliveryController@showPaidAll');
    
     });
   

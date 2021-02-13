@@ -11,6 +11,7 @@ use App\Events\StatusDelivery;
 use Carbon\Carbon;
 use App\User;
 use App\Bank;
+use App\Paid;
 use App\Picture;
 use App\Commerce;
 use App\Delivery;
@@ -100,7 +101,6 @@ class AuthController extends Controller
     public function logoutDelivery(Request $request)
     {
         $user = Delivery::whereId($request->user()->id)->update(array('status' => false));
-        $success = event(new StatusDelivery());
         $request->user()->token()->revoke(); 
         return response()->json([
             'statusCode' => 201,
@@ -223,7 +223,11 @@ class AuthController extends Controller
 
     public function delivery(Request $request)
     {
-        return response()->json(['statusCode' => 201,'data' => $request->user()]);
+        $paid = Paid::where("idDelivery", $request->user()->id)
+                    ->where("statusDelivery",">=",1)
+                    ->orderBy("date", "desc")
+                    ->first();
+        return response()->json(['statusCode' => 201,'data' => $request->user(), 'paid' =>$paid]);
     }
 
     public function versionApp(Request $request)

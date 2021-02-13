@@ -105,18 +105,27 @@
     </div>
 @if(Auth::guard('admin')->check())
   <script>
-  window.Echo.channel('channel-ctpagaAdmin').listen('.event-ctpagaAdmin', (data) => {
-    
-    var audio = new Audio("{{asset('sounds/alarma.mp3')}}"); 
-    audio.play();
-    audio.loop=true; 
+    setInterval(verifyAlarm, 60000);
 
-    alertify.alert('<span class="fa fa-exclamation-circle fa-2x" '
-                  +    'style="vertical-align:middle;color:#e10000;">'
-                  + '</span> Alerta!', 'Tiene una alarma Activa! Por favor revisar Delivery', function(){ 
-                    audio.pause();
-                   });
+    function verifyAlarm(){
+      $.ajax({
+        url: "{{route('admin.verifyAlarm')}}", 
+        type: "POST",
+        }).done(function(data){
+            if(data.status == 201){
+              var audio = new Audio("{{asset('sounds/alarma.mp3')}}"); 
+              audio.play();
+              audio.loop=true; 
+              audio.volume = 1;
 
-  });
+              alertify.alert('<span class="fa fa-exclamation-circle fa-2x" '
+                            +    'style="vertical-align:middle;color:#e10000;">'
+                            + '</span> Alerta!', 'Tiene una alarma Activa! Por favor revisar Delivery', function(){ 
+                              audio.pause();
+                            });
+            }
+
+        }).fail(function(result){})
+    }
   </script>
 @endif

@@ -516,11 +516,11 @@ class AdminController extends Controller
         $searchCodeUrl="";
 
         $transactions = Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
-                        ->orderBy('paids.idDelivery', 'desc')
-                        ->orderBy('paids.alarm', 'asc')
+                        ->orderBy('paids.statusDelivery', 'asc')
                         ->orderBy('paids.date', 'asc')
+                        ->orderBy('paids.alarm', 'desc')
                         ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.selectShipping', 'paids.total',
-                            'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.codeUrl', 'paids.alarm')
+                            'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.codeUrl', 'paids.alarm', 'paids.statusDelivery')
                         ->where('paids.selectShipping','!=', '');
 
         if($request->all()){
@@ -558,35 +558,27 @@ class AdminController extends Controller
     public function deliverySendCode(Request $request)
     {   
         $paid = Paid::where("codeUrl",$request->codeUrl)->first();
-        $delivery = delivery::where('status',true)->orderBy('updated_at', 'desc')->first();
-        if($delivery){
-            $notification['delivery_id'] = $delivery->id;
-            $notification['codeUrl'] = $request->codeUrl;
-
-            $paid->idDelivery = $delivery->id;
-            $paid->save();
-
-            (new User)->forceFill([
-                'email' => $delivery->email,
-            ])->notify(
-                new NewCode($request->codeUrl)
-            );
-
-            $delivery->status = false;
-            $delivery->save();
-
-            $success = event(new SendCode($notification));
-            return response()->json(array('status' => 201));
-        }else{
-            return response()->json(array('status' => 401));
-        }
+        $paid->statusDelivery = 1;
+        $paid->save();
+        
+        return response()->json(array('status' => 201));
     }
 
     public function saveAlarm(Request $request)
     {
         $paid = Paid::whereId($request->id)->first();
-        $paid->alarm = Carbon::parse($request->dateAlarm);
+        $paid->alarm = Carbon::parse($request->dateAlarm)->format('Y-m-d H:m:s');
         $paid->save();
         return response()->json(array('status' => 201));
+    }
+
+    public function verifyAlarm(){
+        $alarm = Paid::where("alarm", "<=", Carbon::now())->where("statusDelivery",0)->first();
+
+        if($alarm){
+            return response()->json(array('status' => 201));
+        }else{
+            return response()->json(array('status' => 401));
+        }
     }
 }
