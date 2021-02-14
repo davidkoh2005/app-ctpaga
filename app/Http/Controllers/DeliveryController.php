@@ -43,7 +43,8 @@ class DeliveryController extends Controller
 
     public function test()
     {
-        dd(Carbon::parse("13-02-2021 03:45 PM")->format('Y-m-d H:m:s'));
+        return view('test');
+        //dd(Carbon::parse("13-02-2021 03:45 PM")->format('Y-m-d H:m:s'));
         /* $message = "Delivery Ctpaga informa que los productos de código de compra: ".$paids->codeUrl." fue retirado desde la tienda llegará al destino no mas tardar de 1 hora.";
         (new User)->forceFill([
             'email' => 'angelgoitia1995@gmail.com',

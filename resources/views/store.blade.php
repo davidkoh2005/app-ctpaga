@@ -216,7 +216,7 @@
                         </div>
                         <div class="row">
                             <div class="col-6 mx-auto text-center">
-                                <img src="{{ asset('images/paypal.png') }}" width="150px" height="80px">
+                                <img src="{{ asset('images/paypal.png') }}" width="150px" height="60px">
                             </div>
                             <div class="col-6 mx-auto text-center">
                                 <img src="{{ asset('images/bitcoin.png') }}" width="140px" height="60px">

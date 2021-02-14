@@ -20,8 +20,8 @@
         "laravel/passport": "^9.3",
         "laravel/tinker": "^2.0",
         "maatwebsite/excel": "^3.1",
-        "pusher/pusher-php-server": "~3.0",
-        "stripe/stripe-php": "^7.66"
+        "paypal/rest-api-sdk-php": "^1.14",
+        "pusher/pusher-php-server": "~3.0"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

@@ -14,9 +14,6 @@
     <script src="{{ asset('js/form.js') }}"></script>
     <script src="{{ asset('js/i18n/es.js') }}"></script>
     <script src="{{ asset('js/global.js') }}"></script>
-    @if($coinClient == 0)
-        <script src="https://js.stripe.com/v3/"></script>
-    @endif
 </head>
 <body>
     <Section>
@@ -56,7 +53,6 @@
                             </div>
                         @endif
                         <form id="payment-form" class="contact-form" method='POST' action="{{route('form.formSubmit')}}">
-                            <input type="hidden" id="STRIPE_KEY" value="{{env('STRIPE_KEY')}}">
                             @csrf
                             <div class= "form-section center">
                                 <span id="coin">@if ($coinClient == 0) $ @else Bs @endif</span> <span id="total"> {{$total}}</span>
@@ -163,48 +159,52 @@
                             </div>
 
                             <div class= "form-section">
-                                <p>Ingresa la información de tu tarjeta de crédito o debito:</p>
                                 @if ($coinClient ==0)
-                                    <div class="row center" id="card-element">
-                                        <div class="col">
-                                            <img src="{{ asset('images/visa.png') }}" class="img-fluid" width="150px" height="150px">
-                                        </div>
-                                        <div class="col">
-                                            <img src="{{ asset('images/MasterCard.png') }}" class="img-fluid" width="100px" height="100px">
-                                        </div>
-                                    </div>
+                                    <p>Seleccionar metodo de pago:</p>
+                                @else
+                                    <p>Ingresa la información de tu tarjeta de crédito o debito:</p>
                                 @endif
-                                <div class="row">&nbsp;</div>
+<!--                                 <div class="row">&nbsp;</div>
                                 <div class="row justify-content-center align-items-center">
                                     <label class="switch">
                                         <input type="checkbox" id="switchPay" name="switchPay">
                                         <span class="slider round"></span>
                                     </label>
                                     <label class="noPadding">Realizar pago en Efectivo</label>
-                                </div>
+                                </div> -->
                                 <div class="dataPay">
-                                    <label class="form" for="nameCard">NOMBRE DE LA TARJETA:</label>
-                                    <input type="text" name="nameCard" id="nameCard" class="form-control" data-parsley-minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" required />
                                     @if ($coinClient ==0)
-                                        <label class="form" for="numberCard">NUMERO DE LA TARJETA:</label>
-                                        <div id="errorCard">
-                                            <ul><li>Complete los datos de la tarjeta</li></ul>
+                                    <div class="row checkPayment justify-content-center align-items-center minh-10">
+                                        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4" id="iconChecked">
+                                            <input type="radio" class="radio-payment" name="payment" id="payment" value="PAYPAL">
                                         </div>
-                                        <div id="card_number" class="field"></div>
-                                        <div id="paymentResponseCardNumber"></div>
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <label class="form" for="dateCard">FECHA DE EXPIRACIÓN:</label>
-                                                <div id="card_expiry" class="field"></div>
-                                                <div id="paymentResponseDate"></div>
-                                            </div>
-                                            <div class="col-6">
-                                                <label class="form" for="cvcCard">CVV/CVC:</label>
-                                                <div id="card_cvc" class="field"></div>
-                                                <div id="paymentResponseCVC"></div>
-                                            </div>
+                                        <div class="description-payment col">
+                                            <img src="{{ asset('images/paypal.png') }}" width="150px" height="50px">
+                                            <input type="hidden" id="paymentDescription" value="PAYPAL">
                                         </div>
+                                    </div>
+                                    <div class="row checkPayment justify-content-center align-items-center minh-10">
+                                        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4" id="iconChecked">
+                                            <input type="radio" class="radio-payment" name="payment" id="payment" value="BITCOIN">
+                                        </div>
+                                        <div class="description-payment col">
+                                            <img src="{{ asset('images/bitcoin.png') }}" width="150px" height="50px">    
+                                            <input type="hidden" id="paymentDescription" value="BITCOIN">                                    
+                                        </div>
+                                    </div>
+                                    <div class="row checkPayment justify-content-center align-items-center minh-10">
+                                        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4" id="iconChecked">
+                                            <input type="radio" class="radio-payment" name="payment" id="payment" value="EFECTIVO">
+                                        </div>
+                                        <div class="description-payment col">
+                                            <img src="{{ asset('images/dolars.png') }}" width="150px" height="50px">
+                                            <label style="margin-left:10px">PAGAR EN EFECTIVO</label>
+                                            <input type="hidden" id="paymentDescription" value="EFECTIVO">
+                                        </div>
+                                    </div>
                                     @else
+                                        <label class="form" for="nameCard">NOMBRE DE LA TARJETA:</label>
+                                        <input type="text" name="nameCard" id="nameCard" class="form-control" data-parsley-minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" required />
                                         <label class="form" for="SelectTypeCard">SELECCONE EL TIPO DE TARJETA:</label>
                                         <div id="errorCard">
                                             <ul><li>Complete los datos de la tarjeta</li></ul>
@@ -310,7 +310,6 @@
                                 <input type="hidden" id="selectShipping" name="selectShipping">
                                 <input type="hidden" id="priceShipping" name="priceShipping" >
                                 <input type="hidden" id="totalAll" name="totalAll">
-                                <input type="hidden" id="stripeToken" name="stripeToken" value="">
                             </div> 
 
                             <div class="row">&nbsp;</div>

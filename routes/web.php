@@ -19,7 +19,6 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome'); 
 
-
 Route::fallback(function () {
     return redirect()->route('welcome');
 });
@@ -99,6 +98,7 @@ Route::get('password/delivery/create', 'Auth\PasswordResetController@createDeliv
 Route::get('password/delivery/find/{token}', 'Auth\PasswordResetController@findDelivery');
 Route::post('password/delivery/reset', 'Auth\PasswordResetController@resetDelivery')->name('form.passwordResetDelivery');
 
+Route::get('/pagar/estadoPaypal', 'PaidController@statusPaypal')->name('form.statusPaypal');
 
 Route::get('/{userUrl}/', 'SaleController@indexStore')->name('form.store');
 Route::get('/{userUrl}/{codeUrl}/{statusModification?}', 'SaleController@index');

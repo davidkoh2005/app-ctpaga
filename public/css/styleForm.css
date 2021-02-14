@@ -140,7 +140,8 @@ div.name label {
     height: 80px;
 }
 
-div.shippings {
+div.shippings, div.checkPayment {
+    cursor: pointer;
     padding: 15px;
     background-color: #e6e6e6;
     color:black;
@@ -221,7 +222,7 @@ div.shipping-price{
     color: #00cc5f;
 }
 
-.radio-shippings {
+.radio-shippings, .radio-payment {
     width: 0;
     height: 0;
 }

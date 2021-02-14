@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Events\NewNotification;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use App\Notifications\PostPurchase;
 use App\Notifications\ShippingNotification;
@@ -16,9 +17,34 @@ use App\Balance;
 use App\Shipping;
 use Session;
 use AWS;
+use PayPal\Api\Amount;
+use PayPal\Api\Payment;
+use PayPal\Api\Payer;
+use PayPal\Api\RedirectUrls;
+use PayPal\Api\Transaction;
+use PayPal\Api\PaymentExecution;
+use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Rest\ApiContext;
 
 class PaidController extends Controller
 {
+
+    private $apiContext;
+
+    public function __construct()
+    {
+        $payPalConfig = Config::get('paypal');
+
+        $this->apiContext = new ApiContext(
+            new OAuthTokenCredential(
+                $payPalConfig['client_id'],
+                $payPalConfig['secret']
+            )
+        );
+
+        $this->apiContext->setConfig($payPalConfig['settings']);
+    }
+
     public function formSubmit(Request $request)
     {
         $amount = str_replace(".","",$request->totalAll);
@@ -90,139 +116,41 @@ class PaidController extends Controller
             );
 
             return view('result', compact('userUrl'));
-        }elseif($request->coinClient == 0){
-            \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+        }elseif($request->coinClient == 0 && $request->payment == "PAYPAL"){
 
-            try{
-                $customer = \Stripe\Customer::create(array( 
-                    'name'  => $request->name,
-                    'email' => $request->email, 
-                    'source'  => $request->stripeToken, 
-                ));
+            $payer = new Payer();
+            $payer->setPaymentMethod('paypal');
 
-            }catch(\Stripe\Exception\CardException $e) {  
-                $error = "Tu tarjeta no tiene fondos suficientes";  
-            }catch (\Stripe\Exception\ApiErrorException $e){
-                $error = "Tu tarjeta fue rechazada. Esta transacción requiere autenticación.";
-            }catch (Exception $e) {
-                $error = $e->getMessage(); 
+            $amountPaypal = new Amount();
+            $amountPaypal->setTotal($amount);
+            $amountPaypal->setCurrency('USD');
+
+            $transaction = new Transaction();
+            $transaction->setAmount($amountPaypal);
+            $transaction->setDescription('Compra a través de ctpaga');
+
+            $callbackUrl = url('/pagar/estadoPaypal/');
+
+            Session::put('request', $request->all());
+
+            $redirectUrls = new RedirectUrls();
+            $redirectUrls->setReturnUrl($callbackUrl)
+                ->setCancelUrl($callbackUrl);
+
+            $payment = new Payment();
+            $payment->setIntent('sale')
+                ->setPayer($payer)
+                ->setTransactions(array($transaction))
+                ->setRedirectUrls($redirectUrls);
+
+            try {
+                $payment->create($this->apiContext);
+                return redirect()->away($payment->getApprovalLink());
+            } catch (PayPalConnectionException $ex) {
+                echo $ex->getData();
             }
-
-            if(empty($error) && $customer){  
-                try {  
-                    $charge = \Stripe\Charge::create( array(
-                        'amount' => $amount*100, 
-                        'currency' => 'usd',
-                        'description' => $request->orderClient,
-                        "customer" => $customer->id,
-                    ));
-                }catch(Exception $e) {  
-                    $error = $e->getMessage();  
-                } 
-                 
-                if(empty($error) && $charge){ 
-                 
-                    $chargeJson = $charge->jsonSerialize(); 
-                 
-                    if($chargeJson['amount_refunded'] == 0 && empty($chargeJson['failure_code']) && $chargeJson['paid'] == 1 && $chargeJson['captured'] == 1){ 
-
-                        $payment_status = $chargeJson['status']; 
-
-                        if($payment_status == 'succeeded'){ 
-
-                            $sales = Sale::where("codeUrl", $request->codeUrl)->get();
-                            $message="";
-                            foreach ($sales as $sale)
-                            {
-                                if($sale->type == 0 && $sale->productService_id != 0){
-                                    $product = Product::where('id',$sale->productService_id)->first();
-                                    
-                                    if ($product->postPurchase)
-                                        $message .= "- ".$product->postPurchase."\n";
-
-                                    $product->stock -= $sale->quantity;
-                                    $product->save();
-                                }
-
-                                if($sale->type == 1 && $sale->productService_id != 0){
-                                    $service = Service::where('id',$sale->productService_id)->first();
-                                    
-                                    if($service->postPurchase)
-                                        $message .= "- ".$service->postPurchase."\n";
-                                }
-
-                                $sale->statusSale = 1;
-                                $sale->save();
-
-                            }
-
-                            $commerce = Commerce::where('userUrl',$request->userUrl)->first();
-                            $user = User::where('id',$commerce->user_id)->first();
-                            
-                            if(strlen($request->priceShipping)>0){
-                                $priceShipping = $request->priceShipping;
-                            }else{
-                                $priceShipping = "0";
-                            }
-
-                            Paid::create([
-                                "user_id"               => $user->id,
-                                "commerce_id"           => $commerce->id,
-                                "codeUrl"               => $request->codeUrl,
-                                "nameClient"            => $request->nameClient,
-                                "total"                 => $amount,
-                                "coin"                  => $request->coinClient,
-                                "email"                 => $request->email,
-                                "nameShipping"          => $request->name,
-                                "numberShipping"        => $request->number,
-                                "addressShipping"       => $request->address,
-                                "detailsShipping"       => $request->details,
-                                "selectShipping"        => $request->selectShipping,
-                                "priceShipping"         => str_replace(",",".",$priceShipping),
-                                "percentage"            => $request->percentageSelect,
-                                "nameCompanyPayments"   => "Stripe",
-                                "date"                  => Carbon::now(),
-                            ]);
-
-                            $balance = Balance::firstOrNew([
-                                'user_id'       => $user->id,
-                                "commerce_id"   => $commerce->id,
-                                "coin"          => $request->coinClient,
-                            ]);
-
-                            $balance->total += floatval($amount);
-                            $balance->save();
-
-                            $userUrl = $request->userUrl;
-
-                            $messageNotification['commerce_id'] = $commerce->id;
-                            $messageNotification['total'] = $amount;
-                            $messageNotification['coin'] = $request->coinClient;
-                            $success = event(new NewNotification($messageNotification));
-
-                            (new User)->forceFill([
-                                'email' => $request->email,
-                            ])->notify(
-                                new PostPurchase($message, $userUrl, $commerce->name, $request->codeUrl)
-                            );
-
-                            return view('result', compact('userUrl'));
-                        }else{ 
-                            Session::flash('message', "¡Tu pago ha fallado!");
-                            return Redirect::back();
-                        } 
-                    }else{ 
-                        Session::flash('message', "¡La transacción ha fallado!");
-                        return Redirect::back();
-                    } 
-                }else{
-                    Session::flash('message', 'Error al crear la carga');
-                    return Redirect::back();
-                } 
-            }else{  
-                Session::flash('message', $error);
-                return Redirect::back();  
-            } 
+        }elseif($request->coinClient == 0 && $request->payment == "BITCOIN"){
+            //code bitcoin
         }else{
 
             $url = 'https://esitef-homologacao.softwareexpress.com.br/e-sitef/api/v1/transactions';
@@ -361,6 +289,115 @@ class PaidController extends Controller
             }
         }
 
+    }
+
+    public function statusPaypal(Request $request)
+    {
+        $requestForm = Session::get('request');
+        Session::forget('request');
+        
+        $userUrl = $requestForm['userUrl'];
+        $codeUrl = $requestForm['codeUrl'];
+        $amount = str_replace(".","",$requestForm['totalAll']);
+        $amount = str_replace(",",".",$amount);
+
+        $paymentId = $request->input('paymentId');
+        $payerId = $request->input('PayerID');
+        $token = $request->input('token');
+
+        if (!$paymentId || !$payerId || !$token) {
+            Session::flash('message', "Lo sentimos! El pago a través de PayPal no se pudo realizar.");
+            return redirect('/'.$userUrl.'/'.$codeUrl);
+        }
+
+        $payment = Payment::get($paymentId, $this->apiContext);
+
+        $execution = new PaymentExecution();
+        $execution->setPayerId($payerId);
+
+        /** Execute the payment **/
+        $result = $payment->execute($execution, $this->apiContext);
+
+        if ($result->getState() === 'approved') {
+            $sales = Sale::where("codeUrl", $codeUrl)->get();
+            $message="";
+            foreach ($sales as $sale)
+            {
+                if($sale->type == 0 && $sale->productService_id != 0){
+                    $product = Product::where('id',$sale->productService_id)->first();
+                    
+                    if ($product->postPurchase)
+                        $message .= "- ".$product->postPurchase."\n";
+
+                    $product->stock -= $sale->quantity;
+                    $product->save();
+                }
+
+                if($sale->type == 1 && $sale->productService_id != 0){
+                    $service = Service::where('id',$sale->productService_id)->first();
+                    
+                    if($service->postPurchase)
+                        $message .= "- ".$service->postPurchase."\n";
+                }
+
+                $sale->statusSale = 1;
+                $sale->save();
+
+            }
+
+            $commerce = Commerce::where('userUrl',$userUrl)->first();
+            $user = User::where('id',$commerce->user_id)->first();
+            
+            if(strlen($requestForm['priceShipping'])>0){
+                $priceShipping = $requestForm['priceShipping'];
+            }else{
+                $priceShipping = "0";
+            }
+
+            Paid::create([
+                "user_id"               => $user->id,
+                "commerce_id"           => $commerce->id,
+                "codeUrl"               => $requestForm['codeUrl'],
+                "nameClient"            => $requestForm['nameClient'],
+                "total"                 => $amount,
+                "coin"                  => $requestForm['coinClient'],
+                "email"                 => $requestForm['email'],
+                "nameShipping"          => $requestForm['name'],
+                "numberShipping"        => $requestForm['number'],
+                "addressShipping"       => $requestForm['address'],
+                "detailsShipping"       => $requestForm['details'],
+                "selectShipping"        => $requestForm['selectShipping'],
+                "priceShipping"         => str_replace(",",".",$priceShipping),
+                "percentage"            => $requestForm['percentageSelect'],
+                "nameCompanyPayments"   => "PayPal",
+                "date"                  => Carbon::now(),
+            ]);
+
+            $balance = Balance::firstOrNew([
+                'user_id'       => $user->id,
+                "commerce_id"   => $commerce->id,
+                "coin"          => $requestForm['coinClient'],
+            ]);
+
+            $balance->total += floatval($amount);
+            $balance->save();
+
+            $messageNotification['commerce_id'] = $commerce->id;
+            $messageNotification['total'] = $amount;
+            $messageNotification['coin'] = $requestForm['coinClient'];
+            $success = event(new NewNotification($messageNotification));
+
+            (new User)->forceFill([
+                'email' => $requestForm['email'],
+            ])->notify(
+                new PostPurchase($message, $userUrl, $commerce->name, $codeUrl)
+            );
+
+            return view('result', compact('userUrl'));
+        }
+
+        Session::flash('message', "Lo sentimos! El pago a través de PayPal no se pudo realizar.");
+        return redirect('/'.$userUrl.'/'.$codeUrl);
     }
 
     public function show(Request $request)

@@ -4,91 +4,18 @@ var shippingPrice = 0;
 var shippingCoin = 0;
 var _coinClient = 0;
 var _rate = 0;
-var _selectSale;
+var _selectSale, selectPayment;
 
 $(function(){
     var $sections = $('.form-section');
     var statusShippingClient = false;
-    var statusCard = false;
-    var statusDate = false;
-    var statusCVC = false;
+    var clickPayment = false;
     var statusLoading = false;
     var switchPay = false;
+    var checkDiscount = false;
 
     $('#errorCard').hide();
-    $('#loading').hide();
-
-    if(_coinClient == 0){
-        var stripe = Stripe($("#STRIPE_KEY").val());
-        var elements = stripe.elements();
-
-        var style = {
-            base: {
-                fontWeight: 400,
-                fontFamily: 'Roboto, Open Sans, Segoe UI, sans-serif',
-                fontSize: '16px',
-                lineHeight: '1.4',
-                color: '#555',
-                backgroundColor: '#fff',
-                '::placeholder': {
-                    color: '#888',
-                },
-            },
-            invalid: {
-                color: '#eb1c26',
-            }
-        };
-
-        var cardElement = elements.create('cardNumber', {
-            style: style
-        });
-        cardElement.mount('#card_number');
-        
-        var exp = elements.create('cardExpiry', {
-            'style': style
-        });
-        exp.mount('#card_expiry');
-        
-        var cvc = elements.create('cardCvc', {
-            'style': style
-        });
-        cvc.mount('#card_cvc');
-        
-        // Validate input of the card elements
-        var resultContainerCard = document.getElementById('paymentResponseCardNumber');
-        cardElement.addEventListener('change', function(event) {
-            if (event.error) {
-                statusCard = false;
-                resultContainerCard.innerHTML = '<p>'+event.error.message+'</p>';
-            } else {
-                statusCard = true;
-                resultContainerCard.innerHTML = '';
-            }
-        });
-
-        var resultContainerDate = document.getElementById('paymentResponseDate');
-        exp.addEventListener('change', function(event) {
-            if (event.error) {
-                statusDate = false;
-                resultContainerDate.innerHTML = '<p>'+event.error.message+'</p>';
-            } else {
-                statusDate = true;
-                resultContainerDate.innerHTML = '';
-            }
-        });     
-        
-        var resultContainerCVC = document.getElementById('paymentResponseCVC');
-        cvc.addEventListener('change', function(event) {
-            if (event.error) {
-                statusCVC = false;
-                resultContainerCVC.innerHTML = '<p>'+event.error.message+'</p>';
-            } else {
-                statusCVC = true;
-                resultContainerCVC.innerHTML = '';
-            }
-        });
-    }
-    
+    $('#loading').hide();    
 
     $(window).keydown(function(event){
         if(event.keyCode == 13) {
@@ -154,11 +81,21 @@ $(function(){
                 $('.next').hide();
         }
 
-        if(index == 6)
+        if(index == 5){
+            if(clickPayment)
+                $('.next').show();
+            else
+                $('.next').hide();
+        }
+            
+
+        if(index == 6){
+            $( "#discount" ).prop( "disabled", checkDiscount);
             if($("#switchDiscount").is(':checked') || $('#percentageSelect').val() != 0)
                 $('.next').show();
             else
                 $('.next').hide();
+        }
 
         if(index == 7)
             calculateTotal();
@@ -183,6 +120,7 @@ $(function(){
     })
 
     $('.form-navigation .pay').click(function(){
+        $('.alert-danger').hide();
         $('.contact-form').parsley().whenValidate({
             group: 'block-' + curIndex()
         }).done(function(){
@@ -201,27 +139,8 @@ $(function(){
 
         if(curIndex() == 5){
             $('#errorCard').hide();
-            if(_coinClient == 0)
-                if(switchPay){
-                    $('.contact-form').parsley().whenValidate({
-                        group: 'block-' + curIndex()
-                    }).done(function(){
-                        navigateTo(curIndex()+1);
-                    })
-                }else{
-                    if(statusCard && statusDate && statusCVC){
-                        $('.contact-form').parsley().whenValidate({
-                            group: 'block-' + curIndex()
-                        }).done(function(){
-                            navigateTo(curIndex()+1);
-                        })
-                    }else{
-                        $('#errorCard').show();
-                        $('.contact-form').parsley().whenValidate({
-                            group: 'block-' + curIndex()
-                        });
-                    }
-                }
+            if(_coinClient == 0 && selectPayment)
+                navigateTo(curIndex()+1);
             else{
                 if(switchPay){
                     $('.contact-form').parsley().whenValidate({
@@ -278,16 +197,35 @@ $(function(){
         $('.next').show();
     });
 
+    $('.checkPayment').on('click', function(){
+        $('#svg-check').remove();
+        var checkbox = $(this).find('input[type=radio]');
+        checkbox.prop('checked', !checkbox.prop('checked'));
+        selectPayment = checkbox.val();
+        var svg = $(this).find('#iconChecked');
+        svg.append("<svg width='2em' height='2em' viewBox='0 0 16 16' class='bi bi-check-circle-fill' id='svg-check' fill='currentColor'><path fill-rule='evenodd' d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z'/></svg>");
+        clickPayment = true;
+        $('#selectPayment').val($(this).find('#paymentDescription').val());
+
+        if($(this).find('#paymentDescription').val() == "EFECTIVO")
+            switchPay = true;
+        else 
+            switchPay = false;
+
+        $('.next').show();
+    });
+
     $("#switchDiscount").on('click', function(){
         $( "#discount" ).prop( "disabled", $(this).is(':checked'));
-
+        checkDiscount = $(this).is(':checked');
         if($(this).is(':checked')){
             $('#discount').val('');
             $('#percentageSelect').val(0);
             $('.next').show();
         }
-        else
+        else{
             $('.next').hide();
+        }
     });
 
     $("#switchPay").on('click', function(){
@@ -309,34 +247,9 @@ $(function(){
         $('.submit').hide();
         $('#loading').show();
 
-        if(switchPay){
-            $("#payment-form").submit();
-        }else if($('#coinClient').val() == 0){
-            createToken();
-        }else{
-            $("#payment-form").submit();
-        }
+        $("#payment-form").submit();
     });
 
-    function createToken() {
-        stripe.createToken(cardElement).then(function(result) {
-            if (result.error) {
-                statusLoading = false;
-                $('#loading').hide();
-                $('.submit').show();
-                resultContainer.innerHTML = '<p>'+result.error.message+'</p>';
-                navigateTo(4);
-            } else {
-                stripeTokenHandler(result.token);
-            }
-        });
-    }
-    
-    function stripeTokenHandler(token) {
-        $('#stripeToken').val(token.id);
-        
-        $("#payment-form").submit();
-    }
 
     $('.sales').on('click', function(){
         if(statusModification){
