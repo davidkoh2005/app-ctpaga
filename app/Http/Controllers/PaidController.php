@@ -151,8 +151,7 @@ class PaidController extends Controller
             }
         }elseif($request->coinClient == 0 && $request->payment == "BITCOIN"){
             //code bitcoin
-        }else{
-
+        }elseif($request->coinClient == 1){
             $url = 'https://esitef-homologacao.softwareexpress.com.br/e-sitef/api/v1/transactions';
             $ch = curl_init($url);
             $jsonData = array(

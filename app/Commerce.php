@@ -9,7 +9,7 @@ class Commerce extends Model
     //
 
     protected $fillable = [
-        'id', 'user_id', 'rif', 'name', 'address', 'phone', 'userUrl',
+        'id', 'user_id', 'rif', 'name', 'address', 'phone', 'userUrl', 'confirmed',
     ]; 
 
     public function user()

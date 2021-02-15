@@ -45,6 +45,7 @@ class CutDeposits extends Command
 
         $balancesAll = Balance::join('commerces', 'commerces.id', '=', 'balances.commerce_id')
                 ->where('balances.total', '>=', 1)
+                ->where('commerces.confirmed', true)
                 ->select('balances.id', 'balances.user_id', 'balances.commerce_id', 'balances.coin', 'balances.total',
                 'commerces.name')
                 ->orderBy('name', 'asc')
@@ -52,19 +53,7 @@ class CutDeposits extends Command
 
         foreach ($balancesAll as $balance)
         {
-            $pictures = Picture::where('user_id', '=', $balance->user_id)
-                            ->where('commerce_id', '=', null)
-                            ->orwhere('commerce_id', $balance->commerce_id)->get();
-            
-            $count= 0;
-            foreach($pictures as $picture)
-            {
-                if (in_array($picture->description, array('Selfie','RIF','Identification'))) {
-                    $count +=1;
-                }
-
-            }
-            
+ 
             if($balance->coin == 0)
                 $coin = "USD";
             else
@@ -73,7 +62,7 @@ class CutDeposits extends Command
             $bank = Bank::where('user_id', $balance->user_id)
                         ->where('coin', $coin)->first();
 
-            if($count == 3 && $bank){
+            if($bank){
                 Deposits::create([
                     "user_id"       => $balance->user_id,
                     "commerce_id"   => (int)$balance->commerce_id,

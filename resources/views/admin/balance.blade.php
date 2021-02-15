@@ -146,13 +146,14 @@
         var statusMenu = "{{$statusMenu}}";
         var selectCoin = '{{$selectCoin}}';
         var statusSelect = false;
+        var selectID = [];
 
         var searchStatus ='{{$searchStatus}}';
         $("#searchStatus option[value='"+ searchStatus +"']").attr("selected",true);
 
         $( ".loader" ).fadeOut("slow"); 
         $('#changeStatus').change(function(){
-            var selectID = [];
+            selectID = [];
             var error = false;
             var status = $(this).val();
             if (status != 0){

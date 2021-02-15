@@ -51,7 +51,7 @@ class CommerceController extends Controller
                                 ->orderBy('name', 'asc')->get();
 
         $totalShopping = 0;
-        $totalShoppingStripe = 0;
+        $totalShoppingPayPal = 0;
         $totalShoppingSitef = 0;
         $idCommerce = 0;
         $commerceName = "";
@@ -84,15 +84,15 @@ class CommerceController extends Controller
         foreach ($paidAll as $paid)
         {
             $totalShopping += 1;
-            if($paid->nameCompanyPayments == "Stripe")
-                $totalShoppingStripe += floatval($paid->total);
+            if($paid->nameCompanyPayments == "PayPal")
+                $totalShoppingPayPal += floatval($paid->total);
             
             if($paid->nameCompanyPayments == "E-sitef")
                 $totalShoppingSitef += floatval($paid->total);
         }
 
         $statusMenu = "dashboard";
-        return view('auth.dashboard',compact("totalShopping", "totalShoppingStripe", "totalShoppingSitef", "statusMenu", "commercesUser", "pictureUser", "commerceName", "idCommerce"));
+        return view('auth.dashboard',compact("totalShopping", "totalShoppingPayPal", "totalShoppingSitef", "statusMenu", "commercesUser", "pictureUser", "commerceName", "idCommerce"));
         
     }
 
@@ -152,26 +152,26 @@ class CommerceController extends Controller
         }
 
         if(!empty($request->idCommerce))
-            $transactions->where('commerces.id', $idCommerce); 
+            $transactions = $transactions->where('commerces.id', $idCommerce); 
 
         if(!empty($request->searchNameCompany))
-            $transactions->where('commerces.name', 'ilike', "%" . $request->searchNameCompany . "%" );
+            $transactions = $transactions->where('commerces.name', 'ilike', "%" . $request->searchNameCompany . "%" );
         
         if(!empty($request->searchNameClient))
-            $transactions->where('paids.nameClient', 'ilike', "%" . $request->searchNameClient . "%" );
+            $transactions = $transactions->where('paids.nameClient', 'ilike', "%" . $request->searchNameClient . "%" );
 
         if(!empty($request->selectCoin) && $request->selectCoin != "Selecionar Moneda")
-            $transactions->where('paids.coin', $request->selectCoin);
+            $transactions = $transactions->where('paids.coin', $request->selectCoin);
         
         if(!empty($request->selectPayment) && $request->selectPayment != "Selecionar Tipo de Pago"){
             if($request->selectPayment == "Tienda Web")
-                $transactions->where('paids.nameCompanyPayments', "Stripe")->orWhere('paids.nameCompanyPayments',  "E-sitef" );
+                $transactions = $transactions->where('paids.nameCompanyPayments', "PayPal")->orWhere('paids.nameCompanyPayments',  "E-sitef" );
             else
-                $transactions->where('paids.nameCompanyPayments',  'ilike', "%" . $request->selectPayment . "%" );
+                $transactions = $transactions->where('paids.nameCompanyPayments',  'ilike', "%" . $request->selectPayment . "%" );
         }
 
-        $transactions->where('paids.date', ">=",$startDate)
-                        ->where('paids.date', "<=",$endDate);
+        $transactions = $transactions->where('paids.created_at', ">=",$startDate)
+                        ->where('paids.created_at', "<=",$endDate);
 
         $transactions = $transactions->get();
 
@@ -202,6 +202,7 @@ class CommerceController extends Controller
         $companyName = "";
         $commerceName = "";
         $startDate = Carbon::now()->setDay(1)->subMonth(4)->format('Y-m-d');
+        $startDateQuery = Carbon::now()->setDay(1)->subMonth(4)->format('Y-m-d');
         $endDate = Carbon::now()->format('Y-m-d');
         $historyAll = array();
         
@@ -244,7 +245,7 @@ class CommerceController extends Controller
                             ->where("date", ">=", Carbon::now()->subMonth(4));
 
         if($selectCoin == 0)
-            $historyPaids = $historyPaids->where("nameCompanyPayments", "Stripe")->get();
+            $historyPaids = $historyPaids->where("nameCompanyPayments", "PayPal")->get();
         else
             $historyPaids = $historyPaids->where("nameCompanyPayments", "E-sitef")->get();
 
@@ -259,7 +260,7 @@ class CommerceController extends Controller
         {
             $dateStart = Carbon::parse($historyPaids[0]->date)->subDays(1);
             $dateFinal = Carbon::parse($historyPaids[0]->date);
-            $startDate = Carbon::parse($historyPaids[0]->date)->format('Y-m-d');
+            $startDateQuery = Carbon::parse($historyPaids[0]->date)->format('Y-m-d');
             $endDate = Carbon::now()->format('Y-m-d');
             foreach ($historyPaids as $history)
             {
@@ -357,8 +358,8 @@ class CommerceController extends Controller
 
         $rates = Rate::where('user_id', Auth::guard('web')->id())->orderBy('date', 'desc');
         
-        $rates = $rates->where('date', ">=",$startDate)
-                        ->where('date', "<=",$endDate);
+        $rates = $rates->where('created_at', ">=",$startDate)
+                        ->where('created_at', "<=",$endDate);
 
         $rates = $rates->get();
 

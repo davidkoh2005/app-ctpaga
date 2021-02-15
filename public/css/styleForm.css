@@ -358,7 +358,7 @@ div#card_number, div#card_expiry, div#card_cvc{
 
 
 #typeCard:checked + img {
-    outline: 2px solid #f00;
+    outline: 2px solid #00cc5f;
 } 
 
 .profile {

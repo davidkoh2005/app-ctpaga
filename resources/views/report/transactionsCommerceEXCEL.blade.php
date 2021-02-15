@@ -72,7 +72,7 @@
                 <tr>
                     <td style="text-align:center;">{{ $transaction->nameClient}}</td>
                     <td style="text-align:center;">@if($transaction->coin == 0) $ @else Bs @endif {{ $transaction->total}}</td>
-                    <td style="text-align:center;">@if($transaction->nameCompanyPayments == "Stripe" || $transaction->nameCompanyPayments == "E-Sitef" ) Tienda Web @else {{$transaction->nameCompanyPayments}} @endif</td>
+                    <td style="text-align:center;">@if($transaction->nameCompanyPayments == "PayPal" || $transaction->nameCompanyPayments == "E-Sitef" ) Tienda Web @else {{$transaction->nameCompanyPayments}} @endif</td>
                     <td style="text-align:center;"> {{date('d/m/Y h:i A',strtotime($transaction->date))}}</td>
                 </tr>
                 @endforeach

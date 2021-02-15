@@ -278,7 +278,7 @@ md = {
 
   initDashboardPageCharts: function() {
 
-    if ($('#dailySalesChart').length != 0 || $('#dailySalesStripeChart').length != 0 || $('#dailySalesSitefChart').length != 0) {
+    if ($('#dailySalesChart').length != 0 || $('#dailySalesPayPalChart').length != 0 || $('#dailySalesSitefChart').length != 0) {
       /* ----------==========     Daily Sales Chart initialization    ==========---------- */
 
       dataDailySalesChart = {
@@ -328,16 +328,16 @@ md = {
 
       md.startAnimationForLineChart(dailySalesChart);
 
-      /* ----------==========     Daily Sales Stripe Chart initialization    ==========---------- */
+      /* ----------==========     Daily Sale PayPal Chart initialization    ==========---------- */
 
-      dataDailySalesStripeChart = {
+      dataDailySalesPayPalChart = {
         labels: ['01', '02', '03', '04', '05', '06', '07'],
         series: [
           [0, 0, 0, 0, 0, 0, 0]
         ]
       };
 
-      optionsDailySalesStripeChart = {
+      optionsDailySalesPayPalChart = {
         lineSmooth: Chartist.Interpolation.cardinal({
           tension: 0
         }),
@@ -373,9 +373,9 @@ md = {
         ],
       }
 
-      var dailySalesStripeChart = new Chartist.Line('#dailySalesStripeChart', dataDailySalesStripeChart, optionsDailySalesStripeChart);
+      var dailySalesPayPalChart = new Chartist.Line('#dailySalesPayPalChart', dataDailySalesPayPalChart, optionsDailySalesPayPalChart);
 
-      md.startAnimationForLineChart(dailySalesStripeChart);
+      md.startAnimationForLineChart(dailySalesPayPalChart);
 
       /* ----------==========     Daily Sales E-Sitef Chart initialization    ==========---------- */
 

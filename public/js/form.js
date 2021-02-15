@@ -82,10 +82,13 @@ $(function(){
         }
 
         if(index == 5){
-            if(clickPayment)
-                $('.next').show();
+            if(coinClient == 0)
+                if(clickPayment)
+                    $('.next').show();
+                else
+                    $('.next').hide();
             else
-                $('.next').hide();
+                $('.next').show(); 
         }
             
 

@@ -89,15 +89,14 @@
                     status = false;
                     alertify.error('Debe ingresar el numero de referencia correctamente');
                 }
-                console.log(statusSelect);
 
-                if(status && !statusSelect){
+                if(status){
                     $('#submit').hide();
                     $('#loading').removeClass("hide");
                     $('#loading').addClass("show");
                     $.ajax({
                         url: "{{route('admin.saveDeposits')}}", 
-                        data: {"numRef": numRef},
+                        data: {"selectId" : selectID, "status" : 3 ,"numRef": numRef},
                         type: "POST",
                     }).done(function(result){
                         $('#payModal').modal('hide');  
@@ -111,26 +110,6 @@
                         $('#loading').addClass("hide");
                         alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                     });
-                }else if(status && statusSelect) {
-                    $('#submit').hide();
-                    $('#loading').removeClass("hide");
-                    $('#loading').addClass("show");
-                    $.ajax({
-                        url: "{{route('admin.changeStatus')}}", 
-                        data: {"selectId" : "", "status" : 3, "numRef": numRef },
-                        type: "POST",
-                    }).done(function(data){
-                        $("#changeStatus option[value='']").attr("selected",true);
-                        if(data.status == 201)
-                            alertify.success('Estado ha sido cambiado correctamente');
-                    
-                        location.reload()
-                    }).fail(function(result){
-                        $('#submit').show();
-                        $('#loading').removeClass("show");
-                        $('#loading').addClass("hide");
-                        alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
-                    }); 
                 }
                 
             });

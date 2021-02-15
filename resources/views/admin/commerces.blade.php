@@ -23,6 +23,7 @@
                         <th scope="col">RIF</th>
                         <th scope="col">Dirección</th>
                         <th scope="col">Telefono</th>
+                        <th scope="col">Estado</th>
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
@@ -34,8 +35,14 @@
                         <td>{{ $commerce->rif }}</td>
                         <td>{{ $commerce->address }}</td>
                         <td>{{ $commerce->phone }}</td>
+                        <td>@if($commerce->confirmed)
+                                <div class="confirmed">Verificado</div>
+                            @else
+                                <div class="unconfirmed">Pendiente</div>
+                            @endif
+                        </td>
                         <td>
-                            <a class="btn btn-bottom" href="{{route('admin.show', ['id' => $commerce->id])}}" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Documentos"><i class="material-icons">verified_user</i></a>
+                            <a class="btn btn-bottom" href="{{route('admin.commercesShow', ['id' => $commerce->id])}}" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Documentos"><i class="material-icons">verified_user</i></a>
                             <a class="btn btn-bottom" href="{{route('admin.transactionsSearchId', ['id' => $commerce->id])}}" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Transacciones"><i class="material-icons">description</i></a>
                             <a class="btn btn-bottom" href="{{route('form.store', ['userUrl' => $commerce->userUrl])}}" rel="tooltip" target="_blank" data-toggle="tooltip" data-placement="left" title="Ver Tienda"><i class="material-icons">store</i></a>
                         </td>
@@ -51,6 +58,7 @@
         $(document).ready( function () {
             $('.main-panel').perfectScrollbar({suppressScrollX: true, maxScrollbarLength: 200}); 
             $('#table_id').DataTable({
+                order: [[ 5, "asc" ]],
                 language: {
                     "decimal": "",
                     "emptyTable": "No hay información",

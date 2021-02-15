@@ -46,7 +46,7 @@
                                     <select class="form-select form-control" name="selectPayment" id="selectPayment">
                                         <option value="Selecionar Tipo de Pago">Selecionar Tipo de Pago</option>
                                         <option value="E-sitef">E-sitef</option>
-                                        <option value="Stripe">Stripe</option>
+                                        <option value="PayPal">PayPal</option>
                                         <option value="Pago en Efectivo">Pago en Efectivo</option>
                                         <option value="Tienda Fisica">Tienda Fisica</option>
                                     </select>
@@ -70,7 +70,7 @@
                                     <div class="input-daterange input-group" id="datepicker-admin">
                                     <input type="text" class="form-control" name="startDate" placeholder="Fechan Inicial" value="{{Carbon::parse($startDate)->format('d/m/Y')}}" autocomplete="off"/>
                                         <span class="input-group-addon"> Hasta </span>
-                                        <input type="text" class="form-control" name="endDate" placeholder="Fecha Final" value="{{Carbon::parse($endDate)->format('d/m/Y')}}" autocomplete="off"/>
+                                        <input type="text" class="form-control" name="endDate" placeholder="Fecha Final" value="{{Carbon::parse(str_replace('/','-',$endDate))->format('d/m/Y')}}" autocomplete="off"/>
                                     </div>
                                 </div>
                             </div>

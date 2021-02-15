@@ -69,11 +69,11 @@ Route::group(['middleware'=>'admin'], function() {
     Route::post('/admin/depositos', 'AdminController@index')->name('admin.balance');
     Route::get('/admin/comerciantes', 'AdminController@commerces')->name('admin.commerces');
     Route::get('/admin/comerciantes/{id}', 'AdminController@commercesShow')->name('admin.commercesShow');
+    Route::post('/admin/confirmed', 'AdminController@confirmedCommerce')->name('admin.confirmedCommerce');
     Route::post('/admin/transacciones', 'AdminController@transactions')->name('admin.transactionsSearch');
     Route::get('/admin/transacciones', 'AdminController@transactions')->name('admin.transactions');
     Route::get('/admin/transacciones/{id}', 'AdminController@transactions')->name('admin.transactionsSearchId');
     Route::get('/admin/transaccionesShow/', 'AdminController@transactionsShow')->name('admin.transactionsShow');
-    Route::get('/admin/depositos/{id}', 'AdminController@show')->name('admin.show');
     Route::post('/admin/payment', 'AdminController@showPayment')->name('admin.showPayment');
     Route::post('/admin/status', 'AdminController@changeStatus')->name('admin.changeStatus');
     Route::get('/admin/historial', 'AdminController@reportPayment')->name('admin.reportPayment');

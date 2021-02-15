@@ -43,8 +43,8 @@
                   <div class="card-icon">
                     <i class="material-icons">account_balance</i>
                   </div>
-                  <p class="card-category">@if(Auth::guard('admin')->check()) Stripe @else $ USD @endif</p>
-                  <h3 class="card-title">$ {{$totalShoppingStripe}}</h3>
+                  <p class="card-category">@if(Auth::guard('admin')->check()) PayPal @else $ USD @endif</p>
+                  <h3 class="card-title">$ {{$totalShoppingPayPal}}</h3>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
@@ -89,10 +89,10 @@
             <div class="col-md-4">
               <div class="card card-chart">
                 <div class="card-header card-header-info">
-                  <div class="ct-chart" id="dailySalesStripeChart"></div>
+                  <div class="ct-chart" id="dailySalesPayPalChart"></div>
                 </div>
                 <div class="card-body">
-                  <h4 class="card-title">Ventas con Stripe</h4>
+                  <h4 class="card-title">Ventas con PayPal</h4>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
@@ -147,13 +147,13 @@
 
       var date=[];
         var dayTotalSales=[];
-        var dayTotalStripe=[];
+        var dayTotalPayPal=[];
         var dayTotalSitef=[];
 
         $.each(listDay, function(i, item) {
             date.push(item.dia);
             dayTotalSales.push(item.totalSales);
-            dayTotalStripe.push(item.totalStripe);
+            dayTotalPayPal.push(item.totalPayPal);
             dayTotalSitef.push(item.totalSitef);
         });
 
@@ -165,10 +165,10 @@
           ]
         }; 
 
-        dataDailySalesStripeChart = {
+        dataDailySalesPayPalChart = {
           labels: date,
           series: [
-            dayTotalStripe
+            dayTotalPayPal
           ]
         };
 
@@ -197,8 +197,8 @@
         var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
         md.startAnimationForLineChart(dailySalesChart);
 
-        var dailySalesStripeChart = new Chartist.Line('#dailySalesStripeChart', dataDailySalesStripeChart, optionsDailySalesStripeChart);
-        md.startAnimationForLineChart(dailySalesStripeChart);
+        var dailySalesPayPalChart = new Chartist.Line('#dailySalesPayPalChart', dataDailySalesPayPalChart, optionsDailySalesPayPalChart);
+        md.startAnimationForLineChart(dailySalesPayPalChart);
 
         var dailySalesSitefChart = new Chartist.Line('#dailySalesSitefChart', dataDailySalesSitefChart, optionsDailySalesSitefChart);
         md.startAnimationForLineChart(dailySalesSitefChart);
