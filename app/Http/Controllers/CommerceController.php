@@ -170,8 +170,8 @@ class CommerceController extends Controller
                 $transactions = $transactions->where('paids.nameCompanyPayments',  'ilike', "%" . $request->selectPayment . "%" );
         }
 
-        $transactions = $transactions->where('paids.created_at', ">=",$startDate)
-                        ->where('paids.created_at', "<=",$endDate);
+        $transactions = $transactions->whereDate('paids.created_at', ">=",$startDate)
+                        ->whereDate('paids.created_at', "<=",$endDate);
 
         $transactions = $transactions->get();
 
@@ -358,8 +358,8 @@ class CommerceController extends Controller
 
         $rates = Rate::where('user_id', Auth::guard('web')->id())->orderBy('date', 'desc');
         
-        $rates = $rates->where('created_at', ">=",$startDate)
-                        ->where('created_at', "<=",$endDate);
+        $rates = $rates->whereDate('created_at', ">=",$startDate)
+                        ->whereDate('created_at', "<=",$endDate);
 
         $rates = $rates->get();
 

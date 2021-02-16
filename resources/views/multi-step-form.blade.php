@@ -152,9 +152,9 @@
                                     <label class="form" for="number">NUMERO DE CELULAR:</label>
                                     <input type="tel" name="number" class="form-control" placeholder="04121234567" size="11" maxlength="20" data-parsley-maxlength="20" data-parsley-pattern="^(?:(\+)58|0)(?:2(?:12|4[0-9]|5[1-9]|6[0-9]|7[0-8]|8[1-35-8]|9[1-5]|3[45789])|4(?:1[246]|2[46]))\d{7}$" required />
                                     <label class="form" for="address">DIRECCÍON:</label>
-                                    <textarea class="form-control" name="address" row="3" placeholder="Av. Principal los dos caminos" required></textarea>
+                                    <textarea class="form-control" name="address" row="8" placeholder="Av. Principal los dos caminos. &#10; &#10;Punto Referencia: Al frente de Farmatodo." required style="height:100px !important"></textarea>
                                     <label class="form" for="details">DETALLE ADICIONALES (OPCIONAL)</label>
-                                    <textarea class="form-control" name="details" row="3" placeholder="Deja en la recepción"></textarea>
+                                    <textarea class="form-control" name="details" row="5" placeholder="Deja en la recepción" style="height:100px !important"></textarea>
                                 @endif
                             </div>
 

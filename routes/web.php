@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/test', 'DeliveryController@test');
 
+
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome'); 
@@ -98,7 +99,11 @@ Route::get('password/delivery/create', 'Auth\PasswordResetController@createDeliv
 Route::get('password/delivery/find/{token}', 'Auth\PasswordResetController@findDelivery');
 Route::post('password/delivery/reset', 'Auth\PasswordResetController@resetDelivery')->name('form.passwordResetDelivery');
 
-Route::get('/pagar/estadoPaypal', 'PaidController@statusPaypal')->name('form.statusPaypal');
+Route::get('/pagar/estadoPaypal', 'PaidController@statusPaypal');
+Route::post('/pagar/criptomonedas', 'PaidController@cryptocurrencies');
+Route::post('/criptomonedas/callback', function () {
+    return view('gatewayBTC.lib.cryptobox-callback');
+});
 
 Route::get('/{userUrl}/', 'SaleController@indexStore')->name('form.store');
 Route::get('/{userUrl}/{codeUrl}/{statusModification?}', 'SaleController@index');

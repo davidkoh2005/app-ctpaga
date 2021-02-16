@@ -47,6 +47,7 @@
                                         <option value="Selecionar Tipo de Pago">Selecionar Tipo de Pago</option>
                                         <option value="E-sitef">E-sitef</option>
                                         <option value="PayPal">PayPal</option>
+                                        <option value="Bitcoin">Bitcoin</option>
                                         <option value="Pago en Efectivo">Pago en Efectivo</option>
                                         <option value="Tienda Fisica">Tienda Fisica</option>
                                     </select>
@@ -68,7 +69,7 @@
                                 @endphp
                                 <div class="col">
                                     <div class="input-daterange input-group" id="datepicker-admin">
-                                    <input type="text" class="form-control" name="startDate" placeholder="Fechan Inicial" value="{{Carbon::parse($startDate)->format('d/m/Y')}}" autocomplete="off"/>
+                                    <input type="text" class="form-control" name="startDate" placeholder="Fechan Inicial" value="{{Carbon::parse(str_replace('/','-',$startDate))->format('d/m/Y')}}" autocomplete="off"/>
                                         <span class="input-group-addon"> Hasta </span>
                                         <input type="text" class="form-control" name="endDate" placeholder="Fecha Final" value="{{Carbon::parse(str_replace('/','-',$endDate))->format('d/m/Y')}}" autocomplete="off"/>
                                     </div>
@@ -116,6 +117,7 @@
                             <th scope="col">Nombre Cliente</th>
                             <th scope="col">Total</th>
                             <th scope="col">Pago</th>
+                            <th scope="col">Estado</th>
                             <th scope="col">Fecha</th>
                             <th scope="col">Acciones</th>
                         </tr>
@@ -128,6 +130,13 @@
                             <td>{{ $transaction->nameClient}}</td>
                             <td>@if($transaction->coin == 0) $ @else Bs @endif {{ $transaction->total}}</td>
                             <td> {{$transaction->nameCompanyPayments}}</td>
+                            <td>
+                                @if($transaction->statusPayment == 0)
+                                    <div class="pending">Pendiente</div>
+                                @else
+                                    <div class="completed">Completado</div>
+                                @endif
+                            </td>
                             <td> {{date('d/m/Y h:i A',strtotime($transaction->date))}}</td>
                             <td>
                                 <button class="btn btn-bottom" onClick="showProduct({{$transaction->id}})" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Productos"><i class="material-icons">shopping_bag</i></button>

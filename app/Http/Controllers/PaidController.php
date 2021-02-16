@@ -47,10 +47,12 @@ class PaidController extends Controller
 
     public function formSubmit(Request $request)
     {
+        $userUrl = $request->userUrl;
+        $codeUrl = $request->codeUrl;
         $amount = str_replace(".","",$request->totalAll);
         $amount = str_replace(",",".",$amount);
         if($request->switchPay){
-            $sales = Sale::where("codeUrl", $request->codeUrl)->get();
+            $sales = Sale::where("codeUrl", $codeUrl)->get();
             $message="";
             foreach ($sales as $sale)
             {
@@ -86,7 +88,7 @@ class PaidController extends Controller
             Paid::create([
                 "user_id"               => $user->id,
                 "commerce_id"           => $commerce->id,
-                "codeUrl"               => $request->codeUrl,
+                "codeUrl"               => $codeUrl,
                 "nameClient"            => $request->nameClient,
                 "total"                 => $amount,
                 "coin"                  => $request->coinClient,
@@ -100,6 +102,7 @@ class PaidController extends Controller
                 "percentage"            => $request->percentageSelect,
                 "nameCompanyPayments"   => "Pago en Efectivo",
                 "date"                  => Carbon::now(),
+                "statusPayment"         => 1,
             ]);
 
             $userUrl = $request->userUrl;
@@ -112,7 +115,7 @@ class PaidController extends Controller
             (new User)->forceFill([
                 'email' => $request->email,
             ])->notify(
-                new PostPurchase($message, $userUrl, $commerce->name, $request->codeUrl)
+                new PostPurchase($message, $userUrl, $commerce->name, $codeUrl)
             );
 
             return view('result', compact('userUrl'));
@@ -150,7 +153,73 @@ class PaidController extends Controller
                 echo $ex->getData();
             }
         }elseif($request->coinClient == 0 && $request->payment == "BITCOIN"){
-            //code bitcoin
+            
+            $sales = Sale::where("codeUrl", $codeUrl)->get();
+            $message="";
+            foreach ($sales as $sale)
+            {
+                if($sale->type == 0 && $sale->productService_id != 0){
+                    $product = Product::where('id',$sale->productService_id)->first();
+                    
+                    if ($product->postPurchase)
+                        $message .= "- ".$product->postPurchase."\n";
+
+                    $product->stock -= $sale->quantity;
+                    $product->save();
+                }
+
+                if($sale->type == 1 && $sale->productService_id != 0){
+                    $service = Service::where('id',$sale->productService_id)->first();
+                    
+                    if($service->postPurchase)
+                        $message .= "- ".$service->postPurchase."\n";
+                }
+
+                $sale->statusSale = 1;
+                $sale->save();
+
+            }
+
+            $commerce = Commerce::where('userUrl',$userUrl)->first();
+            $user = User::where('id',$commerce->user_id)->first();
+            
+            if(strlen($request->priceShipping)>0){
+                $priceShipping = $request->priceShipping;
+            }else{
+                $priceShipping = "0";
+            }
+
+            Paid::create([
+                "user_id"               => $user->id,
+                "commerce_id"           => $commerce->id,
+                "codeUrl"               => $codeUrl,
+                "nameClient"            => $request->nameClient,
+                "total"                 => $amount,
+                "coin"                  => $request->coinClient,
+                "email"                 => $request->email,
+                "nameShipping"          => $request->name,
+                "numberShipping"        => $request->number,
+                "addressShipping"       => $request->address,
+                "detailsShipping"       => $request->details,
+                "selectShipping"        => $request->selectShipping,
+                "priceShipping"         => str_replace(",",".",$priceShipping),
+                "percentage"            => $request->percentageSelect,
+                "nameCompanyPayments"   => "Bitcoin",
+                "date"                  => Carbon::now(),
+                "statusPayment"         => 0,
+            ]);
+
+            $balance = Balance::firstOrNew([
+                'user_id'       => $user->id,
+                "commerce_id"   => $commerce->id,
+                "coin"          => $request->coinClient,
+            ]);
+
+            $balance->total += floatval($amount);
+            $balance->save();
+
+            return view('gatewayBTC.example_basic', compact('userUrl', 'codeUrl', 'amount'));
+        
         }elseif($request->coinClient == 1){
             $url = 'https://esitef-homologacao.softwareexpress.com.br/e-sitef/api/v1/transactions';
             $ch = curl_init($url);
@@ -206,7 +275,7 @@ class PaidController extends Controller
 
 
             if($resultTransaction['message'] == 'OK. Transaction successful'){
-                $sales = Sale::where("codeUrl", $request->codeUrl)->get();
+                $sales = Sale::where("codeUrl", $codeUrl)->get();
                 $message="";
                 foreach ($sales as $sale)
                 {
@@ -243,7 +312,7 @@ class PaidController extends Controller
                 Paid::create([
                     "user_id"               => $user->id,
                     "commerce_id"           => $commerce->id,
-                    "codeUrl"               => $request->codeUrl,
+                    "codeUrl"               => $codeUrl,
                     "nameClient"            => $request->nameClient,
                     "total"                 => $amount,
                     "coin"                  => $request->coinClient,
@@ -278,7 +347,7 @@ class PaidController extends Controller
                 (new User)->forceFill([
                     'email' => $request->email,
                 ])->notify(
-                    new PostPurchase($message, $userUrl, $commerce->name, $request->codeUrl)
+                    new PostPurchase($message, $userUrl, $commerce->name, $codeUrl)
                 );
 
                 return view('result', compact('userUrl'));
@@ -370,6 +439,7 @@ class PaidController extends Controller
                 "percentage"            => $requestForm['percentageSelect'],
                 "nameCompanyPayments"   => "PayPal",
                 "date"                  => Carbon::now(),
+                "statusPayment"         => 1,
             ]);
 
             $balance = Balance::firstOrNew([

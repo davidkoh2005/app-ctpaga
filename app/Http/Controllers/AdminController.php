@@ -321,12 +321,12 @@ class AdminController extends Controller
         
         if(!empty($request->selectPayment) && $request->selectPayment != "Selecionar Tipo de Pago")
             $transactions = $transactions->where('paids.nameCompanyPayments', $request->selectPayment);
-            
-        $transactions = $transactions->where('paids.created_at', ">=",$startDate)
-            ->where('paids.created_at', "<=",$endDate)
-            ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.coin', 'paids.total',
-                            'paids.date', 'paids.nameCompanyPayments')
-            ->get();
+
+        $transactions = $transactions->whereDate('paids.created_at', ">=",$startDate)
+                    ->whereDate('paids.created_at', "<=",$endDate)
+                    ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.coin', 'paids.total',
+                                    'paids.date', 'paids.nameCompanyPayments', 'paids.statusPayment')
+                    ->get();
 
         
         if($request->statusFile == "PDF"){
@@ -465,8 +465,8 @@ class AdminController extends Controller
         if(!empty($request->selectCoin) && $request->selectCoin != "Selecionar Moneda")
             $deposits = $deposits->where('deposits.coin', $request->selectCoin);
         
-        $deposits = $deposits->where('deposits.created_at', ">=",$startDate)
-                        ->where('deposits.created_at', "<=",$endDate);
+        $deposits = $deposits->whereDate('deposits.created_at', ">=",$startDate)
+                        ->whereDate('deposits.created_at', "<=",$endDate);
 
         $deposits = $deposits->get();
         $today = Carbon::now()->format('Y-m-d');
@@ -520,7 +520,8 @@ class AdminController extends Controller
                         ->orderBy('paids.alarm', 'desc')
                         ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.selectShipping', 'paids.total',
                             'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.codeUrl', 'paids.alarm', 'paids.statusDelivery')
-                        ->where('paids.selectShipping','!=', '');
+                        ->where('paids.selectShipping','!=', '')
+                        ->where('paids.statusPayment',1);
 
         if($request->all()){
             $searchNameCompany=$request->searchNameCompany;

@@ -30,9 +30,11 @@ class DeliveryController extends Controller
     {   
         $delivery = $request->user();
         $paids =Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
+                    ->leftJoin('pictures', 'pictures.commerce_id', '=', 'paids.commerce_id')
                     ->where('paids.statusDelivery',1)
                     ->whereNull('paids.idDelivery')
-                    ->select('paids.id', 'paids.codeUrl', 'commerces.name', 'commerces.address')
+                    ->where('pictures.description','Profile')
+                    ->select('paids.id', 'paids.codeUrl', 'commerces.name', 'commerces.address', 'pictures.url')
                     ->get();
     
         return response()->json([

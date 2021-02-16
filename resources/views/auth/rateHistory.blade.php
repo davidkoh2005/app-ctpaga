@@ -30,7 +30,7 @@
                                 <label class="col-sm-2 col-form-label">Rango de Fecha</label>
                                 <div class="col">
                                     <div class="input-daterange input-group" id="datepicker">
-                                    <input type="text" class="form-control" name="startDate" placeholder="Fechan Inicial" value="{{Carbon::parse($startDate)->format('d/m/Y')}}" autocomplete="off"/>
+                                    <input type="text" class="form-control" name="startDate" placeholder="Fechan Inicial" value="{{Carbon::parse(str_replace('/','-',$startDate))->format('d/m/Y')}}" autocomplete="off"/>
                                         <span class="input-group-addon"> Hasta </span>
                                         <input type="text" class="form-control" name="endDate" placeholder="Fecha Final" value="{{Carbon::parse(str_replace('/','-',$endDate))->format('d/m/Y')}}" autocomplete="off"/>
                                     </div>
