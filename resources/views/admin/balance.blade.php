@@ -188,11 +188,12 @@
                             location.reload()
                         }).fail(function(result){
                             $( ".loader" ).fadeOut("slow"); 
+                            $("#changeStatus option[value='0']").attr("selected",true);
                             alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                         }); 
                     }
                 else if (selectID.length == 0 && !error){
-                    alertify.error('Debe seleccionar depositos');
+                    alertify.error('Debe seleccionar al menos un deposito');
                     $("#changeStatus option[value='0']").attr("selected",true);
                 }
                 else{
@@ -234,7 +235,7 @@
                     alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                 }); 
             else 
-                alertify.error('Debe seleccionar depositos');
+                alertify.error('Debe seleccionar al menos un deposito');
         }
 
         function showDataPayment(id, status)

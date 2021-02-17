@@ -11,6 +11,7 @@
     <script type="text/javascript" src="{{ asset('js/transactions.js') }}"></script>
 </head>
 <body class="body-admin">
+    <div class="loader"></div>
     @include('auth.menu')
     <div class="main-panel">
         @include('auth.navbar')
@@ -112,6 +113,7 @@
                 <table id="table_id" class="table table-bordered mb-5 display" width="100%">
                     <thead>
                         <tr class="table-title">
+                        <th scope="col"><input type="checkbox" class="selectAll" id="selectAllCheck-Payment" name="selectAllCheck-Payment"></th>
                             <th scope="col">#</th>
                             @if($idCommerce == 0)<th scope="col">Nombre Compañia</th>@endif
                             <th scope="col">Nombre Cliente</th>
@@ -125,13 +127,14 @@
                     <tbody>
                         @foreach($transactions as $transaction)
                         <tr>
+                        <td><input type="checkbox" class="check-Payment" data-id="{{ $transaction->id }}" data-status="{{$transaction->statusPayment}}"></td>
                             <th scope="row">{{ $transaction->id }}</th>
                             @if($idCommerce == 0)<td>{{ $transaction->name }}</td>@endif
                             <td>{{ $transaction->nameClient}}</td>
                             <td>@if($transaction->coin == 0) $ @else Bs @endif {{ $transaction->total}}</td>
                             <td> {{$transaction->nameCompanyPayments}}</td>
                             <td>
-                                @if($transaction->statusPayment == 0)
+                                @if($transaction->statusPayment == 1)
                                     <div class="pending">Pendiente</div>
                                 @else
                                     <div class="completed">Completado</div>
@@ -146,6 +149,24 @@
                     </tbody>
                 </table>
             </div>
+
+            <div class="row" style="margin-left:20px; margin-bottom:60px;">
+                <div class="text-left" style="margin-top:12px; margin-left:25px">
+                    <label style="color:black;"><input type="checkbox" class="selectAll" id="selectAllCheck-Payment" name="selectAllCheck-Payment"> Seleccionar Todos </label>
+                </div>
+                <div class="text-left" style="margin-left:40px;">
+                    <strong class="addMarginRight">Acciones:</strong>
+                    <label class="content-select">
+                        <select class="addMargin" name="changeStatus" id="changeStatus">
+                            <option value="0">Cambiar Estado</option>
+                            <option value="1">Pendiente</option>
+                            <option value="2">Completado</option>
+                        </select>
+                    </label>
+                    
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -190,6 +211,52 @@
         }
 
         $(".main-panel").perfectScrollbar('update');
+        $( ".loader" ).fadeOut("slow"); 
+
+        $('#changeStatus').change(function(){
+            selectID = [];
+            var error = false;
+            var status = $(this).val();
+            if (status != 0){
+                $("input:checked.check-Payment").each(function () {
+                    var id = $(this).data("id");
+                    var statuscheck = $(this).data("status");
+                    if(statuscheck > status || statuscheck == status || (statuscheck+1 != status)){
+                        error = true;
+                    }
+                    selectID.push(id);
+                });
+
+                if(selectID.length >0 && !error){
+                    $("#changeStatus option[value='0']").attr("selected",true);
+                    $( ".loader" ).fadeIn("slow"); 
+                    $.ajax({
+                        url: "{{route('admin.changeStatusPayment')}}", 
+                        data: {"selectId" : selectID, "status" : status },
+                        type: "POST",
+                    }).done(function(data){
+                        $( ".loader" ).fadeOut("slow"); 
+                        $("#changeStatus option[value='0']").attr("selected",true);
+                        if(data.status == 201)
+                            alertify.success('Estado ha sido cambiado correctamente');
+                    
+                        location.reload()
+                    }).fail(function(result){
+                        $( ".loader" ).fadeOut("slow"); 
+                        $("#changeStatus option[value='0']").attr("selected",true);
+                        alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                    }); 
+                }else if (selectID.length == 0 && !error){
+                    alertify.error('Debe seleccionar al menos un transaccion');
+                    $("#changeStatus option[value='0']").attr("selected",true);
+                }
+                else{
+                    alertify.error('Debe seleccionar transacciones con estado correctamente');
+                    $("#changeStatus option[value='0']").attr("selected",true);
+                }
+            }
+            
+        });
     </script>
 </body>
 </html>

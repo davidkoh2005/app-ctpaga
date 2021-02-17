@@ -102,7 +102,7 @@ class PaidController extends Controller
                 "percentage"            => $request->percentageSelect,
                 "nameCompanyPayments"   => "Pago en Efectivo",
                 "date"                  => Carbon::now(),
-                "statusPayment"         => 1,
+                "statusPayment"         => 2,
             ]);
 
             $userUrl = $request->userUrl;
@@ -206,17 +206,8 @@ class PaidController extends Controller
                 "percentage"            => $request->percentageSelect,
                 "nameCompanyPayments"   => "Bitcoin",
                 "date"                  => Carbon::now(),
-                "statusPayment"         => 0,
+                "statusPayment"         => 1,
             ]);
-
-            $balance = Balance::firstOrNew([
-                'user_id'       => $user->id,
-                "commerce_id"   => $commerce->id,
-                "coin"          => $request->coinClient,
-            ]);
-
-            $balance->total += floatval($amount);
-            $balance->save();
 
             return view('gatewayBTC.example_basic', compact('userUrl', 'codeUrl', 'amount'));
         
@@ -439,7 +430,7 @@ class PaidController extends Controller
                 "percentage"            => $requestForm['percentageSelect'],
                 "nameCompanyPayments"   => "PayPal",
                 "date"                  => Carbon::now(),
-                "statusPayment"         => 1,
+                "statusPayment"         => 2,
             ]);
 
             $balance = Balance::firstOrNew([

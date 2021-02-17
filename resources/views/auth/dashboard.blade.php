@@ -9,8 +9,6 @@
   <title>Ctpaga</title>
   <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
   @include('bookshop')
-  <script src="{{ asset('js/bookshop/jquery.js') }}"></script>
-  <script src="{{ asset('js/bookshop/jquery.min.js') }}"></script>
   @include('admin.bookshop')
 </head>
 
@@ -43,7 +41,7 @@
                   <div class="card-icon">
                     <i class="material-icons">account_balance</i>
                   </div>
-                  <p class="card-category">@if(Auth::guard('admin')->check()) PayPal @else $ USD @endif</p>
+                  <p class="card-category"> $ USD </p>
                   <h3 class="card-title">$ {{$totalShoppingPayPal}}</h3>
                 </div>
                 <div class="card-footer">
@@ -59,7 +57,7 @@
                   <div class="card-icon">
                     <i class="material-icons">account_balance</i>
                   </div>
-                  <p class="card-category">@if(Auth::guard('admin')->check()) E-sitef @else Bs Venezuela @endif</p>
+                  <p class="card-category"> Bs Venezuela </p>
                   <h3 class="card-title">Bs {{$totalShoppingSitef}}</h3>
                 </div>
                 <div class="card-footer">
@@ -92,7 +90,7 @@
                   <div class="ct-chart" id="dailySalesPayPalChart"></div>
                 </div>
                 <div class="card-body">
-                  <h4 class="card-title">Ventas con PayPal</h4>
+                  <h4 class="card-title">Ventas con $ USD </h4>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
@@ -107,7 +105,7 @@
                   <div class="ct-chart" id="dailySalesSitefChart"></div>
                 </div>
                 <div class="card-body">
-                  <h4 class="card-title">Ventas con E-sitef</h4>
+                  <h4 class="card-title">Ventas con Bs Venezuela </h4>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
@@ -121,11 +119,11 @@
       </div>
     </div>
   </div>
-  <script src="{{ asset('js/dashboard/core/jquery.min.js') }}"></script>
   @include('admin.bookshopBottom')
+  
   <script>
     var statusMenu = "{{$statusMenu}}";
-    var listDay;
+    var listDay=[];
     $.ajax({
         url: "{{route('admin.dataGraphic')}}", 
         data: {"commerce_id" : "{{$idCommerce}}"},
@@ -137,15 +135,13 @@
     }).fail(function(result){
       alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
     });
-    $(document).ready(function() {
-
-      md.initDashboardPageCharts();
-    });
+    
+    md.initDashboardPageCharts();
 
     function updateData()
     {
 
-      var date=[];
+        var date=[];
         var dayTotalSales=[];
         var dayTotalPayPal=[];
         var dayTotalSitef=[];
@@ -179,20 +175,6 @@
           ]
         };
 
-        optionsDaily= {
-          lineSmooth: Chartist.Interpolation.cardinal({
-            tension: 0
-          }),
-          chartPadding: {
-            top: 20,
-            right: 0,
-            bottom: 0,
-            left: 0
-          },
-          axisY: {
-            onlyInteger: true,
-          },
-        }
 
         var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
         md.startAnimationForLineChart(dailySalesChart);

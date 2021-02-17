@@ -45,13 +45,22 @@ class AdminController extends Controller
 
         $totalShopping = 0;
         $totalShoppingPayPal = 0;
+        $totalShoppingCryptocurrency = 0;
         $totalShoppingSitef = 0;
-        $paidAll = Paid::where("date", 'like', "%".Carbon::now()->format('Y-m-d')."%")->get();
+        $paidAll = Paid::where("date", 'like', "%".Carbon::now()->format('Y-m-d')."%")
+                    ->where("statusPayment",2)->get();
         foreach ($paidAll as $paid)
         {
             $totalShopping += 1;
-            if($paid->nameCompanyPayments == "PayPal")
+            if($paid->nameCompanyPayments == "PayPal" || $paid->nameCompanyPayments == "Bitcoin")
                 $totalShoppingPayPal += floatval($paid->total);
+            
+                // separation paypal and bitcoin
+            /* if($paid->nameCompanyPayments == "PayPal")
+                $totalShoppingPayPal += floatval($paid->total);
+
+            if($paid->nameCompanyPayments == "Bitcoin")
+                $totalShoppingCryptocurrency += floatval($paid->total); */
             
             if($paid->nameCompanyPayments == "E-sitef")
                 $totalShoppingSitef += floatval($paid->total);
@@ -59,7 +68,7 @@ class AdminController extends Controller
 
         $statusMenu = "dashboard";
         $idCommerce = 0;
-        return view('auth.dashboard',compact("totalShopping", "totalShoppingPayPal", "totalShoppingSitef", "statusMenu", 'idCommerce'));
+        return view('auth.dashboard',compact("totalShopping", "totalShoppingPayPal", "totalShoppingCryptocurrency", "totalShoppingSitef", "statusMenu", 'idCommerce'));
     }
 
     public function dataGraphic(Request $request)
@@ -71,27 +80,48 @@ class AdminController extends Controller
         for ($i = 0; $i < 7; $i++) {
             $totalShop = 0;
             $totalShopPayPal = 0;
+            $totalShopCryptocurrency = 0;
             $totalShopSitef = 0;
             if(Auth::guard('admin')->check())
-                $paidAll = Paid::where("date", 'like', "%".Carbon::now()->format($years.'-'.$month.'-'.Carbon::now()->subDay(6-$i)->format('d'))."%")->get();
+                $paidAll = Paid::where("date", 'like', "%".Carbon::now()->format($years.'-'.$month.'-'.Carbon::now()->subDay(6-$i)->format('d'))."%")
+                                ->where("statusPayment",2)->get();
             else
                 $paidAll = Paid::where("date", 'like', "%".Carbon::now()->format($years.'-'.$month.'-'.Carbon::now()->subDay(6-$i)->format('d'))."%")
                                 ->where('user_id',Auth::guard('web')->id())
                                 ->where('commerce_id',$request->commerce_id)
+                                ->where("statusPayment",2)
                                 ->get();
             
             foreach ($paidAll as $paid)
             {
                 $totalShop += 1;
-                if($paid->nameCompanyPayments == "PayPal")
-                    $totalShopPayPal += floatval($paid->total);
+                // separation PayPal and Bitcoin
+                /* if(Auth::guard('admin')->check()){
+                    if($paid->nameCompanyPayments == "PayPal")
+                        $totalShopPayPal += floatval($paid->total);
+
+                    if($paid->nameCompanyPayments == "Bitcoin")
+                        $totalShopCryptocurrency += floatval($paid->total);
+                    
+                    if($paid->nameCompanyPayments == "E-sitef")
+                        $totalShopSitef += floatval($paid->total);
+                }else{
+                    if($paid->nameCompanyPayments == "PayPal" || $paid->nameCompanyPayments == "Bitcoin")
+                        $totalShopPayPal += floatval($paid->total);
+                    else
+                        $totalShopSitef += floatval($paid->total);
                 
-                if($paid->nameCompanyPayments == "E-sitef")
+                } */
+                
+                if($paid->nameCompanyPayments == "PayPal" || $paid->nameCompanyPayments == "Bitcoin")
+                    $totalShopPayPal += floatval($paid->total);
+                else
                     $totalShopSitef += floatval($paid->total);
             }
             $listDay[$i]['dia'] = Carbon::now()->subDay(6-$i)->format('d');
             $listDay[$i]['totalSales'] = $totalShop;
             $listDay[$i]['totalPayPal'] = $totalShopPayPal;
+            $listDay[$i]['totalCryptocurrency'] = $totalShopCryptocurrency;
             $listDay[$i]['totalSitef'] = $totalShopSitef;
         }
 
@@ -360,6 +390,29 @@ class AdminController extends Controller
             $deposits->status = $request->status;
             $deposits->numRef = "";
             $deposits->save();
+        }
+        
+        return response()->json(array('status' => 201));
+    }
+
+    public function changeStatusPayment(Request $request)
+    {
+        foreach ($request->selectId as $id)
+        {
+            $transaction = Paid::where('id', $id)->first();
+            $transaction->statusPayment = $request->status;
+            $transaction->save();
+
+            if($request->status == 2){
+                $balance = Balance::firstOrNew([
+                    'user_id'       => $transaction->user_id,
+                    "commerce_id"   => $transaction->commerce_id,
+                    "coin"          => $transaction->coin,
+                ]);
+    
+                $balance->total += floatval($transaction->total);
+                $balance->save();
+            }
         }
         
         return response()->json(array('status' => 201));

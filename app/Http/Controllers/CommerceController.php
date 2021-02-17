@@ -79,12 +79,13 @@ class CommerceController extends Controller
 
 
         $paidAll = Paid::where("date", 'like', "%".Carbon::now()->format('Y-m-d')."%")
-                        ->where("commerce_id", $idCommerce)->get();
+                        ->where("commerce_id", $idCommerce)
+                        ->where("statusPayment",2)->get();
 
         foreach ($paidAll as $paid)
         {
             $totalShopping += 1;
-            if($paid->nameCompanyPayments == "PayPal")
+            if($paid->nameCompanyPayments == "PayPal" || $paid->nameCompanyPayments == "Bitcoin")
                 $totalShoppingPayPal += floatval($paid->total);
             
             if($paid->nameCompanyPayments == "E-sitef")

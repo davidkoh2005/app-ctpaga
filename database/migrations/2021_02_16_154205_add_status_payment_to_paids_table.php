@@ -14,7 +14,7 @@ class AddStatusPaymentToPaidsTable extends Migration
     public function up()
     {
         Schema::table('paids', function (Blueprint $table) {
-            $table->integer("statusPayment")->default(0); // 0 pendiente 0 confirmado
+            $table->integer("statusPayment")->default(1); // 1 pendiente 2 confirmado
         });
     }
 
