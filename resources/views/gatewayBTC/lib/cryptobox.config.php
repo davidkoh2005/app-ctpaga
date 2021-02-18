@@ -8,7 +8,7 @@
  */
 
  define("DB_HOST",	env('DB_HOST', '127.0.0.1'));				// hostname
- define("DB_USER",	"root");		// database username
+ define("DB_USER",	env('DB_USERNAME', 'root'));		// database username
  define("DB_PASSWORD",	env('DB_PASSWORD', ''));		// database password
  define("DB_NAME",	env('DB_DATABASE', 'forge'));	// database name
 

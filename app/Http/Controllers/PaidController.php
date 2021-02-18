@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use App\User;
 use App\Sale;
 use App\Paid;
+use App\Rate;
 use App\Commerce;
 use App\Product;
 use App\Balance;
@@ -104,6 +105,15 @@ class PaidController extends Controller
                 "date"                  => Carbon::now(),
                 "statusPayment"         => 2,
             ]);
+
+            $balance = Balance::firstOrNew([
+                'user_id'       => $user->id,
+                "commerce_id"   => $commerce->id,
+                "coin"          => $request->coinClient,
+            ]);
+
+            $balance->total += floatval($amount)-(floatval($amount)*0.05+0.35);
+            $balance->save();
 
             $userUrl = $request->userUrl;
 
@@ -208,10 +218,12 @@ class PaidController extends Controller
                 "date"                  => Carbon::now(),
                 "statusPayment"         => 1,
             ]);
+            
 
             return view('gatewayBTC.example_basic', compact('userUrl', 'codeUrl', 'amount'));
         
         }elseif($request->coinClient == 1){
+            
             $url = 'https://esitef-homologacao.softwareexpress.com.br/e-sitef/api/v1/transactions';
             $ch = curl_init($url);
             $jsonData = array(
@@ -325,7 +337,9 @@ class PaidController extends Controller
                     "coin"          => $request->coinClient,
                 ]);
 
-                $balance->total += floatval($amount);
+                $rateAdmin = Rate::where("roleRate",0)->orderBy("created_at","desc")->first();
+
+                $balance->total += floatval($amount)-(floatval($amount)*0.05+(0.35*floatval($rateAdmin->rate));
                 $balance->save();
 
                 $userUrl = $request->userUrl;
@@ -376,7 +390,6 @@ class PaidController extends Controller
 
         /** Execute the payment **/
         $result = $payment->execute($execution, $this->apiContext);
-
         if ($result->getState() === 'approved') {
             $sales = Sale::where("codeUrl", $codeUrl)->get();
             $message="";
@@ -431,6 +444,7 @@ class PaidController extends Controller
                 "nameCompanyPayments"   => "PayPal",
                 "date"                  => Carbon::now(),
                 "statusPayment"         => 2,
+                "refPayment"            => $result->getId(),
             ]);
 
             $balance = Balance::firstOrNew([
@@ -439,7 +453,7 @@ class PaidController extends Controller
                 "coin"          => $requestForm['coinClient'],
             ]);
 
-            $balance->total += floatval($amount);
+            $balance->total += floatval($amount)-(floatval($amount)*0.1+0.35);
             $balance->save();
 
             $messageNotification['commerce_id'] = $commerce->id;

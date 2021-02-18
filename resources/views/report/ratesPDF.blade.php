@@ -57,9 +57,31 @@
     @php
         use Carbon\Carbon;
     @endphp
+
+    @if(Auth::guard('admin')->check())
     <div class="row">
         <div class="styleText">
-            <strong>Fecha:</strong> {{$today}}<br>
+            <strong>Fecha:</strong> {{Carbon::now()->format('Y-m-d')}}<br>
+            <strong>Direccion:</strong> Los Dos Caminos.<br>
+            <strong>Teléfono:</strong> 0212-555-5555<br>
+        </div>
+
+        <div class="positionImage">
+        @php
+            $path = public_path('/images/logo/logo.png');
+            $type = pathinfo($path, PATHINFO_EXTENSION);
+            $data = file_get_contents($path);
+            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+        @endphp
+            <img src="{{$base64}}" width="140px">
+        </div>
+    </div>
+
+    @else
+
+    <div class="row">
+        <div class="styleText">
+            <strong>Fecha:</strong> {{Carbon::now()->format('Y-m-d')}}<br>
             <strong>Nombre de la compañia:</strong> {{$commerceData->name}}<br>
             <strong>Direccion:</strong> {{$commerceData->address}}<br>
             <strong>Teléfono:</strong> {{$commerceData->phone}}<br>
@@ -85,6 +107,7 @@
             <img src="{{$base64}}" width="100px">
         </div>
     </div>
+    @endif
 
     <div class="row">&nbsp;</div>
     <div class="row">&nbsp;</div>

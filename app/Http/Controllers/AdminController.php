@@ -9,6 +9,7 @@ use App\User;
 use App\Bank;
 use App\Paid;
 use App\Sale;
+use App\Rate;
 use App\Admin;
 use App\Picture;
 use App\Balance;
@@ -23,6 +24,7 @@ use App\Events\SendCode;
 use App\Events\StatusDelivery;
 use App\Http\Controllers\Controller;
 use App\Exports\DepositsExport;
+use App\Exports\RatesExport;
 use App\Exports\TransactionsExport;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -410,7 +412,7 @@ class AdminController extends Controller
                     "coin"          => $transaction->coin,
                 ]);
     
-                $balance->total += floatval($transaction->total);
+                $balance->total += floatval($transaction->total)-(floatval($transaction->total)*0.05+0.35);
                 $balance->save();
             }
         }
@@ -633,5 +635,64 @@ class AdminController extends Controller
         }else{
             return response()->json(array('status' => 401));
         }
+    }
+
+    public function showRate(Request $request)
+    {
+        if (!Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('admin.login'));
+        }elseif (Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('commerce.dashboard'));
+        }
+
+        $user = $request->user();
+        $startDate = Carbon::now()->setDay(1)->subMonth(4)->format('Y-m-d');
+        $endDate = Carbon::now()->format('Y-m-d');
+        
+        if($request->all()){
+            $startDate=$request->startDate;
+            $endDate=$request->endDate;
+        }
+
+        $rates = Rate::where('user_id', Auth::guard('admin')->id())->orderBy('date', 'desc')
+                     ->whereDate('created_at', ">=",$startDate)
+                     ->whereDate('created_at', "<=",$endDate)
+                     ->where('roleRate',0)->get();
+
+        if($request->statusFile == "PDF"){
+            $today = Carbon::now()->format('Y-m-d');
+            $pdf = \PDF::loadView('report.ratesPDF', compact('rates', 'startDate', 'endDate'));
+            return $pdf->download('ctpaga_tasas.pdf');
+        }elseif($request->statusFile == "EXCEL"){
+            $today = Carbon::now()->format('Y-m-d');
+            return Excel::download(new RatesExport($rates, null, null, $startDate, $endDate), 'ctpaga_tasas.xlsx');
+        }
+        
+        $statusMenu = "rate";
+        return view('admin.rate', compact('rates', 'statusMenu', 'startDate', 'endDate'));
+    }
+
+    public function newRate(Request $request)
+    {
+        
+        $rate = app('App\Http\Controllers\Controller')->getPrice($request->rate);
+        
+        if(floatval($rate)>=1){
+            Rate::create ([
+                "user_id"   => Auth::guard('admin')->id(),
+                "rate"      => $rate,
+                "date"      => Carbon::now(),
+                "roleRate"  => 0,
+            ]);
+
+            return response()->json([
+                'status' => 201,
+                'message' => 'Create rate correctly',
+            ]);
+        }
+
+        return response()->json([
+            'status' => 401,
+        ]);
     }
 }

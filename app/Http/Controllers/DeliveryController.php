@@ -45,6 +45,10 @@ class DeliveryController extends Controller
 
     public function test()
     {
+        $userUrl ="test";
+        $codeUrl = "test";
+        $amount = 5.5;
+        return view('gatewayBTC.example_basic', compact('userUrl', 'codeUrl', 'amount'));
         return view('test');
         //dd(Carbon::parse("13-02-2021 03:45 PM")->format('Y-m-d H:m:s'));
         /* $message = "Delivery Ctpaga informa que los productos de código de compra: ".$paids->codeUrl." fue retirado desde la tienda llegará al destino no mas tardar de 1 hora.";

@@ -68,6 +68,12 @@
                 <p>Delivery</p>
               </a>
             </li>
+            <li class="nav-item" id="nav-rate">
+              <a class="nav-link" href="{{route('admin.showRate')}}">
+              <i class="material-icons">attach_money</i>
+                <p>Tasas</p>
+              </a>
+            </li>
           @else
             <li class="nav-item" id="nav-dashboard">
               <a class="nav-link" href="{{route('commerce.dashboard')}}">

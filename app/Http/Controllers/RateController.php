@@ -13,7 +13,8 @@ class RateController extends Controller
     public function show(Request $request)
     {
         $user = $request->user();
-        $rates = Rate::where('user_id', $user->id)->orderBy('date', 'desc')->get();
+        $rates = Rate::where('user_id', $user->id)->orderBy('date', 'desc')
+                     ->where('roleRate',1)->get();
         return response()->json(['statusCode' => 201,'data' => $rates]);
     }
 

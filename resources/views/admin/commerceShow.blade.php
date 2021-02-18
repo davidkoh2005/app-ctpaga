@@ -166,7 +166,7 @@
                             <img widht="80px" height="80px" class="justify-content-center" src="{{ asset('images/loading.gif') }}">
                         </div>
                     </div>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>

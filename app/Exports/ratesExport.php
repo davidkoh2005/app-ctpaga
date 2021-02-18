@@ -2,6 +2,8 @@
 
 namespace App\Exports;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithDrawings;
@@ -9,14 +11,13 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 class ratesExport implements FromView, WithDrawings
 {
-    protected $rates, $today, $startDate, $endDate, $commerceData, $pictureUser;
+    protected $rates, $startDate, $endDate, $commerceData, $pictureUser;
     /**
     * @return \Illuminate\Support\Collection
     */
 
-    function __construct($rates, $today, $commerceData, $pictureUser, $startDate, $endDate) {
+    function __construct($rates, $commerceData, $pictureUser, $startDate, $endDate) {
         $this->rates = $rates;
-        $this->today = $today;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
         $this->commerceData = $commerceData;
@@ -27,12 +28,22 @@ class ratesExport implements FromView, WithDrawings
     {
         $drawing = new Drawing();
         $drawing->setName('Logo');
-        $drawing->setDescription('Loco Comercio');
-        if($this->pictureUser)
-            $drawing->setPath(public_path($this->pictureUser->url));
-        else
-            $drawing->setPath(public_path("images/perfil.png"));
-        $drawing->setWidth(100);
+
+        if(Auth::guard('admin')->check()){
+            $drawing->setDescription('Loco Ctpaga');
+            $drawing->setPath(public_path('/images/logo/logo.png'));
+            $drawing->setWidth(140);
+        }else{
+            $drawing->setDescription('Loco Comercio');
+            
+            if($this->pictureUser)
+                $drawing->setPath(public_path($this->pictureUser->url));
+            else
+                $drawing->setPath(public_path("images/perfil.png"));
+            
+            $drawing->setWidth(100);
+        }
+
         $drawing->setCoordinates('E1');
 
         return $drawing;
@@ -41,13 +52,19 @@ class ratesExport implements FromView, WithDrawings
 
     public function view(): View
     {
-
-        return view('report.ratesEXCEL', [
-            'rates'      => $this->rates,
-            'today'         => $this->today,
-            'startDate'     => $this->startDate,
-            'endDate'       => $this->endDate,
-            'commerceData'  => $this->commerceData,
-        ]);
+        if(Auth::guard('admin')->check()){
+            return view('report.ratesEXCEL', [
+                'rates'      => $this->rates,
+                'startDate'     => $this->startDate,
+                'endDate'       => $this->endDate,
+            ]);
+        }else{
+            return view('report.ratesEXCEL', [
+                'rates'      => $this->rates,
+                'startDate'     => $this->startDate,
+                'endDate'       => $this->endDate,
+                'commerceData'  => $this->commerceData,
+            ]);
+        }
     }
 }

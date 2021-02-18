@@ -347,9 +347,7 @@
                         <div class="col-12 col-md-10 col-lg-8">
                             <!-- Section Heading -->
                             <div class="section-heading text-center">
-                                <h2>Comisiones de retiro de dinero</h2>
-                                <p class="d-none d-sm-block mt-4">El retiro de moneda estadounidense (Dolares) solo puede recibir dinero a través de cuenta Estados Unidos o Panamá.</p>
-                                <p class="d-block d-sm-none mt-4">El retiro de moneda Venezolano (Bolivares) solo puede recibir dinero a través de cuenta Venezolano.</p>
+                                <h2>Comisiones por transacciones</h2>
                             </div>
                         </div>
                     </div>
@@ -369,7 +367,7 @@
                                         </div>
                                         <!-- Plan Price -->
                                         <div class="plan-price pb-2 pb-sm-3">
-                                            <h2 class="fw-7">5<small class="fw-6">%</small> <small class="fw-6">+</small> 0.50 <small class="fw-6">$</small></h2>
+                                            <h2 class="fw-7">5<small class="fw-6">%</small> <small class="fw-6">+</small> 0.35 <small class="fw-6">$</small></h2>
                                         </div>
                                     </div>
                                 </div>
@@ -386,9 +384,98 @@
                                         </div>
                                         <!-- Plan Price -->
                                         <div class="plan-price pb-2 pb-sm-3">
-                                            <h2 class="fw-7">5<small class="fw-6">%</small> <small class="fw-6">+</small> 0.50 <small class="fw-6">$</small></h2>
-                                            <h4 class="text-uppercase">(Al cambio del dia)</h4>
+                                            <h2 class="fw-7">5<small class="fw-6">%</small> <small class="fw-6">+</small> 0.35 <small class="fw-6">$</small></h2>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 mt-4 mt-md-0">
+                                    <!-- Single Price Plan -->
+                                    <div class="single-price-plan text-center p-5 wow fadeInRight" data-aos-duration="2s" data-wow-delay="0.4s">
+                                        <!-- Plan Thumb -->
+                                        <div class="plan-thumb">
+                                            <img class="avatar-lg" src="{{ asset('images/paypal.png') }}" alt="" style="width:100%">
+                                        </div>
+                                        <!-- Plan Title -->
+                                        <div class="plan-title my-2 my-sm-3">
+                                            <h4 class="text-uppercase">Paypal</h4>
+                                        </div>
+                                        <!-- Plan Price -->
+                                        <div class="plan-price pb-2 pb-sm-3">
+                                            <h2 class="fw-7">10<small class="fw-6">%</small> <small class="fw-6">+</small> 0.35 <small class="fw-6">$</small></h2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 mt-4 mt-md-0">
+                                    <!-- Single Price Plan -->
+                                    <div class="single-price-plan text-center p-5 wow fadeInRight" data-aos-duration="2s" data-wow-delay="0.4s">
+                                        <!-- Plan Thumb -->
+                                        <div class="plan-thumb">
+                                            <img class="avatar-lg" src="{{ asset('images/bitcoin.png') }}" alt="" style="width:100%">
+                                        </div>
+                                        <!-- Plan Title -->
+                                        <div class="plan-title my-2 my-sm-3">
+                                            <h4 class="text-uppercase">Bitcoin</h4>
+                                        </div>
+                                        <!-- Plan Price -->
+                                        <div class="plan-price pb-2 pb-sm-3">
+                                            <h2 class="fw-7">5<small class="fw-6">%</small> <small class="fw-6">+</small> 0.35 <small class="fw-6">$</small></h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- ***** Price Plan Area End ***** -->
+
+            <!-- ***** withdrawal money***** -->
+            <section id="withdrawal" class="section work-area bg-overlay overflow-hidden ptb_100"">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-10 col-lg-8">
+                            <!-- Section Heading -->
+                            <div class="section-heading text-center">
+                                <h2 class="text-white">Retiro de dinero</h2>
+                                <p class="d-none d-sm-block mt-4 text-white">El retiro de moneda estadounidense (Dolares) solo puede recibir dinero a través de cuenta Estados Unidos o Panamá.</p>
+                                <p class="d-block d-sm-none mt-4 text-white">El retiro de moneda Venezolano (Bolivares) solo puede recibir dinero a través de cuenta Venezolano.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-sm-10 col-lg-8">
+                            <div class="row price-plan-wrapper">
+                                <div class="col-12 col-md-6">
+                                    <!-- Single Price Plan -->
+                                    <div class="single-price-plan text-center p-5 wow fadeInLeft" data-aos-duration="2s" data-wow-delay="0.4s">
+                                        <!-- Plan Thumb -->
+                                        <div class="plan-thumb">
+                                            <img class="avatar-lg" src="{{ asset('images/eeuu.png') }}" alt="">
+                                        </div>
+                                        <!-- Plan Title -->
+                                        <div class="plan-title my-2 my-sm-3">
+                                            <h4 class="text-uppercase">Dolares</h4>
+                                        </div>
+                                        <div class="plan-title my-2 my-sm-3">
+                                            <h4 class="text-uppercase">Banco Estados Unidos o Panamá</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 mt-4 mt-md-0">
+                                    <!-- Single Price Plan -->
+                                    <div class="single-price-plan text-center p-5 wow fadeInRight" data-aos-duration="2s" data-wow-delay="0.4s">
+                                        <!-- Plan Thumb -->
+                                        <div class="plan-thumb">
+                                            <img class="avatar-lg" src="{{ asset('images/venezuela.png') }}" alt="">
+                                        </div>
+                                        <!-- Plan Title -->
+                                        <div class="plan-title my-2 my-sm-3">
+                                            <h4 class="text-uppercase">Bolivares</h4>
+                                        </div>
+                                        <div class="plan-title my-2 my-sm-3">
+                                            <h4 class="text-uppercase">Banco Venezolano</h4>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -598,6 +685,7 @@
                                         <li class="py-2"><a href="#home">Inicio</a></li>
                                         <li class="py-2"><a href="#features">Caracteristicas</a></li>
                                         <li class="py-2"><a href="#pricing">Comisiones</a></li>
+                                        <li class="py-2"><a href="#withdrawal">Retiro</a></li>
                                         <li class="py-2"><a href="#faq">Preguntas frecuentes</a></li>
                                         <li class="py-2"><a href="#contact">Contacto</a></li>
                                     </ul>

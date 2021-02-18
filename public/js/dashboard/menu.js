@@ -17,6 +17,8 @@ $(document).ready( function () {
         $("#title-navbar").html("Tasa Historial");
     else if(statusMenu == "delivery")
         $("#title-navbar").html("Delivery");
+    else if(statusMenu == "rate")
+        $("#title-navbar").html("Tasa Transaccion");
     
 
     $('#nav-balance').click(function() {

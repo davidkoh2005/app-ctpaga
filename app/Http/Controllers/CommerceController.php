@@ -325,7 +325,6 @@ class CommerceController extends Controller
         $endDate = Carbon::now()->format('Y-m-d');
         
         if($request->all() && !$request->commerceId){
-            $selectCoin=$request->selectCoin? $request->selectCoin : 0;
             $startDate=$request->startDate;
             $endDate=$request->endDate;
         }
@@ -357,20 +356,16 @@ class CommerceController extends Controller
             $commerceName = $commerceData->name;
     
 
-        $rates = Rate::where('user_id', Auth::guard('web')->id())->orderBy('date', 'desc');
-        
-        $rates = $rates->whereDate('created_at', ">=",$startDate)
-                        ->whereDate('created_at', "<=",$endDate);
-
-        $rates = $rates->get();
+        $rates = Rate::where('user_id', Auth::guard('web')->id())->orderBy('date', 'desc')
+                    ->whereDate('created_at', ">=",$startDate)
+                    ->whereDate('created_at', "<=",$endDate)
+                    ->where('roleRate',1)->get();
 
         if($request->statusFile == "PDF"){
-            $today = Carbon::now()->format('Y-m-d');
-            $pdf = \PDF::loadView('report.ratesPDF', compact('rates', 'today', 'commerceData', 'pictureUser', 'startDate', 'endDate'));
+            $pdf = \PDF::loadView('report.ratesPDF', compact('rates', 'commerceData', 'pictureUser', 'startDate', 'endDate'));
             return $pdf->download('ctpaga_tasas.pdf');
         }elseif($request->statusFile == "EXCEL"){
-            $today = Carbon::now()->format('Y-m-d');
-            return Excel::download(new RatesExport($rates, $today, $commerceData, $pictureUser, $startDate, $endDate), 'ctpaga_transacciones.xlsx');
+            return Excel::download(new RatesExport($rates, $commerceData, $pictureUser, $startDate, $endDate), 'ctpaga_tasas.xlsx');
         }
 
         $statusMenu = "rateHistory";

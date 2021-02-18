@@ -15,6 +15,7 @@ class AddStatusPaymentToPaidsTable extends Migration
     {
         Schema::table('paids', function (Blueprint $table) {
             $table->integer("statusPayment")->default(1); // 1 pendiente 2 confirmado
+            $table->string('refPayment')->nullable()->default(NULL);
         });
     }
 
@@ -27,6 +28,7 @@ class AddStatusPaymentToPaidsTable extends Migration
     {
         Schema::table('paids', function (Blueprint $table) {
             $table->dropColumn('statusPayment');
+            $table->dropColumn('refPayment');
         });
     }
 }
