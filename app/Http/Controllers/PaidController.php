@@ -339,7 +339,7 @@ class PaidController extends Controller
 
                 $rateAdmin = Rate::where("roleRate",0)->orderBy("created_at","desc")->first();
 
-                $balance->total += floatval($amount)-(floatval($amount)*0.05+(0.35*floatval($rateAdmin->rate));
+                $balance->total += floatval($amount)-(floatval($amount)*0.05+(0.35*floatval($rateAdmin->rate)));
                 $balance->save();
 
                 $userUrl = $request->userUrl;
@@ -476,9 +476,12 @@ class PaidController extends Controller
 
     public function show(Request $request)
     {
+        $startDate = Carbon::now()->setDay(1)->subMonth(4)->format('Y-m-d');
+
         $user = $request->user();
         $paids = Paid::where('user_id', $user->id)
                     ->where('commerce_id', $request->commerce_id)
+                    ->whereDate('created_at', ">=",$startDate)
                     ->orderBy('created_at', 'desc')->get();
         
         return response()->json(['statusCode' => 201,'data' => $paids]);

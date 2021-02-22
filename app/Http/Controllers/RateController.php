@@ -12,9 +12,12 @@ class RateController extends Controller
 {
     public function show(Request $request)
     {
+        $startDate = Carbon::now()->setDay(1)->subMonth(1)->format('Y-m-d');
+
         $user = $request->user();
-        $rates = Rate::where('user_id', $user->id)->orderBy('date', 'desc')
-                     ->where('roleRate',1)->get();
+        $rates = Rate::where('user_id', $user->id)->orderBy('created_at', 'desc')
+                     ->where('roleRate',1)
+                     ->whereDate('created_at', ">=",$startDate)->get();
         return response()->json(['statusCode' => 201,'data' => $rates]);
     }
 
