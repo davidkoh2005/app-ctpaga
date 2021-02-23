@@ -56,6 +56,7 @@ Route::post('logout/', 'AdminController@logout')->name('logout');
 Route::group(['middleware'=>'web'], function() {
     Route::get('/inicio/', 'CommerceController@dashboard')->name('commerce.dashboard');
     Route::post('/delivery', 'CommerceController@transactions')->name('commerce.transactions');
+    Route::post('/transacciones', 'CommerceController@transactions')->name('commerce.transactions');
     Route::get('/transacciones', 'CommerceController@transactions')->name('commerce.transactions');
     Route::get('/historial', 'CommerceController@depositHistory')->name('commerce.depositHistory');
     Route::post('/historial', 'CommerceController@depositHistory')->name('commerce.depositHistory');
@@ -102,6 +103,11 @@ Route::post('password/reset', 'Auth\PasswordResetController@reset')->name('form.
 Route::get('password/delivery/create', 'Auth\PasswordResetController@createDelivery');
 Route::get('password/delivery/find/{token}', 'Auth\PasswordResetController@findDelivery');
 Route::post('password/delivery/reset', 'Auth\PasswordResetController@resetDelivery')->name('form.passwordResetDelivery');
+
+Route::get('/pagar/completado/{userUrl}', function ($userUrl) {
+    $status = false;
+    return view('result', compact('userUrl', 'status'));
+});
 
 Route::get('/pagar/estadoPaypal', 'PaidController@statusPaypal');
 Route::post('/pagar/criptomonedas', 'PaidController@cryptocurrencies');

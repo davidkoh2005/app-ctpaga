@@ -8,9 +8,34 @@ use App\Paid;
 use App\Events\StatusDelivery;
 use App\Events\AlarmUrgent;
 use Carbon\Carbon;
+use PayPal\Api\Amount;
+use PayPal\Api\Payment;
+use PayPal\Api\Payer;
+use PayPal\Api\RedirectUrls;
+use PayPal\Api\Transaction;
+use PayPal\Api\PaymentExecution;
+use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Rest\ApiContext;
+use Illuminate\Support\Facades\Config;
 
 class DeliveryController extends Controller
 {
+    private $apiContext;
+
+    public function __construct()
+    {
+        $payPalConfig = Config::get('paypal');
+
+        $this->apiContext = new ApiContext(
+            new OAuthTokenCredential(
+                $payPalConfig['client_id'],
+                $payPalConfig['secret']
+            )
+        );
+
+        $this->apiContext->setConfig($payPalConfig['settings']);
+    }
+
     public function update(Request $request)
     {   
         $delivery = $request->user();
@@ -45,11 +70,42 @@ class DeliveryController extends Controller
 
     public function test()
     {
-        $userUrl ="test";
+
+        $payer = new Payer();
+            $payer->setPaymentMethod('paypal');
+
+            $amountPaypal = new Amount();
+            $amountPaypal->setTotal(2);
+            $amountPaypal->setCurrency('USD');
+
+            $transaction = new Transaction();
+            $transaction->setAmount($amountPaypal);
+            $transaction->setDescription('Compra a través de ctpaga');
+
+            $callbackUrl = url('/pagar/estadoPaypal/');
+
+            $redirectUrls = new RedirectUrls();
+            $redirectUrls->setReturnUrl($callbackUrl)
+                ->setCancelUrl($callbackUrl);
+
+            $payment = new Payment();
+            $payment->setIntent('sale')
+                ->setPayer($payer)
+                ->setTransactions(array($transaction))
+                ->setRedirectUrls($redirectUrls);
+
+            try {
+                $payment->create($this->apiContext);
+                return redirect()->away($payment->getApprovalLink());
+            } catch (PayPalConnectionException $ex) {
+                echo $ex->getData();
+            }
+
+        /* $userUrl ="test";
         $codeUrl = "test";
         $amount = 5.5;
         return view('gatewayBTC.example_basic', compact('userUrl', 'codeUrl', 'amount'));
-        return view('test');
+        return view('test'); */
         //dd(Carbon::parse("13-02-2021 03:45 PM")->format('Y-m-d H:m:s'));
         /* $message = "Delivery Ctpaga informa que los productos de código de compra: ".$paids->codeUrl." fue retirado desde la tienda llegará al destino no mas tardar de 1 hora.";
         (new User)->forceFill([
@@ -76,4 +132,6 @@ class DeliveryController extends Controller
         //$success = event(new StatusDelivery());
         // dd($success); 
     }
+
+    
 }

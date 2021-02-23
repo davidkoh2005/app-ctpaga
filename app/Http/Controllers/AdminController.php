@@ -343,10 +343,10 @@ class AdminController extends Controller
             $transactions = $transactions->where('commerces.id', $request->idCommerce); 
 
         if(!empty($request->searchNameCompany))
-            $transactions = $transactions->where('commerces.name', 'ilike', '%'.$request->searchNameCompany.'%' );
+            $transactions = $transactions->where('commerces.name', 'like', '%'.$request->searchNameCompany.'%' );
         
         if(!empty($request->searchNameClient))
-            $transactions = $transactions->where('paids.nameClient', 'ilike', '%'.$request->searchNameClient.'%');
+            $transactions = $transactions->where('paids.nameClient', 'like', '%'.$request->searchNameClient.'%');
 
         if(!empty($request->selectCoin) && $request->selectCoin != "Selecionar Moneda")
             $transactions = $transactions->where('paids.coin', $request->selectCoin);
@@ -509,13 +509,13 @@ class AdminController extends Controller
                 ->select('deposits.id', 'deposits.user_id', 'deposits.commerce_id', 'deposits.coin', 'deposits.total', 'deposits.numRef', 'deposits.date', 'commerces.name')
                 ->where("deposits.status",3);
         if(!empty($request->searchNameCompany))
-            $deposits = $deposits->where('commerces.name', 'ilike', "%" . $request->searchNameCompany . "%" );
+            $deposits = $deposits->where('commerces.name', 'like', "%" . $request->searchNameCompany . "%" );
         
         if(!empty($request->numRef))
-            $deposits = $deposits->where('deposits.numRef', 'ilike', "%" . $request->numRef . "%" );
+            $deposits = $deposits->where('deposits.numRef', 'like', "%" . $request->numRef . "%" );
 
         if(!empty($request->searchNameClient))
-            $deposits = $deposits->where('deposits.nameClient', 'ilike', "%" . $request->searchNameClient . "%" );
+            $deposits = $deposits->where('deposits.nameClient', 'like', "%" . $request->searchNameClient . "%" );
 
         if(!empty($request->selectCoin) && $request->selectCoin != "Selecionar Moneda")
             $deposits = $deposits->where('deposits.coin', $request->selectCoin);
@@ -586,12 +586,12 @@ class AdminController extends Controller
         }
 
         if(!empty($request->searchNameCompany)){
-            $transactions->where('commerces.name', 'ilike', "%" . $request->searchNameCompany . "%" );
+            $transactions->where('commerces.name', 'like', "%" . $request->searchNameCompany . "%" );
         }
 
 
         if(!empty($request->searchCodeUrl)){
-            $transactions->where('paids.codeUrl', 'ilike', "%" . $request->searchCodeUrl . "%" );
+            $transactions->where('paids.codeUrl', 'like', "%" . $request->searchCodeUrl . "%" );
         }
 
         $transactions->where('paids.date', ">=",$startDate)

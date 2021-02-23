@@ -85,10 +85,10 @@ class CommerceController extends Controller
         foreach ($paidAll as $paid)
         {
             $totalShopping += 1;
-            if($paid->nameCompanyPayments == "PayPal" || $paid->nameCompanyPayments == "Bitcoin")
+            if($paid->coin == 0)
                 $totalShoppingPayPal += floatval($paid->total);
             
-            if($paid->nameCompanyPayments == "E-sitef")
+            if($paid->coin == 0)
                 $totalShoppingSitef += floatval($paid->total);
         }
 
@@ -156,19 +156,19 @@ class CommerceController extends Controller
             $transactions = $transactions->where('commerces.id', $idCommerce); 
 
         if(!empty($request->searchNameCompany))
-            $transactions = $transactions->where('commerces.name', 'ilike', "%" . $request->searchNameCompany . "%" );
+            $transactions = $transactions->where('commerces.name', 'like', "%" . $request->searchNameCompany . "%" );
         
         if(!empty($request->searchNameClient))
-            $transactions = $transactions->where('paids.nameClient', 'ilike', "%" . $request->searchNameClient . "%" );
+            $transactions = $transactions->where('paids.nameClient', 'like', "%" . $request->searchNameClient . "%" );
 
         if(!empty($request->selectCoin) && $request->selectCoin != "Selecionar Moneda")
             $transactions = $transactions->where('paids.coin', $request->selectCoin);
         
         if(!empty($request->selectPayment) && $request->selectPayment != "Selecionar Tipo de Pago"){
             if($request->selectPayment == "Tienda Web")
-                $transactions = $transactions->where('paids.nameCompanyPayments', "PayPal")->orWhere('paids.nameCompanyPayments',  "E-sitef" );
+                $transactions = $transactions->where('paids.nameCompanyPayments', "!=", "Tienda Fisica")->Where('paids.nameCompanyPayments', "!=", "Pago en Efectivo" );
             else
-                $transactions = $transactions->where('paids.nameCompanyPayments',  'ilike', "%" . $request->selectPayment . "%" );
+                $transactions = $transactions->where('paids.nameCompanyPayments',  'like', "%" . $request->selectPayment . "%" );
         }
 
         $transactions = $transactions->whereDate('paids.created_at', ">=",$startDate)
@@ -243,12 +243,8 @@ class CommerceController extends Controller
                             ->where("coin", $selectCoin)
                             ->orderBy('date', 'asc')
                             ->select("date", "total")
-                            ->where("date", ">=", Carbon::now()->subMonth(4));
-
-        if($selectCoin == 0)
-            $historyPaids = $historyPaids->where("nameCompanyPayments", "PayPal")->get();
-        else
-            $historyPaids = $historyPaids->where("nameCompanyPayments", "E-sitef")->get();
+                            ->where("date", ">=", Carbon::now()->subMonth(4))
+                            ->get();
 
         $historyDeposits = Deposits::where("commerce_id", $idCommerce)
                                 ->where("coin", $selectCoin)

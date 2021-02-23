@@ -128,7 +128,8 @@ class PaidController extends Controller
                 new PostPurchase($message, $userUrl, $commerce->name, $codeUrl)
             );
 
-            return view('result', compact('userUrl'));
+            $status = true;
+            return view('result', compact('userUrl', 'status'));
         }elseif($request->coinClient == 0 && $request->payment == "PAYPAL"){
 
             $payer = new Payer();
@@ -355,7 +356,8 @@ class PaidController extends Controller
                     new PostPurchase($message, $userUrl, $commerce->name, $codeUrl)
                 );
 
-                return view('result', compact('userUrl'));
+                $status = true;
+                return view('result', compact('userUrl', 'status'));
             }else{
                 Session::flash('message', "¡Tu pago ha fallado!");
                 return Redirect::back();
@@ -387,7 +389,6 @@ class PaidController extends Controller
 
         $execution = new PaymentExecution();
         $execution->setPayerId($payerId);
-
         /** Execute the payment **/
         $result = $payment->execute($execution, $this->apiContext);
         if ($result->getState() === 'approved') {
@@ -467,7 +468,8 @@ class PaidController extends Controller
                 new PostPurchase($message, $userUrl, $commerce->name, $codeUrl)
             );
 
-            return view('result', compact('userUrl'));
+            $status = true;
+            return view('result', compact('userUrl', 'status'));
         }
 
         Session::flash('message', "Lo sentimos! El pago a través de PayPal no se pudo realizar.");
@@ -488,6 +490,25 @@ class PaidController extends Controller
     }
 
     public function showPaidDelivery(Request $request)
+    {
+        $delivery = $request->user();
+        $paids = Paid::where('codeUrl', $request->codeUrl)
+                ->where("idDelivery",$delivery->id)->first();
+
+        if($paids){
+            $paids->idDelivery = $delivery->id;
+            $paids->statusDelivery = 2;
+            $sales = Sale::where('codeUrl',$request->codeUrl)->orderBy('name', 'asc')->get();
+            $commerce = Commerce::whereId($paids->commerce_id)->first();
+            $paids->save();
+            return response()->json(['statusCode' => 201,'data' =>['paid'=>$paids, 'commerce'=>$commerce, 'sales'=>$sales]]);
+        }
+        else
+            return response()->json(['statusCode' => 401,'message' => "Error no esta disponible"]);
+
+    }
+
+    public function orderPaidDelivery(Request $request)
     {
         $delivery = $request->user();
         $paids = Paid::where('codeUrl', $request->codeUrl)
