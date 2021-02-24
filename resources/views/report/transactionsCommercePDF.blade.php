@@ -51,6 +51,29 @@
             color: black;
             font-weight: bold;
         }
+
+        .cancelled {
+            padding-left: 5px;
+            padding-right: 5px;
+            border-radius: 5px;
+            background-color: #585858;
+            color: white
+        }
+
+        .pending  {
+            padding-left: 5px;
+            padding-right: 5px;
+            border-radius: 5px;
+            background-color: red;
+            color: white
+        }
+
+        .completed {
+            padding-left: 5px;
+            padding-right: 5px;
+            border-radius: 5px;
+            background-color: #00cc5f;
+        }
     </style>
 </head>
 <body style="margin: 50px;">
@@ -91,17 +114,29 @@
             <thead>
                 <tr class="table-title">
                     <th scope="col">Nombre Cliente</th>
+                    <th scope="col">Código</th>
                     <th scope="col">Total</th>
                     <th scope="col">Pago</th>
+                    <th scope="col">Estado</th>
                     <th scope="col">Fecha</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($transactions as $transaction)
                 <tr>
-                    <td>{{ $transaction->nameClient}}</td>
+                    <td>{{ $transaction->nameClient }}</td>
+                    <td>{{ $transaction->codeUrl }}</td>
                     <td>@if($transaction->coin == 0) $ @else Bs @endif {{ $transaction->total}}</td>
                     <td>@if($transaction->nameCompanyPayments == "PayPal" || $transaction->nameCompanyPayments == "E-Sitef" ) Tienda Web @else {{$transaction->nameCompanyPayments}} @endif</td>
+                    <td>
+                        @if($transaction->statusPayment == 0)
+                            <div class="cancelled">Cancelado</div>
+                        @elseif($transaction->statusPayment == 1)
+                            <div class="pending">Pendiente</div>
+                        @else
+                            <div class="completed">Completado</div>
+                        @endif
+                    </td>
                     <td> {{date('d/m/Y h:i A',strtotime($transaction->date))}}</td>
                 </tr>
                 @endforeach

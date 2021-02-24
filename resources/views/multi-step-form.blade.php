@@ -14,6 +14,14 @@
     <script src="{{ asset('js/form.js') }}"></script>
     <script src="{{ asset('js/i18n/es.js') }}"></script>
     <script src="{{ asset('js/global.js') }}"></script>
+    @if($coinClient==0)
+    <!-- link to the SqPaymentForm library -->
+    <script type="text/javascript" src="https://js.squareupsandbox.com/v2/paymentform">
+    </script>
+
+    <!-- link to the local custom styles for SqPaymentForm -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/bookshop/mysqpaymentform.css') }}">
+    @endif
 </head>
 <body>
     <Section>
@@ -176,6 +184,32 @@
                                     @if ($coinClient ==0)
                                     <div class="row checkPayment justify-content-center align-items-center minh-10">
                                         <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4" id="iconChecked">
+                                            <input type="radio" class="radio-payment" name="payment" id="payment" value="CARD">
+                                        </div>
+                                        <div class="description-payment col">
+                                            <img src="{{ asset('images/visa.png') }}" width="150px" height="50px">
+                                            <img src="{{ asset('images/MasterCard.png') }}" width="120px" height="50px">
+                                            <input type="hidden" id="paymentDescription" value="CARD">
+                                        </div>
+                                    </div>
+
+                                    <div id="errorCard">
+                                        <ul><li>Complete los datos de la tarjeta</li></ul>
+                                    </div>
+
+                                    <div id="showCardForm" style="margin-bottom: 80px; margin-top: 100px;">
+                                        <div id="form-container">
+                                            <div id="sq-card-number"></div>
+                                            <div class="third" id="sq-expiration-date"></div>
+                                            <div class="third" id="sq-cvv"></div>
+                                            <div class="third" id="sq-postal-code"></div>
+                                        </div> 
+                                        <input type="hidden" name="nonce" id="nonce">
+                                        <input type="hidden" name="idempotency_key" id="idempotency_key">
+                                    </div>
+
+                                    <div class="row checkPayment justify-content-center align-items-center minh-10">
+                                        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4" id="iconChecked">
                                             <input type="radio" class="radio-payment" name="payment" id="payment" value="PAYPAL">
                                         </div>
                                         <div class="description-payment col">
@@ -333,6 +367,8 @@
     <script> 
         var commerceName = "{{$commerce->name}}";
         var statusModification = {{$statusModification}};
+        applicationId = "{{env('SQUARE_APP_ID')}}";
+
         $(function(){
             function delay(callback, ms) {
                 var timer = 0;

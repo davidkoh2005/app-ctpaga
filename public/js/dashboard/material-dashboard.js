@@ -278,7 +278,7 @@ md = {
 
   initDashboardPageCharts: function() {
 
-    if ($('#dailySalesChart').length != 0 || $('#dailySalesPayPalChart').length != 0 || $('#dailySalesSitefChart').length != 0) {
+    if ($('#dailySalesChart').length != 0 || $('#dailySalesUSDChart').length != 0 || $('#dailySalesBSChart').length != 0) {
       /* ----------==========     Daily Sales Chart initialization    ==========---------- */
 
       dataDailySalesChart = {
@@ -328,16 +328,16 @@ md = {
 
       md.startAnimationForLineChart(dailySalesChart);
 
-      /* ----------==========     Daily Sale PayPal Chart initialization    ==========---------- */
+      /* ----------==========     Daily Sale USD Chart initialization    ==========---------- */
 
-      dataDailySalesPayPalChart = {
+      dataDailySalesUSDChart = {
         labels: ['01', '02', '03', '04', '05', '06', '07'],
         series: [
           [0, 0, 0, 0, 0, 0, 0]
         ]
       };
 
-      optionsDailySalesPayPalChart = {
+      optionsDailySalesUSDChart = {
         lineSmooth: Chartist.Interpolation.cardinal({
           tension: 0
         }),
@@ -359,7 +359,7 @@ md = {
               textAnchor: 'middle',
             },
             axisY: {
-              axisTitle: 'Cantidad',
+              axisTitle: 'Monto',
               axisClass: 'ct-axis-title',
               offset: {
                 x: 0,
@@ -373,20 +373,20 @@ md = {
         ],
       }
 
-      var dailySalesPayPalChart = new Chartist.Line('#dailySalesPayPalChart', dataDailySalesPayPalChart, optionsDailySalesPayPalChart);
+      var dailySalesUSDChart = new Chartist.Line('#dailySalesUSDChart', dataDailySalesUSDChart, optionsDailySalesUSDChart);
 
-      md.startAnimationForLineChart(dailySalesPayPalChart);
+      md.startAnimationForLineChart(dailySalesUSDChart);
 
-      /* ----------==========     Daily Sales E-Sitef Chart initialization    ==========---------- */
+      /* ----------==========     Daily Sales BS Chart initialization    ==========---------- */
 
-      dataDailySalesSitefChart = {
+      dataDailySalesBSChart = {
         labels: ['01', '02', '03', '04', '05', '06', '07'],
         series: [
           [0, 0, 0, 0, 0, 0, 0]
         ]
       };
 
-      optionsDailySalesSitefChart = {
+      optionsDailySalesBSChart = {
         lineSmooth: Chartist.Interpolation.cardinal({
           tension: 0
         }),
@@ -408,7 +408,7 @@ md = {
               textAnchor: 'middle',
             },
             axisY: {
-              axisTitle: 'Cantidad',
+              axisTitle: 'Monto',
               axisClass: 'ct-axis-title',
               offset: {
                 x: 0,
@@ -422,9 +422,9 @@ md = {
         ],
       }
 
-      var dailySalesSitefChart = new Chartist.Line('#dailySalesSitefChart', dataDailySalesSitefChart, optionsDailySalesSitefChart);
+      var dailySalesBSChart = new Chartist.Line('#dailySalesBSChart', dataDailySalesBSChart, optionsDailySalesBSChart);
 
-      md.startAnimationForLineChart(dailySalesSitefChart);
+      md.startAnimationForLineChart(dailySalesBSChart);
       
       updateData();
     }

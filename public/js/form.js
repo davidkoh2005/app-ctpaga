@@ -4,18 +4,19 @@ var shippingPrice = 0;
 var shippingCoin = 0;
 var _coinClient = 0;
 var _rate = 0;
-var _selectSale, selectPayment;
+var _selectSale, selectPayment, applicationId;
 
 $(function(){
     var $sections = $('.form-section');
     var statusShippingClient = false;
-    var clickPayment = false;
     var statusLoading = false;
     var switchPay = false;
     var checkDiscount = false;
 
+    $('#showCardForm').hide();
     $('#errorCard').hide();
     $('#loading').hide();    
+    _coinClient = $('#coinClient').val();
 
     $(window).keydown(function(event){
         if(event.keyCode == 13) {
@@ -25,6 +26,7 @@ $(function(){
     });
 
     function navigateTo(index){
+        curIndexJS = index;
         $sections.removeClass('current').eq(index).addClass('current');
         if(statusModification)
             $('.form-navigation .previous').toggle(index>0);
@@ -82,11 +84,8 @@ $(function(){
         }
 
         if(index == 5){
-            if(coinClient == 0)
-                if(clickPayment)
-                    $('.next').show();
-                else
-                    $('.next').hide();
+            if(_coinClient == 0 && !selectPayment)
+                $('.next').hide();
             else
                 $('.next').show(); 
         }
@@ -131,7 +130,7 @@ $(function(){
         })
     })
 
-    $('.form-navigation .next').click(function(){
+    $('.form-navigation .next').click(function(event){
         if(curIndex() == 2 && $('#statusShipping').val()=='false'){
             $('.contact-form').parsley().whenValidate({
                 group: 'block-' + curIndex()
@@ -142,8 +141,10 @@ $(function(){
 
         if(curIndex() == 5){
             $('#errorCard').hide();
-            if(_coinClient == 0 && selectPayment)
+            if(_coinClient == 0 && selectPayment != "CARD")
                 navigateTo(curIndex()+1);
+            else if(_coinClient == 0 && selectPayment == "CARD")
+                onGetCardNonce(event);
             else{
                 if(switchPay){
                     $('.contact-form').parsley().whenValidate({
@@ -168,8 +169,7 @@ $(function(){
             }
                 
 
-        }
-        else{
+        }else{
             $('.contact-form').parsley().whenValidate({
                 group: 'block-' + curIndex()
             }).done(function(){
@@ -201,13 +201,13 @@ $(function(){
     });
 
     $('.checkPayment').on('click', function(){
+        $('#errorCard').hide();
         $('#svg-check').remove();
         var checkbox = $(this).find('input[type=radio]');
         checkbox.prop('checked', !checkbox.prop('checked'));
         selectPayment = checkbox.val();
         var svg = $(this).find('#iconChecked');
         svg.append("<svg width='2em' height='2em' viewBox='0 0 16 16' class='bi bi-check-circle-fill' id='svg-check' fill='currentColor'><path fill-rule='evenodd' d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z'/></svg>");
-        clickPayment = true;
         $('#selectPayment').val($(this).find('#paymentDescription').val());
 
         if($(this).find('#paymentDescription').val() == "EFECTIVO")
@@ -215,6 +215,11 @@ $(function(){
         else 
             switchPay = false;
 
+        if($(this).find('#paymentDescription').val() != "CARD")
+            $('#showCardForm').hide();
+        else
+            $('#showCardForm').show();
+        
         $('.next').show();
     });
 
@@ -265,6 +270,88 @@ $(function(){
     $("#numberCard, #dateMM, #dateYY, #cardCVC").inputFilter(function(value) {
         return /^\d*$/.test(value);    // Allow digits only, using a RegExp
     });
+
+
+    //square
+    if(_coinClient==0){
+        //TODO: paste code from step 2.1.1
+        const idempotency_key = uuidv4();
+
+        // Create and initialize a payment form object
+        const paymentForm = new SqPaymentForm({
+            // Initialize the payment form elements
+
+            //TODO: Replace with your sandbox application ID
+            applicationId: applicationId,
+            inputClass: 'sq-input',
+            autoBuild: false,
+            // Customize the CSS for SqPaymentForm iframe elements
+            inputStyles: [{
+                fontSize: '16px',
+                lineHeight: '24px',
+                padding: '16px',
+                placeholderColor: '#a0a0a0',
+                backgroundColor: 'transparent',
+            }],
+            // Initialize the credit card placeholders
+            cardNumber: {
+                elementId: 'sq-card-number',
+                placeholder: 'Card Number'
+            },
+            cvv: {
+                elementId: 'sq-cvv',
+                placeholder: 'CVV'
+            },
+            expirationDate: {
+                elementId: 'sq-expiration-date',
+                placeholder: 'MM/YY'
+            },
+            postalCode: {
+            elementId: 'sq-postal-code',
+            placeholder: 'Postal'
+            },
+            // SqPaymentForm callback functions
+            callbacks: {
+                /*
+                * callback function: cardNonceResponseReceived
+                * Triggered when: SqPaymentForm completes a card nonce request
+                */
+                cardNonceResponseReceived: function (errors, nonce, cardData) {
+                if (errors) {
+                    // Log errors from nonce generation to the browser developer console.
+                    $('#errorCard').show();
+                    return;
+                }
+
+                $('#errorCard').hide();
+                $("#nonce").val(nonce);
+                $("#idempotency_key").val(idempotency_key);
+                navigateTo(curIndexJS+1);
+                }
+            }
+        });
+
+    
+        paymentForm.build();
+
+        //TODO: paste code from step 2.1.2
+        // Generate a random UUID as an idempotency key for the payment request
+        // length of idempotency_key should be less than 45
+        function uuidv4() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        // onGetCardNonce is triggered when the "Pay $1.00" button is clicked
+        function onGetCardNonce(event) {
+            // Don't submit the form until SqPaymentForm returns with a nonce
+            event.preventDefault();
+            // Request a nonce from the SqPaymentForm object
+            paymentForm.requestCardNonce();
+        }
+    }
 
 });
 

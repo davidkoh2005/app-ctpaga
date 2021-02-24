@@ -99,8 +99,10 @@
                             <th scope="col">#</th>
                             @if($idCommerce == 0)<th scope="col">Nombre Compañia</th>@endif
                             <th scope="col">Nombre Cliente</th>
+                            <th scope="col">Código</th>
                             <th scope="col">Total</th>
                             <th scope="col">Pago</th>
+                            <th scope="col">Estado</th>
                             <th scope="col">Fecha</th>
                             <th scope="col">Acciones</th>
                         </tr>
@@ -111,8 +113,18 @@
                             <th scope="row">{{ $transaction->id }}</th>
                             @if($idCommerce == 0)<td>{{ $transaction->name }}</td>@endif
                             <td>{{ $transaction->nameClient}}</td>
+                            <td>{{ $transaction->codeUrl}}</td>
                             <td>@if($transaction->coin == 0) $ @else Bs @endif {{ $transaction->total}}</td>
                             <td>@if($transaction->nameCompanyPayments == "PayPal" || $transaction->nameCompanyPayments == "E-Sitef" ) Tienda Web @else {{$transaction->nameCompanyPayments}} @endif</td>
+                            <td>
+                                @if($transaction->statusPayment == 0)
+                                    <div class="cancelled">Cancelado</div>
+                                @elseif($transaction->statusPayment == 1)
+                                    <div class="pending">Pendiente</div>
+                                @else
+                                    <div class="completed">Completado</div>
+                                @endif
+                            </td>
                             <td> {{date('d/m/Y h:i A',strtotime($transaction->date))}}</td>
                             <td>
                                 <button class="btn btn-bottom" onClick="showProduct({{$transaction->id}})" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Productos"><i class="material-icons">shopping_bag</i></button>

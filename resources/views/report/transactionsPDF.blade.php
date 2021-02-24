@@ -24,7 +24,7 @@
         }
 
         #table_id td, #table_id th {
-
+            text-align: center;
             border: 1px solid #ddd;
             padding: 8px;
         }
@@ -35,6 +35,29 @@
             text-align: center;
             background-color: #585858;
             color: white;
+        }
+
+        .cancelled {
+            padding-left: 5px;
+            padding-right: 5px;
+            border-radius: 5px;
+            background-color: #585858;
+            color: white
+        }
+
+        .pending  {
+            padding-left: 5px;
+            padding-right: 5px;
+            border-radius: 5px;
+            background-color: red;
+            color: white
+        }
+
+        .completed {
+            padding-left: 5px;
+            padding-right: 5px;
+            border-radius: 5px;
+            background-color: #00cc5f;
         }
     </style>
 </head>
@@ -71,8 +94,10 @@
                     <tr class="table-title">
                         @if($idCommerce == 0)<th scope="col">Nombre Compañia</th>@endif
                         <th scope="col">Nombre Cliente</th>
+                        <th scope="col">Código</th>
                         <th scope="col">Total</th>
                         <th scope="col">Pago</th>
+                        <th scope="col">Estado</th>
                         <th scope="col">Fecha</th>
                     </tr>
                 </thead>
@@ -81,9 +106,19 @@
                     @foreach($transactions ?? '' as $transaction)
                     <tr>
                         @if($idCommerce == 0)<td>{{ $transaction->name }}</td>@endif
-                        <td>{{ $transaction->nameClient}}</td>
+                        <td>{{ $transaction->nameClient }}</td>
+                        <td>{{ $transaction->codeUrl }}</td>
                         <td>@if($transaction->coin == 0) $ @else Bs @endif {{ $transaction->total}}</td>
                         <td> {{$transaction->nameCompanyPayments}}</td>
+                        <td>
+                            @if($transaction->statusPayment == 0)
+                                <div class="cancelled">Cancelado</div>
+                            @elseif($transaction->statusPayment == 1)
+                                <div class="pending">Pendiente</div>
+                            @else
+                                <div class="completed">Completado</div>
+                            @endif
+                        </td>
                         <td> {{date('d/m/Y h:i A',strtotime($transaction->date))}}</td>
                     </tr>
                     @php 

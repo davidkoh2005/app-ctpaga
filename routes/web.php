@@ -28,6 +28,10 @@ Route::get('activate/sockets', function(){
     \Illuminate\Support\Facades\Artisan::call('websockets:serve');
 });
 
+Route::post('court/active', function(){
+    \Illuminate\Support\Facades\Artisan::call('make:cutDeposits');
+})->name('admin.court');
+
 Route::get('/admin/login', function () {
     if (Auth::guard('web')->check()){
         return redirect(route('commerce.dashboard'));

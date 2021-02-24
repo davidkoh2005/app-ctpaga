@@ -51,8 +51,10 @@ class CommerceController extends Controller
                                 ->orderBy('name', 'asc')->get();
 
         $totalShopping = 0;
-        $totalShoppingPayPal = 0;
-        $totalShoppingSitef = 0;
+        $totalShoppingUSD = 0;
+        $totalShoppingBS = 0;
+        $totalPendingUSD=0;
+        $totalPendingBS=0;
         $idCommerce = 0;
         $commerceName = "";
         
@@ -79,21 +81,25 @@ class CommerceController extends Controller
 
 
         $paidAll = Paid::where("date", 'like', "%".Carbon::now()->format('Y-m-d')."%")
-                        ->where("commerce_id", $idCommerce)
-                        ->where("statusPayment",2)->get();
+                        ->where("commerce_id", $idCommerce)->get();
 
         foreach ($paidAll as $paid)
         {
             $totalShopping += 1;
             if($paid->coin == 0)
-                $totalShoppingPayPal += floatval($paid->total);
-            
-            if($paid->coin == 0)
-                $totalShoppingSitef += floatval($paid->total);
+                if($paid->statusPayment == 2)
+                    $totalShoppingUSD += floatval($paid->total);
+                else
+                    $totalPendingUSD += floatval($paid->total); 
+            else
+                if($paid->statusPayment == 2)
+                    $totalShoppingBS += floatval($paid->total);
+                else
+                    $totalPendingBS += floatval($paid->total); 
         }
 
         $statusMenu = "dashboard";
-        return view('auth.dashboard',compact("totalShopping", "totalShoppingPayPal", "totalShoppingSitef", "statusMenu", "commercesUser", "pictureUser", "commerceName", "idCommerce"));
+        return view('auth.dashboard',compact("totalShopping", "totalShoppingUSD", "totalShoppingBS", "statusMenu", "commercesUser", "pictureUser", "commerceName", "idCommerce", "totalPendingUSD", "totalPendingBS"));
         
     }
 
@@ -140,7 +146,7 @@ class CommerceController extends Controller
                     ->where('paids.commerce_id', 'like', "%".$idCommerce. "%" )
                     ->orderBy('paids.id', 'desc')
                     ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.coin', 'paids.total',
-                        'paids.date', 'paids.nameCompanyPayments');
+                        'paids.date', 'paids.nameCompanyPayments','paids.codeUrl', 'paids.statusPayment');
         
         
         if($request->all() && !$request->commerceId){
@@ -178,7 +184,7 @@ class CommerceController extends Controller
 
         if($request->statusFile == "PDF"){
             $today = Carbon::now()->format('Y-m-d');
-            $pdf = \PDF::loadView('report.transactionsCommercePDF', compact('transactions', 'today', 'commerce', 'pictureUser', 'startDate', 'endDate'));
+            $pdf = \PDF::loadView('report.transactionsCommercePDF', compact('transactions', 'today', 'commerce', 'pictureUser', 'startDate', 'endDate'))->setPaper('a4', 'landscape');
             return $pdf->download('ctpaga_transacciones.pdf');
         }elseif($request->statusFile == "EXCEL"){
             $today = Carbon::now()->format('Y-m-d');

@@ -74,6 +74,12 @@
                 <p>Tasas</p>
               </a>
             </li>
+            <li class="nav-item" id="nav-court">
+              <a href="javascript:;" class="nav-link">
+              <i class="material-icons">price_check</i>
+                <p>Corte Depositos</p>
+              </a>
+            </li>
           @else
             <li class="nav-item" id="nav-dashboard">
               <a class="nav-link" href="{{route('commerce.dashboard')}}">
@@ -109,6 +115,37 @@
         </ul>
       </div>
     </div>
+    <style>
+      .ajs-message {
+        color: white !important;
+      }
+      button.ajs-button.ajs-ok {
+          border-radius: 60px !important;
+          border: 2px solid #00cc5f !important;
+          background-color: #00cc5f !important;
+          color: white !important;
+      }
+
+      button.ajs-button.ajs-ok:hover {
+          border-radius: 60px !important;
+          background-color: white !important;
+          border: 2px solid #00cc5f !important;
+          color: #00cc5f !important;
+      }
+
+      button.ajs-button.ajs-cancel {
+          border-radius: 60px !important;
+          border: 2px solid #ffffff80 !important;
+          color: black !important;
+      }
+
+      button.ajs-button.ajs-cancel:hover {
+          border-radius: 60px !important;
+          background-color: #ffffff80 !important;
+          border: 2px solid #ffffff80 !important;
+          color: black !important;
+      }
+    </style>
 @if(Auth::guard('admin')->check())
   <script>
     setInterval(verifyAlarm, 60000);
@@ -133,5 +170,17 @@
 
         }).fail(function(result){})
     }
+
+    $('#nav-court').click(function(){
+      alertify.confirm('Confirmar Corte de depositos', '¿Está seguro que desea realizar corte de manera Manual?', function(){ 
+        $.ajax({
+        url: "{{route('admin.court')}}", 
+        type: "POST",
+        }).done(function(data){
+          alertify.success('Corte de depositos realizado correctamente!')
+        }).fail(function(result){})
+      }
+      , function(){ });
+    });
   </script>
 @endif

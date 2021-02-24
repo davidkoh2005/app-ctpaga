@@ -130,6 +130,14 @@ table {
     color: white !important;
 }
 
+.cancelled {
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 5px;
+    background-color: #585858;
+    color: white
+}
+
 .pending , .unconfirmed {
     padding-left: 5px;
     padding-right: 5px;

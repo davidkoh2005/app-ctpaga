@@ -42,7 +42,23 @@
                     <i class="material-icons">account_balance</i>
                   </div>
                   <p class="card-category"> $ USD </p>
-                  <h3 class="card-title">$ {{$totalShoppingPayPal}}</h3>
+                  <h3 class="card-title">$ {{$totalShoppingUSD}}</h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">date_range</i> Hoy
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-7 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-danger card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">account_balance</i>
+                  </div>
+                  <p class="card-category"> $ USD (Por Confirmar)</p>
+                  <h3 class="card-title">$ {{$totalPendingUSD}}</h3>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
@@ -58,7 +74,7 @@
                     <i class="material-icons">account_balance</i>
                   </div>
                   <p class="card-category"> Bs Venezuela </p>
-                  <h3 class="card-title">Bs {{$totalShoppingSitef}}</h3>
+                  <h3 class="card-title">Bs {{$totalShoppingBS}}</h3>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
@@ -67,6 +83,23 @@
                 </div>
               </div>
             </div>
+            <div class="col-lg-4 col-md-7 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-dark card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">account_balance</i>
+                  </div>
+                  <p class="card-category"> Bs Venezuela (Por Confirmar)</p>
+                  <h3 class="card-title">Bs {{$totalPendingBS}}</h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">date_range</i> Hoy
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           </div>
           <div class="row">
             <div class="col-md-4">
@@ -87,7 +120,7 @@
             <div class="col-md-4">
               <div class="card card-chart">
                 <div class="card-header card-header-info">
-                  <div class="ct-chart" id="dailySalesPayPalChart"></div>
+                  <div class="ct-chart" id="dailySalesUSDChart"></div>
                 </div>
                 <div class="card-body">
                   <h4 class="card-title">Ventas con $ USD </h4>
@@ -102,7 +135,7 @@
             <div class="col-md-4">
               <div class="card card-chart">
                 <div class="card-header card-header-success">
-                  <div class="ct-chart" id="dailySalesSitefChart"></div>
+                  <div class="ct-chart" id="dailySalesBSChart"></div>
                 </div>
                 <div class="card-body">
                   <h4 class="card-title">Ventas con Bs Venezuela </h4>
@@ -143,14 +176,14 @@
 
         var date=[];
         var dayTotalSales=[];
-        var dayTotalPayPal=[];
-        var dayTotalSitef=[];
+        var dayTotalUSD=[];
+        var dayTotalBS=[];
 
         $.each(listDay, function(i, item) {
             date.push(item.dia);
             dayTotalSales.push(item.totalSales);
-            dayTotalPayPal.push(item.totalPayPal);
-            dayTotalSitef.push(item.totalSitef);
+            dayTotalUSD.push(item.totalUSD);
+            dayTotalBS.push(item.totalBS);
         });
 
 
@@ -161,17 +194,17 @@
           ]
         }; 
 
-        dataDailySalesPayPalChart = {
+        dataDailySalesUSDChart = {
           labels: date,
           series: [
-            dayTotalPayPal
+            dayTotalUSD
           ]
         };
 
-        dataDailySalesSitefChart = {
+        dataDailySalesBSChart = {
           labels: date,
           series: [
-            dayTotalSitef
+            dayTotalBS
           ]
         };
 
@@ -179,11 +212,11 @@
         var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
         md.startAnimationForLineChart(dailySalesChart);
 
-        var dailySalesPayPalChart = new Chartist.Line('#dailySalesPayPalChart', dataDailySalesPayPalChart, optionsDailySalesPayPalChart);
-        md.startAnimationForLineChart(dailySalesPayPalChart);
+        var dailySalesUSDChart = new Chartist.Line('#dailySalesUSDChart', dataDailySalesUSDChart, optionsDailySalesUSDChart);
+        md.startAnimationForLineChart(dailySalesUSDChart);
 
-        var dailySalesSitefChart = new Chartist.Line('#dailySalesSitefChart', dataDailySalesSitefChart, optionsDailySalesSitefChart);
-        md.startAnimationForLineChart(dailySalesSitefChart);
+        var dailySalesBSChart = new Chartist.Line('#dailySalesBSChart', dataDailySalesBSChart, optionsDailySalesBSChart);
+        md.startAnimationForLineChart(dailySalesBSChart);
     }
   </script>
 </body>

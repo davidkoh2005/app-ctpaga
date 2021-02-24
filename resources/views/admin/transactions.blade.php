@@ -117,6 +117,7 @@
                             <th scope="col">#</th>
                             @if($idCommerce == 0)<th scope="col">Nombre Compañia</th>@endif
                             <th scope="col">Nombre Cliente</th>
+                            <th scope="col">Código</th>
                             <th scope="col">Total</th>
                             <th scope="col">Pago</th>
                             <th scope="col">Estado</th>
@@ -131,10 +132,13 @@
                             <th scope="row">{{ $transaction->id }}</th>
                             @if($idCommerce == 0)<td>{{ $transaction->name }}</td>@endif
                             <td>{{ $transaction->nameClient}}</td>
+                            <td>{{ $transaction->codeUrl }}</td>
                             <td>@if($transaction->coin == 0) $ @else Bs @endif {{ $transaction->total}}</td>
                             <td> {{$transaction->nameCompanyPayments}}</td>
                             <td>
-                                @if($transaction->statusPayment == 1)
+                                @if($transaction->statusPayment == 0)
+                                    <div class="cancelled">Cancelado</div>
+                                @elseif($transaction->statusPayment == 1)
                                     <div class="pending">Pendiente</div>
                                 @else
                                     <div class="completed">Completado</div>
@@ -158,7 +162,8 @@
                     <strong class="addMarginRight">Acciones:</strong>
                     <label class="content-select">
                         <select class="addMargin" name="changeStatus" id="changeStatus">
-                            <option value="0">Cambiar Estado</option>
+                            <option value="-1">Cambiar Estado</option>
+                            <option value="0">Cancelado</option>
                             <option value="1">Pendiente</option>
                             <option value="2">Completado</option>
                         </select>
@@ -217,18 +222,19 @@
             selectID = [];
             var error = false;
             var status = $(this).val();
-            if (status != 0){
+            if (status >= 0){
                 $("input:checked.check-Payment").each(function () {
                     var id = $(this).data("id");
                     var statuscheck = $(this).data("status");
-                    if(statuscheck > status || statuscheck == status || (statuscheck+1 != status)){
+
+                    if(statuscheck == status || statuscheck ==2){
                         error = true;
                     }
                     selectID.push(id);
                 });
 
                 if(selectID.length >0 && !error){
-                    $("#changeStatus option[value='0']").attr("selected",true);
+                    $("#changeStatus option[value='-1']").attr("selected",true);
                     $( ".loader" ).fadeIn("slow"); 
                     $.ajax({
                         url: "{{route('admin.changeStatusPayment')}}", 
@@ -236,23 +242,23 @@
                         type: "POST",
                     }).done(function(data){
                         $( ".loader" ).fadeOut("slow"); 
-                        $("#changeStatus option[value='0']").attr("selected",true);
+                        $("#changeStatus option[value='-1']").attr("selected",true);
                         if(data.status == 201)
                             alertify.success('Estado ha sido cambiado correctamente');
                     
                         location.reload()
                     }).fail(function(result){
                         $( ".loader" ).fadeOut("slow"); 
-                        $("#changeStatus option[value='0']").attr("selected",true);
+                        $("#changeStatus option[value='-1']").attr("selected",true);
                         alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                     }); 
                 }else if (selectID.length == 0 && !error){
                     alertify.error('Debe seleccionar al menos un transaccion');
-                    $("#changeStatus option[value='0']").attr("selected",true);
+                    $("#changeStatus option[value='-1']").attr("selected",true);
                 }
                 else{
                     alertify.error('Debe seleccionar transacciones con estado correctamente');
-                    $("#changeStatus option[value='0']").attr("selected",true);
+                    $("#changeStatus option[value='-1']").attr("selected",true);
                 }
             }
             
