@@ -26,6 +26,8 @@ use PayPal\Api\Transaction;
 use PayPal\Api\PaymentExecution;
 use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Rest\ApiContext;
+use CoinbaseCommerce\Resources\Charge;
+use CoinbaseCommerce\ApiClient;
 
 class PaidController extends Controller
 {
@@ -219,9 +221,23 @@ class PaidController extends Controller
                 "date"                  => Carbon::now(),
                 "statusPayment"         => 1,
             ]);
-            
 
-            return view('gatewayBTC.example_basic', compact('userUrl', 'codeUrl', 'amount'));
+            ApiClient::init(env('COINBASE_KEY'));
+
+
+            $chargeData = [
+                'name' => 'Pago Ctpaga',
+                'description' => 'Transacción código: '.$codeUrl,
+                'code' => $codeUrl,
+                'local_price' => [
+                    'amount' => $amount,
+                    'currency' => 'USD'
+                ],
+                'pricing_type' => 'fixed_price'
+            ];
+            $chargeObj = Charge::create($chargeData);
+            
+            return redirect()->away($chargeObj->hosted_url);
         
         }elseif($request->coinClient == 1){
             

@@ -70,36 +70,35 @@ class DeliveryController extends Controller
 
     public function test()
     {
-
         $payer = new Payer();
-            $payer->setPaymentMethod('paypal');
+        $payer->setPaymentMethod('paypal');
 
-            $amountPaypal = new Amount();
-            $amountPaypal->setTotal(2);
-            $amountPaypal->setCurrency('USD');
+        $amountPaypal = new Amount();
+        $amountPaypal->setTotal(2);
+        $amountPaypal->setCurrency('USD');
 
-            $transaction = new Transaction();
-            $transaction->setAmount($amountPaypal);
-            $transaction->setDescription('Compra a través de ctpaga');
+        $transaction = new Transaction();
+        $transaction->setAmount($amountPaypal);
+        $transaction->setDescription('Compra a través de ctpaga');
 
-            $callbackUrl = url('/pagar/estadoPaypal/');
+        $callbackUrl = url('/pagar/estadoPaypal/');
 
-            $redirectUrls = new RedirectUrls();
-            $redirectUrls->setReturnUrl($callbackUrl)
-                ->setCancelUrl($callbackUrl);
+        $redirectUrls = new RedirectUrls();
+        $redirectUrls->setReturnUrl($callbackUrl)
+            ->setCancelUrl($callbackUrl);
 
-            $payment = new Payment();
-            $payment->setIntent('sale')
-                ->setPayer($payer)
-                ->setTransactions(array($transaction))
-                ->setRedirectUrls($redirectUrls);
+        $payment = new Payment();
+        $payment->setIntent('sale')
+            ->setPayer($payer)
+            ->setTransactions(array($transaction))
+            ->setRedirectUrls($redirectUrls);
 
-            try {
-                $payment->create($this->apiContext);
-                return redirect()->away($payment->getApprovalLink());
-            } catch (PayPalConnectionException $ex) {
-                echo $ex->getData();
-            }
+        try {
+            $payment->create($this->apiContext);
+            return redirect()->away($payment->getApprovalLink());
+        } catch (PayPalConnectionException $ex) {
+            echo $ex->getData();
+        } 
 
         /* $userUrl ="test";
         $codeUrl = "test";
