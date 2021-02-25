@@ -25,6 +25,11 @@ a.tienda {
     font-weight: bold;
 }
 
+a.tienda:hover {
+    color: #585858;
+    font-weight: bold;
+}
+
 .pay{
     width: 100%;
 }

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'client_id' => env('PAYPAl_CLIENT_ID'),
+    'client_id' => env('PAYPAL_CLIENT_ID'),
     'secret' => env('PAYPAL_SECRET'),
 
     'settings' => [

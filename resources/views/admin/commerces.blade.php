@@ -35,7 +35,7 @@
                         <td>{{ $commerce->rif }}</td>
                         <td>{{ $commerce->address }}</td>
                         <td>{{ $commerce->phone }}</td>
-                        <td>@if($commerce->confirmed)
+                        <td>@if($commerce->confirmed == 1)
                                 <div class="confirmed">Verificado</div>
                             @else
                                 <div class="unconfirmed">Pendiente</div>

@@ -182,7 +182,7 @@
         var statusReason= 0;
         var idSelect;
         var statusMenu = "{{$statusMenu}}";
-        var checkConfirmed = "{{$commerce->confirmed}}";
+        var checkConfirmed = "{{$commerce->confirmed==1? true : false}}";
         $( "#switchConfirmed" ).prop( "checked", checkConfirmed);
     
         $(function() {
@@ -238,6 +238,7 @@
 
             $("#switchConfirmed").on('click', function(){
                 var status = $(this).is(':checked');
+                console.log(status);
                 $.ajax({
                     url: "{{route('admin.confirmedCommerce')}}", 
                     data: {"id" : idCommerce,  "status": status},

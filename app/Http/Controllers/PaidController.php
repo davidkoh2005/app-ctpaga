@@ -658,6 +658,10 @@ class PaidController extends Controller
             $sales = Sale::where('codeUrl',$request->codeUrl)->orderBy('name', 'asc')->get();
             $commerce = Commerce::whereId($paids->commerce_id)->first();
             $paids->save();
+
+            $delivery->codeUrlPaid = $request->codeUrl;
+            $delivery->save();
+
             return response()->json(['statusCode' => 201,'data' =>['paid'=>$paids, 'commerce'=>$commerce, 'sales'=>$sales]]);
         }
         else
@@ -679,6 +683,10 @@ class PaidController extends Controller
             );
 
         }elseif($request->statusShipping == 2){
+            $delivery = $request->user();
+            $delivery->codeUrlPaid = null;
+            $delivery->save();
+
             $message = "Delivery Ctpaga informa que los productos de código de compra ".$paids->codeUrl." fue entregado a su destino.";
             $userCommerce = User::whereId($paids->user_id)->first();
     

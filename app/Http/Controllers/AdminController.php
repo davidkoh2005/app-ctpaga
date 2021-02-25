@@ -200,7 +200,7 @@ class AdminController extends Controller
     public function confirmedCommerce(Request $request)
     {
         $commerce = Commerce::where("id", $request->id)->first();
-        $commerce->confirmed = $request->status;
+        $commerce->confirmed = $request->status?1:0;
         $commerce->save();
 
         return response()->json([
@@ -271,7 +271,8 @@ class AdminController extends Controller
                     ->whereNotNull("address")
                     ->whereNotNull("phone")
                     ->whereNotNull("userUrl")
-                    ->orderBy("name","asc")->get();
+                    ->orderBy("name","asc")
+                    ->orderBy("confirmed")->get();
 
         $statusMenu = "commerces";
         return view('admin.commerces', compact('commerces','statusMenu'));
