@@ -84,7 +84,7 @@
                                     <div class="col-12 form-navigation">
                                         <button class="submit btn btn-bordered w-100 mt-3 mt-sm-4" type="submit">Guardar Contraseña</button>
                                         <div id="loading">
-                                            <img class="justify-content-center" src="{{ asset('images/loading.gif') }}" style="max-width:80px !important;">
+                                            <img class="justify-content-center" src="{{ asset('images/loadingTransparent.gif') }}" style="max-width:80px !important;">
                                         </div>
                                     </div>
                                 </div>

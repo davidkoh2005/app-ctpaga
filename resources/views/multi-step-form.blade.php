@@ -158,7 +158,7 @@
                                     <label class="form" for="name">NOMBRE:</label>
                                     <input type="text" name="name" class="form-control" data-parsley-minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" required />
                                     <label class="form" for="number">NUMERO DE CELULAR:</label>
-                                    <input type="tel" name="number" class="form-control" placeholder="04121234567" size="11" maxlength="20" data-parsley-maxlength="20" data-parsley-pattern="^(?:(\+)58|0)(?:2(?:12|4[0-9]|5[1-9]|6[0-9]|7[0-8]|8[1-35-8]|9[1-5]|3[45789])|4(?:1[246]|2[46]))\d{7}$" required />
+                                    <input type="tel" name="number" class="form-control" placeholder="04121234567" size="11" maxlength="20" data-parsley-maxlength="20" data-parsley-pattern="^(?:(\+)58|0)(?:2(?:12|4[0-9]|5[1-9]|6[0-9]|7[0-8]|8[1-35-8]|9[1-5]|3[45789])|4(?:1[246]|2[46]))\d{7}$" required autocomplete="off" />
                                     <label class="form" for="address">DIRECCÍON:</label>
                                     <textarea class="form-control" name="address" row="8" placeholder="Av. Principal los dos caminos. &#10; &#10;Punto Referencia: Al frente de Farmatodo." required style="height:100px !important"></textarea>
                                     <label class="form" for="details">DETALLE ADICIONALES (OPCIONAL)</label>
@@ -186,9 +186,24 @@
                                         <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4" id="iconChecked">
                                             <input type="radio" class="radio-payment" name="payment" id="payment" value="CARD">
                                         </div>
-                                        <div class="description-payment col">
-                                            <img src="{{ asset('images/visa.png') }}" width="150px" height="50px">
-                                            <img src="{{ asset('images/MasterCard.png') }}" width="120px" height="50px">
+                                        <div class="col">
+                                            <div class="description-payment row" style="padding-bottom: 10px;">
+                                                <div class="col center">
+                                                    <img src="{{ asset('images/visa.png') }}" width="150px" height="50px">
+                                                </div>
+                                                <div class="col center">
+                                                    <img src="{{ asset('images/MasterCard.png') }}" width="120px" height="50px">
+                                                </div>
+                                            </div>
+                                            <div class="description-payment row">
+                                                <div class="col center">
+                                                    <img src="{{ asset('images/diners.png') }}" width="90px" height="60px">
+                                                </div>
+                                                <div class="col center">
+                                                    <img src="{{ asset('images/americanExpress.png') }}" width="90px" height="60px">
+                                                </div>
+                                            </div>
+                                            
                                             <input type="hidden" id="paymentDescription" value="CARD">
                                         </div>
                                     </div>
@@ -197,7 +212,7 @@
                                         <ul><li>Complete los datos de la tarjeta</li></ul>
                                     </div>
 
-                                    <div id="showCardForm" style="margin-bottom: 80px; margin-top: 100px;">
+                                    <div id="showCardForm" style="padding-bottom: 80px; margin-top: 100px;">
                                         <div id="form-container">
                                             <div id="sq-card-number"></div>
                                             <div class="third" id="sq-expiration-date"></div>
@@ -297,7 +312,16 @@
                             <div class="form-section">
                                 <p>Ingresa código de descuento:</p>
                                 <label class="form" for="discount">CODE DE DESCUENTO:</label>
-                                <input type="text" name="discount" id="discount" class="form-control" data-parsley-minlength="3" placeholder="DESCO20" autocomplete="off" onkeyup="javascript:this.value=this.value.toUpperCase();" />
+                                <div class="row">
+                                    <div class="col-10">
+                                        <input type="text" name="discount" id="discount" class="form-control" data-parsley-minlength="3" placeholder="DESCO20" autocomplete="off" onkeyup="javascript:this.value=this.value.toUpperCase();" />
+                                    </div>
+                                    <div class="col">
+                                        <i class="fa fa-times" aria-hidden="true"id="iconClose" style="font-size:35px; color:red"></i>
+                                        <i class="fa fa-check" aria-hidden="true" id="iconDone" style="font-size:35px; color:#00cc5f"></i>
+                                        <img widht="40px" height="40px" id="iconLoading" src="{{ asset('/images/loadingTransparent.gif') }}">
+                                    </div>                                
+                                </div>
                                 <div class="row">&nbsp;</div>
                                 <div class="row justify-content-center align-items-center">
                                     <label class="switch">
@@ -355,7 +379,7 @@
                                 <button type="submit" class="submit btn btn-bottom">Realizar Pago</button>
                             </div>
                             <div class="row justify-content-center"id="loading">
-                                <img widht="80px" height="80px" class="justify-content-center" src="{{ asset('/images/loading.gif') }}">
+                                <img widht="80px" height="80px" class="justify-content-center" src="{{ asset('/images/loadingTransparent.gif') }}">
                             </div>
                         </form>
                     </div>
@@ -368,6 +392,10 @@
         var commerceName = "{{$commerce->name}}";
         var statusModification = {{$statusModification}};
         applicationId = "{{env('SQUARE_APP_ID')}}";
+
+        $('#iconClose').hide();
+        $('#iconDone').hide();  
+        $('#iconLoading').hide();  
 
         $(function(){
             function delay(callback, ms) {
@@ -382,6 +410,9 @@
             }
 
             $('#discount').keyup(delay(function (e) {
+                $('#iconClose').hide();
+                $('#iconDone').hide();  
+                $('#iconLoading').show(); 
                 $.ajax({
                     url: "{{ url('/verify')}}", 
                     data: {"input" : $(this).val(), "user_id" : "{{$commerce->user_id}}"},
@@ -389,11 +420,15 @@
                     dataType: "json",
                 }).done(function(result){
                     $('#percentageSelect').val(result['percentage']);
+                    $('#iconClose').hide();
+                    $('#iconDone').show();  
+                    $('#iconLoading').hide(); 
                     $('.next').show();       
-                    },
-                ).fail(function(result){  
-                    alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                }).fail(function(result){  
                     $('#percentageSelect').val(0);
+                    $('#iconClose').show();
+                    $('#iconDone').hide();  
+                    $('#iconLoading').hide(); 
                     $('.next').hide();                    
                 });
             }, 500));

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Paid extends Model
 {
     protected $fillable = [
-        'id', 'user_id', 'commerce_id', 'codeUrl', 'nameClient', 'total', 'coin', 'email', 'nameShipping', 'numberShipping', 'addressShipping', 'detailsShipping', 'selectShipping', 'priceShipping', 'percentage', 'statusShipping', 'nameCompanyPayments', 'date', 'idDelivery', 'alarm'
+        'id', 'user_id', 'commerce_id', 'codeUrl', 'nameClient', 'total', 'coin', 'email', 'nameShipping', 'numberShipping', 'addressShipping', 'detailsShipping', 'selectShipping', 'priceShipping', 'percentage', 'statusShipping', 'nameCompanyPayments', 'date', 'idDelivery', 'alarm', 'statusPayment'
     ]; 
 
     public function user()

@@ -47,6 +47,7 @@
                                     <select class="form-select form-control" name="selectPayment" id="selectPayment">
                                         <option value="Selecionar Tipo de Pago">Selecionar Tipo de Pago</option>
                                         <option value="E-sitef">E-sitef</option>
+                                        <option value="Square">Square</option>
                                         <option value="PayPal">PayPal</option>
                                         <option value="Bitcoin">Bitcoin</option>
                                         <option value="Pago en Efectivo">Pago en Efectivo</option>

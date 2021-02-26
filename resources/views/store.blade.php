@@ -209,6 +209,15 @@
                         </div>
                         <div class="row">&nbsp;</div>
                         <div class="row">
+                            <div class="col-6 mx-auto text-center">
+                                <img src="{{ asset('images/diners.png')}}" width="100px" height="80px">
+                            </div>
+                            <div class="col-6 mx-auto text-center">
+                                <img src="{{ asset('images/americanExpress.png')}}" width="100px" height="80px">
+                            </div>
+                        </div>
+                        <div class="row">&nbsp;</div>
+                        <div class="row">
                             <div class="col-md-12 col-sm-12 col-12 mx-auto text-center">
                                 <label class="titleCoin">O Recibimos en </label>
                             </div>

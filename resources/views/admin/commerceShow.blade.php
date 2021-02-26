@@ -163,7 +163,7 @@
                     <div class="marginAuto">
                         <input type="input" class="btn btn-bottom btn-current" id="submitReason" value="Enviar Razón">
                         <div class="row marginAuto"id="loadingReason">
-                            <img widht="80px" height="80px" class="justify-content-center" src="{{ asset('images/loading.gif') }}">
+                            <img widht="80px" height="80px" class="justify-content-center" src="{{ asset('images/loadingTransparent.gif') }}">
                         </div>
                     </div>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

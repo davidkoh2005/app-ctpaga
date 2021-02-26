@@ -16,10 +16,13 @@ use App\Balance;
 use App\Commerce;
 use App\Deposits;
 use App\Delivery;
+use App\Product;
+use App\Service;
 use Carbon\Carbon;
 use App\Notifications\PictureRemove;
 use App\Notifications\NewCode;
 use App\Notifications\SendDeposits;
+use App\Notifications\PostPurchase;
 use App\Events\SendCode;
 use App\Events\StatusDelivery;
 use App\Http\Controllers\Controller;
@@ -396,6 +399,36 @@ class AdminController extends Controller
     
                 $balance->total += floatval($transaction->total)-(floatval($transaction->total)*0.05+0.35);
                 $balance->save();
+
+                $sales = Sale::where("codeUrl", $transaction->condeUrl)->get();
+                $message="";
+                foreach ($sales as $sale)
+                {
+                    if($sale->type == 0 && $sale->productService_id != 0){
+                        $product = Product::where('id',$sale->productService_id)->first();
+                        
+                        if ($product->postPurchase)
+                            $message .= "- ".$product->postPurchase."\n";
+
+                        $product->stock -= $sale->quantity;
+                        $product->save();
+                    }
+
+                    if($sale->type == 1 && $sale->productService_id != 0){
+                        $service = Service::where('id',$sale->productService_id)->first();
+                        
+                        if($service->postPurchase)
+                            $message .= "- ".$service->postPurchase."\n";
+                    }
+
+                }
+
+                $commerce = Commerce::where('id',$transaction->commerce_id)->first();
+                (new User)->forceFill([
+                    'email' => $transaction->email,
+                ])->notify(
+                    new PostPurchase($message, $userUrl, $commerce->name, $codeUrl)
+                );
             }
         }
         
@@ -558,7 +591,7 @@ class AdminController extends Controller
                         ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.selectShipping', 'paids.total',
                             'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.codeUrl', 'paids.alarm', 'paids.statusDelivery')
                         ->where('paids.selectShipping','!=', '')
-                        ->where('paids.statusPayment',1);
+                        ->where('paids.statusPayment',2);
 
         if($request->all()){
             $searchNameCompany=$request->searchNameCompany;

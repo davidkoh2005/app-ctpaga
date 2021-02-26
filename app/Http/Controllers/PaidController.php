@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use App\Notifications\PostPurchase;
 use App\Notifications\ShippingNotification;
+use App\Notifications\NotificationCommerce;
 use Carbon\Carbon;
 use App\User;
 use App\Sale;
@@ -14,6 +15,7 @@ use App\Paid;
 use App\Rate;
 use App\Commerce;
 use App\Product;
+use App\Service;
 use App\Balance;
 use App\Shipping;
 use Session;
@@ -54,7 +56,7 @@ class PaidController extends Controller
         $codeUrl = $request->codeUrl;
         $amount = str_replace(".","",$request->totalAll);
         $amount = str_replace(",",".",$amount);
-        if($request->switchPay){
+        if($request->coinClient == 0 && $request->payment == "EFECTIVO"){
             $sales = Sale::where("codeUrl", $codeUrl)->get();
             $message="";
             foreach ($sales as $sale)
@@ -128,6 +130,12 @@ class PaidController extends Controller
                 'email' => $request->email,
             ])->notify(
                 new PostPurchase($message, $userUrl, $commerce->name, $codeUrl)
+            );
+
+            (new User)->forceFill([
+                'email' => $user->email,
+            ])->notify(
+                new NotificationCommerce($codeUrl.' ha realizado el pago correctamente!')
             );
 
             $status = true;
@@ -242,6 +250,12 @@ class PaidController extends Controller
                         new PostPurchase($message, $userUrl, $commerce->name, $codeUrl)
                     );
 
+                    (new User)->forceFill([
+                        'email' => $user->email,
+                    ])->notify(
+                        new NotificationCommerce($codeUrl.' ha realizado el pago correctamente!')
+                    );
+
                     $status = true;
                     return view('result', compact('userUrl', 'status'));
                 }else{
@@ -344,7 +358,6 @@ class PaidController extends Controller
             ]);
 
             ApiClient::init(env('COINBASE_KEY'));
-
 
             $chargeData = [
                 'name' => 'Pago Ctpaga',
@@ -494,6 +507,12 @@ class PaidController extends Controller
                     new PostPurchase($message, $userUrl, $commerce->name, $codeUrl)
                 );
 
+                (new User)->forceFill([
+                    'email' => $user->email,
+                ])->notify(
+                    new NotificationCommerce($codeUrl.' ha realizado el pago correctamente!')
+                );
+
                 $status = true;
                 return view('result', compact('userUrl', 'status'));
             }else{
@@ -529,76 +548,78 @@ class PaidController extends Controller
         $execution->setPayerId($payerId);
         /** Execute the payment **/
         $result = $payment->execute($execution, $this->apiContext);
+        
+        $sales = Sale::where("codeUrl", $codeUrl)->get();
+        $message="";
+        foreach ($sales as $sale)
+        {
+            if($sale->type == 0 && $sale->productService_id != 0){
+                $product = Product::where('id',$sale->productService_id)->first();
+                
+                if ($product->postPurchase)
+                    $message .= "- ".$product->postPurchase."\n";
+
+                $product->stock -= $sale->quantity;
+                $product->save();
+            }
+
+            if($sale->type == 1 && $sale->productService_id != 0){
+                $service = Service::where('id',$sale->productService_id)->first();
+                
+                if($service->postPurchase)
+                    $message .= "- ".$service->postPurchase."\n";
+            }
+
+            $sale->statusSale = 1;
+            $sale->save();
+
+        }
+
+        $commerce = Commerce::where('userUrl',$userUrl)->first();
+        $user = User::where('id',$commerce->user_id)->first();
+        
+        if(strlen($requestForm['priceShipping'])>0){
+            $priceShipping = $requestForm['priceShipping'];
+        }else{
+            $priceShipping = "0";
+        }
+
         if ($result->getState() === 'approved') {
-            $sales = Sale::where("codeUrl", $codeUrl)->get();
-            $message="";
-            foreach ($sales as $sale)
-            {
-                if($sale->type == 0 && $sale->productService_id != 0){
-                    $product = Product::where('id',$sale->productService_id)->first();
-                    
-                    if ($product->postPurchase)
-                        $message .= "- ".$product->postPurchase."\n";
+            $resultPayment=2;
+        }else{
+            $resultPayment=1;
+        }
 
-                    $product->stock -= $sale->quantity;
-                    $product->save();
-                }
+        Paid::create([
+            "user_id"               => $user->id,
+            "commerce_id"           => $commerce->id,
+            "codeUrl"               => $requestForm['codeUrl'],
+            "nameClient"            => $requestForm['nameClient'],
+            "total"                 => $amount,
+            "coin"                  => $requestForm['coinClient'],
+            "email"                 => $requestForm['email'],
+            "nameShipping"          => $requestForm['name'],
+            "numberShipping"        => $requestForm['number'],
+            "addressShipping"       => $requestForm['address'],
+            "detailsShipping"       => $requestForm['details'],
+            "selectShipping"        => $requestForm['selectShipping'],
+            "priceShipping"         => str_replace(",",".",$priceShipping),
+            "percentage"            => $requestForm['percentageSelect'],
+            "nameCompanyPayments"   => "PayPal",
+            "date"                  => Carbon::now(),
+            "statusPayment"         => $resultPayment,
+            "refPayment"            => $result->getId(),
+        ]);
 
-                if($sale->type == 1 && $sale->productService_id != 0){
-                    $service = Service::where('id',$sale->productService_id)->first();
-                    
-                    if($service->postPurchase)
-                        $message .= "- ".$service->postPurchase."\n";
-                }
-
-                $sale->statusSale = 1;
-                $sale->save();
-
-            }
-
-            $commerce = Commerce::where('userUrl',$userUrl)->first();
-            $user = User::where('id',$commerce->user_id)->first();
-            
-            if(strlen($requestForm['priceShipping'])>0){
-                $priceShipping = $requestForm['priceShipping'];
-            }else{
-                $priceShipping = "0";
-            }
-
-            Paid::create([
-                "user_id"               => $user->id,
-                "commerce_id"           => $commerce->id,
-                "codeUrl"               => $requestForm['codeUrl'],
-                "nameClient"            => $requestForm['nameClient'],
-                "total"                 => $amount,
-                "coin"                  => $requestForm['coinClient'],
-                "email"                 => $requestForm['email'],
-                "nameShipping"          => $requestForm['name'],
-                "numberShipping"        => $requestForm['number'],
-                "addressShipping"       => $requestForm['address'],
-                "detailsShipping"       => $requestForm['details'],
-                "selectShipping"        => $requestForm['selectShipping'],
-                "priceShipping"         => str_replace(",",".",$priceShipping),
-                "percentage"            => $requestForm['percentageSelect'],
-                "nameCompanyPayments"   => "PayPal",
-                "date"                  => Carbon::now(),
-                "statusPayment"         => 2,
-                "refPayment"            => $result->getId(),
-            ]);
-
+        if ($result->getState() === 'approved') {
             $balance = Balance::firstOrNew([
                 'user_id'       => $user->id,
                 "commerce_id"   => $commerce->id,
                 "coin"          => $requestForm['coinClient'],
             ]);
-
+    
             $balance->total += floatval($amount)-(floatval($amount)*0.1+0.35);
             $balance->save();
-
-            $messageNotification['commerce_id'] = $commerce->id;
-            $messageNotification['total'] = $amount;
-            $messageNotification['coin'] = $requestForm['coinClient'];
-            $success = event(new NewNotification($messageNotification));
 
             (new User)->forceFill([
                 'email' => $requestForm['email'],
@@ -606,12 +627,35 @@ class PaidController extends Controller
                 new PostPurchase($message, $userUrl, $commerce->name, $codeUrl)
             );
 
-            $status = true;
-            return view('result', compact('userUrl', 'status'));
+            (new User)->forceFill([
+                'email' => $user->email,
+            ])->notify(
+                new NotificationCommerce($codeUrl.' ha realizado el pago correctamente!')
+            );
+    
+        }else{
+            (new User)->forceFill([
+                'email' => $requestForm['email'],
+            ])->notify(
+                new PaymentVerification($message, $userUrl, $commerce->name, $codeUrl)
+            );
+
+            (new User)->forceFill([
+                'email' => $user->email,
+            ])->notify(
+                new NotificationCommerce($codeUrl.' el pago esta en proceso de verificación!')
+            );
+    
         }
 
-        Session::flash('message', "Lo sentimos! El pago a través de PayPal no se pudo realizar.");
-        return redirect('/'.$userUrl.'/'.$codeUrl);
+        $messageNotification['commerce_id'] = $commerce->id;
+        $messageNotification['total'] = $amount;
+        $messageNotification['coin'] = $requestForm['coinClient'];
+        $success = event(new NewNotification($messageNotification));
+
+        $status = true;
+        return view('result', compact('userUrl', 'status'));
+
     }
 
     public function show(Request $request)
