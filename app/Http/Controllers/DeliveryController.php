@@ -41,9 +41,10 @@ class DeliveryController extends Controller
         $delivery = $request->user();
         Delivery::whereId($delivery->id)->update($request->all());
         
-
-        if(isset($request->status))
-            $success = event(new StatusDelivery());
+        if(!$delivery->status){
+            $request->user()->token()->revoke(); 
+            return response()->json(['statusCode' => 401,'message' => "Unauthorized"]);
+        }
 
         return response()->json([
             'statusCode' => 201,
@@ -54,6 +55,12 @@ class DeliveryController extends Controller
     public function showPaidAll(Request $request)
     {   
         $delivery = $request->user();
+
+        if(!$delivery->status){
+            $request->user()->token()->revoke(); 
+            return response()->json(['statusCode' => 401,'message' => "Unauthorized"]);
+        }
+
         $paids =Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
                     ->leftJoin('pictures', 'pictures.commerce_id', '=', 'paids.commerce_id')
                     ->where('paids.statusDelivery',1)

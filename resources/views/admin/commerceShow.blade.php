@@ -55,7 +55,7 @@
                         <div class="card-body">
                             <h5 class="center">Datos Personal</h5>
                             <label><strong>Nombre: </strong>{{$user->name}}</label> <br>
-                            <label><strong>Telefono: </strong>{{$user->phone}}</label> <br>
+                            <label><strong>Teléfono: </strong>{{$user->phone}}</label> <br>
                             <label><strong>Dirección: </strong>{{$user->address}}</label> <br>
                             <label><strong>Correo: </strong>{{$user->email}}</label> 
 
@@ -64,7 +64,7 @@
                             <h5 class="center">Datos de Empresa</h5>
                             <label><strong>Nombre: </strong>{{$commerce->name}}</label> <br>
                             <label><strong>Rif: </strong>{{$commerce->rif}}</label> <br>
-                            <label><strong>Telefono: </strong>{{$commerce->phone}}</label> <br>
+                            <label><strong>Teléfono: </strong>{{$commerce->phone}}</label> <br>
                             <label><strong>Dirección: </strong>{{$commerce->address}}</label> <br>
                             <label><strong>Link: </strong><a href="{{route('form.store', ['userUrl' => $commerce->userUrl])}}" class="tienda">Tienda</a></label> <br>
 
@@ -238,7 +238,6 @@
 
             $("#switchConfirmed").on('click', function(){
                 var status = $(this).is(':checked');
-                console.log(status);
                 $.ajax({
                     url: "{{route('admin.confirmedCommerce')}}", 
                     data: {"id" : idCommerce,  "status": status},

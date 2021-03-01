@@ -22,7 +22,7 @@
                         <th scope="col">Nombre Compañia</th>
                         <th scope="col">RIF</th>
                         <th scope="col">Dirección</th>
-                        <th scope="col">Telefono</th>
+                        <th scope="col">Teléfono</th>
                         <th scope="col">Estado</th>
                         <th scope="col">Acciones</th>
                     </tr>

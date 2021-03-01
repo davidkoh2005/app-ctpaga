@@ -30,7 +30,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('verifyUrl', 'UserController@verifyUrlUser');
 
     Route::group(['middleware' => 'auth:delivery'], function() {
-        Route::post('logoutDelivery', 'AuthController@logoutDelivery');
+        Route::post('logoutDelivery', 'AuthController@logout');
         Route::post('delivery', 'AuthController@delivery');
         Route::post('updatePasswordDelivery', 'AuthController@updatePassword');
 

@@ -80,6 +80,12 @@
                 <p>Corte Depositos</p>
               </a>
             </li>
+            <li class="nav-item" id="nav-auth-delivery">
+              <a href="{{route('admin.authDelivery')}}" class="nav-link">
+              <i class="material-icons">verified_user</i>
+                <p>Delivery Autorizado</p>
+              </a>
+            </li>
           @else
             <li class="nav-item" id="nav-dashboard">
               <a class="nav-link" href="{{route('commerce.dashboard')}}">

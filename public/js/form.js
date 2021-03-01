@@ -135,7 +135,7 @@ $(function(){
             $('.contact-form').parsley().whenValidate({
                 group: 'block-' + curIndex()
             }).done(function(){
-                navigateTo(curIndex()+3);
+                navigateTo(curIndex()+2);
             }) 
         }
 

@@ -149,7 +149,7 @@
         var selectID = [];
 
         var searchStatus ='{{$searchStatus}}';
-        $("#searchStatus option[value='"+ searchStatus +"']").attr("selected",true);
+        $("#searchStatus option[value='"+ searchStatus +"']").prop("selected",true);
 
         $( ".loader" ).fadeOut("slow"); 
         $('#changeStatus').change(function(){
@@ -160,20 +160,21 @@
                 $("input:checked.check-Payment").each(function () {
                     var id = $(this).data("id");
                     var statuscheck = $(this).data("status");
+                    
                     if(statuscheck > status || statuscheck == status || (statuscheck+1 != status)){
                         error = true;
                     }
                     selectID.push(id);
                 });
 
+                $("#changeStatus option[value='0']").prop("selected",true);
+
                 if(selectID.length >0 && !error)
                     if(status == 3){
-                        $("#changeStatus option[value='0']").attr("selected",true);
                         statusSelect = true;
                         showDataPayment(0, false)
                     }
                     else{
-                         $("#changeStatus option[value='0']").attr("selected",true);
                         $( ".loader" ).fadeIn("slow"); 
                         $.ajax({
                             url: "{{route('admin.changeStatus')}}", 
@@ -181,24 +182,20 @@
                             type: "POST",
                         }).done(function(data){
                             $( ".loader" ).fadeOut("slow"); 
-                            $("#changeStatus option[value='0']").attr("selected",true);
                             if(data.status == 201)
                                 alertify.success('Estado ha sido cambiado correctamente');
                         
                             location.reload()
                         }).fail(function(result){
                             $( ".loader" ).fadeOut("slow"); 
-                            $("#changeStatus option[value='0']").attr("selected",true);
                             alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                         }); 
                     }
                 else if (selectID.length == 0 && !error){
                     alertify.error('Debe seleccionar al menos un deposito');
-                    $("#changeStatus option[value='0']").attr("selected",true);
                 }
                 else{
                     alertify.error('Debe seleccionar depositos con estado correctamente');
-                    $("#changeStatus option[value='0']").attr("selected",true);
                 }
             }
             

@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Paid;
 use Illuminate\Console\Command;
 
-class ChangeStatusPaids extends Command
+class ChangeStatus extends Command
 {
     /**
      * The name and signature of the console command.
@@ -19,7 +19,7 @@ class ChangeStatusPaids extends Command
      *
      * @var string
      */
-    protected $description = 'change status paids';
+    protected $description = 'change status delivery';
 
     /**
      * Create a new command instance.
@@ -38,7 +38,8 @@ class ChangeStatusPaids extends Command
      */
     public function handle()
     {
-        Paid::where('statusDelivery',1)->whereNull('idDelivery')->update(array('statusDelivery' => 0));
+        /* Paid::where('statusDelivery',1)->whereNull('idDelivery')->update(array('statusDelivery' => 0)); */
+        Delivery::where('statusAvailability',1)->update(array('statusAvailability' => 0));
 
         $this->info('Se realizo el cambio correctamente!');
     }

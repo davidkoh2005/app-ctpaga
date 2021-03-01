@@ -674,6 +674,13 @@ class PaidController extends Controller
     public function showPaidDelivery(Request $request)
     {
         $delivery = $request->user();
+        
+        if(!$delivery->status){
+            $request->user()->token()->revoke(); 
+            return response()->json(['statusCode' => 401,'message' => "Unauthorized"]);
+        }
+
+
         $paids = Paid::where('codeUrl', $request->codeUrl)
                 ->where("idDelivery",$delivery->id)->first();
 
@@ -686,13 +693,19 @@ class PaidController extends Controller
             return response()->json(['statusCode' => 201,'data' =>['paid'=>$paids, 'commerce'=>$commerce, 'sales'=>$sales]]);
         }
         else
-            return response()->json(['statusCode' => 401,'message' => "Error no esta disponible"]);
+            return response()->json(['statusCode' => 400,'message' => "Error no esta disponible"]);
 
     }
 
     public function orderPaidDelivery(Request $request)
     {
         $delivery = $request->user();
+
+        if(!$delivery->status){
+            $request->user()->token()->revoke(); 
+            return response()->json(['statusCode' => 401,'message' => "Unauthorized"]);
+        }
+
         $paids = Paid::where('codeUrl', $request->codeUrl)
                 ->whereNull("idDelivery")->first();
 
@@ -704,12 +717,13 @@ class PaidController extends Controller
             $paids->save();
 
             $delivery->codeUrlPaid = $request->codeUrl;
+            $delivery->statusAvailability = 0;
             $delivery->save();
 
             return response()->json(['statusCode' => 201,'data' =>['paid'=>$paids, 'commerce'=>$commerce, 'sales'=>$sales]]);
         }
         else
-            return response()->json(['statusCode' => 401,'message' => "Este orden ya no se encuentra disponible"]);
+            return response()->json(['statusCode' => 400,'message' => "Este orden ya no se encuentra disponible"]);
 
     }
 

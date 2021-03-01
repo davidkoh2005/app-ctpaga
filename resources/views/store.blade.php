@@ -201,10 +201,10 @@
                         </div>
                         <div class="row">
                             <div class="col-6 mx-auto text-center">
-                                <img src="{{ asset('images/visa.png')}}" width="100px" height="80px">
+                                <img src="{{ asset('images/visa.png')}}" width="150px" height="80px">
                             </div>
                             <div class="col-6 mx-auto text-center">
-                                <img src="{{ asset('images/MasterCard.png')}}" width="100px" height="80px">
+                                <img src="{{ asset('images/MasterCard.png')}}" width="150px" height="80px">
                             </div>
                         </div>
                         <div class="row">&nbsp;</div>
@@ -219,7 +219,7 @@
                         <div class="row">&nbsp;</div>
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-12 mx-auto text-center">
-                                <label class="titleCoin">O Recibimos en </label>
+                                <label class="titleCoin">Tambien aceptamos </label>
                             </div>
                             <div class="row">&nbsp;</div>
                         </div>
@@ -228,7 +228,7 @@
                                 <img src="{{ asset('images/paypal.png') }}" width="150px" height="60px">
                             </div>
                             <div class="col-6 mx-auto text-center">
-                                <img src="{{ asset('images/bitcoin.png') }}" width="140px" height="60px">
+                                <img src="{{ asset('images/bitcoin.png') }}" width="150px" height="50px">
                             </div>
                         </div>
                     </div>

@@ -189,18 +189,18 @@
                                         <div class="col">
                                             <div class="description-payment row" style="padding-bottom: 10px;">
                                                 <div class="col center">
-                                                    <img src="{{ asset('images/visa.png') }}" width="150px" height="50px">
+                                                    <img style="margin:5px;" src="{{ asset('images/visa.png') }}" width="150px" height="50px">
                                                 </div>
                                                 <div class="col center">
-                                                    <img src="{{ asset('images/MasterCard.png') }}" width="120px" height="50px">
+                                                    <img style="margin:5px;" src="{{ asset('images/MasterCard.png') }}" width="120px" height="50px">
                                                 </div>
                                             </div>
                                             <div class="description-payment row">
                                                 <div class="col center">
-                                                    <img src="{{ asset('images/diners.png') }}" width="90px" height="60px">
+                                                    <img style="margin:5px;" src="{{ asset('images/diners.png') }}" width="90px" height="60px">
                                                 </div>
                                                 <div class="col center">
-                                                    <img src="{{ asset('images/americanExpress.png') }}" width="90px" height="60px">
+                                                    <img style="margin:5px;" src="{{ asset('images/americanExpress.png') }}" width="90px" height="60px">
                                                 </div>
                                             </div>
                                             
@@ -241,6 +241,7 @@
                                             <input type="hidden" id="paymentDescription" value="BITCOIN">                                    
                                         </div>
                                     </div>
+                                    @if($sales[0]->statusShipping)
                                     <div class="row checkPayment justify-content-center align-items-center minh-10">
                                         <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4" id="iconChecked">
                                             <input type="radio" class="radio-payment" name="payment" id="payment" value="EFECTIVO">
@@ -251,6 +252,7 @@
                                             <input type="hidden" id="paymentDescription" value="EFECTIVO">
                                         </div>
                                     </div>
+                                    @endif
                                     @else
                                         <label class="form" for="nameCard">NOMBRE DE LA TARJETA:</label>
                                         <input type="text" name="nameCard" id="nameCard" class="form-control" data-parsley-minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" required />

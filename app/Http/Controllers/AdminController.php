@@ -203,7 +203,7 @@ class AdminController extends Controller
     public function confirmedCommerce(Request $request)
     {
         $commerce = Commerce::where("id", $request->id)->first();
-        $commerce->confirmed = $request->status?1:0;
+        $commerce->confirmed = $request->status == "true"?1:0;
         $commerce->save();
 
         return response()->json([
@@ -590,7 +590,7 @@ class AdminController extends Controller
                         ->orderBy('paids.alarm', 'desc')
                         ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.selectShipping', 'paids.total',
                             'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.codeUrl', 'paids.alarm', 'paids.statusDelivery')
-                        ->where('paids.selectShipping','!=', '')
+                        ->whereNotNull('paids.selectShipping')
                         ->where('paids.statusPayment',2);
 
         if($request->all()){
@@ -609,21 +609,15 @@ class AdminController extends Controller
             $transactions->where('paids.codeUrl', 'like', "%" . $request->searchCodeUrl . "%" );
         }
 
-        $transactions->where('paids.date', ">=",$startDate)
-            ->where('paids.date', "<=",$endDate);
+        $transactions->whereDate('paids.date', ">=",$startDate);
 
         $transactions = $transactions->get();
 
-        $countDeliveries = Delivery::where("status", true)->get()->count();
 
         $statusMenu = "delivery";
-        return view('admin.delivery', compact('transactions', 'searchNameCompany', 'searchNameClient', 'startDate', 'endDate', 'statusMenu','idCommerce', 'companyName', 'searchCodeUrl', 'countDeliveries'));
+        return view('admin.delivery', compact('transactions', 'searchNameCompany', 'searchNameClient', 'startDate', 'endDate', 'statusMenu','idCommerce', 'companyName', 'searchCodeUrl'));
     }
 
-    public function countDeliveries(){
-        $countDeliveries = Delivery::where("status", true)->get()->count();
-        return response()->json(array('status' => 201, 'count'=> $countDeliveries));
-    }
 
     public function deliverySendCode(Request $request)
     {   
@@ -708,6 +702,26 @@ class AdminController extends Controller
 
         return response()->json([
             'status' => 401,
+        ]);
+    }
+
+
+    public function authDelivery(Request $request)
+    {
+        $deliveries = Delivery::orderBy("name")->get();
+        $statusMenu="auth-delivery";
+
+        return view('admin.authDelivery', compact('statusMenu','deliveries'));
+    }
+
+    public function changeStatusDelivery(Request $request)
+    {
+        $delivery = delivery::where("id", $request->id)->first();
+        $delivery->status = $request->status == "true"?1:0;
+        $delivery->save();
+
+        return response()->json([
+            'status' => 201
         ]);
     }
 }

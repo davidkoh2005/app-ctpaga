@@ -194,17 +194,23 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
         $delivery = Delivery::where("email", request('email'))->first();
 
-        if (!isset($delivery))
+        if (isset($delivery) && !$delivery->status)
             return response()->json([
                 'statusCode' => 401,
                 'message' => 'Unauthorized',
             ], 401);
 
+        if (!isset($delivery) )
+            return response()->json([
+                'statusCode' => 400,
+                'message' => 'Error',
+            ], 400);
+
         if (!Hash::check(request('password'), $delivery->password)) {
             return response()->json([
-                'statusCode' => 401,
-                'message' => 'Unauthorized',
-            ], 401);
+                'statusCode' => 400,
+                'message' => 'Error',
+            ], 400);
         } 
 
         $tokenResult = $delivery->createToken('Personal Access Token');
