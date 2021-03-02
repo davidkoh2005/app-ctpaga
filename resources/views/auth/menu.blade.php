@@ -86,6 +86,12 @@
                 <p>Delivery Autorizado</p>
               </a>
             </li>
+            <li class="nav-item" id="nav-settings">
+              <a href="{{route('admin.settings')}}" class="nav-link">
+              <i class="material-icons">settings</i>
+                <p>Configuraciones</p>
+              </a>
+            </li>
           @else
             <li class="nav-item" id="nav-dashboard">
               <a class="nav-link" href="{{route('commerce.dashboard')}}">

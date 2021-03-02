@@ -97,6 +97,9 @@ Route::group(['middleware'=>'admin'], function() {
     Route::post('/admin/nuevoTasa', 'AdminController@newRate')->name('admin.newRate');
     Route::get('/admin/autorizado', 'AdminController@authDelivery')->name('admin.authDelivery');
     Route::post('/admin/autorizado', 'AdminController@changeStatusDelivery')->name('admin.changeStatusDelivery');
+    Route::get('/admin/configuraciones', 'AdminController@settings')->name('admin.settings');
+    Route::post('/admin/settingsSchedule', 'AdminController@settingsSchedule')->name('admin.settingsSchedule');
+    Route::post('/admin/settingsEmails', 'AdminController@settingsEmails')->name('admin.settingsEmails');
 });
 
 Route::post('/admin/removePicture', 'AdminController@removePicture')->name('admin.removePicture');

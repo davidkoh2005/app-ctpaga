@@ -19,8 +19,10 @@ $(document).ready( function () {
         $("#title-navbar").html("Delivery");
     else if(statusMenu == "rate")
         $("#title-navbar").html("Tasa Transaccion");
-        else if(statusMenu == "auth-delivery")
+    else if(statusMenu == "auth-delivery")
         $("#title-navbar").html("Delivery Autorizado");
+    else if(statusMenu == "settings")
+        $("#title-navbar").html("Configuraciones");
     
 
     $('#nav-balance').click(function() {

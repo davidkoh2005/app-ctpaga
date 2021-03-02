@@ -18,6 +18,7 @@ use App\Deposits;
 use App\Delivery;
 use App\Product;
 use App\Service;
+use App\Settings;
 use Carbon\Carbon;
 use App\Notifications\PictureRemove;
 use App\Notifications\NewCode;
@@ -708,6 +709,12 @@ class AdminController extends Controller
 
     public function authDelivery(Request $request)
     {
+        if (!Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('admin.login'));
+        }elseif (Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('commerce.dashboard'));
+        }
+
         $deliveries = Delivery::orderBy("name")->get();
         $statusMenu="auth-delivery";
 
@@ -722,6 +729,78 @@ class AdminController extends Controller
 
         return response()->json([
             'status' => 201
+        ]);
+    }
+
+    public function settings(Request $request)
+    {
+        if (!Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('admin.login'));
+        }elseif (Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('commerce.dashboard'));
+        }
+        $emailsAllPaid = "";
+        $emailsAllDelivery = "";
+        $hoursInitial = "";
+        $minInitial = "";
+        $anteMeridiemInitial = "";
+        $scheduleInitial = array('hours' => '', 'min' => '', 'anteMeridiem' => '');
+        $scheduleFinal = array('hours' => '', 'min' => '', 'anteMeridiem' => '');
+
+        
+        $statusMenu="settings";
+
+        $scheduleInitialGet = Settings::where("name", "Horario Inicial")->first(); 
+        $scheduleFinalGet = Settings::where("name", "Horario Final")->first(); 
+        $emailsAllPaid = Settings::where("name", "Email Transaccion")->first();
+        $emailsAllDelivery = Settings::where("name", "Email Delivery")->first();
+
+        if($scheduleInitialGet && $scheduleFinalGet){
+            $scheduleInitial = $this->getTime($scheduleInitialGet->value);
+            $scheduleFinal = $this->getTime($scheduleFinalGet->value); 
+        }
+
+        return view('admin.settings', compact('statusMenu', 'emailsAllPaid', 'emailsAllDelivery', 'scheduleInitial', 'scheduleFinal'));
+    }
+
+    public function getTime($value)
+    {
+        $array = explode(":",$value);
+
+        $hours = $array[0];
+
+        $array = explode(" ",$array[1]);
+        $min = $array[0];
+        $anteMeridiem = $array[1];
+
+        $result = array('hours' => $hours, 'min' => $min, 'anteMeridiem' => $anteMeridiem);
+
+        return $result;
+    }
+
+    public function settingsSchedule(Request $request)
+    {
+        $shedule = $request->hoursInitial.":".$request->minInitial." ".$request->anteMeridiemInitial;
+        $this->updateSettings("Horario Inicial", $shedule);
+
+        $shedule = $request->hoursFinal.":".$request->minFinal." ".$request->anteMeridiemFinal;
+        $this->updateSettings("Horario Final", $shedule);
+        return redirect(route('admin.settings'));
+    }
+
+    public function settingsEmails(Request $request)
+    {
+        $this->updateSettings("Email Transaccion", $request->emailsAllPaid);
+        $this->updateSettings("Email Delivery", $request->emailsAllDelivery);
+        return redirect(route('admin.settings'));
+    }
+
+    public function updateSettings($name, $value)
+    {
+        Settings::updateOrCreate([
+            'name' => $name,
+        ],[
+            'value' => $value,
         ]);
     }
 }

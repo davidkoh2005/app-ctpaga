@@ -1,0 +1,40 @@
+.nav-link.settings.active {
+    color: white !important;
+    background-color: #00cc5f !important;
+    font-weight: 600;
+}
+
+.nav-link.settings.active:hover {
+    color: white !important;
+    background-color: #00cc5f !important;
+    font-weight: 600;
+}
+
+.nav-link.settings {
+    color:#585858 !important;
+}
+
+.nav-link.settings:hover {
+    color:#585858 !important;
+    background-color: rgba(0, 0, 0, 0.075) !important;
+}
+
+.divUntil{
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+    margin-top: 5px;
+}
+
+#until {
+    color: white !important;
+    background-color: #00cc5f !important;
+    padding-top: 9px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    border-radius: 11px;
+    height: 40px;
+}
+
+strong {
+    font-weight: bold !important;
+}
