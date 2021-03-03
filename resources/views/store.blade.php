@@ -265,7 +265,7 @@
         <div class="row fixed-item-payment">
             <div class="col-md-6 col-sm-12 col-12 mx-auto text-center">
                 <div class="form-navigation bottom relative">
-                    <button type="submit" id="totalBtn" class="submit btn statusButton">Pagar</button>
+                    <button type="submit" id="totalBtn" class="submit btn btn-bottom statusButton">Pagar</button>
                 </div>
                 <div class="row justify-content-center" id="loading">
                     <img widht="80px" height="80px" class="justify-content-center" src="{{ asset('images/loadingTransparent.gif') }}">

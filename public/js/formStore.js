@@ -259,6 +259,7 @@ function showTotalBtn()
     
     if(listCart.length == 0){
         $('#totalBtn').text("Pagar");
+        $('#totalBtn').addClass('statusButton');
     }else{
         $.each( listCart, function( key, value ) {
             total += (exchangeRate(value['data'][0]['price'], rateToday, value['data'][0]['coin'], coinClient ) * value['quantity']);
@@ -267,8 +268,10 @@ function showTotalBtn()
 
         if(coinClient == 0){
             $('#totalBtn').text("Pagar $ "+formatter.format(total));
+            $('#totalBtn').removeClass('statusButton');
         }else{
             $('#totalBtn').text("Pagar Bs "+formatter.format(total));
+            $('#totalBtn').removeClass('statusButton');
         }
     }
 

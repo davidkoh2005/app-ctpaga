@@ -196,6 +196,20 @@ div.shipping-price{
     font-weight: bold;
 }
 
+.btn-active { 
+    width: 100%;
+    border-radius: 60px;
+    font-size: large;
+    background-color: #00cc5f !important;
+    color: white !important;
+}
+
+.btn-active:hover {
+    background-color: white !important;
+    border: 2px solid #00cc5f !important;
+    color: #00cc5f !important;
+}
+
 .btn-remove { 
     width: 150px;
     border-radius: 60px;

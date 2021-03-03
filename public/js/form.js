@@ -4,14 +4,16 @@ var shippingPrice = 0;
 var shippingCoin = 0;
 var _coinClient = 0;
 var _rate = 0;
+var dataShipping=[];
 var _selectSale, selectPayment, applicationId;
+var submit= false;
 
-$(function(){
+$(document).ready(function(){
     var $sections = $('.form-section');
     var statusShippingClient = false;
     var statusLoading = false;
     var switchPay = false;
-    var checkDiscount = false;
+    var checkDiscount = true;
 
     $('#showCardForm').hide();
     $('#errorCard').hide();
@@ -28,6 +30,8 @@ $(function(){
     function navigateTo(index){
         curIndexJS = index;
         $sections.removeClass('current').eq(index).addClass('current');
+        $(".form-navigation .next").removeClass('btn-active');
+
         if(statusModification)
             $('.form-navigation .previous').toggle(index>0);
         else
@@ -57,22 +61,16 @@ $(function(){
                 $(".title-sales").text("Dirección de Envio");
                 break;
             case 5:
-                $(".title-sales").text("Información del Pago");
+                $(".title-sales").text("Descuento");
                 break;
             case 6:
-                $(".title-sales").text("Descuento");
-                if($("#switchDiscount").is(':checked')){
-                    $("#discount" ).prop( "disabled", $(this).is(':checked'));
-                    $('#discount').val('');
-                    $('#percentageSelect').val(0);
-                    $('.next').show();
-                }
-                break;
-            case 7:
                 $(".title-sales").text("Facturación");
                 break;
+            case 7:
+                $(".title-sales").text("Método de Pago");
+                break;
             default: 
-                alert("error");
+                console.log("error case");
         }
 
 
@@ -83,24 +81,31 @@ $(function(){
                 $('.next').hide();
         }
 
-        if(index == 5){
-            if(_coinClient == 0 && !selectPayment)
-                $('.next').hide();
+        if(index == 7){
+            if(_coinClient == 0)
+                $('.submit').hide();
             else
-                $('.next').show(); 
+                $('.submit').show(); 
         }
             
 
-        if(index == 6){
+        if(index == 5){
             $( "#discount" ).prop( "disabled", checkDiscount);
-            if($("#switchDiscount").is(':checked') || $('#percentageSelect').val() != 0)
+            if(!$("#switchDiscount").is(':checked') || $('#percentageSelect').val() != 0){
                 $('.next').show();
-            else
+                $(".form-navigation .next").addClass('btn-active');
+            }
+            else{
+                $('#percentageSelect').val("0");
+                $(".form-navigation .next").removeClass('btn-active');
                 $('.next').hide();
+            }
         }
 
-        if(index == 7)
+        if(index == 6){
             calculateTotal();
+            $(".form-navigation .next").addClass('btn-active');
+        }
     }
 
     function curIndex()
@@ -121,6 +126,31 @@ $(function(){
         
     })
 
+    $('#email').change( function(){
+        if($(this).val().length >0)
+            $(".form-navigation .next").addClass('btn-active');
+        else
+            $(".form-navigation .next").removeClass('btn-active');
+    });
+
+    $(".formDataShipping").keyup(function(){
+        var idData = $(this).attr('id');
+        if(jQuery.inArray( idData, dataShipping )<0 && $(this).val().length >0)
+            dataShipping.push(idData);
+        else if(jQuery.inArray( idData, dataShipping ) >= 0 && $(this).val().length == 0)
+            dataShipping = jQuery.grep(dataShipping, function(value) {
+                return value != idData;
+            });
+
+        if(dataShipping.length ==3)
+            $(".form-navigation .next").addClass('btn-active');
+        else
+            $(".form-navigation .next").removeClass('btn-active');
+        
+
+    });
+
+
     $('.form-navigation .pay').click(function(){
         $('.alert-danger').hide();
         $('.contact-form').parsley().whenValidate({
@@ -139,43 +169,11 @@ $(function(){
             }) 
         }
 
-        if(curIndex() == 5){
-            $('#errorCard').hide();
-            if(_coinClient == 0 && selectPayment != "CARD")
-                navigateTo(curIndex()+1);
-            else if(_coinClient == 0 && selectPayment == "CARD")
-                onGetCardNonce(event);
-            else{
-                if(switchPay){
-                    $('.contact-form').parsley().whenValidate({
-                        group: 'block-' + curIndex()
-                    }).done(function(){
-                        navigateTo(curIndex()+1);
-                    })
-                }else{
-                    if(validateDate() && $("input[name='typeCard']:checked").length  == 1){
-                        $('.contact-form').parsley().whenValidate({
-                            group: 'block-' + curIndex()
-                        }).done(function(){
-                            navigateTo(curIndex()+1);
-                        })
-                    }else{
-                        $('#errorCard').show();
-                        $('.contact-form').parsley().whenValidate({
-                            group: 'block-' + curIndex()
-                        });
-                    }
-                }
-            }
-                
-
-        }else{
-            $('.contact-form').parsley().whenValidate({
-                group: 'block-' + curIndex()
-            }).done(function(){
-                navigateTo(curIndex()+1);
-            })
-        }
+        $('.contact-form').parsley().whenValidate({
+            group: 'block-' + curIndex()
+        }).done(function(){
+            navigateTo(curIndex()+1);
+        })
 
     })
 
@@ -185,7 +183,7 @@ $(function(){
 
     navigateTo(0);
 
-    $('.shippings').on('click', function(){
+    $('#listShipping').on('click', function(){
         $('#svg-check').remove();
         var checkbox = $(this).find('input[type=radio]');
         checkbox.prop('checked', !checkbox.prop('checked'));
@@ -197,38 +195,44 @@ $(function(){
         shippingCoin = $(this).find('#shippingCoin').val();
         statusShippingClient = true;
         $('#selectShipping').val($(this).find('#shippingDescription').val());
+        $(".form-navigation .next").addClass('btn-active');
         $('.next').show();
     });
 
     $('.checkPayment').on('click', function(){
-        $('#errorCard').hide();
-        $('#svg-check').remove();
-        var checkbox = $(this).find('input[type=radio]');
-        checkbox.prop('checked', !checkbox.prop('checked'));
-        selectPayment = checkbox.val();
-        var svg = $(this).find('#iconChecked');
-        svg.append("<svg width='2em' height='2em' viewBox='0 0 16 16' class='bi bi-check-circle-fill' id='svg-check' fill='currentColor'><path fill-rule='evenodd' d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z'/></svg>");
-        $('#selectPayment').val($(this).find('#paymentDescription').val());
+        if(!submit){
+            $('#errorCard').hide();
+            $('#svg-check').remove();
+            var checkbox = $(this).find('input[type=radio]');
+            checkbox.prop('checked', !checkbox.prop('checked'));
+            selectPayment = checkbox.val();
+            var svg = $(this).find('#iconChecked');
+            svg.append("<svg width='2em' height='2em' viewBox='0 0 16 16' class='bi bi-check-circle-fill' id='svg-check' fill='currentColor'><path fill-rule='evenodd' d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z'/></svg>");
+            $('#selectPayment').val($(this).find('#paymentDescription').val());
 
-        if($(this).find('#paymentDescription').val() == "EFECTIVO")
-            switchPay = true;
-        else 
-            switchPay = false;
+            if($(this).find('#paymentDescription').val() == "EFECTIVO")
+                switchPay = true;
+            else 
+                switchPay = false;
 
-        if($(this).find('#paymentDescription').val() != "CARD")
-            $('#showCardForm').hide();
-        else
-            $('#showCardForm').show();
-        
-        $('.next').show();
+            if($(this).find('#paymentDescription').val() != "CARD")
+                $('#showCardForm').hide();
+            else
+                $('#showCardForm').show();
+            
+            $('.submit').show();
+        }
     });
 
     $("#switchDiscount").on('click', function(){
-        $( "#discount" ).prop( "disabled", $(this).is(':checked'));
+        $('#iconClose').hide();
+        $('#iconDone').hide();  
+        $('#iconLoading').hide();
+        $( "#discount" ).prop( "disabled", !$(this).is(':checked'));
         checkDiscount = $(this).is(':checked');
-        if($(this).is(':checked')){
+        if(!$(this).is(':checked')){
             $('#discount').val('');
-            $('#percentageSelect').val(0);
+            $('#percentageSelect').val("0");
             $('.next').show();
         }
         else{
@@ -255,7 +259,35 @@ $(function(){
         $('.submit').hide();
         $('#loading').show();
 
-        $("#payment-form").submit();
+        $('#errorCard').hide();
+        if(_coinClient == 0 && selectPayment != "CARD"){
+            $("#payment-form").submit();
+            submit = true;
+        }else if(_coinClient == 0 && selectPayment == "CARD")
+            onGetCardNonce(e);
+        else{
+            if(switchPay){
+                $("#payment-form").submit();
+                submit = true;
+            }else{
+                if(validateDate() && $("input[name='typeCard']:checked").length  == 1){
+                    $('.contact-form').parsley().whenValidate({
+                        group: 'block-' + curIndex()
+                    }).done(function(){
+                        $("#payment-form").submit();
+                        submit = true;
+                    })
+                }else{
+                    $('#errorCard').show();
+                    $('.contact-form').parsley().whenValidate({
+                        group: 'block-' + curIndex()
+                    });
+                    $('.submit').show();
+                    $('#loading').hide();
+                }
+            }
+        }
+
     });
 
 
@@ -317,16 +349,19 @@ $(function(){
                 * Triggered when: SqPaymentForm completes a card nonce request
                 */
                 cardNonceResponseReceived: function (errors, nonce, cardData) {
-                if (errors) {
-                    // Log errors from nonce generation to the browser developer console.
-                    $('#errorCard').show();
-                    return;
-                }
+                    if (errors) {
+                        // Log errors from nonce generation to the browser developer console.
+                        $('#errorCard').show();
+                        $('.submit').show();
+                        $('#loading').hide();
+                        return;
+                    }
 
-                $('#errorCard').hide();
-                $("#nonce").val(nonce);
-                $("#idempotency_key").val(idempotency_key);
-                navigateTo(curIndexJS+1);
+                    $('#errorCard').hide();
+                    $("#nonce").val(nonce);
+                    $("#idempotency_key").val(idempotency_key);
+                    submit = true;
+                    $("#payment-form").submit();
                 }
             }
         });
@@ -394,11 +429,10 @@ function calculateTotal(){
     total = parseFloat(total);
     var percentage = parseInt($("#percentageSelect").val());
     resultShipping = exchangeRate(shippingPrice, _rate, shippingCoin, _coinClient);
-
     if(_coinClient == 0)
-        $(".showShipping").text("$ "+formatter.format(resultShipping));
+        $("#showShipping").text("$ "+formatter.format(resultShipping));
     else
-        $(".showShipping").text("Bs "+formatter.format(resultShipping));
+        $("#showShipping").text("Bs "+formatter.format(resultShipping));
 
     $(".showPercentage").text("Descuento: "+percentage+" %");
     $("#priceShipping").val(formatter.format(resultShipping));
@@ -409,10 +443,10 @@ function calculateTotal(){
         resulttotal = "Total: Bs "+formatter.format((total-((total*percentage)/100)+resultShipping));
 
     $("#totalAll").val(formatter.format((total-((total*percentage)/100)+resultShipping)));
-    $(".totalGlobal").text(resulttotal);
+    $("#totalGlobal").text(resulttotal);
 
-    if(formatter.format((total-((total*percentage)/100)+resultShipping)) == "NaN")
-        location.reload(); 
+    /* if(formatter.format((total-((total*percentage)/100)+resultShipping)) == "NaN")
+        location.reload();  */
     
 }
 

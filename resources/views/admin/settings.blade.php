@@ -121,7 +121,7 @@
                             <div class="mb-3 row">
                                 <label class="col-md-2 col-12  col-form-label">Transacciones:</label>
                                 <div class="col">
-                                    <input class="form-control" type="text" id="emailsPaid" value="{{$emailsAllPaid->value}}" autocomplete="off">
+                                    <input class="form-control" type="text" id="emailsPaid" value="{{$emailsAllPaid? $emailsAllPaid->value : ''}}" autocomplete="off">
                                     <input type='hidden' id='emailsAllPaid' name='emailsAllPaid' class='form-control'>
                                     <!-- <textarea class="form-control" name="emailsPaid" id="emailsPaid" value="" placeholder="correo1@gmail.com; correo2@gmail.com" rows="5"></textarea> -->
                                 </div>
@@ -130,7 +130,7 @@
                             <div class="mb-3 row">
                                 <label class="col-md-2 col-12 col-form-label">Delivery</label>
                                 <div class="col">
-                                    <input class="form-control" type="text" id="emailsDelivery" value="{{$emailsAllDelivery->value}}" autocomplete="off">
+                                    <input class="form-control" type="text" id="emailsDelivery" value="{{$emailsAllDelivery? $emailsAllDelivery->value : ''}}" autocomplete="off">
                                     <input type='hidden' id='emailsAllDelivery' name='emailsAllDelivery' class='form-control'>
                                     <!-- <textarea class="form-control" name="emailsDelivery" id="emailsDelivery" value="" placeholder="correo1@gmail.com; correo2@gmail.com" rows="5"></textarea> -->
                                 </div>

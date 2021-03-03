@@ -123,7 +123,7 @@
                             <div class= "form-section">
                                 <p>Ingrese un correo electrónico donde podamos enviarte el recibo de pago:</p>
                                 <label class="form" for="email">CORREO ELECTRÓNICO</label>
-                                <input type="email" name="email" class="form-control" placeholder="joedoe@gmail.com" required />
+                                <input type="email" name="email" id="email" class="form-control" placeholder="joedoe@gmail.com" required />
                             </div>
 
                             <div class="form-section">
@@ -131,7 +131,7 @@
                                 <input type="hidden" id="statusShipping" value="true">
                                     <p> Seleccione un envio:</p>
                                     @foreach ($shippings as $shipping)
-                                        <div class="row shippings justify-content-center align-items-center minh-10">
+                                        <div class="row shippings justify-content-center align-items-center minh-10" id="listShipping">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4" id="iconChecked">
                                                 <input type="radio" class="radio-shippings" name="shippings" id="shippings" value="{{$shipping->id}}">
                                                 <input type="hidden" id="shippingPrice" value="{{$shipping->price}}">
@@ -156,19 +156,80 @@
                                 @if ($sales[0]->statusShipping && count($shippings)!=0)
                                     <p> Ingresa la dirección de envío:</p>
                                     <label class="form" for="name">NOMBRE:</label>
-                                    <input type="text" name="name" class="form-control" data-parsley-minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" required />
+                                    <input type="text" name="name" id="name" class="form-control formDataShipping" data-parsley-minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" required />
                                     <label class="form" for="number">NUMERO DE CELULAR:</label>
-                                    <input type="tel" name="number" class="form-control" placeholder="04121234567" size="11" maxlength="20" data-parsley-maxlength="20" data-parsley-pattern="^(?:(\+)58|0)(?:2(?:12|4[0-9]|5[1-9]|6[0-9]|7[0-8]|8[1-35-8]|9[1-5]|3[45789])|4(?:1[246]|2[46]))\d{7}$" required autocomplete="off" />
+                                    <input type="tel" name="number" id="number" class="form-control formDataShipping" placeholder="04121234567" size="11" maxlength="20" data-parsley-maxlength="20" data-parsley-pattern="^(?:(\+)58|0)(?:2(?:12|4[0-9]|5[1-9]|6[0-9]|7[0-8]|8[1-35-8]|9[1-5]|3[45789])|4(?:1[246]|2[46]))\d{7}$" required autocomplete="off" />
                                     <label class="form" for="address">DIRECCÍON:</label>
-                                    <textarea class="form-control" name="address" row="8" placeholder="Av. Principal los dos caminos. &#10; &#10;Punto Referencia: Al frente de Farmatodo." required style="height:100px !important"></textarea>
+                                    <textarea class="form-control formDataShipping" name="address" id="address" row="8" placeholder="Av. Principal los dos caminos. &#10; &#10;Punto Referencia: Al frente de Farmatodo." required style="height:100px !important"></textarea>
                                     <label class="form" for="details">DETALLE ADICIONALES (OPCIONAL)</label>
-                                    <textarea class="form-control" name="details" row="5" placeholder="Deja en la recepción" style="height:100px !important"></textarea>
+                                    <textarea class="form-control formDataShipping" name="details" id="details" row="5" placeholder="Deja en la recepción" style="height:100px !important"></textarea>
                                 @endif
                             </div>
 
+                            <div class="form-section">
+                                <p>Ingresa código de descuento:</p>
+                                <label class="form" for="discount">CODE DE DESCUENTO:</label>
+                                <div class="row">
+                                    <div class="col-10">
+                                        <input type="text" name="discount" id="discount" class="form-control" data-parsley-minlength="3" placeholder="DESCO20" autocomplete="off" onkeyup="javascript:this.value=this.value.toUpperCase();" disabled/>
+                                    </div>
+                                    <div class="col">
+                                        <i class="fa fa-times" aria-hidden="true"id="iconClose" style="font-size:35px; color:red"></i>
+                                        <i class="fa fa-check" aria-hidden="true" id="iconDone" style="font-size:35px; color:#00cc5f"></i>
+                                        <img widht="40px" height="40px" id="iconLoading" src="{{ asset('/images/loadingTransparent.gif') }}">
+                                    </div>                                
+                                </div>
+                                <div class="row">&nbsp;</div>
+                                <div class="row justify-content-center align-items-center">
+                                    <label class="switch">
+                                        <input type="checkbox" id="switchDiscount" name="switchDiscount">
+                                        <span class="slider round"></span>
+                                    </label>
+                                    <label class="noPadding">Tengo descuento</label>
+                                </div>
+                            </div> 
+
+                            <div class="form-section">
+                                <p>Revisa y paga:</p>
+                                <div class="row sales justify-content-center align-items-center minh-10 addPadding">
+                                    <div class="col-md-2 col-sm-2 col-3">
+                                        <svg width="30px" height="30px" viewBox="0 0 16 16" class="bi bi-cart2" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                                        </svg>
+                                    </diV>
+                                    <div class="name col">Pedido <br>{{$quantity}} {{$msg}}</div>
+                                    <input type="hidden" id="orderClient" name="orderClient" value="{{$quantity}} {{$msg}}">
+                                    @if ($coinClient == 0) 
+                                        <div class="total col">$ {{$total}}</div>
+                                    @else
+                                        <div class="total col-md col-12">Bs {{$total}}</div>
+                                    @endif
+
+                                    <input type="hidden" id="totalProductService" name="totalProductService" value="{{$total}}">
+                                    <input type="hidden" id="percentageSelect" name="percentageSelect" value="0">
+                                </div>
+                                <div class="row sales justify-content-center align-items-center minh-10 addPadding">
+                                    <div class="col-md-2 col-sm-2 col-3">
+                                        <img src="{{ asset('images/envios.png') }}" class="figure-img img-fluid rounded" width="50px" height="50px">
+                                    </diV>
+                                    <div class="name col">Envio</div>
+                                    
+                                    @if ($coinClient == 0) 
+                                        <div class="col total showShipping" id="showShipping"></div>
+                                    @else
+                                        <div class="col-md col-12 total showShipping" id="showShipping"></div>
+                                    @endif
+                                </div>
+                                <div class="showPercentage"></div>
+                                <div class="totalGlobal" id="totalGlobal"></div>
+                                <input type="hidden" id="selectShipping" name="selectShipping">
+                                <input type="hidden" id="priceShipping" name="priceShipping" >
+                                <input type="hidden" id="totalAll" name="totalAll">
+                            </div> 
+
                             <div class= "form-section">
                                 @if ($coinClient ==0)
-                                    <p>Seleccionar metodo de pago:</p>
+                                    <p>Seleccionar método de pago:</p>
                                 @else
                                     <p>Ingresa la información de tu tarjeta de crédito o debito:</p>
                                 @endif
@@ -311,74 +372,13 @@
                                 </div>
                             </div>
 
-                            <div class="form-section">
-                                <p>Ingresa código de descuento:</p>
-                                <label class="form" for="discount">CODE DE DESCUENTO:</label>
-                                <div class="row">
-                                    <div class="col-10">
-                                        <input type="text" name="discount" id="discount" class="form-control" data-parsley-minlength="3" placeholder="DESCO20" autocomplete="off" onkeyup="javascript:this.value=this.value.toUpperCase();" />
-                                    </div>
-                                    <div class="col">
-                                        <i class="fa fa-times" aria-hidden="true"id="iconClose" style="font-size:35px; color:red"></i>
-                                        <i class="fa fa-check" aria-hidden="true" id="iconDone" style="font-size:35px; color:#00cc5f"></i>
-                                        <img widht="40px" height="40px" id="iconLoading" src="{{ asset('/images/loadingTransparent.gif') }}">
-                                    </div>                                
-                                </div>
-                                <div class="row">&nbsp;</div>
-                                <div class="row justify-content-center align-items-center">
-                                    <label class="switch">
-                                        <input type="checkbox" id="switchDiscount" name="switchDiscount">
-                                        <span class="slider round"></span>
-                                    </label>
-                                    <label class="noPadding">No tengo descuento</label>
-                                </div>
-                            </div> 
-
-                            <div class="form-section">
-                                <p>Revisa y paga:</p>
-                                <div class="row sales justify-content-center align-items-center minh-10 addPadding">
-                                    <div class="col-md-2 col-sm-2 col-3">
-                                        <svg width="30px" height="30px" viewBox="0 0 16 16" class="bi bi-cart2" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
-                                        </svg>
-                                    </diV>
-                                    <div class="name col">Pedido <br>{{$quantity}} {{$msg}}</div>
-                                    <input type="hidden" id="orderClient" name="orderClient" value="{{$quantity}} {{$msg}}">
-                                    @if ($coinClient == 0) 
-                                        <div class="total col">$ {{$total}}</div>
-                                    @else
-                                        <div class="total col-md col-12">Bs {{$total}}</div>
-                                    @endif
-
-                                    <input type="hidden" id="totalProductService" name="totalProductService" value="{{$total}}">
-                                    <input type="hidden" id="percentageSelect" name="percentageSelect">
-                                </div>
-                                <div class="row sales justify-content-center align-items-center minh-10 addPadding">
-                                    <div class="col-md-2 col-sm-2 col-3">
-                                        <img src="{{ asset('images/envios.png') }}" class="figure-img img-fluid rounded" width="50px" height="50px">
-                                    </diV>
-                                    <div class="name col">Envio</div>
-                                    
-                                    @if ($coinClient == 0) 
-                                        <div class="col total showShipping"></div>
-                                    @else
-                                        <div class="col-md col-12 total showShipping"></div>
-                                    @endif
-                                </div>
-                                <div class="showPercentage"></div>
-                                <div class="totalGlobal"></div>
-                                <input type="hidden" id="selectShipping" name="selectShipping">
-                                <input type="hidden" id="priceShipping" name="priceShipping" >
-                                <input type="hidden" id="totalAll" name="totalAll">
-                            </div> 
-
                             <div class="row">&nbsp;</div>
 
                             <div class="form-navigation bottom">
                                 <button type="button" class="next btn btn-bottom">Siguiente</button>
-                                <button type="button" class="pay btn btn-bottom">Pagar</button>
-                                <button type="button" class="save btn btn-bottom">Guardar</button>
-                                <button type="submit" class="submit btn btn-bottom">Realizar Pago</button>
+                                <button type="button" class="pay btn btn-bottom btn-active">Pagar</button>
+                                <button type="button" class="save btn btn-bottom btn-active">Guardar</button>
+                                <button type="submit" class="submit btn btn-bottom btn-active">Realizar Pago</button>
                             </div>
                             <div class="row justify-content-center"id="loading">
                                 <img widht="80px" height="80px" class="justify-content-center" src="{{ asset('/images/loadingTransparent.gif') }}">
@@ -399,7 +399,7 @@
         $('#iconDone').hide();  
         $('#iconLoading').hide();  
 
-        $(function(){
+        $(document).ready(function(){
             function delay(callback, ms) {
                 var timer = 0;
                 return function() {
@@ -412,6 +412,7 @@
             }
 
             $('#discount').keyup(delay(function (e) {
+                console.log("entr");
                 $('#iconClose').hide();
                 $('#iconDone').hide();  
                 $('#iconLoading').show(); 
@@ -462,7 +463,6 @@
                     alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                 });
             });
-            
         });
     </script>
 </body>

@@ -118,7 +118,7 @@
               </a>
             </li>
           @endif
-          <li class="nav-item active-pro">
+          <li class="nav-item">
             <a class="nav-link" href="{{route('logout')}}">
             <i class="material-icons">login</i>
               <p>Salir</p>
