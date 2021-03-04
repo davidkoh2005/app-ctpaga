@@ -100,9 +100,6 @@
                                 </div>
                             </div>
                             <div class="row">&nbsp;</div>
-                            <div class="row">&nbsp;</div>
-                            <div class="row">&nbsp;</div>
-                            <div class="row">&nbsp;</div>
                             <div class="row">
                                 <div class="col-6 mx-auto">
                                     <button type="submit" class="submit btn btn-bottom" id="submitSchedule">Guardar</button>
@@ -116,7 +113,7 @@
                                 <h4 class="mx-auto">Ingrese la cuenta que recibirá el correo electrónico:</h4>
                             </div>
                             <div class="row">&nbsp;</div>
-                            <p><strong>Importante:</strong> Separar correo con coma ( <strong>,</strong> )</p>
+                            <p><strong>Importante:</strong> Separar correo con coma ( <strong>,</strong> ) o utilizando tecla tabulador (<strong>TAB</strong>) o barra espaciadora (<strong>SPACE</strong>)</p>
                             <div class="row">&nbsp;</div>
                             <div class="mb-3 row">
                                 <label class="col-md-2 col-12  col-form-label">Transacciones:</label>
@@ -135,9 +132,16 @@
                                     <!-- <textarea class="form-control" name="emailsDelivery" id="emailsDelivery" value="" placeholder="correo1@gmail.com; correo2@gmail.com" rows="5"></textarea> -->
                                 </div>
                             </div>
-                            <div class="row">&nbsp;</div>
-                            <div class="row">&nbsp;</div>
-                            <div class="row">&nbsp;</div>
+
+                            <div class="row">&nbsp;</div>  
+                            <div class="mb-3 row">
+                                <label class="col-md-2 col-12 col-form-label">Estado de pedido </label>
+                                <div class="col">
+                                    <input class="form-control" type="text" id="statusPaid" value="{{$statusPaidAll? $statusPaidAll->value : ''}}" autocomplete="off">
+                                    <input type='hidden' id='statusPaidAll' name='statusPaidAll' class='form-control'>
+                                    <!-- <textarea class="form-control" name="emailsDelivery" id="emailsDelivery" value="" placeholder="correo1@gmail.com; correo2@gmail.com" rows="5"></textarea> -->
+                                </div>
+                            </div>
                             <div class="row">&nbsp;</div>
                             <div class="row">
                                 <div class="col-6 mx-auto">
@@ -197,7 +201,7 @@
                 $('#formSchedule').submit();
             }
             else
-                alertify.error('Debe seleccionar al menos un transaccion');
+                alertify.error('Debe seleccionar horario correctamente');
         });
 
         $('#submitEmail').on('click', function(e) {
@@ -221,6 +225,7 @@
 			//To render the input device to multiple email input using BootStrap icon
 			$('#emailsPaid').multiple_emails({position: "bottom"});
             $('#emailsDelivery').multiple_emails({position: "bottom"});
+            $('#statusPaid').multiple_emails({position: "bottom"});
 			
             $('#emailsAllPaid').val($('#emailsPaid').val());
 			$('#emailsPaid').change( function(){
@@ -230,6 +235,11 @@
             $('#emailsAllDelivery').val($('#emailsDelivery').val());
 			$('#emailsDelivery').change( function(){
 				$('#emailsAllDelivery').val($(this).val());
+			});
+
+            $('#statusPaidAll').val($('#statusPaid').val());
+			$('#statusPaid').change( function(){
+				$('#statusPaidAll').val($(this).val());
 			});
 			
 		});

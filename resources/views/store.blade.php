@@ -19,17 +19,17 @@
                     <div class="row colorGrey">
                         <div class="col-12">
                             <div class="row">
-                                <div class="form-navigation float-left">
+                                <div class="form-navigation float-left col-md-2 col-2">
                                     <button type="button" class="previous btn">
                                         <svg width="45px" height="45px" viewBox="0 0 16 16" class="bi bi-chevron-left" fill="currentColor">
                                             <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
                                         </svg>
                                     </button>
                                 </div>
-                                <div class="float-left">
+                                <div class="float-left col-md-8 col-6">
                                     <h5 class="form-store" id="form-store"> {{$commerce->name}} </h5>
                                 </div>
-                                <div class="col text-right" id="btnFloatingShipping">
+                                <div class="col-md-2 col-3 text-right" id="btnFloatingShipping">
                                     <div class="relative">
                                         <div> <img class="logoCart" widht="70px" height="70px" class="justify-content-center" src="{{ asset('images/logoCarrito-white.png')}}"> </div>
                                         <div class="circleGreen">0</div>
@@ -181,56 +181,26 @@
                             <div class="row">&nbsp;</div>
                         </div>
                         <div class="row">
-                            <div class="col-6 mx-auto text-center">
-                                <img class="rounded-circle" src="{{ asset('images/eeuu.png') }}" width="80px" height="80px">
-                                <br>
-                                <label class="textDivisa">USA $</label>
+                            <div class="col-12 mx-auto text-center">
+                                <img class="img-fluid" alt="Responsive image" src="{{ asset('images/monedas.png') }}">
+
                             </div>
-                            <div class="col-6 mx-auto text-center">
-                                <img class="rounded-circle" src="{{ asset('images/venezuela.png') }}" width="80px" height="80px">
-                                <br>
-                                <label class="textDivisa">VE Bs</label>
-                            </div>
+
                         </div>
                         <div class="row">&nbsp;</div>
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-12 mx-auto text-center">
-                                <label class="titleCoin">Con Tarjeta</label>
+                                <label class="titleCoin">Aceptamos</label>
                             </div>
                             <div class="row">&nbsp;</div>
                         </div>
                         <div class="row">
-                            <div class="col-6 mx-auto text-center">
-                                <img src="{{ asset('images/visa.png')}}" width="150px" height="80px">
+                            <div class="col-12 mx-auto text-center">
+                                <img class="img-fluid" alt="Responsive image" src="{{ asset('images/logos-bancos.png')}}" >
                             </div>
-                            <div class="col-6 mx-auto text-center">
-                                <img src="{{ asset('images/MasterCard.png')}}" width="150px" height="80px">
-                            </div>
+
                         </div>
-                        <div class="row">&nbsp;</div>
-                        <div class="row">
-                            <div class="col-6 mx-auto text-center">
-                                <img src="{{ asset('images/diners.png')}}" width="100px" height="80px">
-                            </div>
-                            <div class="col-6 mx-auto text-center">
-                                <img src="{{ asset('images/americanExpress.png')}}" width="100px" height="80px">
-                            </div>
-                        </div>
-                        <div class="row">&nbsp;</div>
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-12 mx-auto text-center">
-                                <label class="titleCoin">Tambien aceptamos </label>
-                            </div>
-                            <div class="row">&nbsp;</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6 mx-auto text-center">
-                                <img src="{{ asset('images/paypal.png') }}" width="150px" height="60px">
-                            </div>
-                            <div class="col-6 mx-auto text-center">
-                                <img src="{{ asset('images/bitcoin.png') }}" width="150px" height="50px">
-                            </div>
-                        </div>
+                        
                     </div>
 
                     @if (count($shippings)!=0)

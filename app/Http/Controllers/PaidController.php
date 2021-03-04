@@ -18,6 +18,7 @@ use App\Product;
 use App\Service;
 use App\Balance;
 use App\Shipping;
+use App\Settings;
 use Session;
 use AWS;
 use PayPal\Api\Amount;
@@ -112,15 +113,6 @@ class PaidController extends Controller
                 "date"                  => Carbon::now(),
                 "statusPayment"         => 2,
             ]);
-
-            $balance = Balance::firstOrNew([
-                'user_id'       => $user->id,
-                "commerce_id"   => $commerce->id,
-                "coin"          => $request->coinClient,
-            ]);
-
-            $balance->total += floatval($amount)-(floatval($amount)*0.05+0.35);
-            $balance->save();
 
             $userUrl = $request->userUrl;
 
@@ -228,17 +220,6 @@ class PaidController extends Controller
                         "statusPayment"         => 2,
                         "refPayment"            => $resultTransaction['payment']['order_id']
                     ]);
-
-                    $balance = Balance::firstOrNew([
-                        'user_id'       => $user->id,
-                        "commerce_id"   => $commerce->id,
-                        "coin"          => $request->coinClient,
-                    ]);
-
-                    $rateAdmin = Rate::where("roleRate",0)->orderBy("created_at","desc")->first();
-
-                    $balance->total += floatval($amount)-(floatval($amount)*0.1+0.35);
-                    $balance->save();
 
                     $userUrl = $request->userUrl;
 
@@ -486,17 +467,6 @@ class PaidController extends Controller
                     "date"                  => Carbon::now(),
                 ]);
 
-                $balance = Balance::firstOrNew([
-                    'user_id'       => $user->id,
-                    "commerce_id"   => $commerce->id,
-                    "coin"          => $request->coinClient,
-                ]);
-
-                $rateAdmin = Rate::where("roleRate",0)->orderBy("created_at","desc")->first();
-
-                $balance->total += floatval($amount)-(floatval($amount)*0.05+(0.35*floatval($rateAdmin->rate)));
-                $balance->save();
-
                 $userUrl = $request->userUrl;
 
                 $messageNotification['commerce_id'] = $commerce->id;
@@ -615,14 +585,6 @@ class PaidController extends Controller
         ]);
 
         if ($result->getState() === 'approved') {
-            $balance = Balance::firstOrNew([
-                'user_id'       => $user->id,
-                "commerce_id"   => $commerce->id,
-                "coin"          => $requestForm['coinClient'],
-            ]);
-    
-            $balance->total += floatval($amount)-(floatval($amount)*0.1+0.35);
-            $balance->save();
 
             (new User)->forceFill([
                 'email' => $requestForm['email'],
@@ -683,20 +645,30 @@ class PaidController extends Controller
             return response()->json(['statusCode' => 401,'message' => "Unauthorized"]);
         }
 
+        $scheduleInitialGet = Settings::where("name", "Horario Inicial")->first(); 
+        $scheduleFinalGet = Settings::where("name", "Horario Final")->first();
 
-        $paids = Paid::where('codeUrl', $request->codeUrl)
+        $now = Carbon::now();
+        $sheduleInitial = Carbon::createFromFormat('g:i A', $scheduleInitialGet->value);
+        $sheduleFinal = Carbon::createFromFormat('g:i A', $scheduleFinalGet->value);
+
+        if($sheduleInitial->isBefore($now) && $sheduleFinal->isAfter($now)){
+            $paids = Paid::where('codeUrl', $request->codeUrl)
                 ->where("idDelivery",$delivery->id)->first();
 
-        if($paids){
-            $paids->idDelivery = $delivery->id;
-            $paids->statusDelivery = 2;
-            $sales = Sale::where('codeUrl',$request->codeUrl)->orderBy('name', 'asc')->get();
-            $commerce = Commerce::whereId($paids->commerce_id)->first();
-            $paids->save();
-            return response()->json(['statusCode' => 201,'data' =>['paid'=>$paids, 'commerce'=>$commerce, 'sales'=>$sales]]);
-        }
-        else
-            return response()->json(['statusCode' => 400,'message' => "Error no esta disponible"]);
+            if($paids){
+                $paids->idDelivery = $delivery->id;
+                $paids->statusDelivery = 2;
+                $sales = Sale::where('codeUrl',$request->codeUrl)->orderBy('name', 'asc')->get();
+                $commerce = Commerce::whereId($paids->commerce_id)->first();
+                $paids->save();
+                return response()->json(['statusCode' => 201,'data' =>['paid'=>$paids, 'commerce'=>$commerce, 'sales'=>$sales]]);
+            }
+            else
+                return response()->json(['statusCode' => 400,'message' => "Error no esta disponible"]);            
+        }else        
+            return response()->json(['statusCode' => 400,'message' => "El horario es de ".$scheduleInitialGet->value." hasta las ".$scheduleFinalGet->value]);
+
 
     }
 
@@ -712,21 +684,31 @@ class PaidController extends Controller
         $paids = Paid::where('codeUrl', $request->codeUrl)
                 ->whereNull("idDelivery")->first();
 
-        if($paids && ($paids->idDelivery == null || $paids->idDelivery == $delivery->id)){
-            $paids->idDelivery = $delivery->id;
-            $paids->statusDelivery = 2;
-            $sales = Sale::where('codeUrl',$request->codeUrl)->orderBy('name', 'asc')->get();
-            $commerce = Commerce::whereId($paids->commerce_id)->first();
-            $paids->save();
+        $scheduleInitialGet = Settings::where("name", "Horario Inicial")->first(); 
+        $scheduleFinalGet = Settings::where("name", "Horario Final")->first();
 
-            $delivery->codeUrlPaid = $request->codeUrl;
-            $delivery->statusAvailability = 0;
-            $delivery->save();
+        $now = Carbon::now();
+        $sheduleInitial = Carbon::createFromFormat('g:i A', $scheduleInitialGet->value);
+        $sheduleFinal = Carbon::createFromFormat('g:i A', $scheduleFinalGet->value);
 
-            return response()->json(['statusCode' => 201,'data' =>['paid'=>$paids, 'commerce'=>$commerce, 'sales'=>$sales]]);
-        }
-        else
-            return response()->json(['statusCode' => 400,'message' => "Este orden ya no se encuentra disponible"]);
+        if($sheduleInitial->isBefore($now)&& $sheduleFinal->isAfter($now))
+            if($paids && ($paids->idDelivery == null || $paids->idDelivery == $delivery->id)){
+                $paids->idDelivery = $delivery->id;
+                $paids->statusDelivery = 2;
+                $sales = Sale::where('codeUrl',$request->codeUrl)->orderBy('name', 'asc')->get();
+                $commerce = Commerce::whereId($paids->commerce_id)->first();
+                $paids->save();
+
+                $delivery->codeUrlPaid = $request->codeUrl;
+                $delivery->statusAvailability = 0;
+                $delivery->save();
+
+                return response()->json(['statusCode' => 201,'data' =>['paid'=>$paids, 'commerce'=>$commerce, 'sales'=>$sales]]);
+            }
+            else
+                return response()->json(['statusCode' => 400,'message' => "Este orden ya no se encuentra disponible"]);
+        else        
+            return response()->json(['statusCode' => 400,'message' => "El horario es de ".$scheduleInitialGet->value." hasta las ".$scheduleFinalGet->value]);
 
     }
 
@@ -747,6 +729,22 @@ class PaidController extends Controller
             $delivery = $request->user();
             $delivery->codeUrlPaid = null;
             $delivery->save();
+
+            $balance = Balance::firstOrNew([
+                'user_id'       => $paids->user_id,
+                "commerce_id"   => $paids->commerce_id,
+                "coin"          => $paids->coin,
+            ]);
+
+            if($paids->coin == 0){
+                $balance->total += floatval($paids->total)-(floatval($paids->total)*0.05+0.35);
+                $balance->save();
+            }else{
+                $rateAdmin = Rate::where("roleRate",0)->orderBy("created_at","desc")->first();
+        
+                $balance->total += floatval($$paids->total)-(floatval($$paids->total)*0.05+(0.35*floatval($rateAdmin->rate)));
+                $balance->save();
+            }
 
             $message = "Delivery Ctpaga informa que los productos de código de compra ".$paids->codeUrl." fue entregado a su destino.";
             $userCommerce = User::whereId($paids->user_id)->first();

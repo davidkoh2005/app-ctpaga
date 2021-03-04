@@ -95,9 +95,9 @@
                             <td width="100px">
                                 <button class="btn btn-bottom" onClick="publicCode('{{$transaction->codeUrl}}', '{{$transaction->statusDelivery}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Publicar Orden"><i class="material-icons">send</i></button>
                                 @if($transaction->alarm)
-                                    <button class="btn btn-bottom" id="btnAlarm" onClick="showAlarm('{{$transaction->id}}', '{{Carbon::parse($transaction->alarm)->format('d/m/Y')}}', {{Carbon::parse($transaction->alarm)->format('g')}}, {{Carbon::parse($transaction->alarm)->format('i')}}, '{{Carbon::parse($transaction->alarm)->format('A')}}', '{{$transaction->idDelivery}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Recordatorio"><i class="material-icons">alarm</i></button>
+                                    <button class="btn btn-bottom" id="btnAlarm" onClick="showAlarm('{{$transaction->id}}', '{{Carbon::parse($transaction->alarm)->format('d/m/Y')}}', {{Carbon::parse($transaction->alarm)->format('g')}}, {{Carbon::parse($transaction->alarm)->format('i')}}, '{{Carbon::parse($transaction->alarm)->format('A')}}', '{{$transaction->idDelivery}}', '{{$transaction->statusDelivery}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Recordatorio"><i class="material-icons">alarm</i></button>
                                 @else
-                                    <button class="btn btn-bottom" id="btnAlarm" onClick="showAlarm('{{$transaction->id}}', '{{Carbon::parse($endDate)->format('d/m/Y')}}', 1, 0, 'AM', '{{$transaction->idDelivery}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Recordatorio"><i class="material-icons">alarm</i></button>
+                                    <button class="btn btn-bottom" id="btnAlarm" onClick="showAlarm('{{$transaction->id}}', '{{Carbon::parse($endDate)->format('d/m/Y')}}', 1, 0, 'AM', '{{$transaction->idDelivery}}', '{{$transaction->statusDelivery}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Recordatorio"><i class="material-icons">alarm</i></button>
                                 @endif
                             </td>
                         </tr>
@@ -205,17 +205,22 @@
             }
         }
 
-        function showAlarm(id, date, hours, min, anteMeridiem, idDelivery){
-            idSelect = id;
-            if(parseInt(idDelivery) > 0)
-                alertify.error('No se puede agregar alarma porque esta transacción ya fue enviado');
-            else{
-                $('#dateAlarm').val(date);
-                $("#hours option[value='"+ hours +"']").attr("selected",true);
-                $("#min option[value='"+ min +"']").attr("selected",true);
-                $("#anteMeridiem option[value='"+ anteMeridiem +"']").attr("selected",true);
-                $('#alarmModal').modal('show');
+        function showAlarm(id, date, hours, min, anteMeridiem, idDelivery, status){
+            if(parseInt(status) == 0){
+                idSelect = id;
+                if(parseInt(idDelivery) > 0)
+                    alertify.error('No se puede agregar alarma porque esta transacción ya fue enviado');
+                else{
+                    $('#dateAlarm').val(date);
+                    $("#hours option[value='"+ hours +"']").attr("selected",true);
+                    $("#min option[value='"+ min +"']").attr("selected",true);
+                    $("#anteMeridiem option[value='"+ anteMeridiem +"']").attr("selected",true);
+                    $('#alarmModal').modal('show');
+                } 
+            }else{
+                alertify.error('No puede activar alarma!');
             }
+
         }
 
         

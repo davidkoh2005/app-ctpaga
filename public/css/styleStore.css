@@ -57,7 +57,7 @@ a {
     border-radius: 100%;
     display: inline-block;
     font-size: 11px;
-    margin: 50px 20px;
+    margin: 50px 15px;
     width: 15px;
     height: 15px;
     line-height: 15px;
@@ -515,5 +515,3 @@ a.category-current div.category-image {
     margin-right: 20px;
     margin-bottom: 20px;
 }
-
-.

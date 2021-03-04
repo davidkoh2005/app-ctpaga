@@ -15,6 +15,7 @@ use App\Paid;
 use App\Picture;
 use App\Commerce;
 use App\Delivery;
+use App\Settings;
 use DB;
 
 class AuthController extends Controller
@@ -233,7 +234,11 @@ class AuthController extends Controller
                     ->where("statusDelivery",">=",1)
                     ->orderBy("date", "desc")
                     ->first();
-        return response()->json(['statusCode' => 201,'data' => $request->user(), 'paid' =>$paid]);
+
+        $scheduleInitialGet = Settings::where("name", "Horario Inicial")->first(); 
+        $scheduleFinalGet = Settings::where("name", "Horario Final")->first(); 
+
+        return response()->json(['statusCode' => 201,'data' => $request->user(), 'paid' =>$paid, 'scheduleInitial' =>$scheduleInitialGet , 'scheduleFinal' =>$scheduleFinalGet]);
     }
 
     public function versionApp(Request $request)

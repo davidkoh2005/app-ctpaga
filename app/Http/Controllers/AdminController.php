@@ -392,14 +392,6 @@ class AdminController extends Controller
             $transaction->save();
 
             if($request->status == 2){
-                $balance = Balance::firstOrNew([
-                    'user_id'       => $transaction->user_id,
-                    "commerce_id"   => $transaction->commerce_id,
-                    "coin"          => $transaction->coin,
-                ]);
-    
-                $balance->total += floatval($transaction->total)-(floatval($transaction->total)*0.05+0.35);
-                $balance->save();
 
                 $sales = Sale::where("codeUrl", $transaction->condeUrl)->get();
                 $message="";
@@ -739,8 +731,11 @@ class AdminController extends Controller
         }elseif (Auth::guard('web')->check() && !Auth::guard('admin')->check()){
             return redirect(route('commerce.dashboard'));
         }
+
         $emailsAllPaid = "";
         $emailsAllDelivery = "";
+        $statusPaidAll = "";
+
         $hoursInitial = "";
         $minInitial = "";
         $anteMeridiemInitial = "";
@@ -754,13 +749,14 @@ class AdminController extends Controller
         $scheduleFinalGet = Settings::where("name", "Horario Final")->first(); 
         $emailsAllPaid = Settings::where("name", "Email Transaccion")->first();
         $emailsAllDelivery = Settings::where("name", "Email Delivery")->first();
+        $statusPaidAll = Settings::where("name", "Email Estado Pedido")->first();
 
         if($scheduleInitialGet && $scheduleFinalGet){
             $scheduleInitial = $this->getTime($scheduleInitialGet->value);
             $scheduleFinal = $this->getTime($scheduleFinalGet->value); 
         }
 
-        return view('admin.settings', compact('statusMenu', 'emailsAllPaid', 'emailsAllDelivery', 'scheduleInitial', 'scheduleFinal'));
+        return view('admin.settings', compact('statusMenu', 'emailsAllPaid', 'emailsAllDelivery', 'statusPaidAll', 'scheduleInitial', 'scheduleFinal'));
     }
 
     public function getTime($value)
@@ -792,6 +788,7 @@ class AdminController extends Controller
     {
         $this->updateSettings("Email Transaccion", $request->emailsAllPaid);
         $this->updateSettings("Email Delivery", $request->emailsAllDelivery);
+        $this->updateSettings("Email Estado Pedido", $request->statusPaidAll);
         return redirect(route('admin.settings'));
     }
 

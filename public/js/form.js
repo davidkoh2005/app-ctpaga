@@ -75,10 +75,21 @@ $(document).ready(function(){
 
 
         if(index == 3){
-            if(statusShippingClient)
+            if(statusShippingClient){
+                $(".form-navigation .next").addClass('btn-active');
                 $('.next').show();
-            else
+            }
+            else{
                 $('.next').hide();
+                $(".form-navigation .next").removeClass('btn-active');
+            }
+        }
+
+        if(index == 4){
+            if(dataShipping.length ==3)
+                $(".form-navigation .next").addClass('btn-active');
+            else
+                $(".form-navigation .next").removeClass('btn-active');
         }
 
         if(index == 7){
@@ -183,7 +194,7 @@ $(document).ready(function(){
 
     navigateTo(0);
 
-    $('#listShipping').on('click', function(){
+    $('.listShipping').on('click', function(){
         $('#svg-check').remove();
         var checkbox = $(this).find('input[type=radio]');
         checkbox.prop('checked', !checkbox.prop('checked'));

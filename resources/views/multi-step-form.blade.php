@@ -31,17 +31,17 @@
                     <div class="row colorGrey">
                         <div class="col-12">
                             <div class="row">
-                                <div class="form-navigation float-left">
+                                <div class="form-navigation float-left col-md-2 col-2">
                                     <button type="button" class="previous btn">
                                         <svg width="45px" height="45px" viewBox="0 0 16 16" class="bi bi-chevron-left" fill="currentColor">
                                             <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
                                         </svg>
                                     </button>
                                 </div>
-                                <div class="float-left">
+                                <div class="float-left col-md-7 col-6">
                                     <h5 class="form-sales" id="form-sales"> {{$commerce->name}} </h5>
                                 </div>
-                                <div class="col text-right profile">
+                                <div class="col-md-2 col text-right profile">
                                     @if($picture)
                                         <img class="rounded-circle" src="{{$picture->url}}" width="60px" height="60px">
                                     @else
@@ -68,12 +68,13 @@
                                 <div class="row">&nbsp;</div>
                                 @foreach ($sales as $sale)
                                     <div class="row sales justify-content-center align-items-center minh-10" id="listSale">
-                                        <div class="float-left">
+                                        <div class="float-left col-2">
                                             @if($sale->image != "")    
-                                                <img src="{{$sale->image}}" width="100px" height="80px"></div>
+                                                <img src="{{$sale->image}}" width="100px" height="80px">
                                             @else
-                                                <img src="{{ asset('images/adicionales.png') }}" width="100px" height="80px"></div>
+                                                <img src="{{ asset('images/adicionales.png') }}" width="100px" height="80px">
                                             @endif
+                                        </div>
                                         <div class="quantity" id="desingQuantity">{{$sale->quantity}}</div>
                                         <div class="verticalLine"></div>
                                         <input type="hidden" name="idSale" id="idSale" value="{{$sale->id}}">
@@ -131,7 +132,7 @@
                                 <input type="hidden" id="statusShipping" value="true">
                                     <p> Seleccione un envio:</p>
                                     @foreach ($shippings as $shipping)
-                                        <div class="row shippings justify-content-center align-items-center minh-10" id="listShipping">
+                                        <div class="row shippings justify-content-center align-items-center minh-10 listShipping">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4" id="iconChecked">
                                                 <input type="radio" class="radio-shippings" name="shippings" id="shippings" value="{{$shipping->id}}">
                                                 <input type="hidden" id="shippingPrice" value="{{$shipping->price}}">
@@ -247,26 +248,11 @@
                                         <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4" id="iconChecked">
                                             <input type="radio" class="radio-payment" name="payment" id="payment" value="CARD">
                                         </div>
-                                        <div class="col">
-                                            <div class="description-payment row" style="padding-bottom: 10px;">
-                                                <div class="col center">
-                                                    <img style="margin:5px;" src="{{ asset('images/visa.png') }}" width="150px" height="50px">
-                                                </div>
-                                                <div class="col center">
-                                                    <img style="margin:5px;" src="{{ asset('images/MasterCard.png') }}" width="120px" height="50px">
-                                                </div>
-                                            </div>
-                                            <div class="description-payment row">
-                                                <div class="col center">
-                                                    <img style="margin:5px;" src="{{ asset('images/diners.png') }}" width="90px" height="60px">
-                                                </div>
-                                                <div class="col center">
-                                                    <img style="margin:5px;" src="{{ asset('images/americanExpress.png') }}" width="90px" height="60px">
-                                                </div>
-                                            </div>
-                                            
-                                            <input type="hidden" id="paymentDescription" value="CARD">
+                                        <div class="description-payment col">
+                                            <img class="img-fluid" alt="Responsive image" style="margin:5px;" src="{{ asset('images/square.png') }}">
                                         </div>
+                                        
+                                        <input type="hidden" id="paymentDescription" value="CARD">
                                     </div>
 
                                     <div id="errorCard">
@@ -288,8 +274,8 @@
                                         <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4" id="iconChecked">
                                             <input type="radio" class="radio-payment" name="payment" id="payment" value="PAYPAL">
                                         </div>
-                                        <div class="description-payment col">
-                                            <img src="{{ asset('images/paypal.png') }}" width="150px" height="50px">
+                                        <div class="description-payment col-md-10 col">
+                                            <img class="img-fluid" alt="Responsive image" src="{{ asset('images/paypal.png') }}">
                                             <input type="hidden" id="paymentDescription" value="PAYPAL">
                                         </div>
                                     </div>
@@ -297,8 +283,8 @@
                                         <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4" id="iconChecked">
                                             <input type="radio" class="radio-payment" name="payment" id="payment" value="BITCOIN">
                                         </div>
-                                        <div class="description-payment col">
-                                            <img src="{{ asset('images/bitcoin.png') }}" width="150px" height="50px">    
+                                        <div class="description-payment col-md-10 col">
+                                            <img class="img-fluid" alt="Responsive image" src="{{ asset('images/bitcoin.png') }}">    
                                             <input type="hidden" id="paymentDescription" value="BITCOIN">                                    
                                         </div>
                                     </div>
@@ -308,8 +294,7 @@
                                             <input type="radio" class="radio-payment" name="payment" id="payment" value="EFECTIVO">
                                         </div>
                                         <div class="description-payment col">
-                                            <img src="{{ asset('images/dolars.png') }}" width="150px" height="50px">
-                                            <label style="margin-left:10px">PAGAR EN EFECTIVO</label>
+                                            <img class="img-fluid" alt="Responsive image" src="{{ asset('images/dolars.png') }}">
                                             <input type="hidden" id="paymentDescription" value="EFECTIVO">
                                         </div>
                                     </div>

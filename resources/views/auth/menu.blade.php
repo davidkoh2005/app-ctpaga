@@ -160,7 +160,7 @@
     </style>
 @if(Auth::guard('admin')->check())
   <script>
-    setInterval(verifyAlarm, 60000);
+    setInterval(verifyAlarm, 30000);
 
     function verifyAlarm(){
       $.ajax({
