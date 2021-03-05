@@ -68,7 +68,7 @@
                                 <div class="row">&nbsp;</div>
                                 @foreach ($sales as $sale)
                                     <div class="row sales justify-content-center align-items-center minh-10" id="listSale">
-                                        <div class="float-left col-2">
+                                        <div class="float-left">
                                             @if($sale->image != "")    
                                                 <img src="{{$sale->image}}" width="100px" height="80px">
                                             @else
@@ -244,12 +244,10 @@
                                 </div> -->
                                 <div class="dataPay">
                                     @if ($coinClient ==0)
-                                    <div class="row checkPayment justify-content-center align-items-center minh-10">
-                                        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4" id="iconChecked">
+                                    <div class="row checkPayment">
+                                        <div class="description-payment col center">
                                             <input type="radio" class="radio-payment" name="payment" id="payment" value="CARD">
-                                        </div>
-                                        <div class="description-payment col">
-                                            <img class="img-fluid" alt="Responsive image" style="margin:5px;" src="{{ asset('images/square.png') }}">
+                                            <img class="img-fluid " alt="Responsive image" src="{{ asset('images/square.png') }}">
                                         </div>
                                         
                                         <input type="hidden" id="paymentDescription" value="CARD">
@@ -271,29 +269,23 @@
                                     </div>
 
                                     <div class="row checkPayment justify-content-center align-items-center minh-10">
-                                        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4" id="iconChecked">
+                                        <div class="description-payment col center">
                                             <input type="radio" class="radio-payment" name="payment" id="payment" value="PAYPAL">
-                                        </div>
-                                        <div class="description-payment col-md-10 col">
                                             <img class="img-fluid" alt="Responsive image" src="{{ asset('images/paypal.png') }}">
                                             <input type="hidden" id="paymentDescription" value="PAYPAL">
                                         </div>
                                     </div>
                                     <div class="row checkPayment justify-content-center align-items-center minh-10">
-                                        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4" id="iconChecked">
+                                        <div class="description-payment col center">
                                             <input type="radio" class="radio-payment" name="payment" id="payment" value="BITCOIN">
-                                        </div>
-                                        <div class="description-payment col-md-10 col">
                                             <img class="img-fluid" alt="Responsive image" src="{{ asset('images/bitcoin.png') }}">    
                                             <input type="hidden" id="paymentDescription" value="BITCOIN">                                    
                                         </div>
                                     </div>
                                     @if($sales[0]->statusShipping)
                                     <div class="row checkPayment justify-content-center align-items-center minh-10">
-                                        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4" id="iconChecked">
+                                        <div class="description-payment col center">
                                             <input type="radio" class="radio-payment" name="payment" id="payment" value="EFECTIVO">
-                                        </div>
-                                        <div class="description-payment col">
                                             <img class="img-fluid" alt="Responsive image" src="{{ asset('images/dolars.png') }}">
                                             <input type="hidden" id="paymentDescription" value="EFECTIVO">
                                         </div>

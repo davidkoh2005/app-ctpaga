@@ -7,7 +7,7 @@ use App\Delivery;
 use App\Paid;
 use App\Events\StatusDelivery;
 use App\Events\AlarmUrgent;
-use Carbon\Carbon;
+use App\Events\NewNotification;
 
 class DeliveryController extends Controller
 {
@@ -53,14 +53,10 @@ class DeliveryController extends Controller
 
     public function test()
     {
-        $now = Carbon::now();
-        $sheduleInitial = Carbon::createFromFormat('g:i A', '7:00 AM');
-        $sheduleFinal = Carbon::createFromFormat('g:i A', '9:00 PM');
-
-        if($sheduleInitial->isBefore($now)&& $sheduleFinal->isAfter($now) )
-            dd("activo");
-        else
-            dd("desactivado");
+        $messageNotification['commerce_id'] = 1;
+        $messageNotification['total'] = "10,00";
+        $messageNotification['coin'] = "0";
+        $success = event(new NewNotification($messageNotification));
     }
 
     

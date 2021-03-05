@@ -137,7 +137,7 @@ $(document).ready(function(){
         
     })
 
-    $('#email').change( function(){
+    $('#email').keyup( function(){
         if($(this).val().length >0)
             $(".form-navigation .next").addClass('btn-active');
         else
@@ -171,7 +171,7 @@ $(document).ready(function(){
         })
     })
 
-    $('.form-navigation .next').click(function(event){
+    $('.form-navigation .next').click(function(){
         if(curIndex() == 2 && $('#statusShipping').val()=='false'){
             $('.contact-form').parsley().whenValidate({
                 group: 'block-' + curIndex()
@@ -213,12 +213,15 @@ $(document).ready(function(){
     $('.checkPayment').on('click', function(){
         if(!submit){
             $('#errorCard').hide();
-            $('#svg-check').remove();
+            //$('#svg-check').remove();
+            $(".checkPayment").removeClass("checkPaymentActive");
+            $(this).addClass("checkPaymentActive");
+
             var checkbox = $(this).find('input[type=radio]');
             checkbox.prop('checked', !checkbox.prop('checked'));
             selectPayment = checkbox.val();
-            var svg = $(this).find('#iconChecked');
-            svg.append("<svg width='2em' height='2em' viewBox='0 0 16 16' class='bi bi-check-circle-fill' id='svg-check' fill='currentColor'><path fill-rule='evenodd' d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z'/></svg>");
+            /* var svg = $(this).find('#iconChecked');
+            svg.append("<svg width='2em' height='2em' viewBox='0 0 16 16' class='bi bi-check-circle-fill' id='svg-check' fill='currentColor'><path fill-rule='evenodd' d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z'/></svg>"); */
             $('#selectPayment').val($(this).find('#paymentDescription').val());
 
             if($(this).find('#paymentDescription').val() == "EFECTIVO")
@@ -434,10 +437,11 @@ function calculateTotal(){
     var resulttotal;
     var total = $("#totalProductService").val();
 
-    total = total.replaceAll(".", "");
-    total = total.replaceAll(",", ".");
+    total = total.replace(/\./g, "");
+    total = total.replace(/,/g, ".");
 
     total = parseFloat(total);
+
     var percentage = parseInt($("#percentageSelect").val());
     resultShipping = exchangeRate(shippingPrice, _rate, shippingCoin, _coinClient);
     if(_coinClient == 0)
@@ -456,8 +460,8 @@ function calculateTotal(){
     $("#totalAll").val(formatter.format((total-((total*percentage)/100)+resultShipping)));
     $("#totalGlobal").text(resulttotal);
 
-    /* if(formatter.format((total-((total*percentage)/100)+resultShipping)) == "NaN")
-        location.reload();  */
+    if(formatter.format((total-((total*percentage)/100)+resultShipping)) == "NaN")
+        location.reload();
     
 }
 

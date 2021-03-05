@@ -23,7 +23,7 @@ class NewNotification implements ShouldBroadcast
    
     public function broadcastOn()
     {
-      return new Channel('event-ctpaga');
+      return new Channel('channel-ctpaga');
     }
 
     public function broadcastAs()
