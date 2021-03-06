@@ -53,10 +53,29 @@ class DeliveryController extends Controller
 
     public function test()
     {
-        $messageNotification['commerce_id'] = 1;
-        $messageNotification['total'] = "10,00";
-        $messageNotification['coin'] = "0";
-        $success = event(new NewNotification($messageNotification));
+
+        $url = "https://fcm.googleapis.com/fcm/send";
+        $token = "fbSmxHKgTjmIBOIf7VG-m4:APA91bEyJON1P1VMmPu99H0D0PkfsANSHK07IzfBVFJ1G3ENGV3JH_-AtqgLM2QZHlxuCUzR83eWyJsi5Ro-9lCLGwgUXqvBemndpRXg0-OlxvfQaNz8hZ8y3ZAy8mPlXbbUvFg6-Afr";
+        $serverKey = 'AAAAayyhqZo:APA91bFw9NTsl9lh5d6C_IQcd7mNz-YvPOlEIPstg88ttpC7wlesWLFX3Uh0aoWMkbcOVG_M7mfboZPlxKCiLy-lrQPEtsBL-7q7PA9LvPnul6UsaN5dB1IqjaJx8ux94eHu26m-bmC0';
+        $title = "Notification title";
+        $body = "Hello I am from Your php server";
+        $notification = array('title' =>$title , 'body' => $body, 'sound' => 'default', 'badge' => '1');
+        $arrayToSend = array('to' => $token, 'notification' => $notification,'priority'=>'high');
+        $json = json_encode($arrayToSend);
+        $headers = array();
+        $headers[] = 'Content-Type: application/json';
+        $headers[] = 'Authorization: key='. $serverKey;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+        curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        //Send the request
+        $response = curl_exec($ch);
+        curl_close($ch);
+
     }
 
     

@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Events\NewNotification;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
@@ -116,10 +115,12 @@ class PaidController extends Controller
 
             $userUrl = $request->userUrl;
 
-            $messageNotification['commerce_id'] = $commerce->id;
-            $messageNotification['total'] = $amount;
-            $messageNotification['coin'] = $request->coinClient;
-            $success = event(new NewNotification($messageNotification));
+            if($request->coinClient == 0)
+                $messageNotification = "Recibiste un pago de $ ".$amount;
+            else
+                $messageNotification = "Recibiste un pago de BS ".$amount;
+
+            $this->sendFCM($user->token_fcm, $messageNotification);
 
             (new User)->forceFill([
                 'email' => $request->email,
@@ -223,10 +224,12 @@ class PaidController extends Controller
 
                     $userUrl = $request->userUrl;
 
-                    $messageNotification['commerce_id'] = $commerce->id;
-                    $messageNotification['total'] = $amount;
-                    $messageNotification['coin'] = $request->coinClient;
-                    $success = event(new NewNotification($messageNotification));
+                    if($request->coinClient == 0)
+                        $messageNotification = "Recibiste un pago de $ ".$amount;
+                    else
+                        $messageNotification = "Recibiste un pago de BS ".$amount;
+
+                    $this->sendFCM($user->token_fcm, $messageNotification);
 
                     (new User)->forceFill([
                         'email' => $request->email,
@@ -469,10 +472,12 @@ class PaidController extends Controller
 
                 $userUrl = $request->userUrl;
 
-                $messageNotification['commerce_id'] = $commerce->id;
-                $messageNotification['total'] = $amount;
-                $messageNotification['coin'] = $request->coinClient;
-                $success = event(new NewNotification($messageNotification));
+                if($request->coinClient == 0)
+                    $messageNotification = "Recibiste un pago de $ ".$amount;
+                else
+                    $messageNotification = "Recibiste un pago de BS ".$amount;
+
+                $this->sendFCM($user->token_fcm, $messageNotification);
 
                 (new User)->forceFill([
                     'email' => $request->email,
@@ -613,10 +618,12 @@ class PaidController extends Controller
     
         }
 
-        $messageNotification['commerce_id'] = $commerce->id;
-        $messageNotification['total'] = $amount;
-        $messageNotification['coin'] = $requestForm['coinClient'];
-        $success = event(new NewNotification($messageNotification));
+        if($requestForm['coinClient'] == 0)
+            $messageNotification = "Recibiste un pago de $ ".$amount;
+        else
+            $messageNotification = "Recibiste un pago de BS ".$amount;
+
+        $this->sendFCM($user->token_fcm, $messageNotification);
 
         $status = true;
         return view('result', compact('userUrl', 'status'));
@@ -791,5 +798,31 @@ class PaidController extends Controller
 
         return response()->json(['statusCode' => 201,'data' =>['paid'=>$paids]]);
 
+    }
+
+    public function sendFCM($token,$message)
+    {
+        $url = "https://fcm.googleapis.com/fcm/send";
+        $token = $token;
+        $serverKey = env('SERVER_KEY_FCM');
+        $title = "Nuevo Pago Recibido";
+        $body = $message;
+        $notification = array('title' =>$title , 'body' => $body, 'sound' => 'default', 'badge' => '1');
+        $arrayToSend = array('to' => $token, 'notification' => $notification,'priority'=>'high');
+        $json = json_encode($arrayToSend);
+        $headers = array();
+        $headers[] = 'Content-Type: application/json';
+        $headers[] = 'Authorization: key='. $serverKey;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+        curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        //Send the request
+        $response = curl_exec($ch);
+
+        curl_close($ch);
     }
 }
