@@ -88,6 +88,8 @@ Route::group(['middleware'=>'admin'], function() {
     Route::post('/admin/txt', 'AdminController@downloadTxt')->name('admin.downloadTxt');
     Route::get('/admin/delivery', 'AdminController@delivery')->name('admin.delivery');
     Route::post('/admin/delivery', 'AdminController@delivery')->name('admin.deliverySearch');
+    Route::post('/admin/showDelivery', 'AdminController@showDeliveryAjax')->name('admin.showDeliveryAjax');
+    Route::get('/admin/delivery/{codeUrl}', 'AdminController@showDelivery')->name('admin.showDelivery');
     Route::post('/admin/countDeliveries', 'AdminController@countDeliveries')->name('admin.countDeliveries');
     Route::post('/admin/deliverySendCode', 'AdminController@deliverySendCode')->name('admin.deliverySendCode');
     Route::post('/admin/saveAlarm', 'AdminController@saveAlarm')->name('admin.saveAlarm');

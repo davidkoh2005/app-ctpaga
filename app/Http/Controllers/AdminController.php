@@ -582,7 +582,7 @@ class AdminController extends Controller
                         ->orderBy('paids.date', 'asc')
                         ->orderBy('paids.alarm', 'desc')
                         ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.selectShipping', 'paids.total',
-                            'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.codeUrl', 'paids.alarm', 'paids.statusDelivery')
+                            'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.codeUrl', 'paids.alarm', 'paids.statusDelivery', 'paids.timeDelivery')
                         ->whereNotNull('paids.selectShipping')
                         ->where('paids.statusPayment',2);
 
@@ -799,5 +799,29 @@ class AdminController extends Controller
         ],[
             'value' => $value,
         ]);
+    }
+
+    public function showDeliveryAjax(Request $request)
+    {
+        $deliveries = Delivery::where('statusAvailability', true)->get();
+
+        if($deliveries)
+            return response()->json(array('status'=>201, 'url' => route('admin.showDelivery', ['codeUrl' => $request->codeUrl]))); 
+        else
+            return response()->json(array('status'=>400)); 
+
+    }
+
+    public function showDelivery(Request $request)
+    {
+        $codeUrl = $request->codeUrl;
+        $deliveries = Delivery::where('statusAvailability', true)->get();
+        $paid = Paid::where('codeUrl',$codeUrl)->first();
+
+        $commerce = Commerce::whereId($paid->commerce_id)->first();
+
+        $statusMenu="delivery";
+        return view('admin.showDelivery', compact('statusMenu', 'deliveries', 'commerce', 'codeUrl')); 
+
     }
 }

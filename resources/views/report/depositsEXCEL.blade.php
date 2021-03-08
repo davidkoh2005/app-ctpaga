@@ -17,7 +17,7 @@
     <div class="row">
         <div class="styleText">
             <strong>Fecha:</strong> {{$today}}<br>
-            <strong>Direccion:</strong> Los Dos Caminos.<br>
+            <strong>Dirección:</strong> Los Dos Caminos.<br>
             <strong>Teléfono:</strong> 0212-555-5555<br>
         </div>
     </div>

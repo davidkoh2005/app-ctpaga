@@ -47,7 +47,7 @@
     <div class="row">
         <div class="styleText">
             <strong>Fecha:</strong> {{Carbon::now()->format('Y-m-d')}}<br>
-            <strong>Direccion:</strong> Los Dos Caminos.<br>
+            <strong>Dirección:</strong> Los Dos Caminos.<br>
             <strong>Teléfono:</strong> 0212-555-5555<br>
         </div>
     </div>
@@ -57,7 +57,7 @@
         <div class="styleText">
             <strong>Fecha:</strong> {{Carbon::now()->format('Y-m-d')}}}<br>
             <strong>Nombre de la compañia:</strong> {{$commerceData->name}}<br>
-            <strong>Direccion:</strong> {{$commerceData->address}}<br>
+            <strong>Dirección:</strong> {{$commerceData->address}}<br>
             <strong>Teléfono:</strong> {{$commerceData->phone}}<br>
         </div>
     </div>

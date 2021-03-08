@@ -6,7 +6,7 @@
 <div id="title"><h5 class="center">Información quien recibe el Productos y/o Servicios </h5></div>
 <label><strong>Nombre: </strong>{{$transaction->nameShipping}}</label> <br>
 <label><strong>Teléfono: </strong>{{$transaction->numberShipping}}</label> <br>
-<label><strong>Direccion: </strong>{{$transaction->addressShipping}}</label> <br>
+<label><strong>Dirección: </strong>{{$transaction->addressShipping}}</label> <br>
 <label><strong>Detalle: </strong>{{$transaction->detailsShipping}}</label> <br>
 
 <div class="row">&nbsp;</div>

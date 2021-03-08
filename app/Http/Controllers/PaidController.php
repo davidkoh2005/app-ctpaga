@@ -749,7 +749,7 @@ class PaidController extends Controller
             else
                 return response()->json(['statusCode' => 400,'message' => "Error no esta disponible"]);            
         }else        
-            return response()->json(['statusCode' => 400,'message' => "El horario es de ".$scheduleInitialGet->value." hasta las ".$scheduleFinalGet->value]);
+            return response()->json(['statusCode' => 400,'message' => "Error de Servidor: El horario es de ".$scheduleInitialGet->value." hasta las ".$scheduleFinalGet->value]);
 
 
     }
@@ -790,7 +790,7 @@ class PaidController extends Controller
             else
                 return response()->json(['statusCode' => 400,'message' => "Este orden ya no se encuentra disponible"]);
         else        
-            return response()->json(['statusCode' => 400,'message' => "El horario es de ".$scheduleInitialGet->value." hasta las ".$scheduleFinalGet->value]);
+            return response()->json(['statusCode' => 400,'message' => "Error de Servidor: El horario es de ".$scheduleInitialGet->value." hasta las ".$scheduleFinalGet->value]);
 
     }
 

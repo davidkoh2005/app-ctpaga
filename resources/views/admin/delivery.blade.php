@@ -14,6 +14,9 @@
     @include('auth.menu')
     <div class="main-panel">
         @include('auth.navbar')
+        @php
+            use Carbon\Carbon;
+        @endphp
         <!--<div class="justify-content-center" id="row">
              <div class="col-10">
                 <div class="card card-Transactions">
@@ -37,9 +40,6 @@
                         
                             <div class="mb-3 row">
                                 <label class="col-sm-2 col-form-label">Rango de Fecha</label>
-                                @php
-                                    use Carbon\Carbon;
-                                @endphp
                                 <div class="col">
                                     <div class="input-daterange input-group" id="datepicker-admin">
                                         <input type="text" class="form-control" name="startDate" placeholder="Fechan Inicial" value="{{Carbon::parse($startDate)->format('d/m/Y')}}" autocomplete="off"/>
@@ -90,10 +90,10 @@
                             <td>{{ $transaction->codeUrl}}</td> 
                             <td> {{date('d/m/Y h:i A',strtotime($transaction->date))}}</td>
                             <td>{{$transaction->selectShipping}}</td>
-                            <td>@if($transaction->statusDelivery==0) <div class="pendingDelivery">Pendiente</div> @elseif($transaction->statusDelivery==1) <div class="publicDelivery">Publicado</div> @else <div class="sendDelivery">Ordenado</div>  @endif </td>
+                            <td>@if($transaction->statusDelivery==1 && $transaction->timeDelivery != null && $transaction->timeDelivery <= Carbon::now()) <div class="urgentDelivery">Urgente</div> @elseif($transaction->statusDelivery==0) <div class="pendingDelivery">Pendiente</div> @elseif($transaction->statusDelivery==1) <div class="publicDelivery">Publicado</div> @else <div class="sendDelivery">Ordenado</div>  @endif </td>
                             <td>@if($transaction->alarm) <div class="activatedAlarm">Activado</div> @else <div class="disabledAlarm">Desactivado</div> @endif</td>
                             <td width="100px">
-                                <button class="btn btn-bottom" onClick="publicCode('{{$transaction->codeUrl}}', '{{$transaction->statusDelivery}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Publicar Orden"><i class="material-icons">send</i></button>
+                                <button class="btn btn-bottom" onClick="publicCode('{{$transaction->codeUrl}}', '{{$transaction->statusDelivery}}', '{{$transaction->statusDelivery==1 && $transaction->timeDelivery != null && $transaction->timeDelivery <= Carbon::now()}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Publicar Orden"><i class="material-icons">send</i></button>
                                 @if($transaction->alarm)
                                     <button class="btn btn-bottom" id="btnAlarm" onClick="showAlarm('{{$transaction->id}}', '{{Carbon::parse($transaction->alarm)->format('d/m/Y')}}', {{Carbon::parse($transaction->alarm)->format('g')}}, {{Carbon::parse($transaction->alarm)->format('i')}}, '{{Carbon::parse($transaction->alarm)->format('A')}}', '{{$transaction->idDelivery}}', '{{$transaction->statusDelivery}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Recordatorio"><i class="material-icons">alarm</i></button>
                                 @else
@@ -105,6 +105,8 @@
                     </tbody>
                 </table>
             </div>
+
+            <div id="showDelivery" class="tableShow"></div>
         </div>
     </div>
 
@@ -172,22 +174,40 @@
     @include('admin.bookshopBottom')
     <script> 
         $( ".loader" ).fadeOut("slow"); 
+        $( "#showDelivery" ).hide(); 
         var statusMenu = "{{$statusMenu}}";
         var idSelect;
         $(".main-panel").perfectScrollbar('update');
 
-        function publicCode(codeUrl, idDelivery){
-
-            if(parseInt(idDelivery) == 1)
+        function publicCode(codeUrl, idDelivery, status){
+            if(parseInt(idDelivery) == 1 && status){
+                $( ".loader" ).fadeIn("slow"); 
+                $.ajax({
+                    url: "{{route('admin.showDeliveryAjax')}}", 
+                    data: {"codeUrl" : codeUrl},
+                    type: "POST",
+                    }).done(function(data){
+                        if(data.status == 201){
+                            window.location.replace(data.url);
+                        }
+                        else{
+                            $( ".loader" ).fadeOut("slow"); 
+                            alertify.error('No hay delivery disponible');
+                        }
+                    }).fail(function(result){
+                        $( ".loader" ).fadeOut("slow"); 
+                        alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                    });
+            }else if(parseInt(idDelivery) == 1 && !status)
                 alertify.error('Esta transacción ya fue publicado');
             else if(parseInt(idDelivery) == 2)
                 alertify.error('Esta transacción ya fue ordenado');
             else{
                 $( ".loader" ).fadeIn("slow"); 
                 $.ajax({
-                url: "{{route('admin.deliverySendCode')}}", 
-                data: {"codeUrl" : codeUrl},
-                type: "POST",
+                    url: "{{route('admin.deliverySendCode')}}", 
+                    data: {"codeUrl" : codeUrl},
+                    type: "POST",
                 }).done(function(data){
                     if(data.status == 201){
                         $( ".loader" ).fadeOut("slow"); 

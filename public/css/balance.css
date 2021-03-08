@@ -305,6 +305,14 @@ div.colorGrey {
 
 /* style delivery */
 
+.urgentDelivery{
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 5px;
+    background-color: orange;
+    color: white
+}
+
 .pendingDelivery {
     padding-left: 5px;
     padding-right: 5px;
@@ -317,7 +325,7 @@ div.colorGrey {
     padding-left: 5px;
     padding-right: 5px;
     border-radius: 5px;
-    background-color: orange;
+    background-color: #3f8ac8;
     color: white
 }
 
@@ -384,5 +392,13 @@ button.ajs-button.ajs-cancel:hover {
     border-radius: 60px !important;
     background-color: #ffffff80 !important;
     border: 2px solid #ffffff80 !important;
+    color: black !important;
+}
+
+.center {
+    text-align: center !important;
+}
+
+.black {
     color: black !important;
 }

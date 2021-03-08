@@ -81,7 +81,7 @@
         <div class="styleText">
             <strong>Fecha:</strong> {{$today}}<br>
             <strong>Nombre de la compañia:</strong> {{$commerce->name}}<br>
-            <strong>Direccion:</strong> {{$commerce->address}}<br>
+            <strong>Dirección:</strong> {{$commerce->address}}<br>
             <strong>Teléfono:</strong> {{$commerce->phone}}<br>
         </div>
 
