@@ -84,7 +84,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($historyAll as $history)
+                        @foreach($historyDeposits as $deposit)
+                        <tr>
+                            <td>{{$deposit->date }}</td>
+                            <td class="deposit">{{$deposit->total}}</td>
+                            <td class="deposit">DEPOSITO</td>
+                            <td class="depositNumRef">{{$deposit->numRef}}</td>
+                        </tr>
+                        @endforeach
+
+                        
+                        <!-- @foreach($historyAll as $history)
                         <tr>
                             <td>{{$history['date'] }}</td>
                             @if($history['status']==0)
@@ -97,7 +107,7 @@
                                 <td class="depositNumRef">{{$history['numRef']}}</td>
                             @endif
                         </tr>
-                        @endforeach
+                        @endforeach -->
                     </tbody>
                 </table>
             </div>

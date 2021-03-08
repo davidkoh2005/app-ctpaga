@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Delivery;
 use App\Paid;
+use App\User;
+use App\Settings;
 use App\Events\StatusDelivery;
 use App\Events\AlarmUrgent;
 use App\Events\NewNotification;
+use App\Notifications\NotificationAdmin;
 
 class DeliveryController extends Controller
 {
@@ -74,7 +77,7 @@ class DeliveryController extends Controller
 
         //Send the request
         $response = curl_exec($ch);
-        curl_close($ch);
+        curl_close($ch); 
 
     }
 

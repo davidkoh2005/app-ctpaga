@@ -245,6 +245,75 @@ class CommerceController extends Controller
         if($commerceData)
             $commerceName = $commerceData->name;
     
+        $historyDeposits = Deposits::where("commerce_id", $idCommerce)
+                                ->where("coin", $selectCoin)
+                                ->select("date", "total", "numRef","status")
+                                ->where("date", ">=", Carbon::now()->subMonth(4))
+                                ->orderBy('date', 'asc')->get();
+
+        if($request->statusFile == "PDF"){
+            $today = Carbon::now()->format('Y-m-d');
+            $pdf = \PDF::loadView('report.depositsCommercePDF', compact("historyAll" ,'today' ,'selectCoin', 'startDate', 'endDate', "commerceData", 'pictureUser'));
+            return $pdf->download('ctpaga_depositos.pdf');
+        }elseif($request->statusFile == "EXCEL"){
+            $today = Carbon::now()->format('Y-m-d');
+            return Excel::download(new DepositsCommerceExport($historyAll, $today, $startDate, $endDate, $commerceData, $pictureUser), 'ctpaga_depositos.xlsx');
+        }
+        
+        
+        $statusMenu = "depositHistory";
+        return view('auth.depositHistory',compact("historyDeposits", "historyAll" ,'selectCoin', 'startDate', 'endDate' ,"statusMenu", "commercesUser", "pictureUser", "commerceName", "idCommerce"));
+    }
+
+    /* public function depositHistory(Request $request)
+    {
+        if (!Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('commerce.login'));
+        }elseif (!Auth::guard('web')->check() && Auth::guard('admin')->check()){
+            return redirect(route('admin.dashboard'));
+        }
+
+        $selectCoin = 0;
+        $idCommerce = 0;
+        $companyName = "";
+        $commerceName = "";
+        $startDate = Carbon::now()->setDay(1)->subMonth(4)->format('Y-m-d');
+        $startDateQuery = Carbon::now()->setDay(1)->subMonth(4)->format('Y-m-d');
+        $endDate = Carbon::now()->format('Y-m-d');
+        $historyAll = array();
+        
+        if($request->all()){
+            $selectCoin=$request->selectCoin? $request->selectCoin : 0;
+            $startDate=$request->startDate;
+            $endDate=$request->endDate;
+        }
+
+
+        if($request->commerceId){
+            $idCommerce = $request->commerceId;
+        }else if(session()->get('commerce_id')){
+            $idCommerce = session()->get('commerce_id');
+        }else{
+            $commerceFirst = Commerce::where('user_id', Auth::guard('web')->id())
+                            ->orderBy('name', 'asc')->first();
+            if($commerceFirst)
+                $idCommerce = $commerceFirst->id;
+        }
+
+
+        session()->put('commerce_id', $idCommerce);
+        
+        $commercesUser = Commerce::where('user_id', Auth::guard('web')->id())
+                                ->orderBy('name', 'asc')->get();
+
+        $pictureUser = Picture::where('user_id', Auth::guard('web')->id())
+                                ->where('commerce_id',$idCommerce)
+                                ->where('description','Profile')->first();
+
+        $commerceData = Commerce::whereId($idCommerce)->first();
+        if($commerceData)
+            $commerceName = $commerceData->name;
+    
         $historyPaids = Paid::where("commerce_id", $idCommerce)
                             ->where("coin", $selectCoin)
                             ->orderBy('date', 'asc')
@@ -310,7 +379,7 @@ class CommerceController extends Controller
         
         $statusMenu = "depositHistory";
         return view('auth.depositHistory',compact("historyAll" ,'selectCoin', 'startDate', 'endDate' ,"statusMenu", "commercesUser", "pictureUser", "commerceName", "idCommerce"));
-    }
+    } */
 
     public function rate(Request $request)
     {
