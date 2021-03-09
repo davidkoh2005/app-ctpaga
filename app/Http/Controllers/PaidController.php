@@ -19,6 +19,7 @@ use App\Service;
 use App\Balance;
 use App\Shipping;
 use App\Settings;
+use App\Delivery;
 use Session;
 use AWS;
 use PayPal\Api\Amount;
@@ -739,11 +740,8 @@ class PaidController extends Controller
                 ->where("idDelivery",$delivery->id)->first();
 
             if($paids){
-                $paids->idDelivery = $delivery->id;
-                $paids->statusDelivery = 2;
                 $sales = Sale::where('codeUrl',$request->codeUrl)->orderBy('name', 'asc')->get();
                 $commerce = Commerce::whereId($paids->commerce_id)->first();
-                $paids->save();
                 return response()->json(['statusCode' => 201,'data' =>['paid'=>$paids, 'commerce'=>$commerce, 'sales'=>$sales]]);
             }
             else
@@ -763,34 +761,39 @@ class PaidController extends Controller
             return response()->json(['statusCode' => 401,'message' => "Unauthorized"]);
         }
 
-        $paids = Paid::where('codeUrl', $request->codeUrl)
-                ->whereNull("idDelivery")->first();
+        if($delivery->statusAvailability && $delivery->codeUrlPaid == null){
 
-        $scheduleInitialGet = Settings::where("name", "Horario Inicial")->first(); 
-        $scheduleFinalGet = Settings::where("name", "Horario Final")->first();
+            $paids = Paid::where('codeUrl', $request->codeUrl)
+                    ->whereNull("idDelivery")->first();
 
-        $now = Carbon::now();
-        $sheduleInitial = Carbon::createFromFormat('g:i A', $scheduleInitialGet->value);
-        $sheduleFinal = Carbon::createFromFormat('g:i A', $scheduleFinalGet->value);
+            $scheduleInitialGet = Settings::where("name", "Horario Inicial")->first(); 
+            $scheduleFinalGet = Settings::where("name", "Horario Final")->first();
 
-        if($sheduleInitial->isBefore($now)&& $sheduleFinal->isAfter($now))
-            if($paids && ($paids->idDelivery == null || $paids->idDelivery == $delivery->id)){
-                $paids->idDelivery = $delivery->id;
-                $paids->statusDelivery = 2;
-                $sales = Sale::where('codeUrl',$request->codeUrl)->orderBy('name', 'asc')->get();
-                $commerce = Commerce::whereId($paids->commerce_id)->first();
-                $paids->save();
+            $now = Carbon::now();
+            $sheduleInitial = Carbon::createFromFormat('g:i A', $scheduleInitialGet->value);
+            $sheduleFinal = Carbon::createFromFormat('g:i A', $scheduleFinalGet->value);
 
-                $delivery->codeUrlPaid = $request->codeUrl;
-                $delivery->statusAvailability = 0;
-                $delivery->save();
+            if($sheduleInitial->isBefore($now)&& $sheduleFinal->isAfter($now))
+                if($paids && ($paids->idDelivery == null || $paids->idDelivery == $delivery->id)){
+                    $paids->idDelivery = $delivery->id;
+                    $paids->statusDelivery = 2;
+                    $sales = Sale::where('codeUrl',$request->codeUrl)->orderBy('name', 'asc')->get();
+                    $commerce = Commerce::whereId($paids->commerce_id)->first();
+                    $paids->save();
 
-                return response()->json(['statusCode' => 201,'data' =>['paid'=>$paids, 'commerce'=>$commerce, 'sales'=>$sales]]);
-            }
-            else
-                return response()->json(['statusCode' => 400,'message' => "Este orden ya no se encuentra disponible"]);
-        else        
-            return response()->json(['statusCode' => 400,'message' => "Error de Servidor: El horario es de ".$scheduleInitialGet->value." hasta las ".$scheduleFinalGet->value]);
+                    $delivery->codeUrlPaid = $request->codeUrl;
+                    $delivery->statusAvailability = 0;
+                    $delivery->save();
+
+                    return response()->json(['statusCode' => 201,'data' =>['paid'=>$paids, 'commerce'=>$commerce, 'sales'=>$sales]]);
+                }
+                else
+                    return response()->json(['statusCode' => 400,'message' => "Este orden ya no se encuentra disponible"]);
+            else        
+                return response()->json(['statusCode' => 400,'message' => "Error de Servidor: El horario es de ".$scheduleInitialGet->value." hasta las ".$scheduleFinalGet->value]);
+        
+        }else
+            return response()->json(['statusCode' => 400,'message' => "Tiene una orden pendiente"]);
 
     }
 

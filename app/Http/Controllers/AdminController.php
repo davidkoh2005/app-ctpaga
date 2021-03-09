@@ -24,6 +24,7 @@ use App\Notifications\PictureRemove;
 use App\Notifications\NewCode;
 use App\Notifications\SendDeposits;
 use App\Notifications\PostPurchase;
+use App\Notifications\NotificationDelivery;
 use App\Events\SendCode;
 use App\Events\StatusDelivery;
 use App\Http\Controllers\Controller;
@@ -616,9 +617,38 @@ class AdminController extends Controller
     {   
         $paid = Paid::where("codeUrl",$request->codeUrl)->first();
         $paid->statusDelivery = 1;
+        $paid->timeDelivery = Carbon::now()->addMinutes(10);
         $paid->save();
         
         return response()->json(array('status' => 201));
+    }
+
+    public function deliverySendCodeManual(Request $request)
+    {   
+        $delivery = Delivery::whereId($request->idDelivery)->first();
+
+        if($delivery->statusAvailability && $delivery->codeUrlPaid == null){
+            $delivery->statusAvailability = false;
+            $delivery->codeUrlPaid = $request->codeUrl;
+            $delivery->save();
+
+            $paid = Paid::where("codeUrl",$request->codeUrl)->first();
+            $paid->statusDelivery = 2;
+            $paid->idDelivery = $request->idDelivery;
+            $paid->save();
+
+            (new User)->forceFill([
+                'email' => $delivery->email,
+            ])->notify(
+                new NotificationDelivery("fue asignado el siguiente orden: ".$request->codeUrl)
+            );
+
+            $this->sendFCM($delivery->token_fcm, "Tiene una orden asignado: ".$request->codeUrl);
+            
+            return response()->json(array('status' => 201, 'url' => route('admin.delivery')));
+        }
+
+        return response()->json(array('status' => 400));
     }
 
     public function saveAlarm(Request $request)
@@ -823,5 +853,31 @@ class AdminController extends Controller
         $statusMenu="delivery";
         return view('admin.showDelivery', compact('statusMenu', 'deliveries', 'commerce', 'codeUrl')); 
 
+    }
+
+    public function sendFCM($token,$message)
+    {
+        $url = "https://fcm.googleapis.com/fcm/send";
+        $token = $token;
+        $serverKey = env('SERVER_KEY_FCM_DELIVERY');
+        $title = "Ctpaga Aviso";
+        $body = $message;
+        $notification = array('title' =>$title , 'body' => $body, 'sound' => 'default', 'badge' => '1');
+        $arrayToSend = array('to' => $token, 'notification' => $notification,'priority'=>'high');
+        $json = json_encode($arrayToSend);
+        $headers = array();
+        $headers[] = 'Content-Type: application/json';
+        $headers[] = 'Authorization: key='. $serverKey;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+        curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        //Send the request
+        $response = curl_exec($ch);
+
+        curl_close($ch);
     }
 }

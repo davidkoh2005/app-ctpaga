@@ -21,7 +21,8 @@
             <div class="tableShow">
             <h3 class="center black"> <strong>Delivery Disponible</strong> </h3>
             <div class="row">&nbsp;</div>
-            <label class="black"> <strong>Orden:</strong> {{$codeUrl}} </label> <br>
+            <label class="black"> <strong>Orden:</strong> {{$codeUrl}} </label>
+            <div class="row">&nbsp;</div>
             <label class="black"> <strong>Commerciante</strong> </label> <br>
             <label class="black"> <strong>Nombre:</strong> {{$commerce->name}} </label> <br>
             <label class="black"> <strong>Dirección:</strong> {{$commerce->address}} </label> <br>
@@ -45,7 +46,7 @@
                         <td>{{ $delivery->phone}}</td> 
                         <td>{{$delivery->addressPosition}}</td>
                         <td width="100px">
-                            <button class="btn btn-bottom" onClick="publicCode('{{$delivery->codeUrl}}', '{{$delivery->statusDelivery}}', '{{$delivery->statusDelivery==1 && $delivery->timeDelivery != null && $delivery->timeDelivery <= Carbon::now()}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Enviar Orden"><i class="material-icons">send</i></button>
+                            <button class="btn btn-bottom" onClick="publicCode('{{$codeUrl}}', '{{$delivery->id}}' )" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Enviar Orden"><i class="material-icons">send</i></button>
                         </td>
                     </tr>
                     @endforeach
@@ -85,6 +86,30 @@
                 }
             },
         });
+
+
+        function publicCode(codeUrl, idDelivery){
+            $( ".loader" ).fadeIn("slow"); 
+            $.ajax({
+                url: "{{route('admin.deliverySendCodeManual')}}", 
+                data: {"codeUrl" : codeUrl, "idDelivery": idDelivery},
+                type: "POST",
+            }).done(function(data){
+                if(data.status == 201){
+                    $( ".loader" ).fadeOut("slow"); 
+                    alertify.success('El orden ha sido asignado correctamente');
+                    window.location.replace(data.url);
+                }
+                else{
+                    $( ".loader" ).fadeOut("slow"); 
+                    alertify.error('Delivery no se encuentra disponible');
+                    location.reload();
+                }
+            }).fail(function(result){
+                $( ".loader" ).fadeOut("slow"); 
+                alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+            }); 
+        }
     </script>
 </body>
 </html>

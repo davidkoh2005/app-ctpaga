@@ -174,7 +174,6 @@
     @include('admin.bookshopBottom')
     <script> 
         $( ".loader" ).fadeOut("slow"); 
-        $( "#showDelivery" ).hide(); 
         var statusMenu = "{{$statusMenu}}";
         var idSelect;
         $(".main-panel").perfectScrollbar('update');
@@ -211,7 +210,7 @@
                 }).done(function(data){
                     if(data.status == 201){
                         $( ".loader" ).fadeOut("slow"); 
-                        alertify.success('Estado ha sido cambiado correctamente');
+                        alertify.success('El orden ha sido publicado correctamente');
                         location.reload();
                     }
                     else{

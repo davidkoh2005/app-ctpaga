@@ -92,6 +92,7 @@ Route::group(['middleware'=>'admin'], function() {
     Route::get('/admin/delivery/{codeUrl}', 'AdminController@showDelivery')->name('admin.showDelivery');
     Route::post('/admin/countDeliveries', 'AdminController@countDeliveries')->name('admin.countDeliveries');
     Route::post('/admin/deliverySendCode', 'AdminController@deliverySendCode')->name('admin.deliverySendCode');
+    Route::post('/admin/deliverySendCodeManual', 'AdminController@deliverySendCodeManual')->name('admin.deliverySendCodeManual');
     Route::post('/admin/saveAlarm', 'AdminController@saveAlarm')->name('admin.saveAlarm');
     Route::post('/admin/verifyAlarm', 'AdminController@verifyAlarm')->name('admin.verifyAlarm');
     Route::get('/admin/tasa', 'AdminController@showRate')->name('admin.showRate');

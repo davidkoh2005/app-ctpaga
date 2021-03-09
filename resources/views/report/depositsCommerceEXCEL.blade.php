@@ -67,17 +67,17 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($historyAll as $history)
+                @foreach($historyDeposits as $history)
                 <tr>
-                    <td width="12" style="text-align:center;">{{$history['date']}}</td>
-                    @if($history['status']==0)
-                        <td class="received" style="color:green; font-weight: bold; text-align:center;">{{$history['total']}}</td>
+                    <td width="12" style="text-align:center;">{{$history->date}}</td>
+                    @if($history->status==0)
+                        <td class="received" style="color:green; font-weight: bold; text-align:center;">{{$history->total}}</td>
                         <td width="10" class="received" style="color:green; font-weight: bold;text-align:center;">RECIBIDO</td>
                         <td width="25" style="text-align:center;">Transacciones</td>
                     @else 
-                        <td class="deposit" style="color:red; font-weight: bold; text-align:center;">{{$history['total']}}</td>
+                        <td class="deposit" style="color:red; font-weight: bold; text-align:center;">{{$history->total}}</td>
                         <td width="10" class="deposit" style="color:red; font-weight: bold; text-align:center;">DEPOSITO</td>
-                        <td width="25"  class="depositNumRef" style="text-align:center;">{{$history['numRef']}}</td>
+                        <td width="25"  class="depositNumRef" style="text-align:center;">{{$history->numRef}}</td>
                     @endif
                 </tr>
                 @endforeach

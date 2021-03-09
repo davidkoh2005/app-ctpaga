@@ -83,31 +83,21 @@
                             <th scope="col">Número de Referencia</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach($historyDeposits as $deposit)
+                    <tbody>                       
+                        @foreach($historyDeposits as $history)
                         <tr>
-                            <td>{{$deposit->date }}</td>
-                            <td class="deposit">{{$deposit->total}}</td>
-                            <td class="deposit">DEPOSITO</td>
-                            <td class="depositNumRef">{{$deposit->numRef}}</td>
-                        </tr>
-                        @endforeach
-
-                        
-                        <!-- @foreach($historyAll as $history)
-                        <tr>
-                            <td>{{$history['date'] }}</td>
-                            @if($history['status']==0)
-                                <td class="received">{{$history['total']}}</td>
+                            <td>{{$history->date }}</td>
+                            @if($history->status==0)
+                                <td class="received">{{$history->total}}</td>
                                 <td class="received">RECIBIDO</td>
                                 <td class="depositNumRef">Transacciones</td>
                             @else 
-                                <td class="deposit">{{$history['total']}}</td>
+                                <td class="deposit">{{$history->total}}</td>
                                 <td class="deposit">DEPOSITO</td>
-                                <td class="depositNumRef">{{$history['numRef']}}</td>
+                                <td class="depositNumRef">{{$history->numRef}}</td>
                             @endif
                         </tr>
-                        @endforeach -->
+                        @endforeach 
                     </tbody>
                 </table>
             </div>

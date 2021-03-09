@@ -9,13 +9,13 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 class DepositsCommerceExport implements FromView, WithDrawings
 {
-    protected $historyAll, $today, $startDate, $endDate, $commerceData, $pictureUser;
+    protected $historyDeposits, $today, $startDate, $endDate, $commerceData, $pictureUser;
     /**
     * @return \Illuminate\Support\Collection
     */
 
-    function __construct($historyAll, $today, $startDate, $endDate, $commerceData, $pictureUser) {
-        $this->historyAll = $historyAll;
+    function __construct($historyDeposits, $today, $startDate, $endDate, $commerceData, $pictureUser) {
+        $this->historyDeposits = $historyDeposits;
         $this->today = $today;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
@@ -40,7 +40,7 @@ class DepositsCommerceExport implements FromView, WithDrawings
     {
 
         return view('report.depositsCommerceEXCEL', [
-            'historyAll'      => $this->historyAll,
+            'historyDeposits'      => $this->historyDeposits,
             'today'         => $this->today,
             'startDate'     => $this->startDate,
             'endDate'       => $this->endDate,

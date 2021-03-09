@@ -247,22 +247,21 @@ class CommerceController extends Controller
     
         $historyDeposits = Deposits::where("commerce_id", $idCommerce)
                                 ->where("coin", $selectCoin)
-                                ->select("date", "total", "numRef","status")
                                 ->where("date", ">=", Carbon::now()->subMonth(4))
                                 ->orderBy('date', 'asc')->get();
 
         if($request->statusFile == "PDF"){
             $today = Carbon::now()->format('Y-m-d');
-            $pdf = \PDF::loadView('report.depositsCommercePDF', compact("historyAll" ,'today' ,'selectCoin', 'startDate', 'endDate', "commerceData", 'pictureUser'));
+            $pdf = \PDF::loadView('report.depositsCommercePDF', compact("historyDeposits", "historyAll" ,'today' ,'selectCoin', 'startDate', 'endDate', "commerceData", 'pictureUser'));
             return $pdf->download('ctpaga_depositos.pdf');
         }elseif($request->statusFile == "EXCEL"){
             $today = Carbon::now()->format('Y-m-d');
-            return Excel::download(new DepositsCommerceExport($historyAll, $today, $startDate, $endDate, $commerceData, $pictureUser), 'ctpaga_depositos.xlsx');
+            return Excel::download(new DepositsCommerceExport($historyDeposits, $today, $startDate, $endDate, $commerceData, $pictureUser), 'ctpaga_depositos.xlsx');
         }
         
         
         $statusMenu = "depositHistory";
-        return view('auth.depositHistory',compact("historyDeposits", "historyAll" ,'selectCoin', 'startDate', 'endDate' ,"statusMenu", "commercesUser", "pictureUser", "commerceName", "idCommerce"));
+        return view('auth.depositHistory',compact("historyDeposits" ,'selectCoin', 'startDate', 'endDate' ,"statusMenu", "commercesUser", "pictureUser", "commerceName", "idCommerce"));
     }
 
     /* public function depositHistory(Request $request)

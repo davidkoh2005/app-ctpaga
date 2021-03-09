@@ -58,8 +58,8 @@ class DeliveryController extends Controller
     {
 
         $url = "https://fcm.googleapis.com/fcm/send";
-        $token = "fbSmxHKgTjmIBOIf7VG-m4:APA91bEyJON1P1VMmPu99H0D0PkfsANSHK07IzfBVFJ1G3ENGV3JH_-AtqgLM2QZHlxuCUzR83eWyJsi5Ro-9lCLGwgUXqvBemndpRXg0-OlxvfQaNz8hZ8y3ZAy8mPlXbbUvFg6-Afr";
-        $serverKey = 'AAAAayyhqZo:APA91bFw9NTsl9lh5d6C_IQcd7mNz-YvPOlEIPstg88ttpC7wlesWLFX3Uh0aoWMkbcOVG_M7mfboZPlxKCiLy-lrQPEtsBL-7q7PA9LvPnul6UsaN5dB1IqjaJx8ux94eHu26m-bmC0';
+        $token = "cSjCw2o7RTukByosQ88K9h:APA91bHIvDDhHDYxgyV_ohr3BnHTS1rTexoB126-RmBO1xXcah-T4E5aqZH-gLP6_Mh1KW6Ii8aph73wkqjbrOCIrS4oDJTb2Kd5ntiXeyVMk2DMcQj_7mk6Tf-B9i5UVgXNaacDEmhU";
+        $serverKey = 'AAAAfePilJc:APA91bFN28RaVDSoThRCrL1hsoECaoAEWnG5VcqLES2xRCtRoMYMl4YXbaHQ0MmWAVEzjNoQvLuvaRQRbPs7Rvv8CpoBeBTGVph9oFD7dKSI8D9VSKhY3NKKsBHBq90J74lGioJDQC92';
         $title = "Notification title";
         $body = "Hello I am from Your php server";
         $notification = array('title' =>$title , 'body' => $body, 'sound' => 'default', 'badge' => '1');
