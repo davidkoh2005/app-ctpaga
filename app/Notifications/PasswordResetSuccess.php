@@ -1,21 +1,24 @@
 <?php
+
 namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-class PasswordResetSuccess extends Notification implements ShouldQueue
+
+class PasswordResetSuccess extends Notification 
 {
     use Queueable;
-    
+    protected $type, $user;
     /**
     * Create a new notification instance.
     *
     * @return void
     */
-    public function __construct()
+    public function __construct($type, $user)
     {
-        //
+        $this->type = $type;
+        $this->user = $user;
     }
     /**
     * Get the notification's delivery channels.
@@ -35,11 +38,16 @@ class PasswordResetSuccess extends Notification implements ShouldQueue
     */
     public function toMail($notifiable)
     {
+        if($this->type == 0)
+            $subject = "Aviso Ctpaga";
+        else
+            $subject = "Aviso Delivery Ctpaga";
+
         return (new MailMessage)
-            ->line('Has cambiado tu contraseña correctamente.')
-            ->line('Si cambió la contraseña, no se requiere ninguna otra acción.')
-            ->line('Si no cambió la contraseña, proteja su cuenta.')
-            ->subject('Restablecimiento de contraseña exitoso');
+            ->subject($subject)
+            ->markdown(
+                'email.passwordSuccess', ['user' => $this->user]
+            );
     }
 /**
      * Get the array representation of the notification.

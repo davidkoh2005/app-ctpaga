@@ -50,7 +50,7 @@ class AuthController extends Controller
         (new User)->forceFill([
             'email' => $request->email,
         ])->notify(
-            new NewUser()
+            new NewUser($user)
         );
         
         return response()->json([

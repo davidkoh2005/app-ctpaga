@@ -1,24 +1,25 @@
 <?php
+
 namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class PasswordResetRequest extends Notification implements ShouldQueue
+class RetirementProductClient extends Notification 
 {
     use Queueable;
-    protected $token, $type, $user;
+    protected $commerce, $paid, $sales;
     /**
     * Create a new notification instance.
     *
     * @return void
     */
-    public function __construct($token, $type, $user)
+    public function __construct($commerce, $paid, $sales)
     {
-        $this->token = $token;
-        $this->type = $type;
-        $this->user = $user;
+        $this->commerce = $commerce;
+        $this->paid = $paid;
+        $this->sales = $sales;
     }
     /**
     * Get the notification's delivery channels.
@@ -38,28 +39,18 @@ class PasswordResetRequest extends Notification implements ShouldQueue
     */
     public function toMail($notifiable)
     {
-        if($this->type == 0){
-            $url = url('/password/find/'.$this->token);
-            $subject = "Aviso Ctpaga";
-        }
-        else{
-            $url = url('/password/delivery/find/'.$this->token);
-            $subject = "Aviso Delivery Ctpaga";
-        }
-
         return (new MailMessage)
-            ->subject($subject)
+            ->subject("Aviso Delivery Ctpaga")
             ->markdown(
-                'email.passwordReset', ['user' => $this->user, 'url' => $url]
+                'email.retirementProductClient', ['commerce' => $this->commerce, 'paid' => $this->paid, 'sales' => $this->sales]
             );
     }
-    
-    /**
-    * Get the array representation of the notification.
-    *
-    * @param  mixed  $notifiable
-    * @return array
-    */
+/**
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
     public function toArray($notifiable)
     {
         return [

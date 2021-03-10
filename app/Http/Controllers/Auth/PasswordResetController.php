@@ -39,7 +39,7 @@ class PasswordResetController extends Controller
 
         if ($user && $passwordReset)
             $user->notify(
-                new PasswordResetRequest($passwordReset->token, 0)
+                new PasswordResetRequest($passwordReset->token, 0, $user)
             );
 
         return response()->json([
@@ -94,7 +94,7 @@ class PasswordResetController extends Controller
         $user->save();
 
         $passwordReset->delete();
-        $user->notify(new PasswordResetSuccess($passwordReset));
+        $user->notify(new PasswordResetSuccess(0, $user));
 
         Session::flash('succecs', "Guardado corractamente.");
         return view('updatePassword');
@@ -126,7 +126,7 @@ class PasswordResetController extends Controller
 
         if ($delivery && $passwordReset)
             $delivery->notify(
-                new PasswordResetRequest($passwordReset->token, 1)
+                new PasswordResetRequest($passwordReset->token, 1, $delivery)
             );
 
         return response()->json([
@@ -181,7 +181,7 @@ class PasswordResetController extends Controller
         $delivery->save();
 
         $passwordReset->delete();
-        $delivery->notify(new PasswordResetSuccess($passwordReset));
+        $delivery->notify(new PasswordResetSuccess(1, $delivery));
 
         Session::flash('succecs', "Guardado corractamente.");
         return view('updatePassword');

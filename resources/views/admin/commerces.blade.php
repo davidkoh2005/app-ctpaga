@@ -24,7 +24,7 @@
                         <th scope="col">Dirección</th>
                         <th scope="col">Teléfono</th>
                         <th scope="col">Estado</th>
-                        <th scope="col">Acciones</th>
+                        <th scope="col" style="width:20%">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
