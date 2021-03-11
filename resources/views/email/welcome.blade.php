@@ -30,9 +30,7 @@
                 <div style="color: #34495e; width: 100%; margin: 4% 10% 2%; text-align: left; font-family: sans-serif;">
 
                     <h2 style="color:#59595e; margin: 0 0 7px; text-transform: uppercase; font-size: 15px; text-align: center;">
-                        Le damos la bienvenida a
-                        <br>
-                        su punto de venta virtual
+                        LE DAMOS LA BIENVENIDA A <br> CTPAGA SU PUNTO DE VENTA
                     </h2>
 
                 </div>

@@ -30,7 +30,7 @@
 
     <div style="text-align: center; font-size: 14px; color:#59595e;font-family: sans-serif;">
         <p style="text-align: center !important;">
-            Si necesitas ayuda. Visita nuestro <a href="http://wa.me/{{env('WHATSAPP_NUM')}}?text=Hola Ctpaga! Necesito ayuda con ">Centro de ayuda</a>.
+            No podemos recibir respuestas a este correo electrónico. Si necesitas ayuda.  Visita nuestro <a href="http://wa.me/{{env('WHATSAPP_NUM')}}?text=Hola Ctpaga! Necesito ayuda con ">Centro de ayuda</a>.
         </p>
     </div>
 </td>

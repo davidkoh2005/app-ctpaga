@@ -248,12 +248,10 @@ class AdminController extends Controller
             
             $deposits->save();
 
-            $message = "se ha realizado el pago a tu cuenta bancaria , Número referencia: ".$request->numRef.".";
-
             (new User)->forceFill([
                 'email' => $user->email,
             ])->notify(
-                new SendDeposits($message)
+                new SendDeposits($user, $deposits)
             );
 
         }
@@ -640,7 +638,7 @@ class AdminController extends Controller
             (new User)->forceFill([
                 'email' => $delivery->email,
             ])->notify(
-                new NotificationDelivery("fue asignado el siguiente orden: ".$request->codeUrl)
+                new NotificationDelivery("fue asignado el siguiente orden: ".$request->codeUrl, $delivery)
             );
 
             $this->sendFCM($delivery->token_fcm, "Tiene una orden asignado: ".$request->codeUrl);

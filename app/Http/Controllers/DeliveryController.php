@@ -8,12 +8,23 @@ use App\Paid;
 use App\Sale;
 use App\Commerce;
 use App\User;
+use App\Deposits;
 use App\Settings;
 use App\Events\StatusDelivery;
 use App\Events\AlarmUrgent;
 use App\Events\NewNotification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use App\Notifications\NewUser;
+use App\Notifications\SendDeposits;
+use App\Notifications\NotificationAdmin;
+use App\Notifications\PasswordResetSuccess;
+use App\Notifications\PasswordResetRequest;
+use App\Notifications\NotificationDelivery;
+use App\Notifications\DeliveryProductClient;
+use App\Notifications\DeliveryProductCommerce;
 use App\Notifications\RetirementProductClient;
+use App\Notifications\RetirementProductCommerce;
 
 class DeliveryController extends Controller
 {
@@ -59,14 +70,68 @@ class DeliveryController extends Controller
 
     public function test()
     {
-        $paid = Paid::where('codeUrl', 'k4xsus')->first();
+        $user = User::where('email', 'angelgoitia1995@gmail.com')->first();
+        $deposits = Deposits::where('user_id', $user->id)->first();
+        $paid = Paid::where('email', 'angelgoitia1995@gmail.com')->first();
         $commerce = Commerce::whereId($paid->commerce_id)->first();
-        $sales = Sale::where('codeUrl', 'k4xsus')->get();
+        $sales = Sale::where('codeUrl', $paid->codeUrl)->get();
+
+        $delivery = Delivery::where('email', 'angelgoitia1995@gmail.com')->first();
+
+        $messageAdmin = $messageAdmin = " el delivery ".$delivery->name." entrego los productos de código de compra: ".$paid->codeUrl." a su destino.";
+
+        (new User)->forceFill([
+            'email' => 'angelgoitia1995@gmail.com',
+        ])->notify(
+            new NotificationAdmin($messageAdmin)
+        );
+
+        (new User)->forceFill([
+            'email' => $delivery->email,
+        ])->notify(
+            new NotificationDelivery("fue asignado el siguiente orden: ".$paid->codeUrl, $delivery)
+        );
+
+        (new User)->forceFill([
+            'email' => $user->email,
+        ])->notify(
+            new SendDeposits($user, $deposits)
+        );
+
+        (new User)->forceFill([
+            'email' => $paid->email,
+        ])->notify(
+            new DeliveryProductClient($commerce, $paid, $sales)
+        );  
+
+        (new User)->forceFill([
+            'email' => $paid->email,
+        ])->notify(
+            new DeliveryProductCommerce($commerce, $paid, $sales)
+        );
 
         (new User)->forceFill([
             'email' => $paid->email,
         ])->notify(
             new RetirementProductClient($commerce, $paid, $sales)
+        );  
+
+        (new User)->forceFill([
+            'email' => $paid->email,
+        ])->notify(
+            new RetirementProductCommerce($commerce, $paid, $sales)
+        ); 
+
+        $user->notify(new PasswordResetSuccess(0, $user));
+
+        $user->notify(
+            new PasswordResetRequest(Str::random(60), 0, $user)
+        );
+
+        (new User)->forceFill([
+            'email' => $user->email,
+        ])->notify(
+            new NewUser($user)
         ); 
 
         /* $url = "https://fcm.googleapis.com/fcm/send";

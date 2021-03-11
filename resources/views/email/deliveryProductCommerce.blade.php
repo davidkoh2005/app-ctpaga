@@ -27,7 +27,8 @@
                 style="border-left: 25px solid #00b426; border-right: 25px solid #00b426; display: flex; align-items: center; justify-content: center;">
                 <div
                     style="color: #34495e; width: 100%; margin: 4% 10% 2%; text-align: center; font-family: sans-serif;">
-                    <h2 style="color:#59595e; margin: 0 0 7px; text-transform: uppercase; font-size: 15px; text-align: center;">CONFIRMACIÓN DE RETIRO DE <br> PRODUCTOS PARA SU ENTREGA</h2>
+                    <h2 style="color:#59595e; margin: 0 0 7px; text-transform: uppercase; font-size: 15px; text-align: center;">CONFIRMACIÓN
+                        DE <br> ENTREGA DE PRODUCTOS</h2>
                 </div>
             </td>
         </tr>
@@ -35,20 +36,20 @@
             <td style="background-color: #fff; text-align: left; padding: 0;">
                 <br>
                 <a href="">
-                    <img src="{{ asset('images/email/7.png') }}" alt=""
+                    <img src="{{ asset('images/email/6.png') }}" alt=""
                         style="padding: 10px; display: block; margin: 0 auto; width: 80px;"></a>
             </td>
         </tr>
         <tr>
             <td style="background-color: #fff; font-size: 16px">
                 <div style="color: #34495e; margin: 4% 10% 2%; text-align: left; font-family: sans-serif;">
-                    <p style="color:#59595e; margin: 0 0 7px;">Estimado/a <strong>{{ $paid->nameClient == 'Tienda Web'? 'Cliente' : strtoupper($paid->nameClient)}}</strong></p>
+                    <p style="color:#59595e; margin: 0 0 7px;">Estimado/a <strong>{{strtoupper($commerce->name)}}</strong></p>
                     <br>
                     <br>
-                    <p style="color:#59595e; margin: 0 0 7px;">Nuestro equipo de delivery/entregas ha retirado del
-                        comercio {{$commerce->name}}  @if (count($sales) == 1) el Producto @else los Productos @endif correspondientes al pedido {{$paid->codeUrl}}, apenas sea
-                        entregado con Éxito en su destino {{$paid->addressShipping}},
-                        le llegará otro correo con la Confirmación de Entrega.</p>
+                    <p style="color:#59595e; margin: 0 0 7px;">Nuestro equipo de delivery/entregas realizó la entrega
+                        del @if (count($sales) == 1) el Producto @else los Productos @endif vendido (s) a {{ $paid->nameClient == 'Tienda Web'? 'Cliente' : strtoupper($paid->nameClient)}} (orden de compra
+                        {{$paid->codeUrl}}) en la dirección {{$paid->addressShipping}}
+                    </p>
                     <p style="text-align: center">[Pedido {{$paid->codeUrl}}] (
                         @php
                             $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");

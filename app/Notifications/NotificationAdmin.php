@@ -40,9 +40,13 @@ class NotificationAdmin extends Notification
      */
     public function toMail($notifiable)
     {   
+        $msg = 'Estás recibiendo este correo electrónico porque '.$this->message;
+
         return (new MailMessage)  
             ->subject('Ctpaga Aviso')
-            ->line('Estás recibiendo este correo electrónico porque '.$this->message);
+            ->markdown(
+                'email.notificationAdmin', ['message' => $msg]
+            );
     }
 
     /**

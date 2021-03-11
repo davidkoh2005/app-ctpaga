@@ -10,15 +10,16 @@ use Illuminate\Notifications\Notification;
 class NotificationDelivery extends Notification
 {
     use Queueable;
-    protected $message;
+    protected $message, $delivery;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($message)
+    public function __construct($message, $delivery)
     {
         $this->message = $message;
+        $this->delivery = $delivery;
     }
 
     /**
@@ -40,9 +41,13 @@ class NotificationDelivery extends Notification
      */
     public function toMail($notifiable)
     {   
+        $msg = 'Estás recibiendo este correo electrónico porque '.$this->message;
+
         return (new MailMessage)  
-            ->subject('Ctpaga Delivery Aviso')
-            ->line('Estás recibiendo este correo electrónico porque '.$this->message);
+            ->subject('Delivery Ctpaga Aviso')
+            ->markdown(
+                'email.notificationDelivery', ['message' => $msg, 'delivery' => $this->delivery]
+            );
     }
 
     /**

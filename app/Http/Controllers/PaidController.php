@@ -800,18 +800,29 @@ class PaidController extends Controller
     public function changeStatus(Request $request)
     {
         $delivery = $request->user();
-        $paids = Paid::where('codeUrl', $request->codeUrl)->first();
-        $paids->statusShipping = $request->statusShipping;
-        $phone = '+'.app('App\Http\Controllers\Controller')->validateNum($paids->numberShipping);
+        $paid = Paid::where('codeUrl', $request->codeUrl)->first();
+        $paid->statusShipping = $request->statusShipping;
+        $phone = '+'.app('App\Http\Controllers\Controller')->validateNum($paid->numberShipping);
+        
+        $commerce = Commerce::whereId($paid->commerce_id)->first();
+        $userCommerce = User::whereId($paid->user_id)->first();
+        $sales = Sale::where('codeUrl', $request->codeUrl)->get();
+        
         if($request->statusShipping == 1){
-            $message = "Delivery Ctpaga informa que los productos de código de compra: ".$paids->codeUrl." fue retirado desde la tienda llegará al destino no mas tardar de 1 hora.";
+
             (new User)->forceFill([
-                'email' => $paids->email,
+                'email' => $paid->email,
             ])->notify(
-                new ShippingNotification($message)
+                new RetirementProductClient($commerce, $paid, $sales)
             );
 
-            $messageAdmin = " el delivery ".$delivery->name." retiro los productos de código de compra: ".$paids->codeUrl;
+            (new User)->forceFill([
+                'email' => $userCommerce->email,
+            ])->notify(
+                new RetirementProductCommerce($commerce, $paid, $sales)
+            );
+
+            $messageAdmin = " el delivery ".$delivery->name." retiro los productos de código de compra: ".$paid->codeUrl;
 
         }elseif($request->statusShipping == 2){
             $delivery = $request->user();
@@ -819,39 +830,39 @@ class PaidController extends Controller
             $delivery->save();
 
             $balance = Balance::firstOrNew([
-                'user_id'       => $paids->user_id,
-                "commerce_id"   => $paids->commerce_id,
-                "coin"          => $paids->coin,
+                'user_id'       => $paid->user_id,
+                "commerce_id"   => $paid->commerce_id,
+                "coin"          => $paid->coin,
             ]);
 
-            if($paids->coin == 0){
-                $balance->total += floatval($paids->total)-(floatval($paids->total)*0.05+0.35);
+            if($paid->coin == 0){
+                $balance->total += floatval($paid->total)-(floatval($paid->total)*0.05+0.35);
                 $balance->save();
             }else{
                 $rateAdmin = Rate::where("roleRate",0)->orderBy("created_at","desc")->first();
         
-                $balance->total += floatval($$paids->total)-(floatval($$paids->total)*0.05+(0.35*floatval($rateAdmin->rate)));
+                $balance->total += floatval($paid->total)-(floatval($paid->total)*0.05+(0.35*floatval($rateAdmin->rate)));
                 $balance->save();
             }
 
-            $message = "Delivery Ctpaga informa que los productos de código de compra ".$paids->codeUrl." fue entregado a su destino.";
-            $userCommerce = User::whereId($paids->user_id)->first();
+            $message = "Delivery Ctpaga informa que los productos de código de compra ".$paid->codeUrl." fue entregado a su destino.";
+    
+            (new User)->forceFill([
+                'email' => $paid->email,
+            ])->notify(
+                new DeliveryProductClient($commerce, $paid, $sales)
+            );  
     
             (new User)->forceFill([
                 'email' => $userCommerce->email,
             ])->notify(
-                new ShippingNotification($message)
+                new DeliveryProductCommerce($commerce, $paid, $sales)
             );
 
-            $messageAdmin = " el delivery ".$delivery->name." entrego los productos de código de compra: ".$paids->codeUrl." a su destino.";
+            $messageAdmin = " el delivery ".$delivery->name." entrego los productos de código de compra: ".$paid->codeUrl." a su destino.";
 
         }
 
-        (new User)->forceFill([
-            'email' => $paids->email,
-        ])->notify(
-            new ShippingNotification($message)
-        );
 
         $emailsGet = Settings::where('name','Email Estado Pedido')->first();
 
@@ -889,9 +900,9 @@ class PaidController extends Controller
             ],
         ]); 
 
-        $paids->save();
+        $paid->save();
 
-        return response()->json(['statusCode' => 201,'data' =>['paid'=>$paids]]);
+        return response()->json(['statusCode' => 201,'data' =>['paid'=>$paid]]);
 
     }
 

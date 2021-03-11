@@ -10,15 +10,16 @@ use Illuminate\Notifications\Notification;
 class SendDeposits extends Notification
 {
     use Queueable;
-    protected $message;
+    protected $user, $deposits;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($message)
+    public function __construct($user, $deposits)
     {
-        $this->message = $message;
+        $this->user = $user;
+        $this->deposits = $deposits;
     }
 
     /**
@@ -41,9 +42,10 @@ class SendDeposits extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Aviso Delivery Ctpaga')
-            ->line('Estás recibiendo este correo electrónico porque estamos informando que '.$this->message)
-            ->line('¡Gracias por usar nuestra aplicación y confiar en nosotros!');
+            ->subject('Aviso Ctpaga')
+            ->markdown(
+                'email.sendDeposits', ['user' => $this->user, 'deposits' => $this->deposits,]
+            );
     }
 
     /**

@@ -29,9 +29,7 @@
                 <div style="color: #34495e; width: 100%; margin: 4% 10% 2%; text-align: center; font-family: sans-serif;">
 
                     <h2 style="color:#59595e; margin: 0 0 7px; text-transform: uppercase; font-size: 15px; text-align: center;">
-                        CAMBIO DE CONTRASEÑA 
-                        <br>
-                        EN EL ID DE CTPAGA
+                    CAMBIO DE CONTRASEÑA <br> EN EL ID DE CTPAGA
                     </h2>
                 </div>
             </td>
