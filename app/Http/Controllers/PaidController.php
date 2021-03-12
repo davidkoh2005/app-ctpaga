@@ -138,14 +138,16 @@ class PaidController extends Controller
 
             $emailsGet = Settings::where('name','Email Delivery')->first();
 
-            $emails = json_decode($emailsGet->value);
-            $messageAdmin = "se ha realizado un nuevo pedido con código de compra: ".$codeUrl;
-            foreach($emails as $email){
-                (new User)->forceFill([
-                    'email' => $email,
-                ])->notify(
-                    new NotificationAdmin($messageAdmin)
-                );
+            if($emailsGet){
+                $emails = json_decode($emailsGet->value);
+                $messageAdmin = "se ha realizado un nuevo pedido con código de compra: ".$codeUrl;
+                foreach($emails as $email){
+                    (new User)->forceFill([
+                        'email' => $email,
+                    ])->notify(
+                        new NotificationAdmin($messageAdmin)
+                    );
+                } 
             }
 
             $status = true;
@@ -259,14 +261,16 @@ class PaidController extends Controller
 
                     $emailsGet = Settings::where('name','Email Delivery')->first();
 
-                    $emails = json_decode($emailsGet->value);
-                    $messageAdmin = "se ha realizado un nuevo pedido con código de compra: ".$codeUrl;
-                    foreach($emails as $email){
-                        (new User)->forceFill([
-                            'email' => $email,
-                        ])->notify(
-                            new NotificationAdmin($messageAdmin)
-                        );
+                    if($emailsGet){
+                        $emails = json_decode($emailsGet->value);
+                        $messageAdmin = "se ha realizado un nuevo pedido con código de compra: ".$codeUrl;
+                        foreach($emails as $email){
+                            (new User)->forceFill([
+                                'email' => $email,
+                            ])->notify(
+                                new NotificationAdmin($messageAdmin)
+                            );
+                        } 
                     }
 
                     $status = true;
@@ -387,14 +391,16 @@ class PaidController extends Controller
             
             $emailsGet = Settings::where('name','Email Transaccion')->first();
 
-            $emails = json_decode($emailsGet->value);
-            $messageAdmin = "se ha realizado un nuevo pedido con código de compra: ".$codeUrl." ,el pago esta en proceso de verificación.";
-            foreach($emails as $email){
-                (new User)->forceFill([
-                    'email' => $email,
-                ])->notify(
-                    new NotificationAdmin($messageAdmin)
-                );
+            if($emailsGet){
+                $emails = json_decode($emailsGet->value);
+                $messageAdmin = "se ha realizado un nuevo pedido con código de compra: ".$codeUrl." ,el pago esta en proceso de verificación.";
+                foreach($emails as $email){
+                    (new User)->forceFill([
+                        'email' => $email,
+                    ])->notify(
+                        new NotificationAdmin($messageAdmin)
+                    );
+                } 
             }
 
             
@@ -533,14 +539,16 @@ class PaidController extends Controller
 
                 $emailsGet = Settings::where('name','Email Delivery')->first();
 
-                $emails = json_decode($emailsGet->value);
-                $messageAdmin = "se ha realizado un nuevo pedido con código de compra: ".$codeUrl;
-                foreach($emails as $email){
-                    (new User)->forceFill([
-                        'email' => $email,
-                    ])->notify(
-                        new NotificationAdmin($messageAdmin)
-                    );
+                if($emailsGet){
+                    $emails = json_decode($emailsGet->value);
+                    $messageAdmin = "se ha realizado un nuevo pedido con código de compra: ".$codeUrl;
+                    foreach($emails as $email){
+                        (new User)->forceFill([
+                            'email' => $email,
+                        ])->notify(
+                            new NotificationAdmin($messageAdmin)
+                        );
+                    } 
                 }
 
                 $status = true;
@@ -657,15 +665,18 @@ class PaidController extends Controller
 
             $emailsGet = Settings::where('name','Email Delivery')->first();
 
-            $emails = json_decode($emailsGet->value);
-            $messageAdmin = "se ha realizado un nuevo pedido con código de compra: ".$codeUrl;
-            foreach($emails as $email){
-                (new User)->forceFill([
-                    'email' => $email,
-                ])->notify(
-                    new NotificationAdmin($messageAdmin)
-                );
+            if($emailsGet){
+                $emails = json_decode($emailsGet->value);
+                $messageAdmin = "se ha realizado un nuevo pedido con código de compra: ".$codeUrl;
+                foreach($emails as $email){
+                    (new User)->forceFill([
+                        'email' => $email,
+                    ])->notify(
+                        new NotificationAdmin($messageAdmin)
+                    );
+                } 
             }
+
     
         }else{
             (new User)->forceFill([
@@ -682,14 +693,16 @@ class PaidController extends Controller
 
             $emailsGet = Settings::where('name','Email Transaccion')->first();
 
-            $emails = json_decode($emailsGet->value);
-            $messageAdmin = "se ha realizado un nuevo pedido con código de compra: ".$codeUrl." ,el pago esta en proceso de verificación.";
-            foreach($emails as $email){
-                (new User)->forceFill([
-                    'email' => $email,
-                ])->notify(
-                    new NotificationAdmin($messageAdmin)
-                );
+            if($emailsGet){
+                $emails = json_decode($emailsGet->value);
+                $messageAdmin = "se ha realizado un nuevo pedido con código de compra: ".$codeUrl." ,el pago esta en proceso de verificación.";
+                foreach($emails as $email){
+                    (new User)->forceFill([
+                        'email' => $email,
+                    ])->notify(
+                        new NotificationAdmin($messageAdmin)
+                    );
+                } 
             }
     
         }
@@ -866,14 +879,15 @@ class PaidController extends Controller
 
         $emailsGet = Settings::where('name','Email Estado Pedido')->first();
 
-        $emails = json_decode($emailsGet->value);
-        
-        foreach($emails as $email){
-            (new User)->forceFill([
-                'email' => $email,
-            ])->notify(
-                new NotificationAdmin($messageAdmin)
-            );
+        if($emailsGet){
+            $emails = json_decode($emailsGet->value);
+            foreach($emails as $email){
+                (new User)->forceFill([
+                    'email' => $email,
+                ])->notify(
+                    new NotificationAdmin($messageAdmin)
+                );
+            } 
         }
 
         /* $url = 'mensajesms.com.ve/sms2/API/api.php?cel='.$phone.'&men='.str_replace(" ","%20",$message).'&u=demo&t=D3M04P1';

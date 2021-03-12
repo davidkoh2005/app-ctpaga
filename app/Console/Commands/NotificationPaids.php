@@ -44,10 +44,9 @@ class NotificationPaids extends Command
     {
         $paids= Paid::where('statusDelivery',1)->where('timeDelivery', '<=', Carbon::now())->get(); 
         $emailsGet = Settings::where('name','Email Delivery')->first();
-        $emails = json_decode($emailsGet->value);
 
-        foreach ($paids as $paid)
-        {
+        if($emailsGet){
+            $emails = json_decode($emailsGet->value);
             $messageAdmin = "el código de orden: ".$paid->codeUrl." tiene 10 min o más que no ha sido tomado el orden!";
             foreach($emails as $email){
                 (new User)->forceFill([
