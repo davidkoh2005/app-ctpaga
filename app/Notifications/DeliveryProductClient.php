@@ -42,7 +42,7 @@ class DeliveryProductClient extends Notification
         return (new MailMessage)
             ->subject("Aviso Delivery Ctpaga")
             ->markdown(
-                'email.retirementProductClient', ['commerce' => $this->commerce, 'paid' => $this->paid, 'sales' => $this->sales]
+                'email.deliveryProductClient', ['commerce' => $this->commerce, 'paid' => $this->paid, 'sales' => $this->sales]
             );
     }
 /**

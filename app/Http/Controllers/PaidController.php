@@ -8,6 +8,10 @@ use App\Notifications\PostPurchase;
 use App\Notifications\ShippingNotification;
 use App\Notifications\NotificationCommerce;
 use App\Notifications\NotificationAdmin;
+use App\Notifications\DeliveryProductClient;
+use App\Notifications\DeliveryProductCommerce;
+use App\Notifications\RetirementProductClient;
+use App\Notifications\RetirementProductCommerce;
 use Carbon\Carbon;
 use App\User;
 use App\Sale;
@@ -734,6 +738,8 @@ class PaidController extends Controller
 
     public function showPaidDelivery(Request $request)
     {
+        $sheduleInitial = Carbon::createFromFormat('g:i A', '12:00 AM');
+        $sheduleFinal = Carbon::createFromFormat('g:i A', '11:59 PM');
         $delivery = $request->user();
         
         if(!$delivery->status){
@@ -745,8 +751,11 @@ class PaidController extends Controller
         $scheduleFinalGet = Settings::where("name", "Horario Final")->first();
 
         $now = Carbon::now();
-        $sheduleInitial = Carbon::createFromFormat('g:i A', $scheduleInitialGet->value);
-        $sheduleFinal = Carbon::createFromFormat('g:i A', $scheduleFinalGet->value);
+
+        if($scheduleInitialGet && $scheduleFinalGet){
+            $sheduleInitial = Carbon::createFromFormat('g:i A', $scheduleInitialGet->value);
+            $sheduleFinal = Carbon::createFromFormat('g:i A', $scheduleFinalGet->value);
+        }
 
         if($sheduleInitial->isBefore($now) && $sheduleFinal->isAfter($now)){
             $paids = Paid::where('codeUrl', $request->codeUrl)
@@ -767,6 +776,8 @@ class PaidController extends Controller
 
     public function orderPaidDelivery(Request $request)
     {
+        $sheduleInitial = Carbon::createFromFormat('g:i A', '12:00 AM');
+        $sheduleFinal = Carbon::createFromFormat('g:i A', '11:59 PM');
         $delivery = $request->user();
 
         if(!$delivery->status){
@@ -783,8 +794,11 @@ class PaidController extends Controller
             $scheduleFinalGet = Settings::where("name", "Horario Final")->first();
 
             $now = Carbon::now();
-            $sheduleInitial = Carbon::createFromFormat('g:i A', $scheduleInitialGet->value);
-            $sheduleFinal = Carbon::createFromFormat('g:i A', $scheduleFinalGet->value);
+
+            if($scheduleInitialGet && $scheduleFinalGet){
+                $sheduleInitial = Carbon::createFromFormat('g:i A', $scheduleInitialGet->value);
+                $sheduleFinal = Carbon::createFromFormat('g:i A', $scheduleFinalGet->value);
+            }
 
             if($sheduleInitial->isBefore($now)&& $sheduleFinal->isAfter($now))
                 if($paids && ($paids->idDelivery == null || $paids->idDelivery == $delivery->id)){
@@ -822,6 +836,7 @@ class PaidController extends Controller
         $sales = Sale::where('codeUrl', $request->codeUrl)->get();
         
         if($request->statusShipping == 1){
+            $message = "Delivery Ctpaga informa que los productos de código de compra: ".$paid->codeUrl." fue retirado desde la tienda llegará al destino no mas tardar de 1 hora.";
 
             (new User)->forceFill([
                 'email' => $paid->email,

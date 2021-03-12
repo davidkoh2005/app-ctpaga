@@ -18,6 +18,12 @@
                 <p>Inicio</p>
               </a>
             </li>
+            <li class="nav-item" id="nav-users">
+              <a class="nav-link" href="{{route('admin.listUsers')}}">
+                <i class="material-icons">manage_accounts</i>
+                <p>Usuarios</p>
+              </a>
+            </li>
             <li class="nav-item" id="nav-balance">
               <a class="nav-link" href="javascript:;">
                 <i class="material-icons">account_balance</i>

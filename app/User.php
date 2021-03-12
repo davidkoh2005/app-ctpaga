@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'name', 'email', 'password', 'address', 'phone', 'statusShipping', 'token_fcm'
+        'id', 'name', 'email', 'password', 'address', 'phone', 'statusShipping', 'token_fcm', 'status'
     ]; 
 
     /**
@@ -97,5 +97,10 @@ class User extends Authenticatable
     public function deposits()
     {
         return $this->hasMany('App\Deposits');
+    }
+
+    public function email()
+    {
+        return $this->hasMany('App\Email');
     }
 }

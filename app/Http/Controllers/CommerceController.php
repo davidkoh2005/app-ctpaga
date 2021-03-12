@@ -32,7 +32,13 @@ class CommerceController extends Controller
         ]);
 
         if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect()->intended(route('commerce.dashboard'));
+            $user = User::whereId(Auth::guard('web')->id())->first();
+
+            if($user->status != 0){
+                Auth::guard('web')->logout();
+                $request->session()->flush();
+            }else
+                return redirect()->intended(route('commerce.dashboard'));
         }
 
         Session::flash('message', "El correo o la contraseña es incorrecta!");

@@ -11,6 +11,7 @@ use App\Paid;
 use App\Sale;
 use App\Rate;
 use App\Admin;
+use App\Email;
 use App\Picture;
 use App\Balance;
 use App\Commerce;
@@ -20,6 +21,8 @@ use App\Product;
 use App\Service;
 use App\Settings;
 use Carbon\Carbon;
+use App\Notifications\UserPaused;
+use App\Notifications\UserRejected;
 use App\Notifications\PictureRemove;
 use App\Notifications\NewCode;
 use App\Notifications\SendDeposits;
@@ -27,6 +30,7 @@ use App\Notifications\PostPurchase;
 use App\Notifications\NotificationDelivery;
 use App\Events\SendCode;
 use App\Events\StatusDelivery;
+use App\Events\NewNotification;
 use App\Http\Controllers\Controller;
 use App\Exports\DepositsExport;
 use App\Exports\RatesExport;
@@ -208,6 +212,27 @@ class AdminController extends Controller
         $commerce->confirmed = $request->status == "true"?1:0;
         $commerce->save();
 
+        $user = User::whereId($commerce->user_id)->first();
+
+
+        if($request->status == "false"){
+            $sentEmail = Email::firstOrNew([
+                'user_id'       => $user->id,
+                'commerce_id'   => $commerce->id,
+            ]);
+
+            if(!$sentEmail->date || Carbon::parse($sentEmail->date)->format('Y-m-d') != Carbon::now()->format('Y-m-d')){
+                (new User)->forceFill([
+                    'email' => $user->email,
+                ])->notify(
+                    new PictureRemove($commerce)
+                ); 
+            }
+            $sentEmail->date = Carbon::now();
+            $sentEmail->save();
+        }
+        
+
         return response()->json([
             'status' => 201
         ]);
@@ -227,9 +252,23 @@ class AdminController extends Controller
         $commerce->confirmed = false;
         $commerce->save();
 
-        $user->notify(
-            new PictureRemove($request->reason)
-        );
+        $sentEmail = Email::firstOrNew([
+            'user_id'       => $user->id,
+            'commerce_id'   => $commerce->id,
+        ]);
+
+        if(!$sentEmail->date || Carbon::parse($sentEmail->date)->format('Y-m-d') != Carbon::now()->format('Y-m-d')){
+            (new User)->forceFill([
+                'email' => $user->email,
+            ])->notify(
+                new PictureRemove($commerce)
+            ); 
+
+            $sentEmail->date = Carbon::now();
+
+        }
+
+        $sentEmail->save();
 
         return response()->json([
             'status' => 201
@@ -877,5 +916,40 @@ class AdminController extends Controller
         $response = curl_exec($ch);
 
         curl_close($ch);
+    }
+
+    public function listUsers(Request $request)
+    {
+        
+        $usersAll= User::with(['commerces' => function ($q) {
+            $q->orderBy('id', 'asc');
+        }])->get();
+
+        $statusMenu = "users";
+        return view('admin.listUsers', compact('statusMenu', 'usersAll'));
+    }
+
+    public function changeStatusUser(Request $request)
+    {
+        $user = User::whereId($request->id)->first();
+        $user->status = $request->status;
+        $user->save();
+
+        if($request->status == 1)
+            (new User)->forceFill([
+                'email' => $user->email,
+            ])->notify(
+                new UserPaused($user)
+            );
+        elseif($request->status == 2)
+            (new User)->forceFill([
+                'email' => $user->email,
+            ])->notify(
+                new UserRejected($user)
+            ); 
+
+        $success = event(new NewNotification($request->id));
+
+        return response()->json(array('status' => 201));
     }
 }

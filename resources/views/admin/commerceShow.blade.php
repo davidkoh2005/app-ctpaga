@@ -6,10 +6,10 @@
     <title>Ctpaga</title>
     @include('bookshop')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/show.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/datatables.min.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/bookshop/datatables.min.css') }}"/>
     <script type="text/javascript" src="{{ asset('js/show.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/rotate.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/datatables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/bookshop/rotate.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/bookshop/datatables.min.js') }}"></script>
     @include('admin.bookshop')
 </head>
 <body>
@@ -125,9 +125,7 @@
                     </button>
                 </div>              
                 <div class="modal-body">
-                    <div class="row">&nbsp;</div>
-                    <div class="row">&nbsp;</div>
-                    <img src="" class="imagepreview" >
+                    <img src="" class="imagepreview img-fluid" >
                 </div>
                 <div class="modal-footer">
                     <div class="marginAuto">
@@ -186,17 +184,19 @@
         $( "#switchConfirmed" ).prop( "checked", checkConfirmed);
     
         $(function() {
-            $('.main-panel').perfectScrollbar({suppressScrollX: true, maxScrollbarLength: 200}); 
+            //$('.main-panel').perfectScrollbar({suppressScrollX: true, maxScrollbarLength: 200}); 
             $('#rejectSelfie').on('click', function() {
                 statusReason= 0;
-                $('#reasonModal').modal('show'); 
+                //$('#reasonModal').modal('show');
+                removePicture(idSelfie);
             });	
 
 
             $('.btnReject').on('click', function() {
                 statusReason= 1;
                 idSelect = $(this).find('#idPictures').val();
-                $('#reasonModal').modal('show'); 
+                //$('#reasonModal').modal('show');
+                removePicture(idSelect); 
             });
             
             $('#submitReason').on('click', function() {
@@ -237,6 +237,7 @@
             });		
 
             $("#switchConfirmed").on('click', function(){
+                $( ".loader" ).fadeIn("slow"); 
                 var status = $(this).is(':checked');
                 $.ajax({
                     url: "{{route('admin.confirmedCommerce')}}", 
@@ -247,16 +248,39 @@
                         $( ".loader" ).fadeOut("slow"); 
                         alertify.success('Estado de comerciante guardado correctamente!');
                     }else{
+                        $( ".loader" ).fadeOut("slow");
                         $( "#switchConfirmed" ).prop( "checked", !status);
                         alertify.error('Error intentalo de nuevo mas tardes!');
                     }
                 }).fail(function(result){
+                    $( ".loader" ).fadeOut("slow");
                     $( "#switchConfirmed" ).prop( "checked", !status);
                     alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                 });
             });
         });	
         $(".main-panel").perfectScrollbar('update');
+
+
+        function removePicture(id)
+        {
+            $( ".loader" ).fadeIn("slow"); 
+            $.ajax({
+                url: "{{route('admin.removePicture')}}", 
+                data: {"id" : id, 'idCommerce': idCommerce, },
+                type: "POST",
+            }).done(function(result){
+                $( ".loader" ).fadeOut("slow");
+                //$('#reasonModal').modal('hide'); 
+                if(result.status == 201){
+                    alertify.success('Imagen eliminado correctamente!');
+                    location.reload();
+                }
+            }).fail(function(result){
+                $( ".loader" ).fadeOut("slow");
+                alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+            });
+        }
     </script>
 </body>
 </html>

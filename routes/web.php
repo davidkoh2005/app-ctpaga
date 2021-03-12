@@ -71,6 +71,8 @@ Route::group(['middleware'=>'web'], function() {
 Route::group(['middleware'=>'admin'], function() {
     Route::get('/admin/', 'AdminController@dashboard')->name('admin.dashboard');
     Route::post('/admin/dataGraphic', 'AdminController@dataGraphic')->name('admin.dataGraphic');
+    Route::get('/admin/usuario', 'AdminController@listUsers')->name('admin.listUsers');
+    Route::post('/admin/usuario', 'AdminController@changeStatusUser')->name('admin.changeStatusUser');
     Route::get('/admin/depositos', 'AdminController@index')->name('admin.balance');
     Route::post('/admin/depositos', 'AdminController@index')->name('admin.balance');
     Route::get('/admin/comerciantes', 'AdminController@commerces')->name('admin.commerces');

@@ -89,6 +89,9 @@ $(function(){
 
 
         switch (index) {
+            case 0:
+                $("#form-store").text(commerceName);
+                break;
             case 1:
                 $("#form-store").text(commerceName);
                 break;

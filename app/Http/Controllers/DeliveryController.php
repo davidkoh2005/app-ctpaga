@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Delivery;
 use App\Paid;
@@ -10,12 +11,15 @@ use App\Commerce;
 use App\User;
 use App\Deposits;
 use App\Settings;
+use App\Email;
 use App\Events\StatusDelivery;
 use App\Events\AlarmUrgent;
 use App\Events\NewNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Notifications\NewUser;
+use App\Notifications\UserPaused;
+use App\Notifications\UserRejected;
 use App\Notifications\SendDeposits;
 use App\Notifications\NotificationAdmin;
 use App\Notifications\PasswordResetSuccess;
@@ -79,6 +83,18 @@ class DeliveryController extends Controller
         $delivery = Delivery::where('email', 'angelgoitia1995@gmail.com')->first();
 
         $messageAdmin = $messageAdmin = " el delivery ".$delivery->name." entrego los productos de código de compra: ".$paid->codeUrl." a su destino.";
+
+        (new User)->forceFill([
+            'email' => $user->email,
+        ])->notify(
+            new UserRejected($user)
+        ); 
+
+        (new User)->forceFill([
+            'email' => $user->email,
+        ])->notify(
+            new UserPaused($user)
+        ); 
 
         (new User)->forceFill([
             'email' => 'angelgoitia1995@gmail.com',

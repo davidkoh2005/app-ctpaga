@@ -3,6 +3,8 @@ $(document).ready( function () {
 
     if(statusMenu == "dashboard")
         $("#title-navbar").html("Inicio");
+    else if(statusMenu == "users")
+        $("#title-navbar").html("Usuarios");
     else if(statusMenu == "balance")
         $("#title-navbar").html("Depositos");
     else if(statusMenu == "commerces")

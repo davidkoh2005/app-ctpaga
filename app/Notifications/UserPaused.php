@@ -7,20 +7,19 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class PictureRemove extends Notification
+class UserPaused extends Notification
 {
     use Queueable;
-    protected $commerce;
+    protected $user;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($commerce)
+    public function __construct($user)
     {
-        $this->commerce = $commerce;
+        $this->user = $user;
     }
-
     /**
      * Get the notification's delivery channels.
      *
@@ -41,10 +40,10 @@ class PictureRemove extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Aviso Ctpaga')
-            ->markdown(
-                'email.pictureRemove', ['commerce' => $this->commerce]
-            );
+        ->subject('Aviso Importante Ctpaga')
+        ->markdown(
+            'email.userPaused', ['user' => $this->user]
+        );
     }
 
     /**

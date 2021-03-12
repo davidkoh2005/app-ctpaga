@@ -76,6 +76,19 @@ class AuthController extends Controller
             ], 401);
 
         $user = $request->user();
+        
+        if($user->status == 1)
+            return response()->json([
+                'statusCode' => 400,
+                'message' => 'Esta cuenta se encuentra en revisión',
+            ], 401);
+
+        if($user->status == 2)
+            return response()->json([
+                'statusCode' => 400,
+                'message' => 'Esta cuenta se encuentra suspendida',
+            ], 401);
+
         $tokenResult = $user->createToken('Personal Access Token');
 
         $token = $tokenResult->token;

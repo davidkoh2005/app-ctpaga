@@ -19,6 +19,12 @@
                     <div class="row colorGrey">
                         <div class="col-12">
                             <div class="row">
+                                <div class="col-md-2 col-12 text-right d-block d-sm-none" id="btnFloatingShipping">
+                                    <div class="relative">
+                                        <div> <img class="logoCart" widht="70px" height="70px" class="justify-content-center" src="{{ asset('images/logoCarrito-white.png')}}"> </div>
+                                        <div class="circleGreen">0</div>
+                                    </div>
+                                </div>
                                 <div class="form-navigation float-left col-md-2 col-2">
                                     <button type="button" class="previous btn">
                                         <svg width="45px" height="45px" viewBox="0 0 16 16" class="bi bi-chevron-left" fill="currentColor">
@@ -26,10 +32,10 @@
                                         </svg>
                                     </button>
                                 </div>
-                                <div class="float-left col-md-8 col-6">
+                                <div class="float-left col-md-8 col">
                                     <h5 class="form-store" id="form-store"> {{$commerce->name}} </h5>
                                 </div>
-                                <div class="col-md-2 col-3 text-right" id="btnFloatingShipping">
+                                <div class="col-md-2 col-3 text-right d-none d-sm-block" id="btnFloatingShipping">
                                     <div class="relative">
                                         <div> <img class="logoCart" widht="70px" height="70px" class="justify-content-center" src="{{ asset('images/logoCarrito-white.png')}}"> </div>
                                         <div class="circleGreen">0</div>
@@ -265,6 +271,7 @@
                 dataType: "json"
             }).done(function(data){
                 $('#showCategories').html(data.html);
+                console.log(data.html);
                 showProductsServices(null);  
             }).fail(function(){  
                 alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
@@ -284,8 +291,7 @@
                 $('#showProductsServices').html(data.html);
                 setTimeout(removeLoader, 100);
             }).fail(function(){  
-                alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
-                $('#showProductsServices').html();                 
+                location.reload();             
             });
         }
 
