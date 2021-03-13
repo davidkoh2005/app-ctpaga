@@ -6,9 +6,9 @@
     <title>Ctpaga</title>
     @include('bookshop')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/datatables.min.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/bookshop/datatables.min.css') }}"/>
     @include('admin.bookshop')
-    <script type="text/javascript" src="{{ asset('js/datatables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/bookshop/datatables.min.js') }}"></script>
 </head>
 <body class="body-admin">
 @include('auth.menu')
@@ -50,7 +50,7 @@
 
                         <td>
                             <label class="content-select">
-                                <select class="addMargin" name="changeStatus" id="changeStatus" data-id="{{$user->id}}" data-value="{{$user->status}}">
+                                <select class="addMargin changeStatus" name="changeStatus" id="changeStatus" data-id="{{$user->id}}" data-value="{{$user->status}}">
                                     @if($user->status == 0)
                                         <option value="0" selected>Aceptado</option>
                                     @else
@@ -85,11 +85,10 @@
         $(document).ready( function () {
             $('.main-panel').perfectScrollbar({suppressScrollX: true, maxScrollbarLength: 200}); 
             
-            $('#changeStatus').change(function(){
+            $('.changeStatus').change(function(){
                 var id = $(this).data("id");
                 var value = $(this).data("value");
                 var status = $(this).val();
-
                 $( ".loader" ).fadeIn("slow"); 
                 $.ajax({
                     url: "{{route('admin.changeStatusUser')}}", 
