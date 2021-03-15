@@ -46,9 +46,7 @@
                     <p style="color:#59595e; margin: 0 0 7px;">Estimado/a <strong>{{strtoupper($commerce->name)}}</strong></p>
                     <br>
                     <br>
-                    <p style="color:#59595e; margin: 0 0 7px;">Nuestro equipo de delivery/entregas realizó la entrega
-                        del @if (count($sales) == 1) el Producto @else los Productos @endif vendido (s) a {{ $paid->nameClient == 'Tienda Web'? 'Cliente' : strtoupper($paid->nameClient)}} (orden de compra
-                        {{$paid->codeUrl}}) en la dirección {{$paid->addressShipping}}
+                    <p style="color:#59595e; margin: 0 0 7px;">CTPaga Delivery realizó la entrega del pedido {{$paid->codeUrl}} en la dirección {{$paid->addressShipping}}
                     </p>
                     <p style="text-align: center">[Pedido {{$paid->codeUrl}}] (
                         @php

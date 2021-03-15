@@ -45,9 +45,8 @@
                     <p style="color:#59595e; margin: 0 0 7px;">Estimado/a <strong>{{ $paid->nameClient == 'Tienda Web'? 'Cliente' : strtoupper($paid->nameClient)}}</strong></p>
                     <br>
                     <br>
-                    <p style="color:#59595e; margin: 0 0 7px;">Nuestro equipo de delivery/entregas ha retirado del
-                        comercio {{$commerce->name}}  @if (count($sales) == 1) el Producto @else los Productos @endif correspondientes al pedido {{$paid->codeUrl}}, apenas sea
-                        entregado con Éxito en su destino {{$paid->addressShipping}},
+                    <p style="color:#59595e; margin: 0 0 7px;">CTPaga Delivery ha retirado del comercio {{$commerce->name}} el pedido {{$paid->codeUrl}}, apenas sea
+                        entregado con Éxito en la dirección {{$paid->addressShipping}},
                         le llegará otro correo con la Confirmación de Entrega.</p>
                     <p style="text-align: center">[Pedido {{$paid->codeUrl}}] (
                         @php
