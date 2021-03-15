@@ -7,19 +7,19 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class UserPaused extends Notification
+class ConfirmBank extends Notification
 {
     use Queueable;
-    protected $user, $type;
+    protected $user, $commerce;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($user, $type)
+    public function __construct($user, $commerce)
     {
         $this->user = $user;
-        $this->type = $type;
+        $this->commerce = $commerce;
     }
     /**
      * Get the notification's delivery channels.
@@ -40,15 +40,10 @@ class UserPaused extends Notification
      */
     public function toMail($notifiable)
     {
-        if($this->type == 0)
-            $subject = "Aviso Importante Ctpaga";
-        else
-            $subject = "Aviso Importante Delivery Ctpaga";
-        
         return (new MailMessage)
-        ->subject($subject)
+        ->subject('Bienvenido a Ctpaga')
         ->markdown(
-            'email.userPaused', ['user' => $this->user]
+            'email.confirmBank', ['user' => $this->user, 'commerce' => $this->commerce]
         );
     }
 

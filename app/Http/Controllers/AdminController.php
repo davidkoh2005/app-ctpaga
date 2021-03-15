@@ -24,9 +24,11 @@ use Carbon\Carbon;
 use App\Notifications\UserPaused;
 use App\Notifications\UserRejected;
 use App\Notifications\PictureRemove;
+use App\Notifications\ConfirmBank;
 use App\Notifications\NewCode;
 use App\Notifications\SendDeposits;
 use App\Notifications\PostPurchase;
+use App\Notifications\PaymentConfirm;
 use App\Notifications\NotificationDelivery;
 use App\Events\SendCode;
 use App\Events\StatusDelivery;
@@ -214,8 +216,13 @@ class AdminController extends Controller
 
         $user = User::whereId($commerce->user_id)->first();
 
-
-        if($request->status == "false"){
+        if($request->status == "true"){
+            (new User)->forceFill([
+                'email' => $user->email,
+            ])->notify(
+                new ConfirmBank($user, $commerce)
+            ); 
+        }elseif($request->status == "false"){
             $sentEmail = Email::firstOrNew([
                 'user_id'       => $user->id,
                 'commerce_id'   => $commerce->id,
@@ -458,7 +465,7 @@ class AdminController extends Controller
                 (new User)->forceFill([
                     'email' => $transaction->email,
                 ])->notify(
-                    new PostPurchase($message, $userUrl, $commerce->name, $codeUrl)
+                    new PaymentConfirm($transaction->nameClient, $codeUrl)
                 );
             }
         }
@@ -674,6 +681,21 @@ class AdminController extends Controller
             $paid->idDelivery = $request->idDelivery;
             $paid->save();
 
+            $phone = '+'.app('App\Http\Controllers\Controller')->validateNum($paid->numberShipping);
+            $fecha = Carbon::now()->format("d/m/Y");
+            $message = "CTPaga Delivery le informa que ha realizado un pedido con el Nro ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora.";
+            $sms = AWS::createClient('sns');
+            $sms->publish([
+                'Message' => $message,
+                'PhoneNumber' => $phone,
+                'MessageAttributes' => [
+                    'AWS.SNS.SMS.SMSType'  => [
+                        'DataType'    => 'String',
+                        'StringValue' => 'Transactional',
+                    ]
+                ],
+            ]); 
+
             (new User)->forceFill([
                 'email' => $delivery->email,
             ])->notify(
@@ -783,8 +805,21 @@ class AdminController extends Controller
     public function changeStatusDelivery(Request $request)
     {
         $delivery = delivery::where("id", $request->id)->first();
-        $delivery->status = $request->status == "true"?1:0;
+        $delivery->status = $request->status;
         $delivery->save();
+
+        if($request->status == 2)
+            (new User)->forceFill([
+                'email' => $delivery->email,
+            ])->notify(
+                new UserPaused($delivery, 1)
+            );
+        elseif($request->status == 3)
+            (new User)->forceFill([
+                'email' => $delivery->email,
+            ])->notify(
+                new UserRejected($delivery, 1)
+            ); 
 
         return response()->json([
             'status' => 201
@@ -939,13 +974,13 @@ class AdminController extends Controller
             (new User)->forceFill([
                 'email' => $user->email,
             ])->notify(
-                new UserPaused($user)
+                new UserPaused($user, 0)
             );
         elseif($request->status == 2)
             (new User)->forceFill([
                 'email' => $user->email,
             ])->notify(
-                new UserRejected($user)
+                new UserRejected($user, 0)
             ); 
 
         $success = event(new NewNotification($request->id));

@@ -27,7 +27,7 @@ class VersionSeeder extends Seeder
             \DB::table("version")->insert(
                 array(
                     'id'        => 2,
-                    'version'   => '1.0.11',
+                    'version'   => '1.0.12',
                     'url'       => 'https://drive.google.com/file/d/19_dMq-AGDB8FvRv1KZ2oaZdDkJytn-o3/view?usp=sharing',
                     'created_at'=> date('Y-m-d H:m:s'),
                     'updated_at'=> date('Y-m-d H:m:s'),

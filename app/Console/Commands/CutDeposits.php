@@ -16,7 +16,7 @@ class CutDeposits extends Command
      *
      * @var string
      */
-    protected $name = 'make:cutDeposits';
+    protected $name = 'command:cutDeposits';
 
     /**
      * The console command description.

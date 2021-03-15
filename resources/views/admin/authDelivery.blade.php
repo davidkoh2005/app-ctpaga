@@ -7,9 +7,9 @@
     @include('bookshop')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/show.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/datatables.min.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/bookshop/datatables.min.css') }}"/>
     @include('admin.bookshop')
-    <script type="text/javascript" src="{{ asset('js/datatables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/bookshop/datatables.min.js') }}"></script>
 </head>
 <body class="body-admin">
     <div class="loader"></div>
@@ -37,18 +37,34 @@
                         <td>{{ $delivery->phone }}</td>
                         <td>{{ $delivery->email }}</td>
                         <td>
-                            <div class="row justify-content-center align-items-center">
-                                <i class="material-icons iconsClose">close</i>
-                                <label class="switch" id="switch">
-                                    @if($delivery->status==1)
-                                        <input type="checkbox" id="switchAuth" name="switchAuth" data-id="{{ $delivery->id }}" data-status="{{$delivery->status}}" checked>
+                            <label class="content-select">
+                                <select class="addMargin changeStatus" name="changeStatus" id="changeStatus" data-id="{{$delivery->id}}" data-value="{{$delivery->status}}">
+                                    @if($delivery->status == 0)
+                                        <option value="0" selected disabled>En Verificación</option>
                                     @else
-                                        <input type="checkbox" id="switchAuth" name="switchAuth" data-id="{{ $delivery->id }}" data-status="{{$delivery->status}}" >
+                                        <option value="0" disabled>En Verificación</option>
                                     @endif
-                                    <span class="slider round"></span>
-                                </label>
-                                <i class="material-icons iconsVerified">verified_user</i>
-                            </div>
+                                    
+                                    @if($delivery->status == 1)
+                                        <option value="1" selected>Confirmado</option>
+                                    @else
+                                        <option value="1" >Confirmado</option>
+                                    @endif
+
+                                    @if($delivery->status == 2)
+                                        <option value="2" selected>Pausado</option>
+                                    @else
+                                        <option value="2" >Pausado</option>
+                                    @endif
+
+                                    @if($delivery->status == 3)
+                                        <option value="3" selected>Rechazado</option>
+                                    @else
+                                        <option value="3" >Rechazado</option>
+                                    @endif
+
+                                </select>
+                            </label>
                         </td>
                     </tr>
                     @endforeach
@@ -87,6 +103,37 @@
             });
         });
         $(".main-panel").perfectScrollbar('update');
+
+        $('.changeStatus').change(function(){
+            var idDelivery = $(this).data("id");
+            var value = $(this).data("value");
+            var status = $(this).val();
+            var thisSelect = this;
+            $( ".loader" ).fadeIn("slow"); 
+            $.ajax({
+                url: "{{route('admin.changeStatusDelivery')}}", 
+                data: {"id" : idDelivery,  "status": status},
+                type: "POST",
+            }).done(function(result){
+                $( ".loader" ).fadeOut("slow"); 
+                if(result.status == 201){
+                    $( ".loader" ).fadeOut("slow"); 
+                    alertify.success('Estado de comerciante guardado correctamente!');
+                }else{
+                    $(thisSelect).find("option[value='0']").removeAttr('disabled');
+                    $(thisSelect).find("option[value='"+ value +"']").prop("selected",true);
+                    alertify.error('Error intentalo de nuevo mas tardes!');
+                    $(thisSelect).find("option[value='0']").attr('disabled','disabled');
+                    $( ".loader" ).fadeOut("slow"); 
+                }
+            }).fail(function(result){
+                $(thisSelect).find("option[value='0']").removeAttr('disabled');
+                $(thisSelect).find("option[value='"+ value +"']").prop("selected",true);
+                $(thisSelect).find("option[value='0']").attr('disabled','disabled');
+                $( ".loader" ).fadeOut("slow"); 
+                alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+            });  
+        });
 
         $( document ).on( 'click', '#switchAuth', function(){
             var thisSwitch = this;

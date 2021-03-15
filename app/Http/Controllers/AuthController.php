@@ -81,13 +81,13 @@ class AuthController extends Controller
             return response()->json([
                 'statusCode' => 400,
                 'message' => 'Esta cuenta se encuentra en revisión',
-            ], 401);
+            ], 400);
 
         if($user->status == 2)
             return response()->json([
                 'statusCode' => 400,
                 'message' => 'Esta cuenta se encuentra suspendida',
-            ], 401);
+            ], 400);
 
         $tokenResult = $user->createToken('Personal Access Token');
 
@@ -208,23 +208,30 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
         $delivery = Delivery::where("email", request('email'))->first();
 
-        if (isset($delivery) && !$delivery->status)
+        if (isset($delivery) && $delivery->status == 0)
+            return response()->json([
+                'statusCode' => 400,
+                'message' => 'Por favor contactar con el administrador',
+            ], 400);
+
+        if(isset($delivery) && $delivery->status == 2)
+            return response()->json([
+                'statusCode' => 400,
+                'message' => 'Esta cuenta se encuentra en revisión',
+            ], 400);
+
+        if(isset($delivery) && $delivery->status == 3)
+            return response()->json([
+                'statusCode' => 400,
+                'message' => 'Esta cuenta se encuentra suspendida',
+            ], 400);
+
+
+        if (!Hash::check(request('password'), $delivery->password)) {
             return response()->json([
                 'statusCode' => 401,
                 'message' => 'Unauthorized',
             ], 401);
-
-        if (!isset($delivery) )
-            return response()->json([
-                'statusCode' => 400,
-                'message' => 'Error',
-            ], 400);
-
-        if (!Hash::check(request('password'), $delivery->password)) {
-            return response()->json([
-                'statusCode' => 400,
-                'message' => 'Error',
-            ], 400);
         } 
 
         $tokenResult = $delivery->createToken('Personal Access Token');

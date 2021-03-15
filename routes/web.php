@@ -29,7 +29,7 @@ Route::get('activate/sockets', function(){
 });
 
 Route::post('court/active', function(){
-    \Illuminate\Support\Facades\Artisan::call('make:cutDeposits');
+    \Illuminate\Support\Facades\Artisan::call('command:cutDeposits');
 })->name('admin.court');
 
 Route::get('/admin/login', function () {
@@ -125,9 +125,8 @@ Route::get('/pagar/completado/{userUrl}', function ($userUrl) {
 
 Route::get('/pagar/estadoPaypal', 'PaidController@statusPaypal');
 Route::post('/pagar/criptomonedas', 'PaidController@cryptocurrencies');
-Route::post('/criptomonedas/callback', function () {
-    return view('gatewayBTC.lib.cryptobox-callback');
-});
+
+Route::get('facturacion/{codeUrl}/', 'PaidController@billing');
 
 Route::get('/{userUrl}/', 'SaleController@indexStore')->name('form.store');
 Route::get('/{userUrl}/{codeUrl}/{statusModification?}', 'SaleController@index');

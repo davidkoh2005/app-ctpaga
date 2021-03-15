@@ -21,6 +21,7 @@ use App\Notifications\NewUser;
 use App\Notifications\UserPaused;
 use App\Notifications\UserRejected;
 use App\Notifications\SendDeposits;
+use App\Notifications\PaymentConfirm;
 use App\Notifications\NotificationAdmin;
 use App\Notifications\PasswordResetSuccess;
 use App\Notifications\PasswordResetRequest;
@@ -87,13 +88,13 @@ class DeliveryController extends Controller
         (new User)->forceFill([
             'email' => $user->email,
         ])->notify(
-            new UserRejected($user)
+            new UserRejected($user, 0)
         ); 
 
         (new User)->forceFill([
             'email' => $user->email,
         ])->notify(
-            new UserPaused($user)
+            new UserPaused($user, 0)
         ); 
 
         (new User)->forceFill([
@@ -112,6 +113,12 @@ class DeliveryController extends Controller
             'email' => $user->email,
         ])->notify(
             new SendDeposits($user, $deposits)
+        );
+
+        (new User)->forceFill([
+            'email' => $user->email,
+        ])->notify(
+            new PaymentConfirm($paid->nameClient, $paid->codeUrl)
         );
 
         (new User)->forceFill([
@@ -148,7 +155,7 @@ class DeliveryController extends Controller
             'email' => $user->email,
         ])->notify(
             new NewUser($user)
-        ); 
+        );  
 
         /* $url = "https://fcm.googleapis.com/fcm/send";
         $token = "cSjCw2o7RTukByosQ88K9h:APA91bHIvDDhHDYxgyV_ohr3BnHTS1rTexoB126-RmBO1xXcah-T4E5aqZH-gLP6_Mh1KW6Ii8aph73wkqjbrOCIrS4oDJTb2Kd5ntiXeyVMk2DMcQj_7mk6Tf-B9i5UVgXNaacDEmhU";

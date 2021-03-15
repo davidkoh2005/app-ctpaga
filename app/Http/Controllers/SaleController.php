@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Notifications\PostPurchase;
+use App\Notifications\PaymentConfirm;
 use Carbon\Carbon;
 use Session;
 use App\User;
@@ -243,7 +244,7 @@ class SaleController extends Controller
         (new User)->forceFill([
             'email' => $emailClient,
         ])->notify(
-            new PostPurchase($message, $userUrl, $commerce->name)
+            new PaymentConfirm($nameClient, $codeUrl)
         );
     }
 

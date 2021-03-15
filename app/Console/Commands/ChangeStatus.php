@@ -12,7 +12,7 @@ class ChangeStatus extends Command
      *
      * @var string
      */
-    protected $signature = 'make:changeStatus';
+    protected $signature = 'command:changeStatus';
 
     /**
      * The console command description.

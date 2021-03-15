@@ -89,6 +89,7 @@
                 var id = $(this).data("id");
                 var value = $(this).data("value");
                 var status = $(this).val();
+                var thisSelect = this;
                 $( ".loader" ).fadeIn("slow"); 
                 $.ajax({
                     url: "{{route('admin.changeStatusUser')}}", 
@@ -96,12 +97,16 @@
                     type: "POST",
                 }).done(function(data){
                     $( ".loader" ).fadeOut("slow"); 
-                    if(data.status == 201)
+                    if(data.status == 201){
                         alertify.success('Estado ha sido cambiado correctamente');
-                
-                    location.reload()
+                        location.reload()
+                    }else{
+                        $(thisSelect).find("option[value='"+value+"']").prop("selected",true);
+                        $( ".loader" ).fadeOut("slow"); 
+                        alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                    }
                 }).fail(function(result){
-                    $(this+" option[value="+value+"]").prop("selected",true);
+                    $(thisSelect).find("option[value='"+value+"']").prop("selected",true);
                     $( ".loader" ).fadeOut("slow"); 
                     alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                 }); 

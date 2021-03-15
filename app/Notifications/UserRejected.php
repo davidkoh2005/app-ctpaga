@@ -10,15 +10,16 @@ use Illuminate\Notifications\Notification;
 class UserRejected extends Notification
 {
     use Queueable;
-    protected $user;
+    protected $user, $type;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($user)
+    public function __construct($user, $type)
     {
         $this->user = $user;
+        $this->type = $type;
     }
     /**
      * Get the notification's delivery channels.
@@ -39,8 +40,13 @@ class UserRejected extends Notification
      */
     public function toMail($notifiable)
     {
+        if($this->type == 0)
+            $subject = "Aviso Importante Ctpaga";
+        else
+            $subject = "Aviso Importante Delivery Ctpaga";
+
         return (new MailMessage)
-        ->subject('Aviso Importante Ctpaga')
+        ->subject($subject)
         ->markdown(
             'email.userRejected', ['user' => $this->user]
         );
