@@ -42,7 +42,7 @@
                 <br>
                 <a href="">
                     <img 
-                        src="{{ asset('images/email/11.png') }}" 
+                        src="{{ asset('images/email/10.png') }}" 
                         alt="" 
                         style="padding: 10px; display: block; margin: 0 auto; width: 80px;">
                 </a>
@@ -61,7 +61,7 @@
                     <br>
 
                     <p style="color:#59595e; margin: 0 0 7px;">
-                        Ctpaga informa que tu pago del pedido {{$codeUrl}} se encuentra en proceso de Verificación.
+                        Ctpaga informa que tu pago del pedido {{$codeUrl}} se encuentra Rechazada.
                     </p>
 
                     <br>

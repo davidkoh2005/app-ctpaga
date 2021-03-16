@@ -28,6 +28,7 @@ use App\Notifications\ConfirmBank;
 use App\Notifications\SendDeposits;
 use App\Notifications\PostPurchase;
 use App\Notifications\PaymentConfirm;
+use App\Notifications\PaymentCancel;
 use App\Notifications\NotificationDelivery;
 use App\Events\SendCode;
 use App\Events\StatusDelivery;
@@ -465,6 +466,12 @@ class AdminController extends Controller
                     'email' => $transaction->email,
                 ])->notify(
                     new PaymentConfirm($transaction->nameClient, $codeUrl)
+                );
+            }elseif($request->status == 0){
+                (new User)->forceFill([
+                    'email' => $transaction->email,
+                ])->notify(
+                    new PaymentCancel($transaction->nameClient, $codeUrl)
                 );
             }
         }

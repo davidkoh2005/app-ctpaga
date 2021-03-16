@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class PaymentVerification extends Notification
+class PaymentCancel extends Notification
 {
     use Queueable;
     protected $nameClient, $codeUrl;
@@ -42,9 +42,9 @@ class PaymentVerification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)  
-            ->subject('Gracias por realizar tu compra')
+            ->subject('Pago Rechazado')
             ->markdown(
-            'email.paymentVerification', ['nameClient' => $this->nameClient, 'codeUrl' => $this->codeUrl]
+            'email.paymentCancel', ['nameClient' => $this->nameClient, 'codeUrl' => $this->codeUrl]
         );
     }
 

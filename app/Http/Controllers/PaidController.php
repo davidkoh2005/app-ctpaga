@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
+use App\Notifications\PaymentVerification;
 use App\Notifications\PaymentConfirm;
 use App\Notifications\PostPurchase;
 use App\Notifications\ShippingNotification;
@@ -381,6 +382,12 @@ class PaidController extends Controller
                 "statusPayment"         => 1,
             ]);
 
+            (new User)->forceFill([
+                'email' => $requestForm['email'],
+            ])->notify(
+                new PaymentVerification($request->nameClient, $codeUrl)
+            );
+
             ApiClient::init(env('COINBASE_KEY'));
 
             $chargeData = [
@@ -689,7 +696,7 @@ class PaidController extends Controller
             (new User)->forceFill([
                 'email' => $requestForm['email'],
             ])->notify(
-                new PaymentVerification($message, $userUrl, $commerce->name, $codeUrl)
+                new PaymentVerification($requestForm['nameClient'], $codeUrl)
             );
 
             (new User)->forceFill([
