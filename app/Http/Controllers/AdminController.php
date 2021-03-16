@@ -438,7 +438,7 @@ class AdminController extends Controller
 
             if($request->status == 2){
 
-                $sales = Sale::where("codeUrl", $transaction->condeUrl)->get();
+                $sales = Sale::where("codeUrl", $transaction->codeUrl)->get();
                 $message="";
                 foreach ($sales as $sale)
                 {
@@ -465,13 +465,13 @@ class AdminController extends Controller
                 (new User)->forceFill([
                     'email' => $transaction->email,
                 ])->notify(
-                    new PaymentConfirm($transaction->nameClient, $codeUrl)
+                    new PaymentConfirm($transaction->nameClient, $transaction->codeUrl)
                 );
             }elseif($request->status == 0){
                 (new User)->forceFill([
                     'email' => $transaction->email,
                 ])->notify(
-                    new PaymentCancel($transaction->nameClient, $codeUrl)
+                    new PaymentCancel($transaction->nameClient, $transaction->codeUrl)
                 );
             }
         }
