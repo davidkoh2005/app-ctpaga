@@ -25,7 +25,6 @@ use App\Notifications\UserPaused;
 use App\Notifications\UserRejected;
 use App\Notifications\PictureRemove;
 use App\Notifications\ConfirmBank;
-use App\Notifications\NewCode;
 use App\Notifications\SendDeposits;
 use App\Notifications\PostPurchase;
 use App\Notifications\PaymentConfirm;

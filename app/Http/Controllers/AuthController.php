@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Notifications\NewUser;
+use App\Notifications\NewDelivery;
 use App\Events\StatusDelivery;
 use Carbon\Carbon;
 use App\User;
@@ -48,7 +49,7 @@ class AuthController extends Controller
         Commerce::create(['user_id'=>$user->id]);
 
         (new User)->forceFill([
-            'email' => $request->email,
+            'email' => $user->email,
         ])->notify(
             new NewUser($user)
         );
@@ -190,6 +191,12 @@ class AuthController extends Controller
         $token = $tokenResult->token;
         $token->expires_at = Carbon::now()->addYear(5);
         $token->save();
+
+        (new User)->forceFill([
+            'email' => $delivery->email,
+        ])->notify(
+            new NewDelivery($delivery)
+        ); 
         
         return response()->json([
             'statusCode' => 201,

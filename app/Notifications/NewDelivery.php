@@ -7,21 +7,19 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewCode extends Notification
+class NewDelivery extends Notification
 {
     use Queueable;
-
-    protected $codeUrl;
+    protected $delivery;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($codeUrl)
+    public function __construct($delivery)
     {
-        $this->codeUrl = $codeUrl;
+        $this->delivery = $delivery;
     }
-
     /**
      * Get the notification's delivery channels.
      *
@@ -42,10 +40,10 @@ class NewCode extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line('Estás recibiendo este correo electrónico porque recibiste nuevo código de compra.')
-            ->line('Código: '.$this->codeUrl)
-            ->line('Si no recibiste notificación, copia y pega en la aplicación Delivery Ctpaga.')
-            ->subject('Aviso Delivery Ctpaga');
+        ->subject('Bienvenido a Delivery Ctpaga')
+        ->markdown(
+            'email.welcomeDelivery', ['delivery' => $this->delivery]
+        );
     }
 
     /**

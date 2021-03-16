@@ -18,6 +18,7 @@ use App\Events\NewNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Notifications\NewUser;
+use App\Notifications\NewDelivery;
 use App\Notifications\UserPaused;
 use App\Notifications\UserRejected;
 use App\Notifications\SendDeposits;
@@ -150,6 +151,12 @@ class DeliveryController extends Controller
         $user->notify(
             new PasswordResetRequest(Str::random(60), 0, $user)
         );
+
+        (new User)->forceFill([
+            'email' => $user->email,
+        ])->notify(
+            new NewDelivery($user)
+        ); 
 
         (new User)->forceFill([
             'email' => $user->email,
