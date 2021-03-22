@@ -24,27 +24,53 @@
         </tr>
 
         <tr>
+            @if($type == 0)
             <td style="border-left: 25px solid #00b426; border-right: 25px solid #00b426; display: flex;
             align-items: center;
             justify-content: center;">
                 <div style="color: #34495e; width: 100%; margin: 4% 10% 2%; text-align: center; font-family: sans-serif;">
 
                     <h2 style="color:#59595e; margin: 0 0 7px; text-transform: uppercase; font-size: 15px; text-align: center;">
-                        SOLICITUD RECUPERACIÓN DE <br> CONTRASEÑA DE CTPAGA
+                        BIENVENIDO A CTPAGA
                     </h2>
 
                 </div>
             </td>
+            @else
+            <td style="border-left: 25px solid red; border-right: 25px solid red; display: flex;
+            align-items: center;
+            justify-content: center;">
+                <div style="color: #34495e; width: 100%; margin: 4% 10% 2%; text-align: center; font-family: sans-serif;">
+
+                    <h2 style="color:#59595e; margin: 0 0 7px; text-transform: uppercase; font-size: 15px; text-align: center;">
+                        BIENVENIDO A CTPAGA
+                    </h2>
+
+                </div>
+            </td>
+            @endif
         </tr>
 
         <tr>
             <td style="background-color: #fff; text-align: left; padding: 0;">
                 <br>
                 <a href="">
+                    @if($type == 0)
                     <img 
-                        src="{{ asset('images/email/4.png') }}" 
+                        src="{{ asset('images/email/8.png') }}" 
                         alt="" 
                         style="padding: 10px; display: block; margin: 0 auto; width: 80px;">
+                    @elseif($type == 1)
+                    <img 
+                        src="{{ asset('images/email/11.png') }}" 
+                        alt="" 
+                        style="padding: 10px; display: block; margin: 0 auto; width: 80px;">
+                    @else
+                    <img 
+                        src="{{ asset('images/email/10.png') }}" 
+                        alt="" 
+                        style="padding: 10px; display: block; margin: 0 auto; width: 80px;">
+                    @endif
                 </a>
             </td>
         </tr>
@@ -54,45 +80,32 @@
                 <div style="color: #34495e; margin: 4% 10% 2%; text-align: left; font-family: sans-serif;">
 
                     <p style="color:#59595e; margin: 0 0 7px;">
-                        Estimado/a <strong>{{strtoupper($user->name)}}</strong>
+                        Estimado/a <strong>{{ strtoupper($commerce->name)}}</strong>
                     </p>
 
                     <br>
                     <br>
 
-                    <p style="color:#59595e; margin: 0 0 7px;">
-                        Ha solicitado recuperar la contraseña para tu cuenta de CTpaga. Por favor seleccione el siguiente
-                        enlace 
-                        <strong>
-                           <a href="{{$url}}">{{$url}} </a>
-                        </strong> 
-                        para su recuperación
-                    </p>
-
+                    @if($type == 0)
+                        <p style="color:#59595e; margin: 0 0 7px;">
+                            CTpaga informa que el pago del pedido {{$codeUrl}} fue realizado exitoxamente, tu factura ya se encuentra disponible:
+                            <strong>
+                            <a href="{{$url}}" target="_blank">{{$url}} </a>
+                            </strong> 
+                        </p>
+                    @elseif($type == 1)
+                        <p style="color:#59595e; margin: 0 0 7px;">
+                            CTpaga informa que el pago del pedido {{$codeUrl}} se encuentra en proceso de verificación
+                        </p>
+                    @else
+                        <p style="color:#59595e; margin: 0 0 7px;">
+                            CTpaga informa que el pago del pedido {{$codeUrl}} ha sido cancelado
+                        </p>
+                    @endif
                     <br>
 
-                    <p style="color:#59595e; margin: 0 0 7px;">
-                        Recuerde que su contraseña debe contener los siguientes caracteres:
 
-                        <ul>
-                            <li>Una letra en Mayúscula</li>
-                            <li>Al menos una letra en minúscula</li>
-                            <li>Al menos un carácter numérico</li>
-                            <li>Un carácter especial (#, ., $, /, *)</li>
-                        </ul>
-
-                        <br>
-                        <br>
-
-                        Si no solicitó este cambio, comuníquese con el servicio de atención al cliente a través del correo 
-                       <strong>soporte@ctpaga.app</strong>.
-
-                       <br>
-                       <br>
-
-                       Gracias por elegir CTpaga como su plataforma de comercio electrónico.
-                    </p>
-
+                    <p style="color:#59595e; margin: 0 0 7px;">Gracias por la confianza depositada en nosotros.</p>
                     <br>
                     <br>
                     <br>

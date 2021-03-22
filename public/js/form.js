@@ -153,7 +153,7 @@ $(document).ready(function(){
                 return value != idData;
             });
 
-        if(dataShipping.length ==3)
+        if(dataShipping.length >=3)
             $(".form-navigation .next").addClass('btn-active');
         else
             $(".form-navigation .next").removeClass('btn-active');

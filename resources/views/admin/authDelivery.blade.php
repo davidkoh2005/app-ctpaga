@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ctpaga</title>
+    <title>CTpaga</title>
     @include('bookshop')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/show.css') }}">
@@ -118,7 +118,7 @@
                 $( ".loader" ).fadeOut("slow"); 
                 if(result.status == 201){
                     $( ".loader" ).fadeOut("slow"); 
-                    alertify.success('Estado de comerciante guardado correctamente!');
+                    alertify.success('Ha sido guardado correctamente!');
                 }else{
                     $(thisSelect).find("option[value='0']").removeAttr('disabled');
                     $(thisSelect).find("option[value='"+ value +"']").prop("selected",true);
@@ -146,7 +146,7 @@
             }).done(function(result){
                 if(result.status == 201){
                     $( ".loader" ).fadeOut("slow"); 
-                    alertify.success('Estado de comerciante guardado correctamente!');
+                    alertify.success('Guardado correctamente!');
                 }else{
                     $(thisSwitch).prop( "checked", !status);
                     alertify.error('Error intentalo de nuevo mas tardes!');

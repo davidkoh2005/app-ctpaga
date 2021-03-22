@@ -45,7 +45,7 @@
                     <p style="color:#59595e; margin: 0 0 7px;">Estimado/a <strong>{{ $paid->nameClient == 'Tienda Web'? 'Cliente' : strtoupper($paid->nameClient)}}</strong></p>
                     <br>
                     <br>
-                    <p style="color:#59595e; margin: 0 0 7px;">CTPaga Delivery ha retirado del comercio {{$commerce->name}} el pedido {{$paid->codeUrl}}, apenas sea
+                    <p style="color:#59595e; margin: 0 0 7px;">CTpaga Delivery ha retirado del comercio {{$commerce->name}} el pedido {{$paid->codeUrl}}, apenas sea
                         entregado con Éxito en la dirección {{$paid->addressShipping}},
                         le llegará otro correo con la Confirmación de Entrega.</p>
                     <p style="text-align: center">[Pedido {{$paid->codeUrl}}] (

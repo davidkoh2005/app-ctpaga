@@ -329,6 +329,22 @@ div.colorGrey {
     color: white
 }
 
+.inTransit {
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 5px;
+    background-color: #D2691E;
+    color: white
+}
+
+.RetiredProduct {
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 5px;
+    background-color: #2E8B57;
+    color: white
+}
+
 .sendDelivery {
     padding-left: 5px;
     padding-right: 5px;

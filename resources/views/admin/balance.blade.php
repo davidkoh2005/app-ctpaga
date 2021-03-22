@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ctpaga</title>
+    <title>CTpaga</title>
     @include('bookshop')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/datatables.min.css') }}"/>
@@ -16,7 +16,7 @@
     @include('auth.menu')
     <div class="main-panel">
       @include('auth.navbar')
-      <div class="justify-content-center" id="row">
+        <div class="justify-content-center" id="row">
             <div class="col-10">
                 <div class="card card-Transactions">
                     <div class="card-header">
@@ -29,7 +29,7 @@
                                 <label class="col-sm-2 col-form-label">Buscar Estado</label>
                                 <label class="content-select">
                                     <select class="addMargin" name="searchStatus" id="searchStatus">
-                                        <option value="0">Estado</option>
+                                        <option value="0" disabled>Estado</option>
                                         <option value="1">Pendiente</option>
                                         <option value="2">En Proceso</option>
                                         <option value="3">Completado</option>
@@ -183,9 +183,11 @@
                         }).done(function(data){
                             $( ".loader" ).fadeOut("slow"); 
                             if(data.status == 201)
-                                alertify.success('Estado ha sido cambiado correctamente');
-                        
-                            location.reload()
+                                alertify.success('Guardado correctamente!');
+
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
                         }).fail(function(result){
                             $( ".loader" ).fadeOut("slow"); 
                             alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');

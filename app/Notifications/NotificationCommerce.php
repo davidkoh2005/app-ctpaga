@@ -10,15 +10,17 @@ use Illuminate\Notifications\Notification;
 class NotificationCommerce extends Notification
 {
     use Queueable;
-    protected $message;
+    protected $commerce, $codeUrl, $type;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($message)
+    public function __construct($commerce, $codeUrl, $type)
     {
-        $this->message = $message;
+        $this->commerce = $commerce;
+        $this->codeUrl = $codeUrl;
+        $this->type = $type;
     }
 
     /**
@@ -40,10 +42,13 @@ class NotificationCommerce extends Notification
      */
     public function toMail($notifiable)
     {
+        $url = url('/factura/'.$this->codeUrl);
+
         return (new MailMessage)
-            ->subject('Aviso Ctpaga')
-            ->line('Estás recibiendo este correo electrónico porque estamos informando que el código de compra: '.$this->message)
-            ->line('¡Gracias por usar nuestra aplicación y confiar en nosotros!');
+            ->subject('Aviso CTpaga')
+            ->markdown(
+                'email.notificationCommerce', ['commerce' => $this->commerce, 'codeUrl' => $this->codeUrl, 'type' => $this->type, 'url' => $url]
+            );
     }
 
     /**

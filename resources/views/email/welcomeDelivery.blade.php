@@ -56,7 +56,7 @@
                     <br>
 
                     <p style="color:#59595e; margin: 0 0 7px;">
-                        En CTPaga estamos encantados de que haya creado su cuenta.
+                        En CTpaga estamos encantados de que haya creado su cuenta.
                         <br>
                         <br>
                         Su nombre de usuario es <strong><a href="">{{$delivery->email}}</a></strong>

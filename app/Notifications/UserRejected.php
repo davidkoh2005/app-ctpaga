@@ -41,9 +41,9 @@ class UserRejected extends Notification
     public function toMail($notifiable)
     {
         if($this->type == 0)
-            $subject = "Aviso Importante Ctpaga";
+            $subject = "Aviso Importante CTpaga";
         else
-            $subject = "Aviso Importante Delivery Ctpaga";
+            $subject = "Aviso Importante Delivery CTpaga";
 
         return (new MailMessage)
         ->subject($subject)

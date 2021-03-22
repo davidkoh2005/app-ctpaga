@@ -23,7 +23,7 @@ class DepositsExport implements FromView, WithDrawings
     {
         $drawing = new Drawing();
         $drawing->setName('Logo');
-        $drawing->setDescription('Loco Ctpaga');
+        $drawing->setDescription('Loco CTpaga');
         $drawing->setPath(public_path('/images/logo/logo.png'));
         $drawing->setWidth(140);
         $drawing->setCoordinates('E1');

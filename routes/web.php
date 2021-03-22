@@ -126,7 +126,7 @@ Route::get('/pagar/completado/{userUrl}', function ($userUrl) {
 Route::get('/pagar/estadoPaypal', 'PaidController@statusPaypal');
 Route::post('/pagar/criptomonedas', 'PaidController@cryptocurrencies');
 
-Route::get('facturacion/{codeUrl}/', 'PaidController@billing');
+Route::get('factura/{codeUrl}/', 'PaidController@billing');
 
 Route::get('/{userUrl}/', 'SaleController@indexStore')->name('form.store');
 Route::get('/{userUrl}/{codeUrl}/{statusModification?}', 'SaleController@index');

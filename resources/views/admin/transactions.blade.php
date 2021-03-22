@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ctpaga</title>
+    <title>CTpaga</title>
     @include('bookshop')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/styleForm.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css') }}">
@@ -45,7 +45,7 @@
                                 <label class="col-sm-2 col-form-label">Tipo de Pago</label>
                                 <div class="col">
                                     <select class="form-select form-control" name="selectPayment" id="selectPayment">
-                                        <option value="Selecionar Tipo de Pago">Selecionar Tipo de Pago</option>
+                                        <option value="Selecionar Tipo de Pago" disabled>Selecionar Tipo de Pago</option>
                                         <option value="E-sitef">E-sitef</option>
                                         <option value="Square">Square</option>
                                         <option value="PayPal">PayPal</option>
@@ -58,7 +58,7 @@
                                 <label class="col-sm-2 col-form-label">Moneda</label>
                                 <div class="col">
                                     <select class="form-select form-control" name="selectCoin" id="selectCoin">
-                                        <option value="Selecionar Moneda">Selecionar Moneda</option>
+                                        <option value="Selecionar Moneda" disabled>Selecionar Moneda</option>
                                         <option value="0">USA $</option>
                                         <option value="1">VE BS</option>
                                     </select>
@@ -245,9 +245,11 @@
                         $( ".loader" ).fadeOut("slow"); 
                         $("#changeStatus option[value='-1']").attr("selected",true);
                         if(data.status == 201)
-                            alertify.success('Estado ha sido cambiado correctamente');
-                    
-                        location.reload()
+                            alertify.success('Guardado correctamente');
+                        
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
                     }).fail(function(result){
                         $( ".loader" ).fadeOut("slow"); 
                         $("#changeStatus option[value='-1']").attr("selected",true);

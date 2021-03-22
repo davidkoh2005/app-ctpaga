@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use Session;
 use PDF;
+use AWS;
 use App\User;
 use App\Bank;
 use App\Paid;
@@ -30,6 +31,7 @@ use App\Notifications\PostPurchase;
 use App\Notifications\PaymentConfirm;
 use App\Notifications\PaymentCancel;
 use App\Notifications\NotificationDelivery;
+use App\Notifications\NotificationCommerce;
 use App\Events\SendCode;
 use App\Events\StatusDelivery;
 use App\Events\NewNotification;
@@ -408,10 +410,11 @@ class AdminController extends Controller
     public function transactionsShow(Request $request)
     {
         $transaction = Paid::where('id', $request->id)->first();
+        $delivery = Delivery::whereId($transaction->idDelivery)->first();
         $sales = Sale::where('codeUrl', $transaction->codeUrl)->orderBy('name', 'asc')->get();
         $rate = $sales[0]->rate;
         $coinClient = $sales[0]->coinClient;
-        $returnHTML=view('admin.dataProductService', compact('transaction','sales', 'rate', 'coinClient'))->render();
+        $returnHTML=view('admin.dataProductService', compact('transaction','sales', 'rate', 'coinClient', 'delivery'))->render();
         return response()->json(array('html'=>$returnHTML));
     }
 
@@ -434,10 +437,18 @@ class AdminController extends Controller
         {
             $transaction = Paid::where('id', $id)->first();
             $transaction->statusPayment = $request->status;
-            $transaction->save();
 
             if($request->status == 2){
+                $transaction->statusDelivery = 1;
+                $paid->timeDelivery = Carbon::now()->addMinutes(10);
+            }
 
+            $transaction->save();
+
+            $commerce = Commerce::where('id',$transaction->commerce_id)->first();
+            $user = User::where('id',$commerce->user_id)->first();
+
+            if($request->status == 2){
                 $sales = Sale::where("codeUrl", $transaction->codeUrl)->get();
                 $message="";
                 foreach ($sales as $sale)
@@ -461,17 +472,28 @@ class AdminController extends Controller
 
                 }
 
-                $commerce = Commerce::where('id',$transaction->commerce_id)->first();
                 (new User)->forceFill([
                     'email' => $transaction->email,
                 ])->notify(
                     new PaymentConfirm($transaction->nameClient, $transaction->codeUrl)
+                );
+
+                (new User)->forceFill([
+                    'email' => $user->email,
+                ])->notify(
+                    new NotificationCommerce($commerce, $transaction->codeUrl, 0)
                 );
             }elseif($request->status == 0){
                 (new User)->forceFill([
                     'email' => $transaction->email,
                 ])->notify(
                     new PaymentCancel($transaction->nameClient, $transaction->codeUrl)
+                );
+
+                (new User)->forceFill([
+                    'email' => $user->email,
+                ])->notify(
+                    new NotificationCommerce($commerce, $transaction->codeUrl, 2)
                 );
             }
         }
@@ -627,21 +649,32 @@ class AdminController extends Controller
         $idCommerce=0;
         $companyName = "";
         $searchCodeUrl="";
+        $searchStatus = 0;
 
         $transactions = Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
                         ->orderBy('paids.statusDelivery', 'asc')
                         ->orderBy('paids.date', 'asc')
                         ->orderBy('paids.alarm', 'desc')
-                        ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.selectShipping', 'paids.total',
+                        ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.selectShipping', 'paids.total', 'paids.statusShipping',
                             'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.codeUrl', 'paids.alarm', 'paids.statusDelivery', 'paids.timeDelivery')
                         ->whereNotNull('paids.selectShipping')
-                        ->where('paids.statusPayment',2);
+                        ->where('paids.statusPayment',2)
+                        ->where('paids.statusShipping','!=',2);
 
         if($request->all()){
-            $searchNameCompany=$request->searchNameCompany;
-            $startDate=$request->startDate;
-            $endDate=$request->endDate;
-            $searchCodeUrl = $request->searchCodeUrl;
+            $searchStatus = $request->searchStatus;
+
+            if($request->searchStatus == 1)
+                $transactions->where('paids.statusDelivery',0);
+            elseif($request->searchStatus == 2)
+                $transactions->where('paids.statusDelivery',1)->whereNull('idDelivery')->where('paids.timeDelivery','>=',Carbon::now());
+            elseif($request->searchStatus == 3)
+                $transactions->where('paids.statusDelivery',1)->whereNull('idDelivery')->where('paids.timeDelivery','<=',Carbon::now());
+            elseif($request->searchStatus == 4)
+                $transactions->where('paids.statusShipping',0)->whereNotNull('idDelivery');
+            elseif($request->searchStatus == 5)
+                $transactions->where('paids.statusShipping',1)->whereNotNull('idDelivery');
+
         }
 
         if(!empty($request->searchNameCompany)){
@@ -659,7 +692,7 @@ class AdminController extends Controller
 
 
         $statusMenu = "delivery";
-        return view('admin.delivery', compact('transactions', 'searchNameCompany', 'searchNameClient', 'startDate', 'endDate', 'statusMenu','idCommerce', 'companyName', 'searchCodeUrl'));
+        return view('admin.delivery', compact('transactions', 'searchNameCompany', 'searchNameClient', 'startDate', 'endDate', 'statusMenu','idCommerce', 'companyName', 'searchCodeUrl', 'searchStatus'));
     }
 
 
@@ -689,7 +722,7 @@ class AdminController extends Controller
 
             $phone = '+'.app('App\Http\Controllers\Controller')->validateNum($paid->numberShipping);
             $fecha = Carbon::now()->format("d/m/Y");
-            $message = "CTPaga Delivery le informa que ha realizado un pedido con el Nro ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora.";
+            $message = "CTpaga Delivery le informa que ha realizado un pedido con el Nro ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora.";
             $sms = AWS::createClient('sns');
             $sms->publish([
                 'Message' => $message,
@@ -938,7 +971,7 @@ class AdminController extends Controller
         $url = "https://fcm.googleapis.com/fcm/send";
         $token = $token;
         $serverKey = env('SERVER_KEY_FCM_DELIVERY');
-        $title = "Ctpaga Aviso";
+        $title = "CTpaga Aviso";
         $body = $message;
         $notification = array('title' =>$title , 'body' => $body, 'sound' => 'default', 'badge' => '1');
         $arrayToSend = array('to' => $token, 'notification' => $notification,'priority'=>'high');

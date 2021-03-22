@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ctpaga</title>
+    <title>CTpaga</title>
     @include('bookshop')
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/styleForm.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css') }}">
     @include('admin.bookshop')
     <script type="text/javascript" src="{{ asset('js/transactions.js') }}"></script>
@@ -17,7 +18,7 @@
         @php
             use Carbon\Carbon;
         @endphp
-        <!--<div class="justify-content-center" id="row">
+        <div class="justify-content-center" id="row">
              <div class="col-10">
                 <div class="card card-Transactions">
                     <div class="card-header">
@@ -25,28 +26,18 @@
                     </div>
                     <div class="card-body has-success" style="margin:15px;">
                         <form id="payment-form" class="contact-form" method='POST' action="{{route('admin.deliverySearch')}}">  
-                            <div class="mb-3 row">
-                                <label class="col-md-2 col-12  col-form-label">Nombre Compañia</label>
-                                <div class="col">
-                                    <input type="text" class="form-control" name="searchNameCompany" id="searchNameCompany" value="{{$searchNameCompany}}">
-                                </div>
-
-                                <label class="col-md-2 col-12 col-form-label">Código</label>
-                                <div class="col">
-                                    <input type="text" class="form-control" name="searchCodeUrl" id="searchCodeUrl" value="{{$searchCodeUrl}}">
-                                </div>
-                            </div>
-
-                        
-                            <div class="mb-3 row">
-                                <label class="col-sm-2 col-form-label">Rango de Fecha</label>
-                                <div class="col">
-                                    <div class="input-daterange input-group" id="datepicker-admin">
-                                        <input type="text" class="form-control" name="startDate" placeholder="Fechan Inicial" value="{{Carbon::parse($startDate)->format('d/m/Y')}}" autocomplete="off"/>
-                                        <span class="input-group-addon"> Hasta </span>
-                                        <input type="text" class="form-control" name="endDate" placeholder="Fecha Final" value="{{Carbon::parse($endDate)->format('d/m/Y')}}" autocomplete="off"/>
-                                    </div>
-                                </div>
+                        <div class="mb-3 row">
+                                <label class="col-sm-2 col-form-label">Buscar Estado</label>
+                                <label class="content-select">
+                                    <select class="addMargin" name="searchStatus" id="searchStatus">
+                                        <option value="0" disabled>Estado</option>
+                                        <option value="1">Pendiente</option>
+                                        <option value="2">Publicado</option>
+                                        <option value="3">Urgente</option>
+                                        <option value="4">En tránsito</option>
+                                        <option value="5">Producto Retirado</option>
+                                    </select>
+                                </label>
                             </div>
 
                             <div class="row">&nbsp;</div>
@@ -63,7 +54,7 @@
                     </div>
                 </div>
             </div>
-        </div> -->
+        </div> 
 
         <div class="row">&nbsp;</div>
         <div class="row">&nbsp;</div>
@@ -72,6 +63,7 @@
                 <table id="table_id" class="table table-bordered mb-5 display" width="100%">
                     <thead>
                         <tr class="table-title">
+                            <th scope="col">Ver</th>
                             <th scope="col">#</th>
                             <th scope="col">Nombre Compañia</th>
                             <th scope="col">Código</th> 
@@ -85,12 +77,27 @@
                     <tbody>
                         @foreach($transactions as $transaction)
                         <tr>
-                            <th scope="row">{{ $transaction->id }}</th>
+                            <td scope="row">
+                                <button class="btn btn-bottom"onClick="showPaid({{$transaction->id}})" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Pedido"><i class="material-icons">visibility</i></button>
+                            </td>
+                            <td >{{ $transaction->id }}</td>
                             <td>{{ $transaction->name }}</td>
                             <td>{{ $transaction->codeUrl}}</td> 
                             <td> {{date('d/m/Y h:i A',strtotime($transaction->date))}}</td>
                             <td>{{$transaction->selectShipping}}</td>
-                            <td>@if($transaction->statusDelivery==1 && $transaction->timeDelivery != null && $transaction->timeDelivery <= Carbon::now()) <div class="urgentDelivery">Urgente</div> @elseif($transaction->statusDelivery==0) <div class="pendingDelivery">Pendiente</div> @elseif($transaction->statusDelivery==1) <div class="publicDelivery">Publicado</div> @else <div class="sendDelivery">Ordenado</div>  @endif </td>
+                            <td>
+                                @if($transaction->statusDelivery==1 && $transaction->timeDelivery != null && $transaction->timeDelivery <= Carbon::now()) 
+                                    <div class="urgentDelivery">Urgente</div> 
+                                @elseif($transaction->statusDelivery == 0) 
+                                    <div class="pendingDelivery">Pendiente</div> 
+                                @elseif($transaction->statusDelivery == 1) 
+                                    <div class="publicDelivery">Publicado</div> 
+                                @elseif($transaction->statusShipping == 0) 
+                                    <div class="inTransit">En tránsito</div>  
+                                @elseif($transaction->statusShipping == 1) 
+                                    <div class="RetiredProduct">Producto Retirado</div>  
+                                @endif 
+                            </td>
                             <td>@if($transaction->alarm) <div class="activatedAlarm">Activado</div> @else <div class="disabledAlarm">Desactivado</div> @endif</td>
                             <td width="100px">
                                 <button class="btn btn-bottom" onClick="publicCode('{{$transaction->codeUrl}}', '{{$transaction->statusDelivery}}', '{{$transaction->statusDelivery==1 && $transaction->timeDelivery != null && $transaction->timeDelivery <= Carbon::now()}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Publicar Orden"><i class="material-icons">send</i></button>
@@ -170,13 +177,48 @@
         </div>
     </div>
 
+    <!--- Modal products -->
+    <div class="modal fade" id="productsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>              
+                <div class="modal-body">
+                    <div id="showProducts"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     
     @include('admin.bookshopBottom')
     <script> 
         $( ".loader" ).fadeOut("slow"); 
         var statusMenu = "{{$statusMenu}}";
+        var searchStatus ='{{$searchStatus}}';
+        $("#searchStatus option[value='"+ searchStatus +"']").prop("selected",true);
+
         var idSelect;
         $(".main-panel").perfectScrollbar('update');
+
+        function showPaid(id)
+        {
+            $.ajax({
+                url: "{{route('admin.transactionsShow')}}", 
+                data: {"id" : id},
+                type: "GET",
+            }).done(function(data){
+                $('#productsModal').modal('show'); 
+                $('#showProducts').html(data.html);
+            }).fail(function(result){
+                alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                $('#productsModal').modal('hide'); 
+                $('#showProducts').html();
+            });
+        }
 
         function publicCode(codeUrl, idDelivery, status){
             if(parseInt(idDelivery) == 1 && status){
@@ -210,8 +252,10 @@
                 }).done(function(data){
                     if(data.status == 201){
                         $( ".loader" ).fadeOut("slow"); 
-                        alertify.success('El orden ha sido publicado correctamente');
-                        location.reload();
+                        alertify.success('Se ha publicado correctamente');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
                     }
                     else{
                         $( ".loader" ).fadeOut("slow"); 
@@ -266,7 +310,9 @@
                         $('#alarmModal').modal('hide');
                         if(result.status == 201){
                             alertify.success("Guardado Correctamente!");
-                            location.reload();
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
                         }
                     }).fail(function(result){
                         $('#submitAlarm').show();

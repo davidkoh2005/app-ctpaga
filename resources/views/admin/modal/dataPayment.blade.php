@@ -102,7 +102,9 @@
                         $('#payModal').modal('hide');  
                         if(result.status == 201){
                             alertify.success("Guardado Correctamente!");
-                            location.reload();
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
                         }
                     }).fail(function(result){
                         $('#submit').show();

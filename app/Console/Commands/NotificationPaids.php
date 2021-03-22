@@ -58,7 +58,7 @@ class NotificationPaids extends Command
                         'commerce_id'   => 0,
                     ]);
 
-                    if(!$sentEmail->date || Carbon::parse($sentEmail->date)->addMinutes(10) <= Carbon::now()){
+                    if(!$sentEmail->date || Carbon::parse($sentEmail->date)->addMinutes(5) <= Carbon::now()){
 
                         (new User)->forceFill([
                             'email' => $email,

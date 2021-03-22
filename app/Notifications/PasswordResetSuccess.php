@@ -39,9 +39,9 @@ class PasswordResetSuccess extends Notification
     public function toMail($notifiable)
     {
         if($this->type == 0)
-            $subject = "Aviso Ctpaga";
+            $subject = "Aviso CTpaga";
         else
-            $subject = "Aviso Delivery Ctpaga";
+            $subject = "Aviso Delivery CTpaga";
 
         return (new MailMessage)
             ->subject($subject)

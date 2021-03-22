@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ctpaga</title>
+    <title>CTpaga</title>
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo/logoct.svg') }}" />
     <style>
         .styleText {
@@ -62,8 +62,8 @@
     <div class="row">
         <div class="styleText">
             <strong>Fecha:</strong> {{Carbon::now()->format('Y-m-d')}}<br>
-            <strong>Dirección:</strong> Los Dos Caminos.<br>
-            <strong>Teléfono:</strong> 0212-555-5555<br>
+            <strong>Dirección:</strong> {{env('ADDRESS_CTPAGA')}}<br>
+            <strong>Teléfono:</strong> {{env('PHONE_CTPAGA')}}<br>
         </div>
 
         <div class="positionImage">

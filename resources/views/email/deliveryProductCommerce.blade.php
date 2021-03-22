@@ -46,7 +46,7 @@
                     <p style="color:#59595e; margin: 0 0 7px;">Estimado/a <strong>{{strtoupper($commerce->name)}}</strong></p>
                     <br>
                     <br>
-                    <p style="color:#59595e; margin: 0 0 7px;">CTPaga Delivery realizó la entrega del pedido {{$paid->codeUrl}} en la dirección {{$paid->addressShipping}}
+                    <p style="color:#59595e; margin: 0 0 7px;">CTpaga Delivery realizó la entrega del pedido {{$paid->codeUrl}} en la dirección {{$paid->addressShipping}}
                     </p>
                     <p style="text-align: center">[Pedido {{$paid->codeUrl}}] (
                         @php

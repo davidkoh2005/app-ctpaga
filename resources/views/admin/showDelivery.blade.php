@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ctpaga</title>
+    <title>CTpaga</title>
     @include('bookshop')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css') }}">
     @include('admin.bookshop')
@@ -97,13 +97,17 @@
             }).done(function(data){
                 if(data.status == 201){
                     $( ".loader" ).fadeOut("slow"); 
-                    alertify.success('El orden ha sido asignado correctamente');
-                    window.location.replace(data.url);
+                    alertify.success('Asignado correctamente');
+                    setTimeout(function () {
+                        window.location.replace(data.url);
+                    }, 2000);
                 }
                 else{
                     $( ".loader" ).fadeOut("slow"); 
                     alertify.error('Delivery no se encuentra disponible');
-                    location.reload();
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
                 }
             }).fail(function(result){
                 $( ".loader" ).fadeOut("slow"); 

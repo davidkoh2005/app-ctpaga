@@ -44,8 +44,8 @@
                         sistema no cumplen con las políticas exigidas por las autoridades reguladoras.<br>
                         <br>Le invitamos a que vuelva a cargar nuevos documentos que cumplan con los requerimientos.
                     </p><br><br><br>
-                    <p style="color:#59595e; margin: 0 0 7px;">Gracias por elegir CTPaga.</p>
-                    <h4 style="color:#59595e; margin: 0;">El equipo de CTPaga.</h4><br><br><br><br>
+                    <p style="color:#59595e; margin: 0 0 7px;">Gracias por elegir CTpaga.</p>
+                    <h4 style="color:#59595e; margin: 0;">El equipo de CTpaga.</h4><br><br><br><br>
                 </div>
             </td>
         </tr>

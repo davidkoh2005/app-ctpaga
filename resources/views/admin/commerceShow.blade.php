@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ctpaga</title>
+    <title>CTpaga</title>
     @include('bookshop')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/show.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/bookshop/datatables.min.css') }}"/>
@@ -246,7 +246,7 @@
                 }).done(function(result){
                     if(result.status == 201){
                         $( ".loader" ).fadeOut("slow"); 
-                        alertify.success('Estado de comerciante guardado correctamente!');
+                        alertify.success('Guardado correctamente!');
                     }else{
                         $( ".loader" ).fadeOut("slow");
                         $( "#switchConfirmed" ).prop( "checked", !status);
@@ -274,7 +274,9 @@
                 //$('#reasonModal').modal('hide'); 
                 if(result.status == 201){
                     alertify.success('Imagen eliminado correctamente!');
-                    location.reload();
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
                 }
             }).fail(function(result){
                 $( ".loader" ).fadeOut("slow");

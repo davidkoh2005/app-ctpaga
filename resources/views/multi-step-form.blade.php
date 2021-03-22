@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ctpaga</title>
+    <title>CTpaga</title>
     @include('bookshop')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/styleForm.css') }}">
     <style>
@@ -163,7 +163,7 @@
                                     <label class="form" for="address">DIRECCÍON:</label>
                                     <textarea class="form-control formDataShipping" name="address" id="address" row="8" placeholder="Av. Principal los dos caminos. &#10; &#10;Punto Referencia: Al frente de Farmatodo." required style="height:100px !important"></textarea>
                                     <label class="form" for="details">DETALLE ADICIONALES (OPCIONAL)</label>
-                                    <textarea class="form-control formDataShipping" name="details" id="details" row="5" placeholder="Deja en la recepción" style="height:100px !important"></textarea>
+                                    <textarea class="form-control" name="details" id="details" row="5" placeholder="Deja en la recepción" style="height:100px !important"></textarea>
                                 @endif
                             </div>
 

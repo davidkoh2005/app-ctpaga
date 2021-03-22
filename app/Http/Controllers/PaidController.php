@@ -88,7 +88,7 @@ class PaidController extends Controller
                         $message .= "- ".$service->postPurchase."\n";
                 }
 
-                $sale->statusSale = 1;
+                $sale->statusSale = 0;
                 $sale->save();
 
             }
@@ -102,7 +102,7 @@ class PaidController extends Controller
                 $priceShipping = "0";
             }
 
-            Paid::create([
+            $paid = Paid::create([
                 "user_id"               => $user->id,
                 "commerce_id"           => $commerce->id,
                 "codeUrl"               => $codeUrl,
@@ -120,7 +120,11 @@ class PaidController extends Controller
                 "nameCompanyPayments"   => "Pago en Efectivo",
                 "date"                  => Carbon::now(),
                 "statusPayment"         => 2,
+                "timeDelivery"          => Carbon::now()->addMinutes(10),
             ]);
+
+            $paid->statusDelivery = 1;
+            $paid->save();
 
             $userUrl = $request->userUrl;
 
@@ -140,7 +144,7 @@ class PaidController extends Controller
             (new User)->forceFill([
                 'email' => $user->email,
             ])->notify(
-                new NotificationCommerce($codeUrl.' ha realizado el pago correctamente!')
+                new NotificationCommerce($commerce, $codeUrl, 0)
             );
 
             $emailsGet = Settings::where('name','Email Delivery')->first();
@@ -224,7 +228,7 @@ class PaidController extends Controller
                         $priceShipping = "0";
                     }
                     
-                    Paid::create([
+                    $paid = Paid::create([
                         "user_id"               => $user->id,
                         "commerce_id"           => $commerce->id,
                         "codeUrl"               => $codeUrl,
@@ -242,8 +246,12 @@ class PaidController extends Controller
                         "nameCompanyPayments"   => "Square",
                         "date"                  => Carbon::now(),
                         "statusPayment"         => 2,
-                        "refPayment"            => $resultTransaction['payment']['order_id']
+                        "refPayment"            => $resultTransaction['payment']['order_id'],
+                        "timeDelivery"          => Carbon::now()->addMinutes(10),
                     ]);
+
+                    $paid->statusDelivery = 1;
+                    $paid->save();
 
                     $userUrl = $request->userUrl;
 
@@ -264,7 +272,7 @@ class PaidController extends Controller
                     (new User)->forceFill([
                         'email' => $user->email,
                     ])->notify(
-                        new NotificationCommerce($codeUrl.' ha realizado el pago correctamente!')
+                        new NotificationCommerce($commerce, $codeUrl, 0)
                     );
 
                     $emailsGet = Settings::where('name','Email Delivery')->first();
@@ -391,7 +399,7 @@ class PaidController extends Controller
             ApiClient::init(env('COINBASE_KEY'));
 
             $chargeData = [
-                'name' => 'Pago Ctpaga',
+                'name' => 'Pago CTpaga',
                 'description' => 'Transacción código: '.$codeUrl,
                 'code' => $codeUrl,
                 'local_price' => [
@@ -510,7 +518,7 @@ class PaidController extends Controller
                     $priceShipping = "0";
                 }
                 
-                Paid::create([
+                $paid = Paid::create([
                     "user_id"               => $user->id,
                     "commerce_id"           => $commerce->id,
                     "codeUrl"               => $codeUrl,
@@ -528,7 +536,11 @@ class PaidController extends Controller
                     "nameCompanyPayments"   => "E-sitef",
                     "statusPayment"         => 2,
                     "date"                  => Carbon::now(),
+                    "timeDelivery"          => Carbon::now()->addMinutes(10),
                 ]);
+
+                $paid->statusDelivery = 1;
+                $paid->save();
 
                 $userUrl = $request->userUrl;
 
@@ -548,7 +560,7 @@ class PaidController extends Controller
                 (new User)->forceFill([
                     'email' => $user->email,
                 ])->notify(
-                    new NotificationCommerce($codeUrl.' ha realizado el pago correctamente!')
+                    new NotificationCommerce($commerce, $codeUrl, 0)
                 );
 
                 $emailsGet = Settings::where('name','Email Delivery')->first();
@@ -637,12 +649,16 @@ class PaidController extends Controller
         }
 
         if ($result->getState() === 'approved') {
+            $statusDelivery = 1;
+            $timeDelivery = Carbon::now()->addMinutes(10);
             $resultPayment=2;
         }else{
+            $statusDelivery = 0;
+            $timeDelivery = NULL;
             $resultPayment=1;
         }
 
-        Paid::create([
+        $paid = Paid::create([
             "user_id"               => $user->id,
             "commerce_id"           => $commerce->id,
             "codeUrl"               => $requestForm['codeUrl'],
@@ -661,7 +677,11 @@ class PaidController extends Controller
             "date"                  => Carbon::now(),
             "statusPayment"         => $resultPayment,
             "refPayment"            => $result->getId(),
+            "timeDelivery"          => $timeDelivery,
         ]);
+
+        $paid->statusDelivery = $statusDelivery;
+        $paid->save();
 
         if ($result->getState() === 'approved') {
 
@@ -674,7 +694,7 @@ class PaidController extends Controller
             (new User)->forceFill([
                 'email' => $user->email,
             ])->notify(
-                new NotificationCommerce($codeUrl.' ha realizado el pago correctamente!')
+                new NotificationCommerce($commerce, $codeUrl, 0)
             );
 
             $emailsGet = Settings::where('name','Email Delivery')->first();
@@ -702,7 +722,7 @@ class PaidController extends Controller
             (new User)->forceFill([
                 'email' => $user->email,
             ])->notify(
-                new NotificationCommerce($codeUrl.' el pago esta en proceso de verificación!')
+                new NotificationCommerce($commerce, $codeUrl, 1)
             );
 
             $emailsGet = Settings::where('name','Email Transaccion')->first();
@@ -824,7 +844,7 @@ class PaidController extends Controller
 
                     $phone = '+'.app('App\Http\Controllers\Controller')->validateNum($paid->numberShipping);
                     $fecha = Carbon::now()->format("d/m/Y");
-                    $message = "CTPaga Delivery le informa que ha realizado un pedido con el Nro ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora.";
+                    $message = "CTpaga Delivery le informa que ha realizado un pedido con el Nro ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora.";
                     $messageAdmin = " el delivery ".$delivery->name." tomo el pedido ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora.";
 
                     $sms = AWS::createClient('sns');
@@ -868,15 +888,16 @@ class PaidController extends Controller
     {
         $delivery = $request->user();
         $paid = Paid::where('codeUrl', $request->codeUrl)->first();
-        $paid->statusShipping = $request->statusShipping;
+        $paid->statusShipping = intval($request->statusShipping);
+        $paid->save();
         $phone = '+'.app('App\Http\Controllers\Controller')->validateNum($paid->numberShipping);
         
         $commerce = Commerce::whereId($paid->commerce_id)->first();
         $userCommerce = User::whereId($paid->user_id)->first();
         $sales = Sale::where('codeUrl', $request->codeUrl)->get();
         
-        if($request->statusShipping == 1){
-            $message = "CTPaga Delivery le informa que el pedido ".$paid->codeUrl." fue retirado de la tienda ".$commerce->name." y será entregado a la brevedad posible. ";
+        if(intval($request->statusShipping) == 1){
+            $message = "CTpaga Delivery le informa que el pedido ".$paid->codeUrl." fue retirado de la tienda ".$commerce->name." y será entregado a la brevedad posible. ";
 
             (new User)->forceFill([
                 'email' => $paid->email,
@@ -890,9 +911,9 @@ class PaidController extends Controller
                 new RetirementProductCommerce($commerce, $paid, $sales)
             );
 
-            $messageAdmin = " el delivery ".$delivery->name." fue retirado el pedido ".$paid->codeUrl." de la tienda ".$commerce->name." y será entregado a la brevedad posible. ";
+            $messageAdmin = " el delivery ".$delivery->name." retiro el producto del pedido ".$paid->codeUrl." en la tienda ".$commerce->name.".";
 
-        }elseif($request->statusShipping == 2){
+        }elseif(intval($request->statusShipping) == 2){
             $delivery = $request->user();
             $delivery->codeUrlPaid = null;
             $delivery->statusAvailability = 1;
@@ -914,7 +935,7 @@ class PaidController extends Controller
                 $balance->save();
             }
 
-            $message = "CTPaga Delivery le informa que el pedido ".$paid->codeUrl." fue entregado satisfactoriamente a ".$paid->nameShipping;
+            $message = "CTpaga Delivery le informa que el pedido ".$paid->codeUrl." fue entregado satisfactoriamente a ".$paid->nameShipping;
     
             (new User)->forceFill([
                 'email' => $paid->email,
@@ -928,7 +949,7 @@ class PaidController extends Controller
                 new DeliveryProductCommerce($commerce, $paid, $sales)
             );
 
-            $messageAdmin = " el delivery ".$delivery->name." fue entregado el pedido ".$paid->codeUrl." satisfactoriamente a ".$paid->nameShipping;
+            $messageAdmin = " el delivery ".$delivery->name." entregó el pedido ".$paid->codeUrl." correctamente a ".$paid->nameShipping;
 
         }
 
@@ -969,8 +990,6 @@ class PaidController extends Controller
                 ]
             ],
         ]); 
-
-        $paid->save();
 
         return response()->json(['statusCode' => 201,'data' =>['paid'=>$paid]]);
 

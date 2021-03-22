@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ctpaga</title>
+    <title>CTpaga</title>
     @include('bookshop')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/bookshop/datatables.min.css') }}"/>
@@ -98,8 +98,10 @@
                 }).done(function(data){
                     $( ".loader" ).fadeOut("slow"); 
                     if(data.status == 201){
-                        alertify.success('Estado ha sido cambiado correctamente');
-                        location.reload()
+                        alertify.success('Guardado correctamente');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
                     }else{
                         $(thisSelect).find("option[value='"+value+"']").prop("selected",true);
                         $( ".loader" ).fadeOut("slow"); 

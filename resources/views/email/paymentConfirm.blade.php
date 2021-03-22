@@ -30,7 +30,7 @@
                 <div style="color: #34495e; width: 100%; margin: 4% 10% 2%; text-align: center; font-family: sans-serif;">
 
                     <h2 style="color:#59595e; margin: 0 0 7px; text-transform: uppercase; font-size: 15px; text-align: center;">
-                        BIENVENIDA A CTPAGA
+                        BIENVENIDO A CTPAGA
                     </h2>
 
                 </div>
@@ -61,7 +61,7 @@
                     <br>
 
                     <p style="color:#59595e; margin: 0 0 7px;">
-                        Ctpaga informa que tu pago del pedido {{$codeUrl}} fue realizado exitoxamente, tu factura ya se encuentra disponible:
+                        CTpaga informa que tu pago del pedido {{$codeUrl}} fue realizado exitoxamente, tu factura ya se encuentra disponible:
                         <strong>
                            <a href="{{$url}}" target="_blank">{{$url}} </a>
                         </strong> 

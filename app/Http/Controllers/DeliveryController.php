@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use AWS;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Delivery;
@@ -26,6 +27,7 @@ use App\Notifications\PaymentCancel;
 use App\Notifications\PaymentConfirm;
 use App\Notifications\PaymentVerification;
 use App\Notifications\NotificationAdmin;
+use App\Notifications\NotificationCommerce;
 use App\Notifications\PasswordResetSuccess;
 use App\Notifications\PasswordResetRequest;
 use App\Notifications\NotificationDelivery;
@@ -68,6 +70,7 @@ class DeliveryController extends Controller
                     ->whereNull('paids.idDelivery')
                     ->where('pictures.description','Profile')
                     ->select('paids.id', 'paids.codeUrl', 'commerces.name', 'commerces.address', 'pictures.url')
+                    ->orderBy('paids.id','ASC')
                     ->get();
     
         return response()->json([
@@ -78,6 +81,7 @@ class DeliveryController extends Controller
 
     public function test()
     {
+        
         $user = User::where('email', 'angelgoitia1995@gmail.com')->first();
         $deposits = Deposits::where('user_id', $user->id)->first();
         $paid = Paid::where('email', 'angelgoitia1995@gmail.com')->first();
@@ -89,6 +93,22 @@ class DeliveryController extends Controller
         $messageAdmin = $messageAdmin = " el delivery ".$delivery->name." entrego los productos de código de compra: ".$paid->codeUrl." a su destino.";
 
         (new User)->forceFill([
+            'email' => $user->email,
+        ])->notify(
+            new NotificationCommerce($commerce, $paid->codeUrl, 0)
+        );
+        (new User)->forceFill([
+            'email' => $user->email,
+        ])->notify(
+            new NotificationCommerce($commerce, $paid->codeUrl, 1)
+        );
+        (new User)->forceFill([
+            'email' => $user->email,
+        ])->notify(
+            new NotificationCommerce($commerce, $paid->codeUrl, 2)
+        );
+
+        /* (new User)->forceFill([
             'email' => $user->email,
         ])->notify(
             new UserRejected($user, 0)
@@ -176,7 +196,7 @@ class DeliveryController extends Controller
             'email' => $user->email,
         ])->notify(
             new NewUser($user)
-        ); 
+        ); */ 
 
         /* $url = "https://fcm.googleapis.com/fcm/send";
         $token = "cSjCw2o7RTukByosQ88K9h:APA91bHIvDDhHDYxgyV_ohr3BnHTS1rTexoB126-RmBO1xXcah-T4E5aqZH-gLP6_Mh1KW6Ii8aph73wkqjbrOCIrS4oDJTb2Kd5ntiXeyVMk2DMcQj_7mk6Tf-B9i5UVgXNaacDEmhU";
