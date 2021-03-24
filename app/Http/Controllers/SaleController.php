@@ -39,7 +39,7 @@ class SaleController extends Controller
         if($sales[0]->statusSale == 1 || Carbon::now() > $sales[0]->expires_at)
             return redirect()->route('form.store', ['userUrl' => $userUrl]);
 
-        $picture = Picture::where('commerce_id', $commerce->id)->first();
+        $picture = Picture::where('commerce_id', $commerce->id)->where('type',0)->first();
         $shippings = Shipping::where('user_id', $commerce->user_id)->get();
         
         $nameClient = $sales[0]->nameClient;
@@ -263,7 +263,7 @@ class SaleController extends Controller
 
         $statusShipping = $user->statusShipping;
         
-        $picture = Picture::where('commerce_id', $commerce->id)->first();    
+        $picture = Picture::where('commerce_id', $commerce->id)->where('type',0)->first();    
         $shippings = Shipping::where('user_id', $user->id)->get();
 
         $rateUser = Rate::where('user_id', $user->id)->orderBy('date', 'desc')->first();

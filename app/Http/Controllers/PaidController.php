@@ -1042,7 +1042,8 @@ class PaidController extends Controller
     {
         $paid = Paid::where('codeUrl',$codeUrl)->with('commerce')->first(); 
         $pictureUser = Picture::where('commerce_id',$paid->commerce->id)
-                                ->where('description','Profile')->first();
+                                ->where('description','Profile')
+                                ->where('type',0)->first();
         $sales = Sale::where('codeUrl',$codeUrl)->get();
         $today = Carbon::now()->format('d/m/Y g:i A');
         

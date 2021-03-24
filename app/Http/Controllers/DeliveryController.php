@@ -10,6 +10,7 @@ use App\Paid;
 use App\Sale;
 use App\Commerce;
 use App\User;
+use App\Picture;
 use App\Deposits;
 use App\Settings;
 use App\Email;
@@ -38,6 +39,35 @@ use App\Notifications\RetirementProductCommerce;
 
 class DeliveryController extends Controller
 {
+
+    public function updateImg(Request $request)
+    {
+        $delivery = $request->user();
+        $realImage = base64_decode($request->image);
+        $date = Carbon::now()->format('Y-m-d');
+
+        if($request->description == 'Profile')
+            $url = '/Delivery/'.$delivery->id.'/storage/Profile-'.Carbon::now()->format('d-m-Y_H-i-s').'.jpg';
+        
+        if($request->urlPrevious != ''){
+            $urlPrevius = substr($request->urlPrevious,8);
+            \Storage::disk('public')->delete($urlPrevius);
+        }
+        \Storage::disk('public')->put($url,  $realImage);
+
+        Picture::updateOrCreate([
+            'user_id'=>$delivery->id,
+            'description'=> $request->description,
+            'type'=> 1,
+        ],
+        ['url' => '/storage'.$url]);
+
+        return response()->json([
+            'statusCode' => 201,
+            'message' => 'Update image correctly',
+            'url' => '/storage'.$url,
+        ]);
+    }
 
     public function update(Request $request)
     {   
@@ -69,6 +99,7 @@ class DeliveryController extends Controller
                     ->where('paids.statusDelivery',1)
                     ->whereNull('paids.idDelivery')
                     ->where('pictures.description','Profile')
+                    ->where('pictures.type',0)
                     ->select('paids.id', 'paids.codeUrl', 'commerces.name', 'commerces.address', 'pictures.url')
                     ->orderBy('paids.id','ASC')
                     ->get();

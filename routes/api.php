@@ -33,7 +33,7 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('logoutDelivery', 'AuthController@logout');
         Route::post('delivery', 'AuthController@delivery');
         Route::post('updatePasswordDelivery', 'AuthController@updatePassword');
-
+        Route::post('updateDeliveryImg', 'DeliveryController@updateImg');
         Route::post('updateDelivery', 'DeliveryController@update');
 
         Route::post('showPaidDelivery', 'PaidController@showPaidDelivery');

@@ -162,7 +162,7 @@ class AuthController extends Controller
 
     public function user(Request $request)
     {
-        $pictures = Picture::where('user_id', $request->user()->id)->get();
+        $pictures = Picture::where('user_id', $request->user()->id)->where('type',0)->get();
         $banks = Bank::where('user_id', $request->user()->id)->limit(2)->get();
         $commerces = Commerce::where('user_id', $request->user()->id)->orderBy('name', 'asc')->get();
         return response()->json(['statusCode' => 201,'data' => [$request->user(), 'banks'=> $banks, 'commerces'=> $commerces, 'pictures'=>$pictures ]]);
@@ -265,7 +265,9 @@ class AuthController extends Controller
         $scheduleInitialGet = Settings::where("name", "Horario Inicial")->first(); 
         $scheduleFinalGet = Settings::where("name", "Horario Final")->first(); 
 
-        return response()->json(['statusCode' => 201,'data' => $request->user(), 'paid' =>$paid, 'scheduleInitial' =>$scheduleInitialGet , 'scheduleFinal' =>$scheduleFinalGet]);
+        $pictures = Picture::where('user_id', $request->user()->id)->where('type',1)->get();
+
+        return response()->json(['statusCode' => 201,'data' => $request->user(), 'paid' =>$paid, 'scheduleInitial' =>$scheduleInitialGet , 'scheduleFinal' =>$scheduleFinalGet, 'pictures' => $pictures]);
     }
 
     public function versionApp(Request $request)

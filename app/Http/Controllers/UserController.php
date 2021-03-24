@@ -49,6 +49,7 @@ class UserController extends Controller
             'user_id'=>$user->id,
             'description'=> $request->description, 
             'commerce_id' => $commerce_id,
+            'type'=>0,
         ],
         ['url' => '/storage'.$url]);
 

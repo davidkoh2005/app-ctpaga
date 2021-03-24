@@ -11,7 +11,7 @@ class Delivery extends Authenticatable
     use HasApiTokens, Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'password', 'phone', 'status', 'codeUrlPaid', 'statusAvailability', 'addressPosition', 'token_fcm',
+        'name', 'email', 'password', 'phone', 'status', 'codeUrlPaid', 'statusAvailability', 'addressPosition', 'token_fcm', 'model', 'mark', 'colorName', 'colorHex', 'licensePlate',
     ];
     
     protected $hidden = [

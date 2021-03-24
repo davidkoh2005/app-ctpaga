@@ -79,7 +79,8 @@ class CommerceController extends Controller
 
         $pictureUser = Picture::where('user_id', Auth::guard('web')->id())
                                 ->where('commerce_id',$idCommerce)
-                                ->where('description','Profile')->first();
+                                ->where('description','Profile')
+                                ->where('type',0)->first();
 
         $commerceData = Commerce::whereId($idCommerce)->first();
         if($commerceData)
@@ -146,7 +147,8 @@ class CommerceController extends Controller
 
         $pictureUser = Picture::where('user_id', Auth::guard('web')->id())
                                 ->where('commerce_id',$idCommerce)
-                                ->where('description','Profile')->first();
+                                ->where('description','Profile')
+                                ->where('type',0)->first();
 
         $transactions = Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
                     ->where('paids.commerce_id', 'like', "%".$idCommerce. "%" )
@@ -245,7 +247,8 @@ class CommerceController extends Controller
 
         $pictureUser = Picture::where('user_id', Auth::guard('web')->id())
                                 ->where('commerce_id',$idCommerce)
-                                ->where('description','Profile')->first();
+                                ->where('description','Profile')
+                                ->where('type',0)->first();
 
         $commerceData = Commerce::whereId($idCommerce)->first();
         if($commerceData)
@@ -313,7 +316,8 @@ class CommerceController extends Controller
 
         $pictureUser = Picture::where('user_id', Auth::guard('web')->id())
                                 ->where('commerce_id',$idCommerce)
-                                ->where('description','Profile')->first();
+                                ->where('description','Profile')
+                                ->where('type',0)->first();
 
         $commerceData = Commerce::whereId($idCommerce)->first();
         if($commerceData)
@@ -425,7 +429,8 @@ class CommerceController extends Controller
 
         $pictureUser = Picture::where('user_id', Auth::guard('web')->id())
                                 ->where('commerce_id',$idCommerce)
-                                ->where('description','Profile')->first();
+                                ->where('description','Profile')
+                                ->where('type',0)->first();
 
         $commerceData = Commerce::whereId($idCommerce)->first();
         if($commerceData)

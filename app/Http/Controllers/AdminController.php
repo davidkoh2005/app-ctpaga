@@ -201,10 +201,12 @@ class AdminController extends Controller
         $user = User::where("id", $commerce->user_id)->first();
         $pictures = Picture::where('user_id', $user->id)
                             ->where('commerce_id', $commerce->id)
-                            ->where('description', '<>','Profile')->get();
+                            ->where('description', '<>','Profile')
+                            ->where('type',0)->get();
 
         $selfie = Picture::where('user_id', $user->id)
-                        ->where('commerce_id', '=', null)->first();
+                        ->where('commerce_id', '=', null)
+                        ->where('type',0)->first();
 
         $statusMenu = "commerces";
         return view('admin.commerceShow', compact('commerce', 'user', 'pictures', 'selfie','statusMenu'));

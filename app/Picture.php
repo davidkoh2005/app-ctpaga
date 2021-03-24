@@ -8,7 +8,7 @@ class Picture extends Model
 {
 
     protected $fillable = [
-        'user_id', 'description', 'url', 'commerce_id',
+        'user_id', 'description', 'url', 'commerce_id', 'type',
     ]; 
 
     public function user()
