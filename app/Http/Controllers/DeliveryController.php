@@ -92,7 +92,7 @@ class DeliveryController extends Controller
 
         $messageAdmin = $messageAdmin = " el delivery ".$delivery->name." entrego los productos de código de compra: ".$paid->codeUrl." a su destino.";
 
-        (new User)->forceFill([
+        /* (new User)->forceFill([
             'email' => $user->email,
         ])->notify(
             new NotificationCommerce($commerce, $paid->codeUrl, 0)
@@ -108,7 +108,7 @@ class DeliveryController extends Controller
             new NotificationCommerce($commerce, $paid->codeUrl, 2)
         );
 
-        /* (new User)->forceFill([
+        (new User)->forceFill([
             'email' => $user->email,
         ])->notify(
             new UserRejected($user, 0)
@@ -196,7 +196,7 @@ class DeliveryController extends Controller
             'email' => $user->email,
         ])->notify(
             new NewUser($user)
-        ); */ 
+        );  */
 
         /* $url = "https://fcm.googleapis.com/fcm/send";
         $token = "cSjCw2o7RTukByosQ88K9h:APA91bHIvDDhHDYxgyV_ohr3BnHTS1rTexoB126-RmBO1xXcah-T4E5aqZH-gLP6_Mh1KW6Ii8aph73wkqjbrOCIrS4oDJTb2Kd5ntiXeyVMk2DMcQj_7mk6Tf-B9i5UVgXNaacDEmhU";

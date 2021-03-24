@@ -709,44 +709,43 @@ class AdminController extends Controller
     public function deliverySendCodeManual(Request $request)
     {   
         $delivery = Delivery::whereId($request->idDelivery)->first();
+        $delivery->statusAvailability = false;
 
-        if($delivery->statusAvailability && $delivery->codeUrlPaid == null){
-            $delivery->statusAvailability = false;
-            $delivery->codeUrlPaid = $request->codeUrl;
-            $delivery->save();
+        $listCodeUrl = json_decode($delivery->codeUrlPaid);
+        array_push($listCodeUrl,$request->codeUrl);
+        $delivery->codeUrlPaid = json_encode($listCodeUrl);
+        $delivery->save();
 
-            $paid = Paid::where("codeUrl",$request->codeUrl)->first();
-            $paid->statusDelivery = 2;
-            $paid->idDelivery = $request->idDelivery;
-            $paid->save();
+        $paid = Paid::where("codeUrl",$request->codeUrl)->first();
+        $paid->statusDelivery = 2;
+        $paid->idDelivery = $request->idDelivery;
+        $paid->save();
 
-            $phone = '+'.app('App\Http\Controllers\Controller')->validateNum($paid->numberShipping);
-            $fecha = Carbon::now()->format("d/m/Y");
-            $message = "CTpaga Delivery le informa que ha realizado un pedido con el Nro ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora.";
-            $sms = AWS::createClient('sns');
-            $sms->publish([
-                'Message' => $message,
-                'PhoneNumber' => $phone,
-                'MessageAttributes' => [
-                    'AWS.SNS.SMS.SMSType'  => [
-                        'DataType'    => 'String',
-                        'StringValue' => 'Transactional',
-                    ]
-                ],
-            ]); 
+        $phone = '+'.app('App\Http\Controllers\Controller')->validateNum($paid->numberShipping);
+        $fecha = Carbon::now()->format("d/m/Y");
+        $message = "CTpaga Delivery le informa que ha realizado un pedido con el Nro ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora.";
+        $sms = AWS::createClient('sns');
+        $sms->publish([
+            'Message' => $message,
+            'PhoneNumber' => $phone,
+            'MessageAttributes' => [
+                'AWS.SNS.SMS.SMSType'  => [
+                    'DataType'    => 'String',
+                    'StringValue' => 'Transactional',
+                ]
+            ],
+        ]); 
 
-            (new User)->forceFill([
-                'email' => $delivery->email,
-            ])->notify(
-                new NotificationDelivery("fue asignado el siguiente orden: ".$request->codeUrl, $delivery)
-            );
+        (new User)->forceFill([
+            'email' => $delivery->email,
+        ])->notify(
+            new NotificationDelivery("fue asignado el siguiente orden: ".$request->codeUrl, $delivery)
+        );
 
-            $this->sendFCM($delivery->token_fcm, "Tiene una orden asignado: ".$request->codeUrl);
-            
-            return response()->json(array('status' => 201, 'url' => route('admin.delivery')));
-        }
+        $this->sendFCM($delivery->token_fcm, "Tiene una orden asignado: ".$request->codeUrl);
+        
+        return response()->json(array('status' => 201, 'url' => route('admin.delivery')));
 
-        return response()->json(array('status' => 400));
     }
 
     public function saveAlarm(Request $request)
@@ -942,21 +941,10 @@ class AdminController extends Controller
         ]);
     }
 
-    public function showDeliveryAjax(Request $request)
-    {
-        $deliveries = Delivery::where('statusAvailability', true)->get();
-
-        if($deliveries)
-            return response()->json(array('status'=>201, 'url' => route('admin.showDelivery', ['codeUrl' => $request->codeUrl]))); 
-        else
-            return response()->json(array('status'=>400)); 
-
-    }
-
     public function showDelivery(Request $request)
     {
         $codeUrl = $request->codeUrl;
-        $deliveries = Delivery::where('statusAvailability', true)->get();
+        $deliveries = Delivery::orderBy('statusAvailability','DESC')->get();
         $paid = Paid::where('codeUrl',$codeUrl)->first();
 
         $commerce = Commerce::whereId($paid->commerce_id)->first();

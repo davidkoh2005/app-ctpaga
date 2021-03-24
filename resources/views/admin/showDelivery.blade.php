@@ -35,6 +35,8 @@
                         <th scope="col">Nombre</th>
                         <th scope="col">Teléfono</th> 
                         <th scope="col">Ubicación</th>
+                        <th scope="col">Pedido</th>
+                        <th scope="col">Estado</th>
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
@@ -45,6 +47,27 @@
                         <td>{{ $delivery->name }}</td>
                         <td>{{ $delivery->phone}}</td> 
                         <td>{{$delivery->addressPosition}}</td>
+                        <td>
+                            @php
+                                if(json_decode($delivery->codeUrlPaid)){
+                                    $paidAll = '';
+                                    foreach(json_decode($delivery->codeUrlPaid) as $item)
+                                    {
+                                        $paidAll .= $item.", ";
+                                    }
+                                    $paidAll = substr($paidAll, 0, -2);
+
+                                    echo $paidAll;
+                                }
+                            @endphp
+                        </td>
+                        <td>
+                            @if($delivery->statusAvailability)
+                                <div class="availableDelivery">Disponible</div> 
+                            @else
+                                <div class="notAvailableDelivery">No Disponible</div> 
+                            @endif
+                        </td>
                         <td width="100px">
                             <button class="btn btn-bottom" onClick="publicCode('{{$codeUrl}}', '{{$delivery->id}}' )" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Enviar Orden"><i class="material-icons">send</i></button>
                         </td>

@@ -313,7 +313,7 @@ div.colorGrey {
     color: white
 }
 
-.pendingDelivery {
+.pendingDelivery, .notAvailableDelivery {
     padding-left: 5px;
     padding-right: 5px;
     border-radius: 5px;
@@ -345,7 +345,7 @@ div.colorGrey {
     color: white
 }
 
-.sendDelivery {
+.sendDelivery, .availableDelivery {
     padding-left: 5px;
     padding-right: 5px;
     border-radius: 5px;

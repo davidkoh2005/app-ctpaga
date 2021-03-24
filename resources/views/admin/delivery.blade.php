@@ -221,9 +221,13 @@
         }
 
         function publicCode(codeUrl, idDelivery, status){
-            if(parseInt(idDelivery) == 1 && status){
-                $( ".loader" ).fadeIn("slow"); 
-                $.ajax({
+            if(parseInt(idDelivery) == 1 && status || parseInt(idDelivery) == 1 && !status){
+                //$( ".loader" ).fadeIn("slow"); 
+                var urlphp = "{{url('/admin/delivery/')}}";
+                var urlphp = urlphp.concat("/");
+
+                window.location.replace(urlphp.concat(codeUrl));
+                /* $.ajax({
                     url: "{{route('admin.showDeliveryAjax')}}", 
                     data: {"codeUrl" : codeUrl},
                     type: "POST",
@@ -238,10 +242,8 @@
                     }).fail(function(result){
                         $( ".loader" ).fadeOut("slow"); 
                         alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
-                    });
-            }else if(parseInt(idDelivery) == 1 && !status)
-                alertify.error('Esta transacción ya fue publicado');
-            else if(parseInt(idDelivery) == 2)
+                    }); */
+            }else if(parseInt(idDelivery) == 2)
                 alertify.error('Esta transacción ya fue ordenado');
             else{
                 $( ".loader" ).fadeIn("slow"); 

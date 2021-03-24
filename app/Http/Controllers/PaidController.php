@@ -837,8 +837,10 @@ class PaidController extends Controller
                     $sales = Sale::where('codeUrl',$request->codeUrl)->orderBy('name', 'asc')->get();
                     $commerce = Commerce::whereId($paid->commerce_id)->first();
                     $paid->save();
-
-                    $delivery->codeUrlPaid = $request->codeUrl;
+                    
+                    $listCodeUrl = array();
+                    array_push($listCodeUrl,$request->codeUrl);
+                    $delivery->codeUrlPaid = json_encode($listCodeUrl);
                     $delivery->statusAvailability = 0;
                     $delivery->save();
 
@@ -915,8 +917,23 @@ class PaidController extends Controller
 
         }elseif(intval($request->statusShipping) == 2){
             $delivery = $request->user();
-            $delivery->codeUrlPaid = null;
-            $delivery->statusAvailability = 1;
+
+            $array = json_decode($delivery->codeUrlPaid);
+
+            if (($key = array_search($request->codeUrl, $array)) !== false) {
+                unset($array[$key]);
+                $listCode = array_values($array);
+            }
+
+            if(count($array) == 0){
+                $delivery->codeUrlPaid = null;
+                $delivery->statusAvailability = 1;
+            }
+            else{
+                $delivery->codeUrlPaid = json_encode($listCode);
+                $delivery->statusAvailability = 0;
+            }
+
             $delivery->save();
 
             $balance = Balance::firstOrNew([
