@@ -11,6 +11,7 @@ use App\Sale;
 use App\Commerce;
 use App\User;
 use App\Picture;
+use App\Document;
 use App\Deposits;
 use App\Settings;
 use App\Email;
@@ -67,6 +68,45 @@ class DeliveryController extends Controller
             'message' => 'Update image correctly',
             'url' => '/storage'.$url,
         ]);
+    }
+
+    public function updateDocuments(Request $request)
+    {
+        $delivery = $request->user();
+
+        $date = Carbon::now()->format('Y-m-d');
+            
+        if($request->description == 'License')
+            $url = '/Delivery/'.$delivery->id.'/storage/License-'.Carbon::now()->format('d-m-Y_H-i-s').'.'.$request->type;
+        else if($request->description == 'Driving License')
+            $url = '/Delivery/'.$delivery->id.'/storage/Driving-License-'.Carbon::now()->format('d-m-Y_H-i-s').'.'.$request->type;
+        else if($request->description == 'Civil Liability')
+            $url = '/Delivery/'.$delivery->id.'/storage/Civil-Liability-'.Carbon::now()->format('d-m-Y_H-i-s').'.'.$request->type;
+        
+        if($request->urlPrevious != ''){
+            $urlPrevius = substr($request->urlPrevious,8);
+            \Storage::disk('public')->delete($urlPrevius);
+        }
+
+        if($request->type == "jpg"){
+            $realImage = base64_decode($request->image);
+            \Storage::disk('public')->put($url,  $realImage);
+
+        }else{
+            $realFile = base64_decode($request->fileDocument);
+            \Storage::disk('public')->put($url,  $realFile);
+        }
+
+        Document::updateOrCreate([
+            'delivery_id'=>$delivery->id,
+            'description'=> $request->description,
+        ],
+        ['url' => '/storage'.$url]);
+
+        return response()->json([
+            'statusCode' => 201,
+            'message' => 'Update documents correctly',
+        ]); 
     }
 
     public function update(Request $request)

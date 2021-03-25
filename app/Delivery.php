@@ -17,4 +17,9 @@ class Delivery extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function documents()
+    {
+        return $this->hasMany('App\Document');
+    }
 }

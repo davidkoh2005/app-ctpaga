@@ -17,6 +17,7 @@ use App\Picture;
 use App\Commerce;
 use App\Delivery;
 use App\Settings;
+use App\Document;
 use DB;
 
 class AuthController extends Controller
@@ -266,8 +267,9 @@ class AuthController extends Controller
         $scheduleFinalGet = Settings::where("name", "Horario Final")->first(); 
 
         $pictures = Picture::where('user_id', $request->user()->id)->where('type',1)->get();
+        $documents = Document::where('delivery_id', $request->user()->id)->get();
 
-        return response()->json(['statusCode' => 201,'data' => $request->user(), 'paid' =>$paid, 'scheduleInitial' =>$scheduleInitialGet , 'scheduleFinal' =>$scheduleFinalGet, 'pictures' => $pictures]);
+        return response()->json(['statusCode' => 201,'data' => $request->user(), 'paid' =>$paid, 'scheduleInitial' =>$scheduleInitialGet , 'scheduleFinal' =>$scheduleFinalGet, 'pictures' => $pictures, 'documents' => $documents]);
     }
 
     public function versionApp(Request $request)

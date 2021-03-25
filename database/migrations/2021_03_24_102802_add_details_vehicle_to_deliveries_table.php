@@ -19,6 +19,7 @@ class AddDetailsVehicleToDeliveriesTable extends Migration
             $table->string("colorName",50)->nullable();
             $table->string("colorHex",10)->nullable();
             $table->string("licensePlate",20)->nullable();
+            $table->float("balance", 20,2)->default(0);
         });
     }
 
@@ -35,6 +36,7 @@ class AddDetailsVehicleToDeliveriesTable extends Migration
             $table->dropColumn("colorName");
             $table->dropColumn("colorHex");
             $table->dropColumn("licensePlate");
+            $table->dropColumn("balance");
         });
     }
 }
