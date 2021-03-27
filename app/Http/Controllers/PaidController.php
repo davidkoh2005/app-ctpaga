@@ -12,6 +12,8 @@ use App\Notifications\NotificationCommerce;
 use App\Notifications\NotificationAdmin;
 use App\Notifications\DeliveryProductClient;
 use App\Notifications\DeliveryProductCommerce;
+use App\Notifications\DeliveryProductClientInitial;
+use App\Notifications\DeliveryProductCommerceInitial;
 use App\Notifications\RetirementProductClient;
 use App\Notifications\RetirementProductCommerce;
 use Carbon\Carbon;
@@ -836,6 +838,7 @@ class PaidController extends Controller
                     $paid->statusDelivery = 2;
                     $sales = Sale::where('codeUrl',$request->codeUrl)->orderBy('name', 'asc')->get();
                     $commerce = Commerce::whereId($paid->commerce_id)->first();
+                    $userCommerce = User::whereId($paid->user_id)->first();
                     $paid->save();
                     
                     $listCodeUrl = array();
@@ -860,6 +863,18 @@ class PaidController extends Controller
                             ]
                         ],
                     ]); 
+
+                    (new User)->forceFill([
+                        'email' => $paid->email,
+                    ])->notify(
+                        new DeliveryProductClientInitial($commerce, $paid, $sales, $delivery)
+                    );  
+            
+                    (new User)->forceFill([
+                        'email' => $userCommerce->email,
+                    ])->notify(
+                        new DeliveryProductCommerceInitial($commerce, $paid, $sales, $delivery)
+                    );
 
                     $emailsGet = Settings::where('name','Email Estado Pedido')->first();
 

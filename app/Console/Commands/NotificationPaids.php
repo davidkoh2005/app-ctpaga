@@ -56,6 +56,7 @@ class NotificationPaids extends Command
                     $sentEmail = Email::firstOrNew([
                         'user_id'       => 0,
                         'commerce_id'   => 0,
+                        'type'   => 0,
                     ]);
 
                     if(!$sentEmail->date || Carbon::parse($sentEmail->date)->addMinutes(5) <= Carbon::now()){

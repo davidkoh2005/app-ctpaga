@@ -37,6 +37,8 @@ use App\Notifications\DeliveryProductClient;
 use App\Notifications\DeliveryProductCommerce;
 use App\Notifications\RetirementProductClient;
 use App\Notifications\RetirementProductCommerce;
+use App\Notifications\DeliveryProductClientInitial;
+use App\Notifications\DeliveryProductCommerceInitial;
 
 class DeliveryController extends Controller
 {
@@ -82,6 +84,8 @@ class DeliveryController extends Controller
             $url = '/Delivery/'.$delivery->id.'/storage/Driving-License-'.Carbon::now()->format('d-m-Y_H-i-s').'.'.$request->type;
         else if($request->description == 'Civil Liability')
             $url = '/Delivery/'.$delivery->id.'/storage/Civil-Liability-'.Carbon::now()->format('d-m-Y_H-i-s').'.'.$request->type;
+        else if($request->description == 'Selfie')
+            $url = '/Delivery/'.$delivery->id.'/storage/Selfie-'.Carbon::now()->format('d-m-Y_H-i-s').'.'.$request->type;
         
         if($request->urlPrevious != ''){
             $urlPrevius = substr($request->urlPrevious,8);
@@ -97,11 +101,16 @@ class DeliveryController extends Controller
             \Storage::disk('public')->put($url,  $realFile);
         }
 
-        Document::updateOrCreate([
+        $document = Document::updateOrCreate([
             'delivery_id'=>$delivery->id,
             'description'=> $request->description,
         ],
-        ['url' => '/storage'.$url]);
+        [
+            'url' => '/storage'.$url,
+        ]);
+
+        $document->type = $request->type;
+        $document->save();
 
         return response()->json([
             'statusCode' => 201,
@@ -150,6 +159,50 @@ class DeliveryController extends Controller
         ]);
     }
 
+    public function updateColumnIdUrl()
+    {
+
+        $count = Delivery::where('idUrl', '')->count();
+
+        while ($count > 0){
+            $delivery = Delivery::where('idUrl', '')->first();
+            $code = $this->randomCode();
+            $delivery->idUrl = $code;
+            $delivery->save();
+            $count--;
+        }
+
+        return "Update Column Delivery";
+
+    }
+
+    public function randomCode()
+    {
+        $longitud = 6;
+        do
+        {
+            $code = '';
+            $pattern = '1234567890abcdefghijklmnopqrstuvwxyz';
+            $max = strlen($pattern)-1;
+            for($i=0;$i < $longitud;$i++) 
+                $code .= $pattern{mt_rand(0,$max)};
+
+            $statusCode = Delivery::where('idUrl', $code)->first();
+        }
+        while(!empty($statusCode));
+
+        return $code;
+    }
+
+    public function showDelivery($idUrl)
+    {
+        $delivery = Delivery::where('idUrl',$idUrl)->first();
+        $picture = Picture::where('user_id', $delivery->id)
+                        ->where('commerce_id', '=', null)
+                        ->where('type',1)->first();
+        return view('profileDelivery', compact('delivery', 'picture'));
+    }
+
     public function test()
     {
         
@@ -162,6 +215,18 @@ class DeliveryController extends Controller
         $delivery = Delivery::where('email', 'angelgoitia1995@gmail.com')->first();
 
         $messageAdmin = $messageAdmin = " el delivery ".$delivery->name." entrego los productos de código de compra: ".$paid->codeUrl." a su destino.";
+
+        /* (new User)->forceFill([
+            'email' => $paid->email,
+        ])->notify(
+            new DeliveryProductClientInitial($commerce, $paid, $sales, $delivery)
+        );  */ 
+
+        (new User)->forceFill([
+            'email' => $user->email,
+        ])->notify(
+            new DeliveryProductCommerceInitial($commerce, $paid, $sales, $delivery)
+        );
 
         /* (new User)->forceFill([
             'email' => $user->email,

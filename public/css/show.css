@@ -10,7 +10,7 @@ section {
     text-align: center !important;
 }
 
-.card-header {
+.card-headerColor {
     background-color: #00cc5f !important;
     color: white !important;
     font-weight: bold;
@@ -173,4 +173,21 @@ input:checked + .slider:before {
     height: 100%;
     z-index: 9999;
     background: url('../images/loadingTransparent.gif') 50% 50% no-repeat rgb(249,249,249);
+}
+
+.circleColor{
+    display: inline-block;
+    border-radius: 100%;
+    margin-left: 10px;
+    width: 40px;
+    height: 40px;
+}
+
+.positionText{
+    position: relative;
+    bottom: 14px;
+}
+
+.positionTextName {
+    margin-left: 10px;
 }

@@ -54,7 +54,7 @@
                 <div style="color: #34495e; margin: 4% 10% 2%; text-align: left; font-family: sans-serif;">
 
                     <p style="color:#59595e; margin: 0 0 7px;">
-                        Estimado/a <strong>{{ $nameClient == 'Tienda Web'? 'Cliente' : strtoupper($nameClient)}}</strong>
+                        Estimado/a <strong>{{ $nameClient == 'Tienda Web'? 'CLIENTE' : strtoupper($nameClient)}}</strong>
                     </p>
 
                     <br>

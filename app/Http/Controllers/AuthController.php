@@ -171,6 +171,7 @@ class AuthController extends Controller
 
     public function signupDelivery(Request $request)
     {
+        
         $request->validate([
             'name'     => 'required|string',
             'email'    => 'required|string|email|unique:deliveries',
@@ -178,11 +179,14 @@ class AuthController extends Controller
             'phone'    => 'required|string',
         ]);
 
+        $code = $this->randomCode();
+
         $delivery = new Delivery([
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => bcrypt($request->password),
             'phone'    => $request->phone,
+            'idUrl'    => $code,
         ]);
 
         $delivery->save();
@@ -204,6 +208,24 @@ class AuthController extends Controller
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
             'message' => 'Successfully created delivery!'], 201);
+    }
+
+    public function randomCode()
+    {
+        $longitud = 6;
+        do
+        {
+            $code = '';
+            $pattern = '1234567890abcdefghijklmnopqrstuvwxyz';
+            $max = strlen($pattern)-1;
+            for($i=0;$i < $longitud;$i++) 
+                $code .= $pattern{mt_rand(0,$max)};
+
+            $statusCode = Delivery::where('idUrl', $code)->first();
+        }
+        while(!empty($statusCode));
+
+        return $code;
     }
 
     public function loginDelivery(Request $request)

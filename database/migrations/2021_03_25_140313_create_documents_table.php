@@ -18,6 +18,7 @@ class CreateDocumentsTable extends Migration
             $table->integer('delivery_id');
             $table->string('description', 20);
             $table->string('url',100);
+            $table->string('type',5)->nullable();
             $table->timestamps();
         });
     }

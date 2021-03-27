@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Email extends Model
 {
     protected $fillable = [
-        'id','user_id', 'commerce_id', 'date',
+        'id','user_id', 'commerce_id', 'date', 'type',
     ]; 
 
     public function user()

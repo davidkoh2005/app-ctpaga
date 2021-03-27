@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/test', 'DeliveryController@test');
+Route::get('/updateColumn', 'DeliveryController@updateColumnIdUrl');
 
 
 Route::get('/', function () {
@@ -102,12 +103,15 @@ Route::group(['middleware'=>'admin'], function() {
     Route::post('/admin/nuevoTasa', 'AdminController@newRate')->name('admin.newRate');
     Route::get('/admin/autorizado', 'AdminController@authDelivery')->name('admin.authDelivery');
     Route::post('/admin/autorizado', 'AdminController@changeStatusDelivery')->name('admin.changeStatusDelivery');
+    Route::get('/admin/autorizado/delivery/{id}', 'AdminController@deliveryShow')->name('admin.deliveryShow');
     Route::get('/admin/configuraciones', 'AdminController@settings')->name('admin.settings');
     Route::post('/admin/settingsSchedule', 'AdminController@settingsSchedule')->name('admin.settingsSchedule');
     Route::post('/admin/settingsEmails', 'AdminController@settingsEmails')->name('admin.settingsEmails');
 });
 
 Route::post('/admin/removePicture', 'AdminController@removePicture')->name('admin.removePicture');
+Route::post('/admin/removePerfil', 'AdminController@removePerfil')->name('admin.removePerfil');
+Route::post('/admin/removeDocumentDelivery', 'AdminController@removeDocumentDelivery')->name('admin.removeDocumentDelivery');
 Route::post('admin/saveDeposits', 'AdminController@saveDeposits')->name('admin.saveDeposits');
 
 Route::get('password/create', 'Auth\PasswordResetController@create');
@@ -122,6 +126,8 @@ Route::get('/pagar/completado/{userUrl}', function ($userUrl) {
     $status = false;
     return view('result', compact('userUrl', 'status'));
 });
+
+Route::get('/delivery/{idUrl}', 'DeliveryController@showDelivery');
 
 Route::get('/pagar/estadoPaypal', 'PaidController@statusPaypal');
 Route::post('/pagar/criptomonedas', 'PaidController@cryptocurrencies');

@@ -18,6 +18,7 @@ use App\Balance;
 use App\Commerce;
 use App\Deposits;
 use App\Delivery;
+use App\Document;
 use App\Product;
 use App\Service;
 use App\Settings;
@@ -32,6 +33,7 @@ use App\Notifications\PaymentConfirm;
 use App\Notifications\PaymentCancel;
 use App\Notifications\NotificationDelivery;
 use App\Notifications\NotificationCommerce;
+use App\Notifications\PictureDocumentRemoveDelivery;
 use App\Events\SendCode;
 use App\Events\StatusDelivery;
 use App\Events\NewNotification;
@@ -230,6 +232,7 @@ class AdminController extends Controller
             $sentEmail = Email::firstOrNew([
                 'user_id'       => $user->id,
                 'commerce_id'   => $commerce->id,
+                'type'          => 1,
             ]);
 
             if(!$sentEmail->date || Carbon::parse($sentEmail->date)->format('Y-m-d') != Carbon::now()->format('Y-m-d')){
@@ -266,6 +269,7 @@ class AdminController extends Controller
         $sentEmail = Email::firstOrNew([
             'user_id'       => $user->id,
             'commerce_id'   => $commerce->id,
+            'type'          => 1,
         ]);
 
         if(!$sentEmail->date || Carbon::parse($sentEmail->date)->format('Y-m-d') != Carbon::now()->format('Y-m-d')){
@@ -1015,5 +1019,94 @@ class AdminController extends Controller
         $success = event(new NewNotification($request->id));
 
         return response()->json(array('status' => 201));
+    }
+
+    public function deliveryShow($id){
+        if (!Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('admin.login'));
+        }elseif (Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('commerce.dashboard'));
+        }
+
+
+        $delivery = Delivery::whereId($id)->first();
+
+        $selfie = Picture::where('user_id', $delivery->id)
+                        ->where('commerce_id', '=', null)
+                        ->where('type',1)->first();
+                        
+        $documents = Document::where('delivery_id', $delivery->id)
+                            ->orderBy('type', 'DESC')->get();
+                        
+        $statusMenu="auth-delivery";
+        return view('admin.deliveryShow', compact('delivery', 'selfie', 'documents', 'statusMenu'));
+    }
+
+    public function removePerfil(Request $request)
+    {
+        $picture = Picture::whereId($request->id)->first();
+        $urlPrevius = substr($picture->url,8);
+
+        $delivery = Delivery::whereId($picture->user_id)->first();
+
+        \Storage::disk('public')->delete($urlPrevius);
+        $picture->delete();
+
+        $sentEmail = Email::firstOrNew([
+            'user_id'       => $delivery->id,
+            'commerce_id'   => 0,
+            'type'          => 2,
+        ]);
+
+        if(!$sentEmail->date || Carbon::parse($sentEmail->date)->format('Y-m-d') != Carbon::now()->format('Y-m-d')){
+            (new User)->forceFill([
+                'email' => $delivery->email,
+            ])->notify(
+                new PictureDocumentRemoveDelivery($delivery)
+            ); 
+
+            $sentEmail->date = Carbon::now();
+
+        }
+
+        $sentEmail->save();
+
+        return response()->json([
+            'status' => 201
+        ]);
+    }
+
+    public function removeDocumentDelivery(Request $request)
+    {
+        $document = Document::whereId($request->id)->first();
+        $urlPrevius = substr($document->url,8);
+        
+        $delivery = Delivery::whereId($document->delivery_id)->first();
+
+        \Storage::disk('public')->delete($urlPrevius);
+        $document->delete();
+
+        $sentEmail = Email::firstOrNew([
+            'user_id'       => $delivery->id,
+            'commerce_id'   => 0,
+            'type'          => 2,
+        ]);
+
+        if(!$sentEmail->date || Carbon::parse($sentEmail->date)->format('Y-m-d') != Carbon::now()->format('Y-m-d')){
+            (new User)->forceFill([
+                'email' => $delivery->email,
+            ])->notify(
+                new PictureDocumentRemoveDelivery($delivery)
+            ); 
+
+            $sentEmail->date = Carbon::now();
+
+        }
+
+        $sentEmail->save();
+
+        return response()->json([
+            'status' => 201
+        ]);
     }
 }

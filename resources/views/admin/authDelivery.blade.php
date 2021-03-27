@@ -22,6 +22,7 @@
             <table id="table_id" class="table table-bordered mb-5 display" width="100%">
                 <thead>
                     <tr class="table-title">
+                        <th scope="col">Ver</th>
                         <th scope="col">#</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Teléfono</th>
@@ -32,7 +33,10 @@
                 <tbody>
                     @foreach($deliveries as $delivery)
                     <tr>
-                        <th scope="row">{{ $delivery->id }}</th>
+                        <td scope="row">
+                            <a class="btn btn-bottom" href="{{route('admin.deliveryShow', ['id' => $delivery->id])}}" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Delivery"><i class="material-icons">visibility</i></a>
+                        </td>
+                        <td>{{ $delivery->id }}</td>
                         <td>{{ $delivery->name }}</td>
                         <td>{{ $delivery->phone }}</td>
                         <td>{{ $delivery->email }}</td>
@@ -72,6 +76,23 @@
             </table>
         </div>
     </div>
+
+    <!--- Modal Delivery -->
+    <div class="modal fade" id="deliveryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>              
+                <div class="modal-body">
+                    <div id="showDelivery"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @include('admin.bookshopBottom')
     <script> 
         $( ".loader" ).fadeOut("slow"); 

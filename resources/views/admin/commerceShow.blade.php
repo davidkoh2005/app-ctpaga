@@ -21,7 +21,7 @@
             <div class="row">
                 <div class="col-md-6 col-12">
                     <div class="card text-center">
-                        <div class="card-header">
+                        <div class="card-header card-headerColor">
                             Selfie
                         </div>
                         <div class="card-body center">
@@ -49,7 +49,7 @@
                 </div>
                 <div class="col-md-6 col-12">
                     <div class="card text-center">
-                        <div class="card-header">
+                        <div class="card-header card-headerColor">
                             Informacion
                         </div>
                         <div class="card-body">
@@ -91,7 +91,7 @@
                 @foreach ($pictures as $picture)
                     <div class="col-md-6 col-12">
                         <div class="card text-center">
-                            <div class="card-header">
+                            <div class="card-header card-headerColor">
                                 @if($picture->descripction == 'Identification')
                                     Identificación
                                 @else

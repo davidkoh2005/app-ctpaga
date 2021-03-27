@@ -43,7 +43,7 @@
         <tr>
             <td style="background-color: #fff; font-size: 16px">
                 <div style="color: #34495e; margin: 4% 10% 2%; text-align: left; font-family: sans-serif;">
-                    <p style="color:#59595e; margin: 0 0 7px;">Estimado/a <strong>{{ $paid->nameClient == 'Tienda Web'? 'Cliente' : strtoupper($paid->nameClient)}}</strong></p>
+                    <p style="color:#59595e; margin: 0 0 7px;">Estimado/a <strong>{{ $paid->nameClient == 'Tienda Web'? 'CLIENTE' : strtoupper($paid->nameClient)}}</strong></p>
                     <br>
                     <br>
                     <p style="color:#59595e; margin: 0 0 7px;"> CTpaga Delivery realizó la entrega del Pedido {{$paid->codeUrl}} en la dirección {{$paid->addressShipping}}
