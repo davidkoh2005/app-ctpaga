@@ -34,6 +34,8 @@ use App\Notifications\PaymentCancel;
 use App\Notifications\NotificationDelivery;
 use App\Notifications\NotificationCommerce;
 use App\Notifications\PictureDocumentRemoveDelivery;
+use App\Notifications\DeliveryProductClientInitial;
+use App\Notifications\DeliveryProductCommerceInitial;
 use App\Events\SendCode;
 use App\Events\StatusDelivery;
 use App\Events\NewNotification;
@@ -727,6 +729,10 @@ class AdminController extends Controller
         $paid->idDelivery = $request->idDelivery;
         $paid->save();
 
+        $sales = Sale::where('codeUrl',$request->codeUrl)->orderBy('name', 'asc')->get();
+        $commerce = Commerce::whereId($paid->commerce_id)->first();
+        $userCommerce = User::whereId($paid->user_id)->first();
+
         $phone = '+'.app('App\Http\Controllers\Controller')->validateNum($paid->numberShipping);
         $fecha = Carbon::now()->format("d/m/Y");
         $message = "CTpaga Delivery le informa que ha realizado un pedido con el Nro ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora.";
@@ -741,6 +747,18 @@ class AdminController extends Controller
                 ]
             ],
         ]); 
+
+        (new User)->forceFill([
+            'email' => $paid->email,
+        ])->notify(
+            new DeliveryProductClientInitial($commerce, $paid, $sales, $delivery)
+        );  
+
+        (new User)->forceFill([
+            'email' => $userCommerce->email,
+        ])->notify(
+            new DeliveryProductCommerceInitial($commerce, $paid, $sales, $delivery)
+        );
 
         (new User)->forceFill([
             'email' => $delivery->email,
