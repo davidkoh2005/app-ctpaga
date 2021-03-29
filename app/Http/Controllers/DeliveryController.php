@@ -15,6 +15,7 @@ use App\Document;
 use App\Deposits;
 use App\Settings;
 use App\Email;
+use App\Cash;
 use App\Events\StatusDelivery;
 use App\Events\AlarmUrgent;
 use App\Events\NewNotification;
@@ -138,11 +139,6 @@ class DeliveryController extends Controller
     {   
         $delivery = $request->user();
 
-        if(!$delivery->status){
-            $request->user()->token()->revoke(); 
-            return response()->json(['statusCode' => 401,'message' => "Unauthorized"]);
-        }
-
         $paids =Paid::join('commerces', 'commerces.id', '=', 'paids.commerce_id')
                     ->leftJoin('pictures', 'pictures.commerce_id', '=', 'paids.commerce_id')
                     ->where('paids.statusDelivery',1)
@@ -205,7 +201,6 @@ class DeliveryController extends Controller
 
     public function test()
     {
-        
         $user = User::where('email', 'angelgoitia1995@gmail.com')->first();
         $deposits = Deposits::where('user_id', $user->id)->first();
         $paid = Paid::where('email', 'angelgoitia1995@gmail.com')->first();
@@ -220,7 +215,7 @@ class DeliveryController extends Controller
             'email' => $paid->email,
         ])->notify(
             new DeliveryProductClientInitial($commerce, $paid, $sales, $delivery)
-        );  */ 
+        );  
 
         (new User)->forceFill([
             'email' => $user->email,
@@ -228,7 +223,7 @@ class DeliveryController extends Controller
             new DeliveryProductCommerceInitial($commerce, $paid, $sales, $delivery)
         );
 
-        /* (new User)->forceFill([
+        (new User)->forceFill([
             'email' => $user->email,
         ])->notify(
             new NotificationCommerce($commerce, $paid->codeUrl, 0)

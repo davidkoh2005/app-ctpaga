@@ -17,6 +17,7 @@ use App\Notifications\DeliveryProductCommerceInitial;
 use App\Notifications\RetirementProductClient;
 use App\Notifications\RetirementProductCommerce;
 use Carbon\Carbon;
+use App\Cash;
 use App\User;
 use App\Sale;
 use App\Paid;
@@ -967,6 +968,17 @@ class PaidController extends Controller
                 $balance->save();
             }
 
+            foreach ($sales as $sale)
+            {
+                $sale->statusSale = 1;
+                $sale->save();
+            }
+
+            Cash::create([
+                'delivery_id'  => $delivery->id,
+                "paid_id"      => $paid->id,
+            ]);
+
             $message = "CTpaga Delivery le informa que el pedido ".$paid->codeUrl." fue entregado satisfactoriamente a ".$paid->nameShipping;
     
             (new User)->forceFill([
@@ -998,18 +1010,6 @@ class PaidController extends Controller
                 );
             } 
         }
-
-        /* $url = 'mensajesms.com.ve/sms2/API/api.php?cel='.$phone.'&men='.str_replace(" ","%20",$message).'&u=demo&t=D3M04P1';
-        $ch = curl_init($url);
-
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array( 
-            "Content-Type: application/json",
-        ));
-        
-        $resultSms = json_decode(curl_exec($ch), true);
-        curl_close($ch); */
 
         $sms = AWS::createClient('sns');
         $sms->publish([

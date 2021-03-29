@@ -206,14 +206,17 @@
 
         function showPaid(id)
         {
+            $( ".loader" ).fadeIn("slow"); 
             $.ajax({
                 url: "{{route('admin.transactionsShow')}}", 
                 data: {"id" : id},
                 type: "GET",
             }).done(function(data){
+                $( ".loader" ).fadeOut("slow"); 
                 $('#productsModal').modal('show'); 
                 $('#showProducts').html(data.html);
             }).fail(function(result){
+                $( ".loader" ).fadeOut("slow"); 
                 alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                 $('#productsModal').modal('hide'); 
                 $('#showProducts').html();

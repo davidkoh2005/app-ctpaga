@@ -6,6 +6,7 @@ use DB;
 use Session;
 use PDF;
 use AWS;
+use App\Cash;
 use App\User;
 use App\Bank;
 use App\Paid;
@@ -868,6 +869,7 @@ class AdminController extends Controller
     {
         $delivery = delivery::where("id", $request->id)->first();
         $delivery->status = $request->status;
+        $delivery->statusAvailability = 0;
         $delivery->save();
 
         if($request->status == 2)
@@ -1046,7 +1048,6 @@ class AdminController extends Controller
             return redirect(route('commerce.dashboard'));
         }
 
-
         $delivery = Delivery::whereId($id)->first();
 
         $selfie = Picture::where('user_id', $delivery->id)
@@ -1066,6 +1067,9 @@ class AdminController extends Controller
         $urlPrevius = substr($picture->url,8);
 
         $delivery = Delivery::whereId($picture->user_id)->first();
+        $delivery->status = 0;
+        $delivery->statusAvailability = 0;
+        $delivery->save();
 
         \Storage::disk('public')->delete($urlPrevius);
         $picture->delete();
@@ -1100,6 +1104,9 @@ class AdminController extends Controller
         $urlPrevius = substr($document->url,8);
         
         $delivery = Delivery::whereId($document->delivery_id)->first();
+        $delivery->status = 0;
+        $delivery->statusAvailability = 0;
+        $delivery->save();
 
         \Storage::disk('public')->delete($urlPrevius);
         $document->delete();
@@ -1127,4 +1134,49 @@ class AdminController extends Controller
             'status' => 201
         ]);
     }
+
+    public function showBalanceDelivery(Request $request)
+    {
+        $balance = 0.00;
+        $cashes = Cash::join('paids', 'paids.id', '=', 'cashes.paid_id')
+                        ->where('cashes.delivery_id',$request->id)
+                        ->where('cashes.status',0)
+                        ->select('paids.total', 'paids.codeUrl')
+                        ->get();
+        
+        $delivery = Delivery::whereId($request->id)->first();
+
+        foreach($cashes as $cash){
+            $balance += floatval($cash->total);
+        }
+
+        $returnHTML=view('admin.showBalanceDelivery', compact('cashes', 'balance', 'delivery'))->render();
+        return response()->json(array('html'=>$returnHTML));
+    }
+
+    public function updatePaymentDelivery(Request $request)
+    {
+        Cash::where('delivery_id', $request->id)
+            ->where('status',0)->update([
+            "status"  => 1,
+        ]);
+
+        $balance = 0.00;
+        $cashes = Cash::join('paids', 'paids.id', '=', 'cashes.paid_id')
+                        ->join('deliveries', 'deliveries.id', '=', 'cashes.delivery_id')
+                        ->where('cashes.delivery_id',$request->id)
+                        ->where('cashes.status',0)
+                        ->select('paids.total', 'paids.codeUrl', 'cashes.delivery_id')
+                        ->get();
+
+        $delivery = Delivery::whereId($request->id)->first();
+
+        foreach($cashes as $cash){
+            $balance += floatval($cash->total);
+        }
+
+        $returnHTML=view('admin.showBalanceDelivery', compact('cashes', 'balance', 'delivery'))->render();
+        return response()->json(array('status' => 201, 'html'=>$returnHTML));
+    }
+
 }

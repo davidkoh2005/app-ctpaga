@@ -104,6 +104,8 @@ Route::group(['middleware'=>'admin'], function() {
     Route::get('/admin/autorizado', 'AdminController@authDelivery')->name('admin.authDelivery');
     Route::post('/admin/autorizado', 'AdminController@changeStatusDelivery')->name('admin.changeStatusDelivery');
     Route::get('/admin/autorizado/delivery/{id}', 'AdminController@deliveryShow')->name('admin.deliveryShow');
+    Route::get('/admin/balnce/delivery/', 'AdminController@showBalanceDelivery')->name('admin.showBalanceDelivery');
+    Route::post('/admin/balnce/delivery/updatePaymentDelivery', 'AdminController@updatePaymentDelivery')->name('admin.updatePaymentDelivery');
     Route::get('/admin/configuraciones', 'AdminController@settings')->name('admin.settings');
     Route::post('/admin/settingsSchedule', 'AdminController@settingsSchedule')->name('admin.settingsSchedule');
     Route::post('/admin/settingsEmails', 'AdminController@settingsEmails')->name('admin.settingsEmails');

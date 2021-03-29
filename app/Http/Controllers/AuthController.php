@@ -79,13 +79,13 @@ class AuthController extends Controller
 
         $user = $request->user();
         
-        if($user->status == 1)
+        /* if($user->status == 2)
             return response()->json([
                 'statusCode' => 400,
                 'message' => 'Esta cuenta se encuentra en revisión',
-            ], 400);
+            ], 400); */
 
-        if($user->status == 2)
+        if($user->status == 3)
             return response()->json([
                 'statusCode' => 400,
                 'message' => 'Esta cuenta se encuentra suspendida',
@@ -238,11 +238,11 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
         $delivery = Delivery::where("email", request('email'))->first();
 
-        if (isset($delivery) && $delivery->status == 0)
+        /* if (isset($delivery) && $delivery->status == 0)
             return response()->json([
                 'statusCode' => 400,
                 'message' => 'Por favor contactar con el administrador',
-            ], 400);
+            ], 400); */
 
         if(isset($delivery) && $delivery->status == 2)
             return response()->json([

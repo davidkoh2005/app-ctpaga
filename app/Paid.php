@@ -24,4 +24,9 @@ class Paid extends Model
     {
         return $this->belongsTo('App\Shipping', 'shipping_id');
     }
+
+    public function cashes()
+    {
+        return $this->belongsTo('App\Cash', 'paid_id');
+    }
 }

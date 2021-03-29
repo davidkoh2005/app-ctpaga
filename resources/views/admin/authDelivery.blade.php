@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CTpaga</title>
     @include('bookshop')
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/styleForm.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/show.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/bookshop/datatables.min.css') }}"/>
@@ -22,20 +23,17 @@
             <table id="table_id" class="table table-bordered mb-5 display" width="100%">
                 <thead>
                     <tr class="table-title">
-                        <th scope="col">Ver</th>
                         <th scope="col">#</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Teléfono</th>
                         <th scope="col">Correo electrónico</th>
                         <th scope="col">Estado</th>
+                        <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($deliveries as $delivery)
                     <tr>
-                        <td scope="row">
-                            <a class="btn btn-bottom" href="{{route('admin.deliveryShow', ['id' => $delivery->id])}}" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Delivery"><i class="material-icons">visibility</i></a>
-                        </td>
                         <td>{{ $delivery->id }}</td>
                         <td>{{ $delivery->name }}</td>
                         <td>{{ $delivery->phone }}</td>
@@ -70,6 +68,10 @@
                                 </select>
                             </label>
                         </td>
+                        <td>
+                            <a class="btn btn-bottom" href="{{route('admin.deliveryShow', ['id' => $delivery->id])}}" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Delivery"><i class="material-icons">visibility</i></a>
+                            <button class="btn btn-bottom" onClick="showBalance('{{$delivery->id}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Efectivo"><i class="material-icons">account_balance_wallet</i></button>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -96,6 +98,7 @@
     @include('admin.bookshopBottom')
     <script> 
         $( ".loader" ).fadeOut("slow"); 
+        $('#loading').show();
         var statusMenu = "{{$statusMenu}}";
 
         $(document).ready( function () {
@@ -155,6 +158,7 @@
                 alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
             });  
         });
+        
 
         $( document ).on( 'click', '#switchAuth', function(){
             var thisSwitch = this;
@@ -177,6 +181,51 @@
                 alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
             });
         });
+
+        $(document).on( 'click', '#updatePayment', function(){
+            var idDelivery = $('#deliveryID').val();
+            $('#updatePayment').hide();
+            $('#loading').removeClass("hide");
+            $('#loading').addClass("show");
+            $.ajax({
+                url: "{{route('admin.updatePaymentDelivery')}}", 
+                data: {"id" : idDelivery},
+                type: "POST",
+            }).done(function(result){
+                $('#updatePayment').show();
+                $('#loading').removeClass("show");
+                $('#loading').addClass("hide");
+                if(result.status == 201){
+                    $('#showDelivery').html(result.html);
+                    alertify.success('Ha sido guardado correctamente!');
+                }else{
+                    alertify.error('Error intentalo de nuevo mas tardes!');
+                }
+            }).fail(function(result){
+                $('#updatePayment').show();
+                $('#loading').removeClass("show");
+                $('#loading').addClass("hide");
+                alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+            });
+        });
+
+        function showBalance(id){
+            $( ".loader" ).fadeIn("slow"); 
+            $.ajax({
+                url: "{{route('admin.showBalanceDelivery')}}", 
+                data: {"id" : id},
+                type: "GET",
+            }).done(function(data){
+                $( ".loader" ).fadeOut("slow"); 
+                $('#deliveryModal').modal('show'); 
+                $('#showDelivery').html(data.html);
+            }).fail(function(result){
+                $( ".loader" ).fadeOut("slow"); 
+                alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                $('#deliveryModal').modal('hide'); 
+                $('#showDelivery').html();
+            });
+        }
     </script>
 </body>
 </html>

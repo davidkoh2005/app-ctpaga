@@ -10,6 +10,8 @@ class Delivery extends Authenticatable
 {
     use HasApiTokens, Notifiable;
 
+    protected $table = 'deliveries';
+
     protected $fillable = [
         'name', 'email', 'password', 'phone', 'status', 'codeUrlPaid', 'statusAvailability', 'addressPosition', 'token_fcm', 'model', 'mark', 'colorName', 'colorHex', 'licensePlate', 'idUrl', 'balance', 'type'
     ];
@@ -21,5 +23,10 @@ class Delivery extends Authenticatable
     public function documents()
     {
         return $this->hasMany('App\Document');
+    }
+
+    public function cashes()
+    {
+        return $this->belongsTo('App\Cash', 'delivery_id');
     }
 }

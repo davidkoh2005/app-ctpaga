@@ -191,9 +191,12 @@
             var hoursFinal = $('#hoursFinal').val();
             var minFinal = $('#minFinal').val();
             var anteMeridiemFinal = $('#anteMeridiemFinal').val();
+
             var d = new Date();
-            var scheduleInitial = Date.parse(d.getDate()+"/"+d.getMonth()+"/"+d.getYear()+" "+hoursInitial+":"+minInitial+" "+anteMeridiemInitial);
-            var scheduleFinal = Date.parse(d.getDate()+"/"+d.getMonth()+"/"+d.getYear()+" "+hoursFinal+":"+minFinal+" "+anteMeridiemFinal);
+            var mounthToday = d.getMonth()+1;
+
+            var scheduleInitial = Date.parse(d.getFullYear()+"/"+mounthToday+"/"+d.getDate()+" "+hoursInitial+":"+minInitial+" "+anteMeridiemInitial);
+            var scheduleFinal = Date.parse(d.getFullYear()+"/"+mounthToday+"/"+d.getDate()+" "+hoursFinal+":"+minFinal+" "+anteMeridiemFinal);
 
 
             if(scheduleInitial < scheduleFinal){
