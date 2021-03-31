@@ -20,7 +20,7 @@
         <div class="row">&nbsp;</div>
         <div class="row">&nbsp;</div>
         <div class="tableShow">
-            <table id="table_id" class="table table-bordered mb-5 display" width="100%">
+            <table id="table_id" class="table table-bordered display" style="width:100%;">
                 <thead>
                     <tr class="table-title">
                         <th scope="col">#</th>
@@ -102,8 +102,9 @@
         var statusMenu = "{{$statusMenu}}";
 
         $(document).ready( function () {
-            $('.main-panel').perfectScrollbar({suppressScrollX: true, maxScrollbarLength: 200}); 
+            //$('.main-panel').perfectScrollbar({suppressScrollX: true, maxScrollbarLength: 200}); 
             $('#table_id').DataTable({
+                "scrollX": true,
                 language: {
                     "decimal": "",
                     "emptyTable": "No hay información",

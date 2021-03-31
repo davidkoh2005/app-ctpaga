@@ -87,6 +87,7 @@
         $(".main-panel").perfectScrollbar('update');
 
         $('#table_delivery').DataTable({
+            "scrollX": true,
             "ordering": false,
             language: {
                 "decimal": "",

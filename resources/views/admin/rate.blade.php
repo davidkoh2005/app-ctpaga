@@ -67,7 +67,7 @@
                 </div>
             </div>
             <div class="tableShow">
-                <table id="table_Rate" class="table table-bordered mb-5 display">
+                <table id="table_Rate" class="table table-bordered display" style="width:100%;">
                     <thead>
                         <tr class="table-title">
                             <th scope="col">Fecha</th>

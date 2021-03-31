@@ -15,7 +15,7 @@
     <div class="main-panel">
       @include('auth.navbar')
         <div class="tableShow">
-            <table id="table_id" class="table table-bordered mb-5 display" width="100%">
+            <table id="table_id" class="table table-bordered display" style="width:100%;">
                 <thead>
                     <tr class="table-title">
                         <th scope="col">#</th>
@@ -56,8 +56,9 @@
     <script> 
         var statusMenu = "{{$statusMenu}}";
         $(document).ready( function () {
-            $('.main-panel').perfectScrollbar({suppressScrollX: true, maxScrollbarLength: 200}); 
+            //$('.main-panel').perfectScrollbar({suppressScrollX: true, maxScrollbarLength: 200}); 
             $('#table_id').DataTable({
+                "scrollX": true,
                 order: [[ 5, "asc" ]],
                 language: {
                     "decimal": "",

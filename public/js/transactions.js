@@ -1,9 +1,10 @@
 $(document).ready( function () {
-    $('.main-panel').perfectScrollbar({suppressScrollX: true, maxScrollbarLength: 200}); 
+    //$('.main-panel').perfectScrollbar({suppressScrollX: true, maxScrollbarLength: 200}); 
     $('#productsModal').modal('hide'); 
 
     $('#table_id').DataTable({
         "ordering": false,
+        "scrollX": true,
         language: {
             "decimal": "",
             "emptyTable": "No hay información",
@@ -30,6 +31,7 @@ $(document).ready( function () {
 
     $('#table_Rate').DataTable({
         "ordering": false,
+        "scrollX": true,
         language: {
             "decimal": "",
             "emptyTable": "No hay información",
@@ -54,6 +56,7 @@ $(document).ready( function () {
 
     $('#table_Deposits').DataTable({
         "ordering": false,
+        "scrollX": true,
         language: {
             "decimal": "",
             "emptyTable": "No hay información",

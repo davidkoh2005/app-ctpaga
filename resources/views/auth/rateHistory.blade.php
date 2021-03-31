@@ -61,7 +61,7 @@
                 <input type="image" id="btnExcel" src="{{ asset('images/excel.png') }}" width="50px" height="60px" style="margin-left:20px">
             </div>
             <div class="tableShow">
-                <table id="table_Rate" class="table table-bordered mb-5 display">
+                <table id="table_Rate" class="table table-bordered display" style="width:100%;">
                     <thead>
                         <tr class="table-title">
                             <th scope="col">Fecha</th>

@@ -1,6 +1,7 @@
 /node_modules
 /public/hot
 /public/storage
+/public/apk
 /public/js/Ctpaga_files
 /vendor
 .env
