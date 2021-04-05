@@ -69,7 +69,7 @@
                             
 
                             <div class="row">&nbsp;</div>
-
+                            <label><strong>Link Delivery: </strong> <a class="linkDelivery" href="{{url('/delivery/'.$delivery->idUrl)}}" target="_blank" rel="noopener noreferrer">Link</a></label> <br>
 
                         </div>
                     </div>
@@ -148,7 +148,7 @@
         $( ".loader" ).fadeOut("slow"); 
         $('#loading').hide();
         $('#loadingReason').hide();
-        var idSelfie = {{$selfie->id}};
+        var idSelfie = {{ $selfie? $selfie->id : 0}};
         var statusReason= 0;
         var idSelect;
         var statusMenu = "{{$statusMenu}}";

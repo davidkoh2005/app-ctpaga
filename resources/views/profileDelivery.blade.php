@@ -17,9 +17,12 @@
             </div>
             <div class="card-body" style=" margin-right: 20px; margin-left: 20px;">
                 <div id="title"><h5 class="center">Datos Delivery</h5></div>
+                @if($picture)
                 <div class="row justify-content-center zoom">
                     <img class="rounded-circle" src="{{$picture->url}}" width="100px" height="100px">
                 </div>
+                @endif
+                <div class="row">&nbsp;</div>
                 <label><strong>Nombre: </strong>{{$delivery->name}}</label> <br>
                 <label><strong>Teléfono: </strong>{{$delivery->phone}}</label> <br>
                 <label><strong>Dirección: </strong>{{$delivery->address}}</label> <br>
@@ -28,10 +31,19 @@
                 <div class="row">&nbsp;</div>
 
                 <div id="title"><h5 class="center">Vehículo Delivery</h5></div>
-                <label><strong>Marca: </strong>{{$delivery->mark}}</label> <br>
-                <label><strong>Model: </strong>{{$delivery->model}}</label> <br>
-                <label><strong>Número de placa: </strong>{{$delivery->licensePlate}}</label> <br>
-                <label><strong class="positionText" >Color: </strong> <span class="circleColor" style="background: {{$delivery->colorHex}} none repeat scroll 0 0;"></span> <span class="positionText positionTextName">{{$delivery->colorName}}</span></label> <br>
+                <label><strong>Marca: </strong>{{$delivery->mark?? 'Sin Descripción'}}</label> <br>
+                <label><strong>Model: </strong>{{$delivery->model?? 'Sin Descripción'}}</label> <br>
+                <label><strong>Número de placa: </strong>{{$delivery->licensePlate?? 'Sin Descripción'}}</label> <br>
+                <label>
+                    @if($delivery->colorHex && $delivery->colorName)
+                        <strong class="positionText" >Color: </strong>
+                        <span class="circleColor" style="background: {{$delivery->colorHex}} none repeat scroll 0 0;"></span>
+                        <span class="positionText positionTextName">{{$delivery->colorName?? 'Sin Descripción'}}</span> 
+                    @else 
+                        <strong >Color: </strong> 
+                        <span class="positionTextName">{{$delivery->colorName?? 'Sin Descripción'}}</span> 
+                    @endif
+                </label> <br>
                 
 
                 <div class="row">&nbsp;</div>
