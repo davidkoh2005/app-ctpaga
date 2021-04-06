@@ -30,7 +30,7 @@ class DepositsCommerceExport implements FromView, WithDrawings
         $drawing->setDescription('Loco Comercio');
         $drawing->setPath(public_path($this->pictureUser->url));
         $drawing->setWidth(100);
-        $drawing->setCoordinates('E1');
+        $drawing->setCoordinates('A1');
 
         return $drawing;
     }

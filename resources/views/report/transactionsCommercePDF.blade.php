@@ -9,11 +9,13 @@
         .styleText {
             font-family: 'Montserrat-Bold', sans-serif;
             color: black;
+            position: absolute;
+            right: 40px;
+            top: 0px;
         }
 
         .positionImage {
-            position: absolute;
-            right: 40px;
+            left: 40px;
             top: 0px;
         }
 
@@ -78,19 +80,6 @@
 </head>
 <body style="margin: 50px;">
     <div class="row">
-        <div class="styleText">
-            <strong>Fecha:</strong> {{$today}}<br>
-            <strong>Nombre de la compañia:</strong> {{$commerce->name}}<br>
-            <strong>Dirección:</strong> {{$commerce->address}}<br>
-            <strong>Teléfono:</strong> {{$commerce->phone}}<br>
-        </div>
-
-        @if($startDate && $endDate)
-            <div class="row">&nbsp;</div>
-            <div class="row">&nbsp;</div>
-
-            <strong>Fecha:</strong> {{$startDate}} al {{$endDate}}<br>
-        @endif
         <div class="positionImage">
         @php
             if($pictureUser)
@@ -104,6 +93,20 @@
         @endphp
             <img src="{{$base64}}" width="100px">
         </div>
+
+        <div class="styleText">
+            <strong>Fecha:</strong> {{$today}}<br>
+            <strong>Nombre de la compañia:</strong> {{$commerce->name}}<br>
+            <strong>Dirección:</strong> {{$commerce->address}}<br>
+            <strong>Teléfono:</strong> {{$commerce->phone}}<br>
+        </div>
+
+        @if($startDate && $endDate)
+            <div class="row">&nbsp;</div>
+            <div class="row">&nbsp;</div>
+
+            <strong>Fecha:</strong> {{$startDate}} al {{$endDate}}<br>
+        @endif
     </div>
 
     <div class="row">&nbsp;</div>

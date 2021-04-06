@@ -134,7 +134,7 @@ Route::get('/delivery/{idUrl}', 'DeliveryController@showDelivery');
 Route::get('/pagar/estadoPaypal', 'PaidController@statusPaypal');
 Route::post('/pagar/criptomonedas', 'PaidController@cryptocurrencies');
 
-Route::get('factura/{codeUrl}/', 'PaidController@billing');
+Route::get('pedido/{codeUrl}/', 'PaidController@billing');
 
 Route::get('/{userUrl}/', 'SaleController@indexStore')->name('form.store');
 Route::get('/{userUrl}/{codeUrl}/{statusModification?}', 'SaleController@index');

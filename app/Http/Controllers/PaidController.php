@@ -849,14 +849,29 @@ class PaidController extends Controller
                     $delivery->save();
 
                     $phone = '+'.app('App\Http\Controllers\Controller')->validateNum($paid->numberShipping);
+                    $phoneCommerce = '+'.app('App\Http\Controllers\Controller')->validateNum($commerce->phone);
                     $fecha = Carbon::now()->format("d/m/Y");
-                    $message = "CTpaga Delivery le informa que ha realizado un pedido con el Nro ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora.";
+                    $urlDelivery = url('/delivery/'.$delivery->idUrl);
+
+                    $message = "CTpaga Delivery le informa que ha realizado un pedido con el Nro ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora. Ver informacion de delivery: ".$urlDelivery."";
                     $messageAdmin = " el delivery ".$delivery->name." tomo el pedido ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora.";
 
                     $sms = AWS::createClient('sns');
                     $sms->publish([
                         'Message' => $message,
                         'PhoneNumber' => $phone,
+                        'MessageAttributes' => [
+                            'AWS.SNS.SMS.SMSType'  => [
+                                'DataType'    => 'String',
+                                'StringValue' => 'Transactional',
+                            ]
+                        ],
+                    ]); 
+
+                    $sms = AWS::createClient('sns');
+                    $sms->publish([
+                        'Message' => $message,
+                        'PhoneNumber' => $phoneCommerce,
                         'MessageAttributes' => [
                             'AWS.SNS.SMS.SMSType'  => [
                                 'DataType'    => 'String',
@@ -1063,6 +1078,6 @@ class PaidController extends Controller
         $today = Carbon::now()->format('d/m/Y g:i A');
         
         $pdf = \PDF::loadView('report.billing', compact('paid', 'sales', 'today','pictureUser'));
-        return $pdf->download('ctpaga_factura.pdf');
+        return $pdf->download('ctpaga_pedido.pdf');
     }
 }

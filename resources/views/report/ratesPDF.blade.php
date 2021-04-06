@@ -9,11 +9,13 @@
         .styleText {
             font-family: 'Montserrat-Bold', sans-serif;
             color: black;
+            position: absolute;
+            right: 40px;
+            top: 0px;
         }
 
         .positionImage {
-            position: absolute;
-            right: 40px;
+            left: 40px;
             top: 0px;
         }
 
@@ -60,12 +62,6 @@
 
     @if(Auth::guard('admin')->check())
     <div class="row">
-        <div class="styleText">
-            <strong>Fecha:</strong> {{Carbon::now()->format('Y-m-d')}}<br>
-            <strong>Dirección:</strong> {{env('ADDRESS_CTPAGA')}}<br>
-            <strong>Teléfono:</strong> {{env('PHONE_CTPAGA')}}<br>
-        </div>
-
         <div class="positionImage">
         @php
             $path = public_path('/images/logo/logo.png');
@@ -73,26 +69,13 @@
             $data = file_get_contents($path);
             $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
         @endphp
-            <img src="{{$base64}}" width="140px">
+            <img src="{{$base64}}" width="240px">
         </div>
     </div>
 
     @else
 
     <div class="row">
-        <div class="styleText">
-            <strong>Fecha:</strong> {{Carbon::now()->format('Y-m-d')}}<br>
-            <strong>Nombre de la compañia:</strong> {{$commerceData->name}}<br>
-            <strong>Dirección:</strong> {{$commerceData->address}}<br>
-            <strong>Teléfono:</strong> {{$commerceData->phone}}<br>
-        </div>
-
-        @if($startDate && $endDate)
-            <div class="row">&nbsp;</div>
-            <div class="row">&nbsp;</div>
-
-            <strong>Fecha:</strong> {{$startDate}} al {{$endDate}}<br>
-        @endif
         <div class="positionImage">
         @php
             if($pictureUser)
@@ -106,6 +89,22 @@
         @endphp
             <img src="{{$base64}}" width="100px">
         </div>
+
+        <div class="row">&nbsp;</div>
+
+        <div class="styleText">
+            <strong>Fecha:</strong> {{Carbon::now()->format('Y-m-d')}}<br>
+            <strong>Nombre de la compañia:</strong> {{$commerceData->name}}<br>
+            <strong>Dirección:</strong> {{$commerceData->address}}<br>
+            <strong>Teléfono:</strong> {{$commerceData->phone}}<br>
+        </div>
+
+        @if($startDate && $endDate)
+            <div class="row">&nbsp;</div>
+            <div class="row">&nbsp;</div>
+
+            <strong>Fecha:</strong> {{$startDate}} al {{$endDate}}<br>
+        @endif
     </div>
     @endif
 

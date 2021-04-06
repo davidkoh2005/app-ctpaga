@@ -376,8 +376,8 @@ class AdminController extends Controller
             $searchNameClient=$request->searchNameClient;
             $selectCoin=$request->selectCoin;
             $selectPayment=$request->selectPayment;
-            $startDate=$request->startDate;
-            $endDate=$request->endDate;
+            $startDate=Carbon::parse($request->startDate);
+            $endDate=Carbon::parse($request->endDate);
         }
 
 
@@ -590,8 +590,8 @@ class AdminController extends Controller
             $searchNameCompany=$request->searchNameCompany;
             $numRef=$request->numRef;
             $selectCoin=$request->selectCoin;
-            $startDate=$request->startDate;
-            $endDate=$request->endDate;
+            $startDate=Carbon::parse($request->startDate);
+            $endDate=Carbon::parse($request->endDate);
         }
 
         $deposits = DB::table('deposits')
@@ -735,12 +735,26 @@ class AdminController extends Controller
         $userCommerce = User::whereId($paid->user_id)->first();
 
         $phone = '+'.app('App\Http\Controllers\Controller')->validateNum($paid->numberShipping);
+        $phoneCommerce = '+'.app('App\Http\Controllers\Controller')->validateNum($commerce->phone);
         $fecha = Carbon::now()->format("d/m/Y");
-        $message = "CTpaga Delivery le informa que ha realizado un pedido con el Nro ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora.";
+        $message = "CTpaga Delivery le informa que ha realizado un pedido con el Nro ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora. Ver informacion de delivery: ".$urlDelivery."";
+        
         $sms = AWS::createClient('sns');
         $sms->publish([
             'Message' => $message,
             'PhoneNumber' => $phone,
+            'MessageAttributes' => [
+                'AWS.SNS.SMS.SMSType'  => [
+                    'DataType'    => 'String',
+                    'StringValue' => 'Transactional',
+                ]
+            ],
+        ]); 
+
+        $sms = AWS::createClient('sns');
+        $sms->publish([
+            'Message' => $message,
+            'PhoneNumber' => $phoneCommerce,
             'MessageAttributes' => [
                 'AWS.SNS.SMS.SMSType'  => [
                     'DataType'    => 'String',
@@ -804,14 +818,16 @@ class AdminController extends Controller
         $endDate = Carbon::now()->format('Y-m-d');
         
         if($request->all()){
-            $startDate=$request->startDate;
-            $endDate=$request->endDate;
+            $startDate=Carbon::parse($request->startDate);
+            $endDate=Carbon::parse($request->endDate);
         }
+
 
         $rates = Rate::where('user_id', Auth::guard('admin')->id())->orderBy('date', 'desc')
                      ->whereDate('created_at', ">=",$startDate)
                      ->whereDate('created_at', "<=",$endDate)
                      ->where('roleRate',0)->get();
+        
 
         if($request->statusFile == "PDF"){
             $today = Carbon::now()->format('Y-m-d');

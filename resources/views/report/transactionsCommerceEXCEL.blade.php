@@ -39,6 +39,12 @@
     </style>
 </head>
 <body style="margin: 50px;">
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
     <div class="row">
         <div class="styleText">
             <strong>Fecha:</strong> {{$today}}<br>

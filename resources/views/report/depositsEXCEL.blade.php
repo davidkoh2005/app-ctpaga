@@ -14,14 +14,10 @@
     </style>
 </head>
 <body style="margin: 50px;">
-    <div class="row">
-        <div class="styleText">
-            <strong>Fecha:</strong> {{$today}}<br>
-            <strong>Dirección:</strong> {{env('ADDRESS_CTPAGA')}}<br>
-            <strong>Teléfono:</strong> {{env('PHONE_CTPAGA')}}<br>
-        </div>
-    </div>
-
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
     <p></p>
     <p></p>
 

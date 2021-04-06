@@ -12,7 +12,7 @@
 <body>
     <div class="col-lg-4 col-md-4 col-sm-12 col-12 mx-auto">
         <div class="card text-center">
-            <div class="card-header">
+            <div class="card-header notBorder">
                 <img src="{{ asset('images/email/LOGO.png') }}" alt="" style="padding: 10px; display: block; margin: 0 auto; width: 50%; max-width: 200px;">
             </div>
             <div class="card-body" style=" margin-right: 20px; margin-left: 20px;">
@@ -25,7 +25,6 @@
                 <div class="row">&nbsp;</div>
                 <label><strong>Nombre: </strong>{{$delivery->name}}</label> <br>
                 <label><strong>Teléfono: </strong>{{$delivery->phone}}</label> <br>
-                <label><strong>Dirección: </strong>{{$delivery->address}}</label> <br>
                 <label><strong>Correo: </strong>{{$delivery->email}}</label> 
 
                 <div class="row">&nbsp;</div>

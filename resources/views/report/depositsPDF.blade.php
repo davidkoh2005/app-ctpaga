@@ -12,8 +12,7 @@
         }
 
         .positionImage {
-            position: absolute;
-            right: 40px;
+            left: 40px;
             top: 0px;
         }
 
@@ -46,12 +45,6 @@
 </head>
 <body style="margin: 50px;">
     <div class="row">
-        <div class="styleText">
-            <strong>Fecha:</strong> {{$today}}<br>
-            <strong>Dirección:</strong> {{env('ADDRESS_CTPAGA')}}<br>
-            <strong>Teléfono:</strong> {{env('PHONE_CTPAGA')}}<br>
-        </div>
-
         <div class="positionImage">
         @php
             $path = public_path('/images/logo/logo.png');
@@ -59,7 +52,7 @@
             $data = file_get_contents($path);
             $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
         @endphp
-            <img src="{{$base64}}" width="140px">
+            <img src="{{$base64}}" width="240px">
         </div>
     </div>
 

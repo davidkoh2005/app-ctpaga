@@ -7,6 +7,8 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo/logoct.svg') }}" />
     <style>
         .styleText {
+            position: relative;
+            right: 40px;
             font-family: 'Montserrat-Bold', sans-serif;
             color: black;
         }
@@ -44,21 +46,24 @@
     @endphp
 
     @if(Auth::guard('admin')->check())
-    <div class="row">
-        <div class="styleText">
-            <strong>Fecha:</strong> {{Carbon::now()->format('Y-m-d')}}<br>
-            <strong>Dirección:</strong> {{env('ADDRESS_CTPAGA')}}<br>
-            <strong>Teléfono:</strong> {{env('PHONE_CTPAGA')}}<br>
-        </div>
-    </div>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
 
     @else
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
     <div class="row">
         <div class="styleText">
-            <strong>Fecha:</strong> {{Carbon::now()->format('Y-m-d')}}}<br>
-            <strong>Nombre de la compañia:</strong> {{$commerceData->name}}<br>
-            <strong>Dirección:</strong> {{$commerceData->address}}<br>
-            <strong>Teléfono:</strong> {{$commerceData->phone}}<br>
+            <strong>Fecha: </strong> {{Carbon::now()->format('Y-m-d')}}<br>
+            <strong>Nombre de la compañia: </strong> {{$commerceData->name}}<br>
+            <strong>Dirección: </strong> {{$commerceData->address}}<br>
+            <strong>Teléfono: </strong> {{$commerceData->phone}}<br>
         </div>
     </div>
     @endif

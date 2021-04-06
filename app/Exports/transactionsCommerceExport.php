@@ -33,7 +33,7 @@ class TransactionsCommerceExport implements FromView, WithDrawings
         else
             $drawing->setPath(public_path("images/perfil.png"));
         $drawing->setWidth(100);
-        $drawing->setCoordinates('E1');
+        $drawing->setCoordinates('A1');
 
         return $drawing;
     }

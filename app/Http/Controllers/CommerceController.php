@@ -162,8 +162,8 @@ class CommerceController extends Controller
             $searchNameClient=$request->searchNameClient;
             $selectCoin=$request->selectCoin;
             $selectPayment=$request->selectPayment;
-            $startDate=$request->startDate;
-            $endDate=$request->endDate;
+            $startDate=Carbon::parse($request->startDate);
+            $endDate=Carbon::parse($request->endDate);
         }
 
         if(!empty($request->idCommerce))
@@ -223,8 +223,8 @@ class CommerceController extends Controller
         
         if($request->all()){
             $selectCoin=$request->selectCoin? $request->selectCoin : 0;
-            $startDate=$request->startDate;
-            $endDate=$request->endDate;
+            $startDate=Carbon::parse($request->startDate);
+            $endDate=Carbon::parse($request->endDate);
         }
 
 
@@ -292,8 +292,8 @@ class CommerceController extends Controller
         
         if($request->all()){
             $selectCoin=$request->selectCoin? $request->selectCoin : 0;
-            $startDate=$request->startDate;
-            $endDate=$request->endDate;
+            $startDate=Carbon::parse($request->startDate);
+            $endDate=Carbon::parse($request->endDate);
         }
 
 
@@ -405,8 +405,8 @@ class CommerceController extends Controller
         $endDate = Carbon::now()->format('Y-m-d');
         
         if($request->all() && !$request->commerceId){
-            $startDate=$request->startDate;
-            $endDate=$request->endDate;
+            $startDate=Carbon::parse($request->startDate);
+            $endDate=Carbon::parse($request->endDate);
         }
 
 

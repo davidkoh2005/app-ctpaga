@@ -32,7 +32,7 @@ class ratesExport implements FromView, WithDrawings
         if(Auth::guard('admin')->check()){
             $drawing->setDescription('Loco CTpaga');
             $drawing->setPath(public_path('/images/logo/logo.png'));
-            $drawing->setWidth(140);
+            $drawing->setWidth(240);
         }else{
             $drawing->setDescription('Loco Comercio');
             
@@ -44,7 +44,7 @@ class ratesExport implements FromView, WithDrawings
             $drawing->setWidth(100);
         }
 
-        $drawing->setCoordinates('E1');
+        $drawing->setCoordinates('A1');
 
         return $drawing;
     }

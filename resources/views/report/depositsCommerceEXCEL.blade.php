@@ -40,6 +40,12 @@
 </head>
 <body style="margin: 50px;">
     <div class="row">
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
         <div class="styleText">
             <strong>Fecha:</strong> {{$today}}<br>
             <strong>Nombre de la compañia:</strong> {{$commerceData->name}}<br>

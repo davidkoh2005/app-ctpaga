@@ -9,10 +9,13 @@
         .styleText {
             font-family: 'Montserrat-Bold', sans-serif;
             color: black;
+            position: absolute;
+            right: 40px;
+            top: 0px;
         }
 
         .positionImage {
-            position: absolute;
+            position: relative;
             right: 40px;
             top: 0px;
         }
@@ -55,18 +58,6 @@
 </head>
 <body style="margin: 50px;">
     <div class="row">
-        <div class="styleText">
-            <strong>Fecha:</strong> {{$today}}<br>
-            <strong>Nombre de la compañia:</strong> {{$commerceData->name}}<br>
-            <strong>Dirección:</strong> {{$commerceData->address}}<br>
-            <strong>Teléfono:</strong> {{$commerceData->phone}}<br>
-        </div>
-
-        <div class="row">&nbsp;</div>
-        <div class="row">&nbsp;</div>
-
-        <strong>Fecha:</strong> {{$startDate}} al {{$endDate}}<br>
-
         <div class="positionImage">
         @php
             if($pictureUser)
@@ -80,6 +71,17 @@
         @endphp
             <img src="{{$base64}}" width="100px">
         </div>
+        <div class="styleText">
+            <strong>Fecha:</strong> {{$today}}<br>
+            <strong>Nombre de la compañia:</strong> {{$commerceData->name}}<br>
+            <strong>Dirección:</strong> {{$commerceData->address}}<br>
+            <strong>Teléfono:</strong> {{$commerceData->phone}}<br>
+        </div>
+
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+
+        <strong>Fecha:</strong> {{$startDate}} al {{$endDate}}<br>
     </div>
 
     <div class="row">&nbsp;</div>

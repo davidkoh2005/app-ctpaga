@@ -6,15 +6,13 @@
     <title>CTpaga</title>
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo/logoct.svg') }}" />
     <style>
-
         .styleText {
             font-family: 'Montserrat-Bold', sans-serif;
             color: black;
         }
 
         .positionImage {
-            position: absolute;
-            right: 40px;
+            left: 40px;
             top: 0px;
         }
 
@@ -55,28 +53,63 @@
     </style>
 </head>
 <body style="margin: 50px;">
+    @php
+        use Carbon\Carbon;
+    @endphp
 <div class="row">
-        <div class="styleText">
-            <strong>Dirección:</strong> {{env('ADDRESS_CTPAGA')}}<br>
-            <strong>Teléfono:</strong> {{env('PHONE_CTPAGA')}}<br>
-            <strong>Fecha:</strong> {{$today}}<br>
-        </div>
-
-        <div class="positionImage">
+    <div class="positionImage">
         @php
             $path = public_path('/images/logo/logo.png');
             $type = pathinfo($path, PATHINFO_EXTENSION);
             $data = file_get_contents($path);
             $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
         @endphp
-            <img src="{{$base64}}" width="140px">
+            <img src="{{$base64}}" width="240px">
         </div>
     </div>
 
     <div class="row">&nbsp;</div>
     <div class="row">&nbsp;</div>
 
-    <div style="text-align:center"> <h2>Orden de Pago</h2> </div>
+    <div class="row">
+        <table cellspacing="0" cellpadding="0" style="border: none;" width="100%">
+            <tr>
+                <td>
+                    <strong>Nombre: </strong> {{$paid->nameClient == 'Tienda Web'? 'Cliente' : ucwords($paid->nameClient)}}<br>
+                    <strong>Correo: </strong> {{$paid->email}}<br><br>
+                </td>
+                <td>
+                    <strong>Numero de pedido: </strong> {{$paid->codeUrl}}<br>
+                    <strong>Fecha de pedido: </strong> {{Carbon::parse($paid->date)->format('Y-m-d')}}<br>
+                    <strong>Método de pago: </strong> 
+                        @if($paid->nameCompanyPayments == 'Square' || $paid->nameCompanyPayments == 'E-sitef')
+                            Tarjeta de Crédito
+                        @elseif($paid->nameCompanyPayments == 'Pago en Efectivo')
+                            Efectivo
+                        @else
+                            {{ucfirst($paid->nameCompanyPayments)}}
+                        @endif
+                        <br> 
+                </td>
+            </tr>
+        </table>
+
+        <div class="row">
+            <strong>Detalle de envio </strong> <br>
+            <strong>Nombre: </strong> {{ucwords($paid->nameShipping)}}<br>
+            <strong>Teléfono: </strong> {{$paid->numberShipping}}<br>
+            <strong>Dirección: </strong> {{ucfirst($paid->addressShipping)}}<br>
+            @if($paid->detailsShipping)
+                <strong>Detalle: </strong> {{ucfirst($paid->addressShipping)}}<br>
+            @endif  
+        </div>
+        
+    </div>
+
+    <div class="row">&nbsp;</div>
+    <div class="row">&nbsp;</div>
+
+    <div style="text-align:center"> <h2>Pedido</h2> </div>
 
     <div class="row">
         <table id="table_id" class="table table-bordered mb-5 display">

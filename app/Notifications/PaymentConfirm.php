@@ -37,7 +37,7 @@ class PaymentConfirm extends Notification
     */
     public function toMail($notifiable)
     {
-        $url = url('/factura/'.$this->codeUrl);
+        $url = url('/pedido/'.$this->codeUrl);
 
         return (new MailMessage)
             ->subject("Aviso CTpaga")
