@@ -85,7 +85,7 @@
             if($pictureUser)
                 $path = public_path($pictureUser->url);
             else
-                $path = public_path('/images/perfil.png');
+                $path = public_path('/images/perfilUser.png');
 
             $type = pathinfo($path, PATHINFO_EXTENSION);
             $data = file_get_contents($path);

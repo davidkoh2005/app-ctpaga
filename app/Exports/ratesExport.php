@@ -39,7 +39,7 @@ class ratesExport implements FromView, WithDrawings
             if($this->pictureUser)
                 $drawing->setPath(public_path($this->pictureUser->url));
             else
-                $drawing->setPath(public_path("images/perfil.png"));
+                $drawing->setPath(public_path("images/perfilUser.png"));
             
             $drawing->setWidth(100);
         }

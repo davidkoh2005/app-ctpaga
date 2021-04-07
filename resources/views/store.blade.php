@@ -110,7 +110,7 @@
                                 @if($picture)
                                     <img class="rounded-circle" src="{{$picture->url}}" width="150px" height="150px">
                                 @else
-                                    <img class="rounded-circle" src="{{ asset('images/perfil.png') }}" width="150px" height="150px">
+                                    <img class="rounded-circle" src="{{ asset('images/perfilUser.png') }}" width="150px" height="150px">
                                 @endif
                                 </div>
                             </div>
@@ -162,7 +162,7 @@
                                 @if($picture)
                                     <img class="rounded-circle" src="{{$picture->url}}" width="150px" height="150px">
                                 @else
-                                    <img class="rounded-circle" src="{{ asset('images/perfil.png') }}" width="150px" height="150px">
+                                    <img class="rounded-circle" src="{{ asset('images/perfilUser.png') }}" width="150px" height="150px">
                                 @endif
                                 </div>
                             </div>
