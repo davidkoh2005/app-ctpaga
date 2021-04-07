@@ -29,4 +29,9 @@ class Delivery extends Authenticatable
     {
         return $this->belongsTo('App\Cash', 'delivery_id');
     }
+
+    public function historyCashes()
+    {
+        return $this->belongsTo('App\HistoryCash', 'delivery_id');
+    }
 }

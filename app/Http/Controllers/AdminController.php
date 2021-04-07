@@ -23,6 +23,7 @@ use App\Document;
 use App\Product;
 use App\Service;
 use App\Settings;
+use App\HistoryCash;
 use Carbon\Carbon;
 use App\Notifications\UserPaused;
 use App\Notifications\UserRejected;
@@ -44,6 +45,7 @@ use App\Http\Controllers\Controller;
 use App\Exports\DepositsExport;
 use App\Exports\RatesExport;
 use App\Exports\TransactionsExport;
+use App\Exports\HistoryCashesExport;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
@@ -999,9 +1001,8 @@ class AdminController extends Controller
     public function sendFCM($token,$message)
     {
         $url = "https://fcm.googleapis.com/fcm/send";
-        $token = $token;
         $serverKey = env('SERVER_KEY_FCM_DELIVERY');
-        $title = "CTpaga Aviso";
+        $title = "Aviso Importante";
         $body = $message;
         $notification = array('title' =>$title , 'body' => $body, 'sound' => 'default', 'badge' => '1');
         $arrayToSend = array('to' => $token, 'notification' => $notification,'priority'=>'high');
@@ -1172,6 +1173,23 @@ class AdminController extends Controller
 
     public function updatePaymentDelivery(Request $request)
     {
+        $total = 0;
+        $cashes = Cash::join('paids', 'paids.id', '=', 'cashes.paid_id')
+                        ->join('deliveries', 'deliveries.id', '=', 'cashes.delivery_id')
+                        ->where('cashes.delivery_id',$request->id)
+                        ->where('cashes.status',0)
+                        ->select('paids.total', 'paids.codeUrl', 'cashes.delivery_id')
+                        ->get();
+
+        foreach ($cashes as $cash){
+            $total += floatval($cash->total);
+        }
+
+        HistoryCash::create([
+            'delivery_id'   => $request->id,
+            'total'         => $total,
+        ]);
+
         Cash::where('delivery_id', $request->id)
             ->where('status',0)->update([
             "status"  => 1,
@@ -1193,6 +1211,53 @@ class AdminController extends Controller
 
         $returnHTML=view('admin.showBalanceDelivery', compact('cashes', 'balance', 'delivery'))->render();
         return response()->json(array('status' => 201, 'html'=>$returnHTML));
+    }
+
+    public function historyCashes(Request $request)
+    {
+        if (!Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('admin.login'));
+        }elseif (Auth::guard('web')->check() && !Auth::guard('admin')->check()){
+            return redirect(route('commerce.dashboard'));
+        }
+
+        $idDelivery = 0;
+        $searchNameDelivery="";
+        $startDate = Carbon::now()->setDay(1)->subMonth(4)->format('Y-m-d');
+        $endDate = Carbon::now()->format('Y-m-d');
+
+        $histories = HistoryCash::join('deliveries', 'deliveries.id', '=', 'history_cashes.delivery_id');
+
+        if($request->all()){
+            $idDelivery = $request->idDelivery != 0? $request->idDelivery : $idDelivery;
+            $searchNameDelivery=$request->searchNameDelovery;
+
+            $startDate=Carbon::parse($request->startDate);
+            $endDate=Carbon::parse($request->endDate);       
+        }
+
+        if($idDelivery != 0){
+            $histories = $histories->where('history_cashes.delivery_id', $idDelivery);
+        }
+
+        $histories = $histories->whereDate('history_cashes.created_at', ">=",$startDate)
+                    ->whereDate('history_cashes.created_at', "<=",$endDate)
+                    ->select('history_cashes.id', 'deliveries.name', 'history_cashes.total', 'history_cashes.date')
+                    ->get();
+
+        if($request->statusFile == "PDF"){
+            $pdf = \PDF::loadView('report.historyCashesPDF', compact('histories', 'searchNameDelivery', 'startDate', 'endDate'));
+            return $pdf->download('ctpaga_historial.pdf');
+        }elseif($request->statusFile == "EXCEL"){
+            return Excel::download(new HistoryCashesExport($histories, $startDate, $endDate), 'ctpaga_historial.xlsx');
+        }
+
+        if($request->idDelivery && count($histories) >0){
+            $searchNameDelivery = $histories[0]->name;   
+        }
+        
+        $statusMenu = "historyCashes";
+        return view('admin.historyCashes', compact('histories', 'searchNameDelivery', 'startDate', 'endDate', 'statusMenu'));
     }
 
 }

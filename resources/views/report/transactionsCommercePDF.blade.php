@@ -105,7 +105,7 @@
             <div class="row">&nbsp;</div>
             <div class="row">&nbsp;</div>
 
-            <strong>Fecha:</strong> {{$startDate}} al {{$endDate}}<br>
+            <strong>Fecha:</strong> {{Carbon::parse($startDate)->format('Y-m-d')}} al {{Carbon::parse($endDate)->format('Y-m-d')}}<br>
         @endif
     </div>
 

@@ -989,10 +989,12 @@ class PaidController extends Controller
                 $sale->save();
             }
 
-            Cash::create([
-                'delivery_id'  => $delivery->id,
-                "paid_id"      => $paid->id,
-            ]);
+            if($paid->nameCompanyPayments == "Pago en Efectivo"){
+                Cash::create([
+                    'delivery_id'  => $delivery->id,
+                    "paid_id"      => $paid->id,
+                ]);
+            }
 
             $message = "CTpaga Delivery le informa que el pedido ".$paid->codeUrl." fue entregado satisfactoriamente a ".$paid->nameShipping;
     

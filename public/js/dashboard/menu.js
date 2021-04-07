@@ -23,6 +23,8 @@ $(document).ready( function () {
         $("#title-navbar").html("Tasa Transaccion");
     else if(statusMenu == "auth-delivery")
         $("#title-navbar").html("Delivery Autorizado");
+    else if(statusMenu == "historyCashes")
+        $("#title-navbar").html("Historial Efectivo");
     else if(statusMenu == "settings")
         $("#title-navbar").html("Configuraciones");
     

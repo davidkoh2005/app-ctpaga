@@ -58,7 +58,7 @@
     <p></p>
     <p></p>
 
-    <strong>Fecha:</strong> {{$startDate}} al {{$endDate}}<br>
+    <strong>Fecha:</strong> {{Carbon::parse($startDate)->format('Y-m-d')}} al {{Carbon::parse($endDate)->format('Y-m-d')}}<br>
     @endif
     <p></p>
     <p></p>

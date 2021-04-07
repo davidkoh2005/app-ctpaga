@@ -45,28 +45,18 @@
         use Carbon\Carbon;
     @endphp
 
-    @if(Auth::guard('admin')->check())
+    <p></p>
+    <p></p>
     <p></p>
     <p></p>
     <p></p>
     <p></p>
 
-    @else
-    <p></p>
-    <p></p>
-    <p></p>
-    <p></p>
-    <p></p>
-    <p></p>
     <div class="row">
         <div class="styleText">
             <strong>Fecha: </strong> {{Carbon::now()->format('Y-m-d')}}<br>
-            <strong>Nombre de la compañia: </strong> {{$commerceData->name}}<br>
-            <strong>Dirección: </strong> {{$commerceData->address}}<br>
-            <strong>Teléfono: </strong> {{$commerceData->phone}}<br>
         </div>
     </div>
-    @endif
     
     @if($startDate && $endDate)
     <p></p>
@@ -78,18 +68,18 @@
     <p></p>
 
     <div class="row">
-        <table id="table_Rate" class="table table-bordered mb-5 display">
+        <table id="table_id" class="table table-bordered mb-5 display">
             <thead>
                 <tr class="table-title">
-                    <th scope="col" width="30" style="background-color: #585858; color:white; text-align:center;">Fecha</th>
-                    <th scope="col" width="30" style="background-color: #585858; color:white; text-align:center;">Monto</th>
+                    <th scope="col" width="30" style="background-color: #585858; color:white; text-align:center;">Nombre Delivery</th>
+                    <th scope="col" width="30" style="background-color: #585858; color:white; text-align:center;">Total</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($rates as $rate)
+                @foreach($histories as $history)
                 <tr>
-                    <td style="text-align:center;">{{Carbon::parse($rate->date)->format('Y-m-d g:i A') }}</td>
-                    <td style="text-align:center;">Bs {{number_format($rate->rate, 2, ',', '.') }}</td>
+                    <td style="text-align:center;">{{ $history->name }}</td>
+                    <td style="text-align:center;">${{ number_format($history->total, 2, ',', '.') }}</td>
                 </tr>
                 @endforeach
             </tbody>

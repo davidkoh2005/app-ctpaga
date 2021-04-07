@@ -40,6 +40,8 @@ use App\Notifications\RetirementProductClient;
 use App\Notifications\RetirementProductCommerce;
 use App\Notifications\DeliveryProductClientInitial;
 use App\Notifications\DeliveryProductCommerceInitial;
+use CoinbaseCommerce\Resources\Charge;
+use CoinbaseCommerce\ApiClient;
 
 class DeliveryController extends Controller
 {
@@ -112,6 +114,22 @@ class DeliveryController extends Controller
 
         $document->type = $request->type;
         $document->save();
+
+        $count = count(Document::where('delivery_id', $delivery->id)->get());
+
+        $emailsGet = Settings::where('name','Email Delivery')->first();
+
+        if($emailsGet && $count == 4){
+            $emails = json_decode($emailsGet->value);
+            $messageAdmin = "el delivery ".$delivery->name." agrego todos los documentos correspondiente para el servicio de Delivery.";
+            foreach($emails as $email){
+                (new User)->forceFill([
+                    'email' => $email,
+                ])->notify(
+                    new NotificationAdmin($messageAdmin)
+                );
+            } 
+        }
 
         return response()->json([
             'statusCode' => 201,

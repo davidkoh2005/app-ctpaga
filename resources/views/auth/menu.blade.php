@@ -92,6 +92,12 @@
                 <p>Delivery Autorizado</p>
               </a>
             </li>
+            <li class="nav-item" id="nav-historyCashes">
+              <a href="{{route('admin.historyCashes')}}" class="nav-link">
+              <i class="material-icons">description</i>
+                <p>Historial Efectivo</p>
+              </a>
+            </li>
             <li class="nav-item" id="nav-settings">
               <a href="{{route('admin.settings')}}" class="nav-link">
               <i class="material-icons">settings</i>

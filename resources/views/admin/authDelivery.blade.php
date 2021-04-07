@@ -71,6 +71,7 @@
                         <td>
                             <a class="btn btn-bottom" href="{{route('admin.deliveryShow', ['id' => $delivery->id])}}" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Delivery"><i class="material-icons">visibility</i></a>
                             <button class="btn btn-bottom" onClick="showBalance('{{$delivery->id}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Efectivo"><i class="material-icons">account_balance_wallet</i></button>
+                            <a href="javascript:;" onClick="showHistory('{{$delivery->id}}')" class="btn btn-bottom" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Historial"><i class="material-icons">description</i></a>
                         </td>
                     </tr>
                     @endforeach
@@ -78,6 +79,10 @@
             </table>
         </div>
     </div>
+
+    <form id="formHistory"  method='POST' action="{{route('admin.historyCashes')}}">
+        <input type="hidden" id="idDelivery" name="idDelivery" value="0">
+    </form>
 
     <!--- Modal Delivery -->
     <div class="modal fade" id="deliveryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -226,6 +231,12 @@
                 $('#deliveryModal').modal('hide'); 
                 $('#showDelivery').html();
             });
+        }
+
+        function showHistory(id)
+        {
+            $('#idDelivery').val(id);
+            $('#formHistory').submit();
         }
     </script>
 </body>
