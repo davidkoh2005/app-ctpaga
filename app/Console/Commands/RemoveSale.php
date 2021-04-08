@@ -3,24 +3,24 @@
 namespace App\Console\Commands;
 
 use App\Paid;
-use App\Delivery;
+use App\Sale;
 use Illuminate\Console\Command;
 
-class ChangeStatus extends Command
+class RemoveSale extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'command:changeStatus';
+    protected $signature = 'command:removesale';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'change status delivery';
+    protected $description = 'remove sale without using';
 
     /**
      * Create a new command instance.
@@ -39,9 +39,15 @@ class ChangeStatus extends Command
      */
     public function handle()
     {
-        /* Paid::where('statusDelivery',1)->whereNull('idDelivery')->update(array('statusDelivery' => 0)); */
-        Delivery::where('statusAvailability',1)->update(array('statusAvailability' => 0));
+        $sales = Sale::leftJoin('paids', 'sales.codeUrl', '=', 'paids.codeUrl')
+                    ->whereNull('paids.nameCompanyPayments')
+                    ->select('sales.id','sales.codeUrl')->get();
 
+        foreach($sales as $sale)
+        {
+            $sale->delete();
+        }
+        
         $this->info('Se realizo el cambio correctamente!');
     }
 }
