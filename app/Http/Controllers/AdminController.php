@@ -1188,6 +1188,7 @@ class AdminController extends Controller
         HistoryCash::create([
             'delivery_id'   => $request->id,
             'total'         => $total,
+            'date'          => Carbon::now(),
         ]);
 
         Cash::where('delivery_id', $request->id)
@@ -1228,23 +1229,26 @@ class AdminController extends Controller
 
         $histories = HistoryCash::join('deliveries', 'deliveries.id', '=', 'history_cashes.delivery_id');
 
-        if($request->all()){
-            $idDelivery = $request->idDelivery != 0? $request->idDelivery : $idDelivery;
-            $searchNameDelivery=$request->searchNameDelovery;
-
-            $startDate=Carbon::parse($request->startDate);
-            $endDate=Carbon::parse($request->endDate);       
+        if($request->idDelivery){
+            $idDelivery = $request->idDelivery;
+            $histories = $histories->where('history_cashes.delivery_id', $idDelivery);
         }
 
-        if($idDelivery != 0){
-            $histories = $histories->where('history_cashes.delivery_id', $idDelivery);
+        if(!empty($request->searchNameDelivery)){
+            $searchNameDelivery=$request->searchNameDelivery;
+            $transactions->where('deliveries.name', 'like', "%" . $request->searchNameDelivery   . "%" );
+        }
+
+        if(!empty($request->startDate) && !empty($request->startDate)){
+            $startDate=Carbon::parse($request->startDate);
+            $endDate=Carbon::parse($request->endDate); 
         }
 
         $histories = $histories->whereDate('history_cashes.created_at', ">=",$startDate)
                     ->whereDate('history_cashes.created_at', "<=",$endDate)
                     ->select('history_cashes.id', 'deliveries.name', 'history_cashes.total', 'history_cashes.date')
                     ->get();
-
+ 
         if($request->statusFile == "PDF"){
             $pdf = \PDF::loadView('report.historyCashesPDF', compact('histories', 'searchNameDelivery', 'startDate', 'endDate'));
             return $pdf->download('ctpaga_historial.pdf');

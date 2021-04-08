@@ -122,8 +122,8 @@
             <tbody>
                 @foreach($rates as $rate)
                 <tr>
-                    <td>{{Carbon::parse($rate->date)->format('Y-m-d g:i A') }}</td>
-                    <td>Bs {{number_format($rate->rate, 2, ',', '.') }}</td>
+                    <td style="text-align:center;">{{Carbon::parse($rate->date)->format('Y-m-d g:i A') }}</td>
+                    <td style="text-align:center;">Bs {{number_format($rate->rate, 2, ',', '.') }}</td>
                 </tr>
                 @endforeach
             </tbody>

@@ -18,7 +18,7 @@ class CreateHistoryCashesTable extends Migration
             $table->id();
             $table->integer('delivery_id');
             $table->float("total", 20,2);
-            $table->String("date")->default(Carbon::now());
+            $table->String("date");
             $table->timestamps();
         });
     }

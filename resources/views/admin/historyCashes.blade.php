@@ -12,6 +12,9 @@
     <script src="{{ asset('js/dashboard/script.js') }}" type="text/javascript"></script>
 </head>
 <body class="body-admin">
+    @php
+        use Carbon\Carbon;
+    @endphp
     @include('auth.menu')
     <div class="main-panel">
       @include('auth.navbar')
@@ -33,9 +36,6 @@
 
                             <div class="mb-3 row">
                                 <label class="col-sm-2 col-form-label">Rango de Fecha</label>
-                                @php
-                                    use Carbon\Carbon;
-                                @endphp
                                 <div class="col">
                                     <div class="input-daterange input-group" id="datepicker-admin">
                                     <input type="text" class="form-control" name="startDate" placeholder="Fechan Inicial" value="{{Carbon::parse(str_replace('/','-',$startDate))->format('d/m/Y')}}" autocomplete="off"/>
@@ -79,6 +79,7 @@
                     <tr class="table-title">
                         <th scope="col">#</th>
                         <th scope="col">Nombre Delivery</th>
+                        <th scope="col">Fecha</th>
                         <th scope="col">Total</th>
                     </tr>
                 </thead>
@@ -87,6 +88,7 @@
                     <tr>
                         <td>{{ $history->id }}</td>
                         <td>{{ $history->name }}</td>
+                        <td>{{ Carbon::parse($history->date)->format('Y-m-d h:i A') }}</td>
                         <td>${{ number_format($history->total, 2, ',', '.') }}</td>
                     </tr>
                     @endforeach
@@ -104,6 +106,7 @@
             //$('.main-panel').perfectScrollbar({suppressScrollX: true, maxScrollbarLength: 200}); 
             $('#table_id').DataTable({
                 "scrollX": true,
+                "order": [[ 2, "desc" ]],
                 language: {
                     "decimal": "",
                     "emptyTable": "No hay información",

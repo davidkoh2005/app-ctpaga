@@ -78,15 +78,17 @@
                 <tr class="table-title">
                     <th scope="col">#</th>
                     <th scope="col">Nombre Delivery</th>
+                    <th scope="col">Fecha</th>
                     <th scope="col">Total</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($histories as $history)
                 <tr>
-                    <td>{{ $history->id }}</td>
-                    <td>{{ $history->name }}</td>
-                    <td>${{ number_format($history->total, 2, ',', '.') }}</td>
+                    <td style="text-align:center;">{{ $history->id }}</td>
+                    <td style="text-align:center;">{{ $history->name }}</td>
+                    <td style="text-align:center;">{{ Carbon::parse($history->date)->format('Y-m-d h:i A') }}</td>
+                    <td style="text-align:center;">$ {{ number_format($history->total, 2, ',', '.') }}</td>
                 </tr>
                 @endforeach
             </tbody>

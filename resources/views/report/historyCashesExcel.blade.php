@@ -71,14 +71,18 @@
         <table id="table_id" class="table table-bordered mb-5 display">
             <thead>
                 <tr class="table-title">
+                    <th scope="col" width="10" style="background-color: #585858; color:white; text-align:center;">#</th>
                     <th scope="col" width="30" style="background-color: #585858; color:white; text-align:center;">Nombre Delivery</th>
+                    <th scope="col" width="30" style="background-color: #585858; color:white; text-align:center;">Fecha</th>
                     <th scope="col" width="30" style="background-color: #585858; color:white; text-align:center;">Total</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($histories as $history)
                 <tr>
+                    <td style="text-align:center;">{{ $history->id }}</td>
                     <td style="text-align:center;">{{ $history->name }}</td>
+                    <td style="text-align:center;">{{ Carbon::parse($history->date)->format('Y-m-d h:i A') }}</td>
                     <td style="text-align:center;">${{ number_format($history->total, 2, ',', '.') }}</td>
                 </tr>
                 @endforeach
