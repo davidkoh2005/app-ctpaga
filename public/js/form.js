@@ -86,7 +86,13 @@ $(document).ready(function(){
         }
 
         if(index == 4){
-            if(dataShipping.length ==3)
+            if($('#selectState').val())
+                dataShipping.push($('#selectState').val());
+            
+            if($('#selectMunicipalities').val())
+                dataShipping.push($('#selectMunicipalities').val());
+
+            if(dataShipping.length == 6)
                 $(".form-navigation .next").addClass('btn-active');
             else
                 $(".form-navigation .next").removeClass('btn-active');

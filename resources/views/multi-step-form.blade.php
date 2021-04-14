@@ -6,6 +6,7 @@
     <title>CTpaga</title>
     @include('bookshop')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/styleForm.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css') }}">
     <style>
         .btn-bottom {
             width: 100%;
@@ -160,6 +161,26 @@
                                     <input type="text" name="name" id="name" class="form-control formDataShipping" data-parsley-minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" required />
                                     <label class="form" for="number">NUMERO DE CELULAR:</label>
                                     <input type="tel" name="number" id="number" class="form-control formDataShipping" placeholder="04121234567" size="11" maxlength="20" data-parsley-maxlength="20" data-parsley-pattern="^(?:(\+)58|0)(?:2(?:12|4[0-9]|5[1-9]|6[0-9]|7[0-8]|8[1-35-8]|9[1-5]|3[45789])|4(?:1[246]|2[46]))\d{7}$" required autocomplete="off" />
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-6 col-12">
+                                            <label class="form" for="address">Estado:</label>
+                                            <label class="content-select">
+                                                <select class="addMargin" name="selectState" id="selectState" disabled required="" data-parsley-required-message="Debe Seleccionar un Estado" >
+                                                    <option value="" selected>Seleccionar</option>
+                                                </select>
+                                            </label>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label class="form" for="address">Municipio:</label>
+                                            <label class="content-select">
+                                                <select class="addMargin" name="selectMunicipalities" id="selectMunicipalities" required="" data-parsley-required-message="Debe Seleccionar un Municipio">
+                                                    <option value="" selected>Seleccionar</option>
+                                                </select>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
                                     <label class="form" for="address">DIRECCÍON:</label>
                                     <textarea class="form-control formDataShipping" name="address" id="address" row="8" placeholder="Av. Principal los dos caminos. &#10; &#10;Punto Referencia: Al frente de Farmatodo." required style="height:100px !important"></textarea>
                                     <label class="form" for="details">DETALLE ADICIONALES (OPCIONAL)</label>
@@ -371,12 +392,60 @@
         var commerceName = "{{$commerce->name}}";
         var statusModification = {{$statusModification}};
         applicationId = "{{env('SQUARE_APP_ID')}}";
+        
+        var MUNICIPALITIES, STATE, arrayMunicipalities, arrayState;
 
         $('#iconClose').hide();
         $('#iconDone').hide();  
         $('#iconLoading').hide();  
 
-        $(document).ready(function(){
+        $.ajax({
+            'async': false,
+            'global': false,
+            'url': "{{ asset('json/state.json') }}",
+            'dataType': "json",
+            'success': function (data) {
+                STATE = data;
+                arrayState = State();
+                arrayState.forEach(showState);
+                $('#selectState option[value="Distrito Capital"]').attr('selected','selected');
+            }
+        });
+
+        $.ajax({
+            'async': false,
+            'global': false,
+            'url': "{{ asset('json/municipalities.json') }}",
+            'dataType': "json",
+            'success': function (data) {
+                MUNICIPALITIES = data;
+                arrayMunicipalities = Municipalities('Distrito Capital');
+                console.log(arrayMunicipalities);
+                arrayMunicipalities.forEach(showMunicipalities);
+
+            }
+        });
+
+        function showState(item, index) {
+            console.log("estadp: "+item);
+            $('#selectState').append('<option value="'+item+'">'+item+'</option>');
+        }
+
+        function showMunicipalities(item, index) {
+            console.log("municipio: "+item);
+            $('#selectMunicipalities').append('<option value="'+item+'">'+item+'</option>');
+        }
+
+        $(document).ready(function(){           
+
+            $('#selectState').on('change', function() {
+                $('#selectMunicipalities').prop('disabled', 'disabled');
+
+                arrayMunicipalities = Municipalities(this.value);
+                arrayMunicipalities.forEach(showMunicipalities);
+                $('#selectMunicipalities').prop('disabled', false);
+            });
+
             function delay(callback, ms) {
                 var timer = 0;
                 return function() {
@@ -441,6 +510,30 @@
                 });
             });
         });
+
+        function Municipalities(State){
+            try {
+                if(typeof State === 'string'){
+                    if(MUNICIPALITIES[State]){                    
+                        return MUNICIPALITIES[State];
+                    }else{
+                        return '*** Solo Valido para Estados Venezolanos ***'
+                    }
+                } else{
+                    return '**** Especifique un String con el valor del Estado a Consultar ****';
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        function State(){
+            try {
+                return STATE['State'];
+            } catch (error) {
+                console.error(error);
+            }
+        }
     </script>
 </body>
 </html>

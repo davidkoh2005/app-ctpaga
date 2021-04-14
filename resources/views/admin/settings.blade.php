@@ -32,6 +32,9 @@
                     <li class="nav-item" role="presentation">
                         <a class="nav-link settings" id="pills-email-tab" href="#pills-email" data-toggle="tab">Correo Electrónico</a>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link settings" id="pills-cost-tab" href="#pills-cost" data-toggle="tab">Costo Delivery</a>
+                    </li>
                 </ul>
                 <div class="row">&nbsp;</div>
                 <div class="row">&nbsp;</div>
@@ -147,6 +150,13 @@
                                 <div class="col-6 mx-auto">
                                     <button type="submit" class="submit btn btn-bottom" id="submitEmail">Guardar</button>
                                 </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade has-success" id="pills-cost" role="tabpanel" aria-labelledby="pills-cost-tab">
+                        <form action="" method="post">
+                            <div class="row">
+                                <h4 class="mx-auto">Ingrese el costo de Delivery:</h4>
                             </div>
                         </form>
                     </div>

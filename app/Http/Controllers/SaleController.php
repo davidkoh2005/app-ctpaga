@@ -229,6 +229,8 @@ class SaleController extends Controller
             "email"                 => $emailClient,
             "nameShipping"          => null,
             "numberShipping"        => null,
+            "state"                 => null,
+            "municipalities"        => null,
             "addressShipping"       => null,
             "detailsShipping"       => null,
             "selectShipping"        => null,
