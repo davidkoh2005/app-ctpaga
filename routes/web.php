@@ -111,6 +111,8 @@ Route::group(['middleware'=>'admin'], function() {
     Route::get('/admin/configuraciones', 'AdminController@settings')->name('admin.settings');
     Route::post('/admin/settingsSchedule', 'AdminController@settingsSchedule')->name('admin.settingsSchedule');
     Route::post('/admin/settingsEmails', 'AdminController@settingsEmails')->name('admin.settingsEmails');
+    Route::post('/admin/settingsCosts', 'AdminController@settingsCosts')->name('admin.settingsCosts');
+    Route::post('/admin/listCost', 'AdminController@listCost')->name('admin.listCost');
 });
 
 Route::post('/admin/removePicture', 'AdminController@removePicture')->name('admin.removePicture');

@@ -115,7 +115,7 @@
                             <td>{{ $transaction->nameClient}}</td>
                             <td>{{ $transaction->codeUrl}}</td>
                             <td>@if($transaction->coin == 0) $ @else Bs @endif {{ $transaction->total}}</td>
-                            <td>@if($transaction->nameCompanyPayments == "PayPal" || $transaction->nameCompanyPayments == "E-Sitef" ) Tienda Web @else {{$transaction->nameCompanyPayments}} @endif</td>
+                            <td>@if($transaction->nameCompanyPayments == "PayPal" || $transaction->nameCompanyPayments == "E-Sitef" || $transaction->nameCompanyPayments == "Square" || $transaction->nameCompanyPayments == "Bitcoin" ) Tienda Web @else {{$transaction->nameCompanyPayments}} @endif</td>
                             <td>
                                 @if($transaction->statusPayment == 0)
                                     <div class="cancelled">Cancelado</div>

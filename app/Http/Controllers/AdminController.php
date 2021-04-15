@@ -24,6 +24,7 @@ use App\Product;
 use App\Service;
 use App\Settings;
 use App\HistoryCash;
+use App\DeliveryCost;
 use Carbon\Carbon;
 use App\Notifications\UserPaused;
 use App\Notifications\UserRejected;
@@ -374,12 +375,8 @@ class AdminController extends Controller
 
         if($request->all()){
             $idCommerce = $idCommerce == 0? $request->idCommerce : $idCommerce;
-            $searchNameCompany=$request->searchNameCompany;
-            $searchNameClient=$request->searchNameClient;
-            $selectCoin=$request->selectCoin;
-            $selectPayment=$request->selectPayment;
-            $startDate=Carbon::parse($request->startDate);
-            $endDate=Carbon::parse($request->endDate);
+            $startDate=Carbon::createFromFormat('d/m/Y', $request->startDate)->format('Y-m-d');
+            $endDate=Carbon::createFromFormat('d/m/Y', $request->endDate)->format('Y-m-d');
         }
 
 
@@ -592,8 +589,8 @@ class AdminController extends Controller
             $searchNameCompany=$request->searchNameCompany;
             $numRef=$request->numRef;
             $selectCoin=$request->selectCoin;
-            $startDate=Carbon::parse($request->startDate);
-            $endDate=Carbon::parse($request->endDate);
+            $startDate=Carbon::createFromFormat('d/m/Y', $request->startDate)->format('Y-m-d');
+            $endDate=Carbon::createFromFormat('d/m/Y', $request->endDate)->format('Y-m-d');
         }
 
         $deposits = DB::table('deposits')
@@ -820,8 +817,8 @@ class AdminController extends Controller
         $endDate = Carbon::now()->format('Y-m-d');
         
         if($request->all()){
-            $startDate=Carbon::parse($request->startDate);
-            $endDate=Carbon::parse($request->endDate);
+            $startDate=Carbon::createFromFormat('d/m/Y', $request->startDate)->format('Y-m-d');
+            $endDate=Carbon::createFromFormat('d/m/Y', $request->endDate)->format('Y-m-d');
         }
 
 
@@ -926,9 +923,6 @@ class AdminController extends Controller
         $scheduleInitial = array('hours' => '', 'min' => '', 'anteMeridiem' => '');
         $scheduleFinal = array('hours' => '', 'min' => '', 'anteMeridiem' => '');
 
-        
-        $statusMenu="settings";
-
         $scheduleInitialGet = Settings::where("name", "Horario Inicial")->first(); 
         $scheduleFinalGet = Settings::where("name", "Horario Final")->first(); 
         $emailsAllPaid = Settings::where("name", "Email Transaccion")->first();
@@ -940,8 +934,11 @@ class AdminController extends Controller
             $scheduleFinal = $this->getTime($scheduleFinalGet->value); 
         }
 
+        $statusMenu="settings";
+
         return view('admin.settings', compact('statusMenu', 'emailsAllPaid', 'emailsAllDelivery', 'statusPaidAll', 'scheduleInitial', 'scheduleFinal'));
     }
+    
 
     public function getTime($value)
     {
@@ -983,6 +980,31 @@ class AdminController extends Controller
         ],[
             'value' => $value,
         ]);
+    }
+
+    public function settingsCosts(Request $request)
+    {
+        $count = 0;
+        foreach($request->listMunicipalities as $item)
+        {
+            $cost = app('App\Http\Controllers\Controller')->getPrice($request->listCost[$count]);
+            $deliveryCost = DeliveryCost::firstOrNew([
+                'state'             => $request->selectState,
+                'municipalities'    => $item,
+            ]);
+
+            $deliveryCost->cost = floatval($cost);
+            $deliveryCost->save();
+
+            $count++;
+        }
+        return redirect(route('admin.settings'));
+    }
+
+    public function listCost()
+    {
+        $deliveryCosts = DeliveryCost::all();
+        return response()->json(array('list'=>$deliveryCosts));
     }
 
     public function showDelivery(Request $request)
@@ -1240,8 +1262,8 @@ class AdminController extends Controller
         }
 
         if(!empty($request->startDate) && !empty($request->startDate)){
-            $startDate=Carbon::parse($request->startDate);
-            $endDate=Carbon::parse($request->endDate); 
+            $startDate=Carbon::createFromFormat('d/m/Y', $request->startDate)->format('Y-m-d');
+            $endDate=Carbon::createFromFormat('d/m/Y', $request->endDate)->format('Y-m-d'); 
         }
 
         $histories = $histories->whereDate('history_cashes.created_at', ">=",$startDate)

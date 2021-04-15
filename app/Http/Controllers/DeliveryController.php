@@ -16,6 +16,7 @@ use App\Deposits;
 use App\Settings;
 use App\Email;
 use App\Cash;
+use App\DeliveryCost;
 use App\Events\StatusDelivery;
 use App\Events\AlarmUrgent;
 use App\Events\NewNotification;

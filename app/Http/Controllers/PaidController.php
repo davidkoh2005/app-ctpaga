@@ -30,6 +30,7 @@ use App\Balance;
 use App\Shipping;
 use App\Settings;
 use App\Delivery;
+use App\DeliveryCost;
 use Session;
 use AWS;
 use PayPal\Api\Amount;
@@ -983,13 +984,23 @@ class PaidController extends Controller
                 "coin"          => $paid->coin,
             ]);
 
+            $costDelivery = 0;
+
+
+            $listCost = DeliveryCost::select('cost')->where('state', $paid->state)
+                                    ->where('municipalities', $paid->municipalities)
+                                    ->first();
+
+            if($listCost)
+                $costDelivery = $listCost->cost;
+            
             if($paid->coin == 0){
-                $balance->total += floatval($paid->total)-(floatval($paid->total)*0.05+0.35);
+                $balance->total += floatval($paid->total)-(floatval($paid->total)*0.05+0.35)-$costDelivery;
                 $balance->save();
             }else{
                 $rateAdmin = Rate::where("roleRate",0)->orderBy("created_at","desc")->first();
         
-                $balance->total += floatval($paid->total)-(floatval($paid->total)*0.05+(0.35*floatval($rateAdmin->rate)));
+                $balance->total += floatval($paid->total)-(floatval($paid->total)*0.05+(0.35*floatval($rateAdmin->rate)))-($costDelivery*floatval($rateAdmin->rate));
                 $balance->save();
             }
 

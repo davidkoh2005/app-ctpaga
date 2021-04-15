@@ -162,9 +162,10 @@ class CommerceController extends Controller
             $searchNameClient=$request->searchNameClient;
             $selectCoin=$request->selectCoin;
             $selectPayment=$request->selectPayment;
-            $startDate=Carbon::parse($request->startDate);
-            $endDate=Carbon::parse($request->endDate);
+            $startDate=Carbon::createFromFormat('d/m/Y', $request->startDate)->format('Y-m-d');
+            $endDate=Carbon::createFromFormat('d/m/Y', $request->endDate)->format('Y-m-d');
         }
+        
 
         if(!empty($request->idCommerce))
             $transactions = $transactions->where('commerces.id', $idCommerce); 
@@ -223,8 +224,8 @@ class CommerceController extends Controller
         
         if($request->all()){
             $selectCoin=$request->selectCoin? $request->selectCoin : 0;
-            $startDate=Carbon::parse($request->startDate);
-            $endDate=Carbon::parse($request->endDate);
+            $startDate=Carbon::createFromFormat('d/m/Y', $request->startDate)->format('Y-m-d');
+            $endDate=Carbon::createFromFormat('d/m/Y', $request->endDate)->format('Y-m-d');
         }
 
 
@@ -292,8 +293,8 @@ class CommerceController extends Controller
         
         if($request->all()){
             $selectCoin=$request->selectCoin? $request->selectCoin : 0;
-            $startDate=Carbon::parse($request->startDate);
-            $endDate=Carbon::parse($request->endDate);
+            $startDate=Carbon::createFromFormat('d/m/Y', $request->startDate)->format('Y-m-d');
+            $endDate=Carbon::createFromFormat('d/m/Y', $request->endDate)->format('Y-m-d');
         }
 
 
@@ -405,8 +406,8 @@ class CommerceController extends Controller
         $endDate = Carbon::now()->format('Y-m-d');
         
         if($request->all() && !$request->commerceId){
-            $startDate=Carbon::parse($request->startDate);
-            $endDate=Carbon::parse($request->endDate);
+            $startDate=Carbon::createFromFormat('d/m/Y', $request->startDate)->format('Y-m-d');
+            $endDate=Carbon::createFromFormat('d/m/Y', $request->endDate)->format('Y-m-d');
         }
 
 

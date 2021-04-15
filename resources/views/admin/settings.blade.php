@@ -10,6 +10,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/settings.css') }}">
     @include('admin.bookshop')
     <script type="text/javascript" src="{{ asset('js/transactions.js') }}"></script>
+    <script src="{{ asset('js/stateMunicipalities.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/bookshop/jquery.maskMoney.min.js') }}"></script>
     
     <!-- libreria multi emails -->
     <link rel="stylesheet" type="text/css" href="{{ asset('css//bookshop/jquery.multi-emails.css') }}">
@@ -154,9 +156,29 @@
                         </form>
                     </div>
                     <div class="tab-pane fade has-success" id="pills-cost" role="tabpanel" aria-labelledby="pills-cost-tab">
-                        <form action="" method="post">
+                        <form id="formCost" action="{{route('admin.settingsCosts')}}" method="post">
                             <div class="row">
                                 <h4 class="mx-auto">Ingrese el costo de Delivery:</h4>
+                            </div>
+                            <div class="row">
+                                <label class="form"><strong>Estado:</strong></label>
+                                <label class="content-select">
+                                    <select class="addMargin" name="selectState" id="selectState" required="" data-parsley-required-message="Debe Seleccionar un Estado" >
+                                        <option value="" selected>Seleccionar</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="row">&nbsp;</div>
+                            <div class="row showTextMunicipalities">
+                                <label class="form"><strong>Municipio:</strong></label>
+                            </div>
+                            <div class="row">&nbsp;</div>
+                            <div id="showCost" class="mx-auto row"></div>
+                            <div class="row">&nbsp;</div>
+                            <div class="row showTextMunicipalities" >
+                            <div class="col-6 mx-auto">
+                                    <button type="submit" class="submit btn btn-bottom" id="submitCost">Guardar</button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -171,6 +193,7 @@
     @include('admin.bookshopBottom')
     <script> 
         $( ".loader" ).fadeOut("slow"); 
+        $(".showTextMunicipalities").hide();
         var statusMenu = "{{$statusMenu}}";
 
         var hoursInitial = "{{$scheduleInitial['hours']}}";
@@ -180,7 +203,8 @@
         var hoursFinal = "{{$scheduleFinal['hours']}}";
         var minFinal = "{{$scheduleFinal['min']}}";
         var anteMeridiemFinal = "{{$scheduleFinal['anteMeridiem']}}";
-
+        var MUNICIPALITIES, STATE, arrayMunicipalities, arrayState, listDeliveryCost;
+;
 
         $("#hoursInitial option[value='"+ hoursInitial +"']").attr("selected",true);
         $("#minInitial option[value='"+ minInitial +"']").attr("selected",true);
@@ -189,7 +213,57 @@
         $("#hoursFinal option[value='"+ hoursFinal +"']").attr("selected",true);
         $("#minFinal option[value='"+ minFinal +"']").attr("selected",true);
         $("#anteMeridiemFinal option[value='"+ anteMeridiemFinal +"']").attr("selected",true);
+        
+        $.ajax({
+            url: "{{ route('admin.listCost')}}", 
+            type: "POST",
+            dataType: "json"
+        }).done(function(data){
+            listDeliveryCost = data.list; 
+            console.log(listDeliveryCost);
+        }).fail(function(){  
+            alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');               
+        });
 
+        $.ajax({
+            'async': false,
+            'global': false,
+            'url': "{{ asset('json/state.json') }}",
+            'dataType': "json",
+            'success': function (data) {
+                STATE = data;
+                arrayState = State();
+                arrayState.forEach(showState);
+                /* $('#selectState option[value="Distrito Capital"]').attr('selected','selected'); */
+            }
+        });
+
+        $.ajax({
+            'async': false,
+            'global': false,
+            'url': "{{ asset('json/municipalities.json') }}",
+            'dataType': "json",
+            'success': function (data) {
+                MUNICIPALITIES = data;
+                /* arrayMunicipalities = Municipalities('Distrito Capital');
+                console.log(arrayMunicipalities);
+                arrayMunicipalities.forEach(showMunicipalities); */
+
+            }
+        }); 
+
+        function showState(item, index) {
+            if(item == 'Distrito Capital' || item == 'Miranda')
+                $('#selectState').append('<option value="'+item+'">'+item+'</option>');
+        }
+
+        function showMunicipalities(item, index) {
+            var indexList = listDeliveryCost.findIndex(x => x.state === $('#selectState').val() && x.municipalities === item);
+            if(indexList >=0)
+                $('#showCost').append('<div class="mb-3 col-md-6 col-12"><div class="row"><label class="col col-form-label">'+item+': </label><div class="col-6"><input type="hidden" name="listMunicipalities[]" value="'+item+'"> <input class="form-control deliveryCost" type="text" name="listCost[]" autocomplete="off" value="'+listDeliveryCost[indexList].cost+'"></div></div></div>');
+            else
+            $('#showCost').append('<div class="mb-3 col-md-6 col-12"><div class="row"><label class="col col-form-label">'+item+': </label><div class="col-6"><input type="hidden" name="listMunicipalities[]" value="'+item+'"> <input class="form-control deliveryCost" type="text" name="listCost[]" autocomplete="off"></div></div></div>');
+        }
 
         $('#submitSchedule').on('click', function(e) {
             e.preventDefault();
@@ -223,12 +297,26 @@
             $('#formEmails').submit();
         });
 
+        $('#submitCost').on('click', function(e) {
+            e.preventDefault();
+            $( ".loader" ).fadeIn("slow"); 
+            $('#formCost').submit();
+        });
+
 
         $(document).ready(function() {
             $("form").keypress(function(e) {
                 if (e.which == 13) {
                     return false;
                 }
+            });
+
+            $('#selectState').on('change', function() {
+                $(".showTextMunicipalities").show();
+                $('#showCost').html('');
+                arrayMunicipalities = Municipalities(this.value);
+                arrayMunicipalities.forEach(showMunicipalities);
+                $(".deliveryCost").maskMoney({thousands:'.', decimal:',', allowZero:true, prefix:'$ '});
             });
 
         });

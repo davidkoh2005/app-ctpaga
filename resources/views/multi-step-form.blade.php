@@ -15,6 +15,8 @@
     <script src="{{ asset('js/form.js') }}"></script>
     <script src="{{ asset('js/i18n/es.js') }}"></script>
     <script src="{{ asset('js/global.js') }}"></script>
+    <script src="{{ asset('js/stateMunicipalities.js') }}"></script>
+
     @if($coinClient==0)
     <!-- link to the SqPaymentForm library -->
     <script type="text/javascript" src="https://js.squareupsandbox.com/v2/paymentform">
@@ -164,17 +166,17 @@
                                     <br>
                                     <div class="row">
                                         <div class="col-md-6 col-12">
-                                            <label class="form" for="address">Estado:</label>
+                                            <label class="form" for="address">Estado:</label> <br>
                                             <label class="content-select">
-                                                <select class="addMargin" name="selectState" id="selectState" disabled required="" data-parsley-required-message="Debe Seleccionar un Estado" >
+                                                <select class="addMargin" name="selectState" id="selectState" required="" data-parsley-required-message="Debe Seleccionar un Estado" >
                                                     <option value="" selected>Seleccionar</option>
                                                 </select>
                                             </label>
                                         </div>
                                         <div class="col-md-6 col-12">
-                                            <label class="form" for="address">Municipio:</label>
+                                            <label class="form" for="address">Municipio:</label> <br>
                                             <label class="content-select">
-                                                <select class="addMargin" name="selectMunicipalities" id="selectMunicipalities" required="" data-parsley-required-message="Debe Seleccionar un Municipio">
+                                                <select class="addMargin" name="selectMunicipalities" id="selectMunicipalities" disabled required="" data-parsley-required-message="Debe Seleccionar un Municipio">
                                                     <option value="" selected>Seleccionar</option>
                                                 </select>
                                             </label>
@@ -408,7 +410,7 @@
                 STATE = data;
                 arrayState = State();
                 arrayState.forEach(showState);
-                $('#selectState option[value="Distrito Capital"]').attr('selected','selected');
+                /* $('#selectState option[value="Distrito Capital"]').attr('selected','selected'); */
             }
         });
 
@@ -419,20 +421,19 @@
             'dataType': "json",
             'success': function (data) {
                 MUNICIPALITIES = data;
-                arrayMunicipalities = Municipalities('Distrito Capital');
+                /* arrayMunicipalities = Municipalities('Distrito Capital');
                 console.log(arrayMunicipalities);
-                arrayMunicipalities.forEach(showMunicipalities);
+                arrayMunicipalities.forEach(showMunicipalities); */
 
             }
-        });
+        }); 
 
         function showState(item, index) {
-            console.log("estadp: "+item);
-            $('#selectState').append('<option value="'+item+'">'+item+'</option>');
+            if(item == 'Distrito Capital' || item == 'Miranda')
+                $('#selectState').append('<option value="'+item+'">'+item+'</option>');
         }
 
         function showMunicipalities(item, index) {
-            console.log("municipio: "+item);
             $('#selectMunicipalities').append('<option value="'+item+'">'+item+'</option>');
         }
 
@@ -440,7 +441,8 @@
 
             $('#selectState').on('change', function() {
                 $('#selectMunicipalities').prop('disabled', 'disabled');
-
+                $('#selectMunicipalities option').remove();
+                $('#selectMunicipalities').append('<option value="" selected>Seleccionar</option>');
                 arrayMunicipalities = Municipalities(this.value);
                 arrayMunicipalities.forEach(showMunicipalities);
                 $('#selectMunicipalities').prop('disabled', false);
@@ -510,30 +512,6 @@
                 });
             });
         });
-
-        function Municipalities(State){
-            try {
-                if(typeof State === 'string'){
-                    if(MUNICIPALITIES[State]){                    
-                        return MUNICIPALITIES[State];
-                    }else{
-                        return '*** Solo Valido para Estados Venezolanos ***'
-                    }
-                } else{
-                    return '**** Especifique un String con el valor del Estado a Consultar ****';
-                }
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
-        function State(){
-            try {
-                return STATE['State'];
-            } catch (error) {
-                console.error(error);
-            }
-        }
     </script>
 </body>
 </html>
