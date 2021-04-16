@@ -260,9 +260,9 @@
         function showMunicipalities(item, index) {
             var indexList = listDeliveryCost.findIndex(x => x.state === $('#selectState').val() && x.municipalities === item);
             if(indexList >=0)
-                $('#showCost').append('<div class="mb-3 col-md-6 col-12"><div class="row"><label class="col col-form-label">'+item+': </label><div class="col-6"><input type="hidden" name="listMunicipalities[]" value="'+item+'"> <input class="form-control deliveryCost" type="text" name="listCost[]" autocomplete="off" value="'+listDeliveryCost[indexList].cost+'"></div></div></div>');
+                $('#showCost').append('<div class="mb-3 col-md-6 col-12"><div class="row"><label class="">'+item+': </label><div class="col-6"><input type="hidden" name="listMunicipalities[]" value="'+item+'"> <input class="form-control deliveryCost" type="text" name="listCost[]" autocomplete="off" required value="'+listDeliveryCost[indexList].cost+'"></div></div></div>');
             else
-            $('#showCost').append('<div class="mb-3 col-md-6 col-12"><div class="row"><label class="col col-form-label">'+item+': </label><div class="col-6"><input type="hidden" name="listMunicipalities[]" value="'+item+'"> <input class="form-control deliveryCost" type="text" name="listCost[]" autocomplete="off"></div></div></div>');
+            $('#showCost').append('<div class="mb-3 col-md-6 col-12"><div class="row"><label class="">'+item+': </label><div class="col-6"><input type="hidden" name="listMunicipalities[]" value="'+item+'"> <input class="form-control deliveryCost" type="text" name="listCost[]" autocomplete="off" required></div></div></div>');
         }
 
         $('#submitSchedule').on('click', function(e) {
@@ -295,12 +295,6 @@
             e.preventDefault();
             $( ".loader" ).fadeIn("slow"); 
             $('#formEmails').submit();
-        });
-
-        $('#submitCost').on('click', function(e) {
-            e.preventDefault();
-            $( ".loader" ).fadeIn("slow"); 
-            $('#formCost').submit();
         });
 
 
