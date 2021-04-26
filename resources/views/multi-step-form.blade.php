@@ -100,7 +100,7 @@
                             </div>
                             <div class= "form-section center">
                                 <div id="saleQuantity"></div>
-                                <button type="button" class="remove btn btn-remove"><i class="fa fa-trash" aria-hidden="true"></i> Eliminar</button>
+                                <button type="button" class="remove btn btn-remove"><i class="fa fa-trash" aria-hidden="true"></i> Eliminar Producto</button>
                                 <div class="numPad">
                                     <div class="row">
                                         <div class="col" onclick="addNum(1)">1</div>
@@ -414,7 +414,7 @@
             }
         });
 
-        $.ajax({
+        /* $.ajax({
             'async': false,
             'global': false,
             'url': "{{ asset('json/municipalities.json') }}",
@@ -423,18 +423,20 @@
                 MUNICIPALITIES = data;
                 /* arrayMunicipalities = Municipalities('Distrito Capital');
                 console.log(arrayMunicipalities);
-                arrayMunicipalities.forEach(showMunicipalities); */
+                arrayMunicipalities.forEach(showMunicipalities); 
 
             }
-        }); 
+        });  */
 
         function showState(item, index) {
             if(item == 'Distrito Capital' || item == 'Miranda')
                 $('#selectState').append('<option value="'+item+'">'+item+'</option>');
         }
 
-        function showMunicipalities(item, index) {
-            $('#selectMunicipalities').append('<option value="'+item+'">'+item+'</option>');
+        function showMunicipalities(listMunicipalities) {
+            $.each(listMunicipalities, function (key, value) {
+                $('#selectMunicipalities').append('<option value="'+value+'">'+value+'</option>');
+            });
         }
 
         $(document).ready(function(){           
@@ -443,9 +445,21 @@
                 $('#selectMunicipalities').prop('disabled', 'disabled');
                 $('#selectMunicipalities option').remove();
                 $('#selectMunicipalities').append('<option value="" selected>Seleccionar</option>');
-                arrayMunicipalities = Municipalities(this.value);
-                arrayMunicipalities.forEach(showMunicipalities);
-                $('#selectMunicipalities').prop('disabled', false);
+                if(this.value != '')
+                    $.ajax({
+                        url: "{{route('show.municipalities')}}", 
+                        data: {"states" : this.value},
+                        type: "POST",
+                    }).done(function(result){
+                        if(result.statusCode == 201){
+                            arrayMunicipalities=result.data;
+                            arrayMunicipalities.forEach(showMunicipalities);
+                            $('#selectMunicipalities').prop('disabled', false);
+                        }
+
+                    }).fail(function(result){
+                        alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                    });
             });
 
             function delay(callback, ms) {
@@ -500,16 +514,16 @@
                 }
             });
 
-            $('.save').on('click', function(){
+            $('.remove').on('click', function(){
                 $.ajax({
-                    url: "{{route('sale.modifysale')}}", 
+                    url: "{{route('sale.removeSale')}}", 
                     data: {"sale_id" : _selectSale, "userUrl": "{{$userUrl}}", "codeUrl": "{{$codeUrl}}" },
                     type: "POST",
                 }).done(function(result){
                     window.location=result.url;
                 }).fail(function(result){
                     alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
-                });
+                }); 
             });
         });
     </script>

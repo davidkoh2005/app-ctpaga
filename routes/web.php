@@ -142,6 +142,7 @@ Route::get('pedido/{codeUrl}/', 'PaidController@billing');
 
 Route::get('/{userUrl}/', 'SaleController@indexStore')->name('form.store');
 Route::get('/{userUrl}/{codeUrl}/{statusModification?}', 'SaleController@index');
+Route::post('showMunicipalities', 'SaleController@showMunicipalities')->name('show.municipalities');;
 Route::post('verify', 'SaleController@verifyDiscount');
 Route::post('showCategories', 'SaleController@showCategories')->name('show.categories');
 Route::post('showProductsServices', 'SaleController@showProductsServices')->name('show.productsServices');

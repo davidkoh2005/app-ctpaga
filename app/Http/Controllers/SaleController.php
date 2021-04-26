@@ -18,6 +18,7 @@ use App\Discount;
 use App\Product;
 use App\Service;
 use App\Category;
+use App\DeliveryCost;
 
 class SaleController extends Controller
 {
@@ -384,6 +385,24 @@ class SaleController extends Controller
             'statusCode' => 201,
             'message' => 'Show Sale',
             'data'  => $sales,
+        ]);
+    }
+
+    public function showMunicipalities(Request $request){
+        $data = file_get_contents("json/municipalities.json");
+        $states = json_decode($data, true);
+
+        foreach($states as $key => $state){
+            if($key == $request->states){
+                $municipalities = DeliveryCost::where('state',$request->states)->where('cost','>=',1)
+                                    ->select('municipalities')->get();
+            }
+        }
+
+        return response()->json([
+            'statusCode' => 201,
+            'message' => 'Show municipalities',
+            'data'  => $municipalities,
         ]);
     }
 }

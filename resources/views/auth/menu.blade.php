@@ -56,6 +56,12 @@
                 </li>
               </ul>
             </li>
+            <li class="nav-item" id="nav-court">
+              <a href="javascript:;" class="nav-link">
+              <i class="material-icons">price_check</i>
+                <p>Corte Depositos</p>
+              </a>
+            </li>
             <li class="nav-item" id="nav-commerces">
               <a class="nav-link" href="{{route('admin.commerces')}}">
                 <i class="material-icons">store</i>
@@ -78,12 +84,6 @@
               <a class="nav-link" href="{{route('admin.showRate')}}">
               <i class="material-icons">attach_money</i>
                 <p>Tasas</p>
-              </a>
-            </li>
-            <li class="nav-item" id="nav-court">
-              <a href="javascript:;" class="nav-link">
-              <i class="material-icons">price_check</i>
-                <p>Corte Depositos</p>
               </a>
             </li>
             <li class="nav-item" id="nav-auth-delivery">
