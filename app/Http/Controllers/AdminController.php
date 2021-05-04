@@ -31,6 +31,7 @@ use App\Notifications\UserRejected;
 use App\Notifications\PictureRemove;
 use App\Notifications\ConfirmBank;
 use App\Notifications\SendDeposits;
+use App\Notifications\SendDepositsProcess;
 use App\Notifications\PostPurchase;
 use App\Notifications\PaymentConfirm;
 use App\Notifications\PaymentCancel;
@@ -434,6 +435,16 @@ class AdminController extends Controller
             $deposits->status = $request->status;
             $deposits->numRef = "";
             $deposits->save();
+
+            if(intval($request->status) == 2){
+                $user = User::whereId($deposits->user_id)->first();
+
+                (new User)->forceFill([
+                    'email' => $user->email,
+                ])->notify(
+                    new SendDepositsProcess($user, $deposits)
+                ); 
+            }
         }
         
         return response()->json(array('status' => 201));

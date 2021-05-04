@@ -27,6 +27,7 @@ use App\Notifications\NewDelivery;
 use App\Notifications\UserPaused;
 use App\Notifications\UserRejected;
 use App\Notifications\SendDeposits;
+use App\Notifications\SendDepositsProcess;
 use App\Notifications\PaymentCancel;
 use App\Notifications\PaymentConfirm;
 use App\Notifications\PaymentVerification;
@@ -220,8 +221,8 @@ class DeliveryController extends Controller
 
     public function test()
     {
-
-        /* $user = User::where('email', 'angelgoitia1995@gmail.com')->first();
+        /*
+        $user = User::where('email', 'angelgoitia1995@gmail.com')->first();
         $deposits = Deposits::where('user_id', $user->id)->first();
         $paid = Paid::where('email', 'angelgoitia1995@gmail.com')->first();
         $commerce = Commerce::whereId($paid->commerce_id)->first();
@@ -230,7 +231,7 @@ class DeliveryController extends Controller
         $delivery = Delivery::where('email', 'angelgoitia1995@gmail.com')->first();
 
         $messageAdmin = $messageAdmin = " el delivery ".$delivery->name." entrego los productos de código de compra: ".$paid->codeUrl." a su destino.";
- */
+
         /* (new User)->forceFill([
             'email' => $paid->email,
         ])->notify(
@@ -287,6 +288,12 @@ class DeliveryController extends Controller
             'email' => $user->email,
         ])->notify(
             new SendDeposits($user, $deposits)
+        ); 
+
+        (new User)->forceFill([
+            'email' => $user->email,
+        ])->notify(
+            new SendDepositsProcess($user, $deposits)
         ); 
 
         (new User)->forceFill([

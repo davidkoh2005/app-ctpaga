@@ -37,11 +37,14 @@
                     <li class="nav-item" role="presentation">
                         <a class="nav-link settings" id="pills-cost-tab" href="#pills-cost" data-toggle="tab">Costo Delivery</a>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link settings" id="pills-transfer-tab" href="#pills-transfer" data-toggle="tab">Transferencia y Pago móvil</a>
+                    </li>
                 </ul>
                 <div class="row">&nbsp;</div>
                 <div class="row">&nbsp;</div>
-                <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="pills-delivery" role="tabpanel" aria-labelledby="pills-delivery-tab">
+                <div class="tab-content" id="pills-delivery">
+                    <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="pills-delivery-tab">
                         <form id="formSchedule" class="contact-form" method='POST' action="{{route('admin.settingsSchedule')}}">
                             <div class="row">
                                 <h4 class="mx-auto">Ingrese el horario de Delivery:</h4>
@@ -180,6 +183,18 @@
                                     <button type="submit" class="submit btn btn-bottom" id="submitCost">Guardar</button>
                                 </div>
                             </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade has-success" id="pills-transf" role="tabpanel" aria-labelledby="pills-cost-tab">
+                        <form id="formTransf" action="{{route('admin.settingsCosts')}}" method="post">
+                            <div class="row">
+                                <h4 class="mx-auto">Transferencia:</h4>
+                            </div>
+                            <div id="showTransf" class="mx-auto row"></div>
+                            <div class="row">
+                                <h4 class="mx-auto">Pago móvil:</h4>
+                            </div>
+                            <div id="showPay" class="mx-auto row"></div>
                         </form>
                     </div>
                 </div>
