@@ -23,6 +23,7 @@ use App\Document;
 use App\Product;
 use App\Service;
 use App\Settings;
+use App\SettingsBank;
 use App\HistoryCash;
 use App\DeliveryCost;
 use Carbon\Carbon;
@@ -945,9 +946,18 @@ class AdminController extends Controller
             $scheduleFinal = $this->getTime($scheduleFinalGet->value); 
         }
 
+        $allTransfers = array();
+        $allMobilePayments = array();
+
+        $transfers = SettingsBank::where('type',0)->get();
+
+        $mobilePayments = SettingsBank::where('type',1)->get();
+
+        $data = file_get_contents("json/listBanks.json");
+        $listBanks = json_decode($data, true);
         $statusMenu="settings";
 
-        return view('admin.settings', compact('statusMenu', 'emailsAllPaid', 'emailsAllDelivery', 'statusPaidAll', 'scheduleInitial', 'scheduleFinal'));
+        return view('admin.settings', compact('statusMenu', 'emailsAllPaid', 'emailsAllDelivery', 'statusPaidAll', 'scheduleInitial', 'scheduleFinal', 'listBanks', 'transfers', 'mobilePayments', 'allTransfers', 'allMobilePayments'));
     }
     
 
@@ -1016,6 +1026,64 @@ class AdminController extends Controller
     {
         $deliveryCosts = DeliveryCost::all();
         return response()->json(array('list'=>$deliveryCosts));
+    }
+
+    public function SettingsTransfers(Request $request)
+    {
+        if(count($request->allTransfers)> 0){
+            $exceptArray = array_merge(array_diff($request->allTransfers,$request->idTransfers), array_diff($request->idTransfers,$request->allTransfers));
+            foreach ($exceptArray as $id) {
+                SettingsBank::whereId($id)->delete();
+            }
+        }
+
+        for ($i = 0; $i < count($request->bank); $i++) {
+            if(!empty($request->idTransfers[$i])){
+                $setttingBank = SettingsBank::whereId($request->idTransfers[$i])->first();
+                $setttingBank->bank = $request->bank[$i];
+                $setttingBank->idCard = $request->typeCard[$i].'-'.$request->idCard[$i];
+                $setttingBank->accountNumber = $request->accountNumber[$i];
+                $setttingBank->accountType = $request->accountType[$i];
+                $setttingBank->save();
+            }else{
+                $setttingBank = SettingsBank::create([
+                    "type"              => 0,
+                    "bank"              => $request->bank[$i],
+                    "idCard"            => $request->typeCard[$i].'-'.$request->idCard[$i],
+                    "accountNumber"     => $request->accountNumber[$i],
+                    "accountType"       => $request->accountType[$i],
+                ]);
+            }
+        }
+        return redirect(route('admin.settings'));
+    }
+
+    public function SettingsMobile(Request $request)
+    {
+        if(count($request->allMobilePayments)> 0){
+            $exceptArray = array_merge(array_diff($request->allMobilePayments,$request->idMobile), array_diff($request->idMobile,$request->allMobilePayments));
+            foreach ($exceptArray as $id) {
+                SettingsBank::whereId($id)->delete();
+            }
+        }
+
+        for ($i = 0; $i < count($request->bank); $i++) {
+            if(!empty($request->idMobile[$i])){
+                $setttingBank = SettingsBank::whereId($request->idMobile[$i])->first();
+                $setttingBank->bank = $request->bank[$i];
+                $setttingBank->idCard = $request->typeCard[$i].'-'.$request->idCard[$i];
+                $setttingBank->phone = $request->phone[$i];
+                $setttingBank->save();
+            }else{
+                $setttingBank = SettingsBank::create([
+                    "type"      => 1,
+                    "bank"      => $request->bank[$i],
+                    "idCard"    => $request->typeCard[$i].'-'.$request->idCard[$i],
+                    "phone"     => $request->phone[$i],
+                ]);
+            }
+        }
+        return redirect(route('admin.settings'));
     }
 
     public function showDelivery(Request $request)
