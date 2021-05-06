@@ -19,6 +19,7 @@ use App\Product;
 use App\Service;
 use App\Category;
 use App\DeliveryCost;
+use App\SettingsBank;
 
 class SaleController extends Controller
 {
@@ -87,8 +88,13 @@ class SaleController extends Controller
         else if($product == 0 && $service != 0)
             $msg = $msgService;
 
-        
-        return view('multi-step-form', compact('userUrl','codeUrl', 'statusModification', 'commerce','picture', 'sales', 'nameClient', 'rate', 'coinClient', 'total', 'shippings', 'quantity', 'msg'));
+        $transfers = SettingsBank::where('type',0)->get();
+        $mobilePayments = SettingsBank::where('type',1)->get();
+
+        $data = file_get_contents("json/listBanks.json");
+        $listBanks = json_decode($data, true);
+    
+        return view('multi-step-form', compact('userUrl','codeUrl', 'statusModification', 'commerce','picture', 'sales', 'nameClient', 'rate', 'coinClient', 'total', 'shippings', 'quantity', 'msg', 'transfers', 'mobilePayments', 'listBanks'));
     }
 
     public function new(Request $request)

@@ -4,9 +4,10 @@ var shippingPrice = 0;
 var shippingCoin = 0;
 var _coinClient = 0;
 var _rate = 0;
-var dataShipping=[];
+var dataShipping = [];
 var _selectSale, selectPayment, applicationId;
-var submit= false;
+var submit = false;
+var totalPayment = 0;
 
 $(document).ready(function(){
     var $sections = $('.form-section');
@@ -239,6 +240,41 @@ $(document).ready(function(){
                 $('#showCardForm').hide();
             else
                 $('#showCardForm').show();
+
+            if($(this).find('#paymentDescription').val() == "TRANSFERENCIA")
+                $("#showTransfers").css({"display":"block"});
+            else 
+                $("#showTransfers").css({"display":"none"});
+            
+            if($(this).find('#paymentDescription').val() == "PAGO MOVIL")
+                $("#showMobilePayment").css({"display":"block"});
+            else 
+                $("#showMobilePayment").css({"display":"none"});
+            
+            $(".amount").val(0);
+            $("#numTransfers").val();
+            $(".showRemainingAmount").text("Bs "+formatter.format((totalPayment)));
+            $(".showTotalPaid").text("Bs "+formatter.format((0)));
+            totalPaid = 0;
+
+            if(iTransfers > 1)
+                for (var i = 2; i <= iTransfers; i++) {
+                    $('#rowTransfers'+i+'').remove();
+                    $("#showCountTransfers").text(i);
+                }
+            
+            if(iMobiles > 1)
+                for (var i = 2; i <= iMobiles; i++) {
+                    $('#rowMobile'+i+'').remove();
+                    $("#showCountMobiles").text(i);
+                }
+
+            iTransfers = 1;
+            iMobiles = 1;
+
+            $("#showCountTransfers").text(iTransfers);
+            $("#showCountMobiles").text(iMobiles);
+            $(".amount").maskMoney({thousands:'.', decimal:',', allowZero:true, prefix:'Bs '});
             
             $('.submit').show();
         }
@@ -442,6 +478,7 @@ function calculateTotal(){
     var resultShipping;
     var resulttotal;
     var total = $("#totalProductService").val();
+    totalPayment = 0;
 
     total = total.replace(/\./g, "");
     total = total.replace(/,/g, ".");
@@ -465,6 +502,9 @@ function calculateTotal(){
 
     $("#totalAll").val(formatter.format((total-((total*percentage)/100)+resultShipping)));
     $("#totalGlobal").text(resulttotal);
+    $(".showRemainingAmount").text("Bs "+formatter.format((total-((total*percentage)/100)+resultShipping)));
+    $(".totalPayment").text("Bs "+formatter.format((total-((total*percentage)/100)+resultShipping)));
+    totalPayment =(total-((total*percentage)/100)+resultShipping);
 
     if(formatter.format((total-((total*percentage)/100)+resultShipping)) == "NaN")
         location.reload();

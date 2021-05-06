@@ -946,18 +946,15 @@ class AdminController extends Controller
             $scheduleFinal = $this->getTime($scheduleFinalGet->value); 
         }
 
-        $allTransfers = array();
-        $allMobilePayments = array();
-
         $transfers = SettingsBank::where('type',0)->get();
-
         $mobilePayments = SettingsBank::where('type',1)->get();
 
         $data = file_get_contents("json/listBanks.json");
         $listBanks = json_decode($data, true);
+        
         $statusMenu="settings";
 
-        return view('admin.settings', compact('statusMenu', 'emailsAllPaid', 'emailsAllDelivery', 'statusPaidAll', 'scheduleInitial', 'scheduleFinal', 'listBanks', 'transfers', 'mobilePayments', 'allTransfers', 'allMobilePayments'));
+        return view('admin.settings', compact('statusMenu', 'emailsAllPaid', 'emailsAllDelivery', 'statusPaidAll', 'scheduleInitial', 'scheduleFinal', 'listBanks', 'transfers', 'mobilePayments'));
     }
     
 
@@ -1030,7 +1027,7 @@ class AdminController extends Controller
 
     public function SettingsTransfers(Request $request)
     {
-        if(count($request->allTransfers)> 0){
+        if(!empty($request->allTransfer) && count($request->allTransfers)> 0){
             $exceptArray = array_merge(array_diff($request->allTransfers,$request->idTransfers), array_diff($request->idTransfers,$request->allTransfers));
             foreach ($exceptArray as $id) {
                 SettingsBank::whereId($id)->delete();
@@ -1042,6 +1039,7 @@ class AdminController extends Controller
                 $setttingBank = SettingsBank::whereId($request->idTransfers[$i])->first();
                 $setttingBank->bank = $request->bank[$i];
                 $setttingBank->idCard = $request->typeCard[$i].'-'.$request->idCard[$i];
+                $setttingBank->accountName = $request->accountName[$i];
                 $setttingBank->accountNumber = $request->accountNumber[$i];
                 $setttingBank->accountType = $request->accountType[$i];
                 $setttingBank->save();
@@ -1050,6 +1048,7 @@ class AdminController extends Controller
                     "type"              => 0,
                     "bank"              => $request->bank[$i],
                     "idCard"            => $request->typeCard[$i].'-'.$request->idCard[$i],
+                    "accountName"       => $request->accountName[$i],
                     "accountNumber"     => $request->accountNumber[$i],
                     "accountType"       => $request->accountType[$i],
                 ]);
@@ -1060,7 +1059,7 @@ class AdminController extends Controller
 
     public function SettingsMobile(Request $request)
     {
-        if(count($request->allMobilePayments)> 0){
+        if(!empty($request->allMobilePayments) && count($request->allMobilePayments)> 0){
             $exceptArray = array_merge(array_diff($request->allMobilePayments,$request->idMobile), array_diff($request->idMobile,$request->allMobilePayments));
             foreach ($exceptArray as $id) {
                 SettingsBank::whereId($id)->delete();
@@ -1071,14 +1070,14 @@ class AdminController extends Controller
             if(!empty($request->idMobile[$i])){
                 $setttingBank = SettingsBank::whereId($request->idMobile[$i])->first();
                 $setttingBank->bank = $request->bank[$i];
-                $setttingBank->idCard = $request->typeCard[$i].'-'.$request->idCard[$i];
+                $setttingBank->idCard = $request->idCard[$i];
                 $setttingBank->phone = $request->phone[$i];
                 $setttingBank->save();
             }else{
                 $setttingBank = SettingsBank::create([
                     "type"      => 1,
                     "bank"      => $request->bank[$i],
-                    "idCard"    => $request->typeCard[$i].'-'.$request->idCard[$i],
+                    "idCard"    => $request->idCard[$i],
                     "phone"     => $request->phone[$i],
                 ]);
             }

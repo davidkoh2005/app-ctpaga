@@ -231,6 +231,12 @@
                                                             </label>
                                                         </div>
                                                         <div class="mb-3 row">
+                                                            <label class="col-sm-4 col-form-label">Titular:</label>
+                                                            <div class="col">
+                                                                <input class="form-control" type="text" name="accountName[]" autocomplete="off" placeholder="Joe Doe" minlength="4" value="{{$transfer->accountName}}" required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mb-3 row">
                                                             <label class="col-sm-4 col-form-label">Cédula o Rif</label>
                                                             <label class="content-select">
                                                                 <select class="addMargin" name="typeCard[]" required>
@@ -245,11 +251,13 @@
                                                                 </select>
                                                             </label>
                                                             <span style="padding-top: 7px;">&nbsp;&nbsp; - &nbsp;&nbsp;</span>
-                                                            <input type="number" name="idCard[]" class="form-control" minlength="4" value="{{substr($transfer->idCard,2)}}" required/>
+                                                            <div class="col">
+                                                                <input type="number" name="idCard[]" class="form-control" minlength="4" value="{{substr($transfer->idCard,2)}}" required/>
+                                                            </div>
                                                         </div>
                                                         <div class="mb-3 row">
                                                             <label class="col-sm-4 col-form-label">Número de Cuenta</label>
-                                                            <div class="col-6">
+                                                            <div class="col">
                                                                 <input class="form-control" type="number" name="accountNumber[]" autocomplete="off" placeholder="010222222222" minlength="19" maxlength="20" value="{{$transfer->accountNumber}}" required>
                                                             </div>
                                                         </div>
@@ -292,6 +300,12 @@
                                                     </label>
                                                 </div>
                                                 <div class="mb-3 row">
+                                                    <label class="col-sm-4 col-form-label">Titular:</label>
+                                                    <div class="col">
+                                                        <input class="form-control" type="text" name="accountName[]" autocomplete="off" placeholder="Joe Doe" minlength="4" required>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3 row">
                                                     <label class="col-sm-4 col-form-label">Cédula o Rif</label>
                                                     <label class="content-select">
                                                         <select class="addMargin" name="typeCard[]" required>
@@ -302,11 +316,13 @@
                                                         </select>
                                                     </label>
                                                     <span style="padding-top: 7px;">&nbsp;&nbsp; - &nbsp;&nbsp;</span>
-                                                    <input type="number" name="idCard[]" class="form-control" minlength="4" required/>
+                                                    <div class="col">
+                                                        <input type="number" name="idCard[]" class="form-control" minlength="4" required/>
+                                                    </div>
                                                 </div>
                                                 <div class="mb-3 row">
                                                     <label class="col-sm-4 col-form-label">Número de Cuenta</label>
-                                                    <div class="col-6">
+                                                    <div class="col">
                                                         <input class="form-control" type="number" name="accountNumber[]" autocomplete="off" placeholder="010222222222" minlength="19" maxlength="20" required>
                                                     </div>
                                                 </div>
@@ -348,7 +364,11 @@
                                             @if($mobilePayment->type == 1)
                                                 <input type="hidden" name="allMobilePayments[]" value="{{$mobilePayment->id}}">
                                                 <tr id="rowMobile{{intval($key)+1}}">
-                                                    <td>
+                                                    @if($key == 0)
+                                                        <td colspan="2">
+                                                    @else
+                                                        <td>
+                                                    @endif
                                                     <input type="hidden" name="idMobile[]" value="{{$mobilePayment->id}}">
                                                         <div class="mb-3 row">
                                                             <label class="col-sm-4 col-form-label">Banco</label>
@@ -367,14 +387,14 @@
                                                         </div>
                                                         <div class="mb-3 row">
                                                             <label class="col-sm-4 col-form-label">Cédula</label>
-                                                            <div class="col-6">
-                                                                <input class="form-control" type="number" name="idCard[]" autocomplete="off" placeholder="22222222" minlength="4" value="{{substr($mobilePayment->idCard,2)}}" required>
+                                                            <div class="col">
+                                                                <input class="form-control" type="number" name="idCard[]" autocomplete="off" placeholder="22222222" minlength="4" value="{{$mobilePayment->idCard}}" required>
                                                             </div>
                                                         </div>
                                                         <div class="mb-3 row">
                                                             <label class="col-sm-4 col-form-label">Número de Teléfono</label>
-                                                            <div class="col-6">
-                                                                <input class="form-control" type="tel" name="phone[]" autocomplete="off"  placeholder="04125555555" size="11" maxlength="20" pattern="^(?:(\+)58|0)(?:2(?:12|4[0-9]|5[1-9]|6[0-9]|7[0-8]|8[1-35-8]|9[1-5]|3[45789])|4(?:1[246]|2[46]))\d{7}$" value="{{$mobilePayment->phone}}" required>
+                                                            <div class="col">
+                                                                <input class="form-control" type="number" name="phone[]" autocomplete="off"  placeholder="04125555555" size="11" maxlength="20" pattern="^(?:(\+)58|0)(?:2(?:12|4[0-9]|5[1-9]|6[0-9]|7[0-8]|8[1-35-8]|9[1-5]|3[45789])|4(?:1[246]|2[46]))\d{7}$" value="{{$mobilePayment->phone}}" required>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -402,14 +422,14 @@
                                                 </div>
                                                 <div class="mb-3 row">
                                                     <label class="col-sm-4 col-form-label">Cédula</label>
-                                                    <div class="col-6">
+                                                    <div class="col">
                                                         <input class="form-control" type="number" name="idCard[]" autocomplete="off" placeholder="22222222" minlength="4" required>
                                                     </div>
                                                 </div>
                                                 <div class="mb-3 row">
                                                     <label class="col-sm-4 col-form-label">Número de Teléfono</label>
-                                                    <div class="col-6">
-                                                        <input class="form-control" type="tel" name="phone[]" autocomplete="off" placeholder="04125555555" size="11" maxlength="20" pattern="^(?:(\+)58|0)(?:2(?:12|4[0-9]|5[1-9]|6[0-9]|7[0-8]|8[1-35-8]|9[1-5]|3[45789])|4(?:1[246]|2[46]))\d{7}$" required>
+                                                    <div class="col">
+                                                        <input class="form-control" type="number" name="phone[]" autocomplete="off" placeholder="04125555555" size="11" maxlength="20" pattern="^(?:(\+)58|0)(?:2(?:12|4[0-9]|5[1-9]|6[0-9]|7[0-8]|8[1-35-8]|9[1-5]|3[45789])|4(?:1[246]|2[46]))\d{7}$" required>
                                                     </div>
                                                 </div>
                                             </td>
@@ -580,6 +600,12 @@
                                 </label>\
                             </div>\
                             <div class="mb-3 row">\
+                                <label class="col-sm-4 col-form-label">Titular:</label>\
+                                <div class="col">\
+                                    <input class="form-control" type="text" name="accountName[]" autocomplete="off" placeholder="Joe Doe" minlength="4" required>\
+                                </div>\
+                            </div>\
+                            <div class="mb-3 row">\
                                 <label class="col-sm-4 col-form-label">Cédula o Rif</label>\
                                 <label class="content-select">\
                                     <select class="addMargin" name="typeCard[]" required>\
@@ -590,11 +616,13 @@
                                     </select>\
                                 </label>\
                                 <span style="padding-top: 7px;">&nbsp;&nbsp; - &nbsp;&nbsp;</span>\
-                                <input type="number" name="idCard[]" class="form-control" minlength="4" required/>\
+                                <div class="col">\
+                                    <input type="number" name="idCard[]" class="form-control" minlength="4" required/>\
+                                </div>\
                             </div>\
                             <div class="mb-3 row">\
                                 <label class="col-sm-4 col-form-label">Número de Cuenta</label>\
-                                <div class="col-6">\
+                                <div class="col">\
                                     <input class="form-control" type="number" name="accountNumber[]" autocomplete="off" placeholder="010222222222" minlength="19" maxlength="20" required>\
                                 </div>\
                             </div>\
@@ -634,14 +662,14 @@
                             </div>\
                             <div class="mb-3 row">\
                                 <label class="col-sm-4 col-form-label">Cédula</label>\
-                                <div class="col-6">\
+                                <div class="col">\
                                     <input class="form-control" type="number" name="idCard[]" autocomplete="off" placeholder="22222222" minlength="4" required>\
                                 </div>\
                             </div>\
                             <div class="mb-3 row">\
                                 <label class="col-sm-4 col-form-label">Número de Teléfono</label>\
-                                <div class="col-6">\
-                                    <input class="form-control" type="tel" name="phone[]" autocomplete="off" placeholder="04125555555" size="11" maxlength="20" pattern="^(?:(\+)58|0)(?:2(?:12|4[0-9]|5[1-9]|6[0-9]|7[0-8]|8[1-35-8]|9[1-5]|3[45789])|4(?:1[246]|2[46]))\d{7}$" required>\
+                                <div class="col">\
+                                    <input class="form-control" type="number" name="phone[]" autocomplete="off" placeholder="04125555555" size="11" maxlength="20" pattern="^(?:(\+)58|0)(?:2(?:12|4[0-9]|5[1-9]|6[0-9]|7[0-8]|8[1-35-8]|9[1-5]|3[45789])|4(?:1[246]|2[46]))\d{7}$" required>\
                                 </div>\
                             </div>\
                         </td>\

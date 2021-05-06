@@ -142,6 +142,7 @@ Route::post('/pagar/criptomonedas', 'PaidController@cryptocurrencies');
 
 Route::get('pedido/{codeUrl}/', 'PaidController@billing');
 
+Route::post('/showData', 'SettingsBankController@showData')->name('settingsBank.showData');
 Route::get('/{userUrl}/', 'SaleController@indexStore')->name('form.store');
 Route::get('/{userUrl}/{codeUrl}/{statusModification?}', 'SaleController@index');
 Route::post('showMunicipalities', 'SaleController@showMunicipalities')->name('show.municipalities');;

@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class SettingsBank extends Model
 {
     protected $fillable = [
-        'id', 'type', 'bank', 'idCard', 'accountNumber', 'accountType', 'phone',
+        'id', 'type', 'bank', 'idCard', 'accountName', 'accountNumber', 'accountType', 'phone',
     ];
 }

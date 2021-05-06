@@ -18,6 +18,7 @@ class CreateSettingsBanksTable extends Migration
             $table->integer("type"); // 0 transferencia y 1 pago móvil
             $table->string('bank', 100);
             $table->string('idCard', 15);
+            $table->string('accountName', 100)->nullable();
             $table->string('accountNumber', 50)->nullable();
             $table->string('accountType', 1)->nullable();
             $table->string('phone', 20)->nullable();

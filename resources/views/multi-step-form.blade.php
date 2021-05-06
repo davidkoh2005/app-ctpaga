@@ -16,6 +16,7 @@
     <script src="{{ asset('js/i18n/es.js') }}"></script>
     <script src="{{ asset('js/global.js') }}"></script>
     <script src="{{ asset('js/stateMunicipalities.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/bookshop/jquery.maskMoney.min.js') }}"></script>
 
     @if($coinClient==0)
     <!-- link to the SqPaymentForm library -->
@@ -252,11 +253,7 @@
                             </div> 
 
                             <div class= "form-section">
-                                @if ($coinClient ==0)
-                                    <p>Seleccionar método de pago:</p>
-                                @else
-                                    <p>Ingresa la información de tu tarjeta de crédito o debito:</p>
-                                @endif
+                                <p>Seleccionar método de pago:</p>
 <!--                                 <div class="row">&nbsp;</div>
                                 <div class="row justify-content-center align-items-center">
                                     <label class="switch">
@@ -267,105 +264,176 @@
                                 </div> -->
                                 <div class="dataPay">
                                     @if ($coinClient ==0)
-                                    <div class="row checkPayment">
-                                        <div class="description-payment col center">
-                                            <input type="radio" class="radio-payment" name="payment" id="payment" value="CARD">
-                                            <img class="img-fluid " alt="Responsive image" src="{{ asset('images/square.png') }}">
+                                        <div class="row checkPayment">
+                                            <div class="description-payment col center">
+                                                <input type="radio" class="radio-payment" name="payment" id="payment" value="CARD">
+                                                <img class="img-fluid " alt="Responsive image" src="{{ asset('images/square.png') }}">
+                                            </div>
+                                            
+                                            <input type="hidden" id="paymentDescription" value="CARD">
                                         </div>
-                                        
-                                        <input type="hidden" id="paymentDescription" value="CARD">
-                                    </div>
 
-                                    <div id="errorCard">
-                                        <ul><li>Complete los datos de la tarjeta</li></ul>
-                                    </div>
-
-                                    <div id="showCardForm" style="padding-bottom: 80px; margin-top: 100px;">
-                                        <div id="form-container">
-                                            <div id="sq-card-number"></div>
-                                            <div class="third" id="sq-expiration-date"></div>
-                                            <div class="third" id="sq-cvv"></div>
-                                            <div class="third" id="sq-postal-code"></div>
-                                        </div> 
-                                        <input type="hidden" name="nonce" id="nonce">
-                                        <input type="hidden" name="idempotency_key" id="idempotency_key">
-                                    </div>
-
-                                    <div class="row checkPayment justify-content-center align-items-center minh-10">
-                                        <div class="description-payment col center">
-                                            <input type="radio" class="radio-payment" name="payment" id="payment" value="PAYPAL">
-                                            <img class="img-fluid" alt="Responsive image" src="{{ asset('images/paypal.png') }}">
-                                            <input type="hidden" id="paymentDescription" value="PAYPAL">
-                                        </div>
-                                    </div>
-                                    <div class="row checkPayment justify-content-center align-items-center minh-10">
-                                        <div class="description-payment col center">
-                                            <input type="radio" class="radio-payment" name="payment" id="payment" value="BITCOIN">
-                                            <img class="img-fluid" alt="Responsive image" src="{{ asset('images/bitcoin.png') }}">    
-                                            <input type="hidden" id="paymentDescription" value="BITCOIN">                                    
-                                        </div>
-                                    </div>
-                                    @if($sales[0]->statusShipping)
-                                    <div class="row checkPayment justify-content-center align-items-center minh-10">
-                                        <div class="description-payment col center">
-                                            <input type="radio" class="radio-payment" name="payment" id="payment" value="EFECTIVO">
-                                            <img class="img-fluid" alt="Responsive image" src="{{ asset('images/dolars.png') }}">
-                                            <input type="hidden" id="paymentDescription" value="EFECTIVO">
-                                        </div>
-                                    </div>
-                                    @endif
-                                    @else
-                                        <label class="form" for="nameCard">NOMBRE DE LA TARJETA:</label>
-                                        <input type="text" name="nameCard" id="nameCard" class="form-control" data-parsley-minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" required />
-                                        <label class="form" for="SelectTypeCard">SELECCONE EL TIPO DE TARJETA:</label>
                                         <div id="errorCard">
                                             <ul><li>Complete los datos de la tarjeta</li></ul>
                                         </div>
-                                        <div class="row justify-content-center" >
-                                            <div class="col">
-                                                <label>
-                                                    <input type="radio" name="typeCard" id="typeCard" value="1">
-                                                    <img src="{{ asset('images/visa.png') }}" width="70px" height="60px">
-                                                </label>
-                                            </div>
-                                            <div class="col">
-                                                <label>
-                                                    <input type="radio" name="typeCard" id="typeCard" value="2">
-                                                    <img src="{{ asset('images/MasterCard.png') }}" width="60px" height="60px">
-                                                </label>
-                                            </div>
-                                            <div class="col">
-                                                <label>
-                                                    <input type="radio" name="typeCard" id="typeCard" value="3">
-                                                    <img src="{{ asset('images/americanExpress.png') }}" width="60px" height="60px">
-                                                </label>
-                                            </div>
-                                            <div class="col">
-                                                <label>
-                                                    <input type="radio" name="typeCard" id="typeCard" value="33" required data-parsley-required>
-                                                    <img src="{{ asset('images/diners.png') }}" width="60px" height="60px">
-                                                </label>
+
+                                        <div id="showCardForm" style="padding-bottom: 80px; margin-top: 100px;">
+                                            <div id="form-container">
+                                                <div id="sq-card-number"></div>
+                                                <div class="third" id="sq-expiration-date"></div>
+                                                <div class="third" id="sq-cvv"></div>
+                                                <div class="third" id="sq-postal-code"></div>
+                                            </div> 
+                                            <input type="hidden" name="nonce" id="nonce">
+                                            <input type="hidden" name="idempotency_key" id="idempotency_key">
+                                        </div>
+
+                                        <div class="row checkPayment justify-content-center align-items-center minh-10">
+                                            <div class="description-payment col center">
+                                                <input type="radio" class="radio-payment" name="payment" id="payment" value="PAYPAL">
+                                                <img class="img-fluid" alt="Responsive image" src="{{ asset('images/paypal.png') }}">
+                                                <input type="hidden" id="paymentDescription" value="PAYPAL">
                                             </div>
                                         </div>
-                                        <label class="form" for="numberCard">NUMERO DE LA TARJETA:</label>
-                                        <input type="text" name="numberCard" id="numberCard" class="form-control" maxlength="16" placeholder="4242 4242 4242 4242" required data-parsley-maxlength="16" data-parsley-minlength="16" />
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <label class="form" for="dateCard">FECHA DE EXPIRACIÓN:</label>
-                                                <div class="form-row">
-                                                    <div class="col">
-                                                        <input type="text" name="dateMM" id="dateMM" class="form-control" maxlength="2" placeholder="MM" data-parsley-type="integer" data-parsley-maxlength="2"/>
-                                                    </div>
-                                                    <label class="form">/</label>
-                                                    <div class="col">
-                                                        <input type="text"  name="dateYY" id="dateYY" class="form-control" maxlength="2" placeholder="YY" data-parsley-type="integer" data-parsley-maxlength="2"/>
-                                                    </div>
-                                                </div>
-                                                <div id="statusDate"></div>
+                                        <div class="row checkPayment justify-content-center align-items-center minh-10">
+                                            <div class="description-payment col center">
+                                                <input type="radio" class="radio-payment" name="payment" id="payment" value="BITCOIN">
+                                                <img class="img-fluid" alt="Responsive image" src="{{ asset('images/bitcoin.png') }}">    
+                                                <input type="hidden" id="paymentDescription" value="BITCOIN">                                    
                                             </div>
-                                            <div class="col-6">
-                                                <label class="form" for="cvcCard">CVV/CVC:</label>
-                                                <input type="text"  name="cardCVC" id="cardCVC" class="form-control" placeholder="123" minlenght="3" maxlength="3" required data-parsley-maxlength="3" data-parsley-minlength="3"/>
+                                        </div>
+                                        @if($sales[0]->statusShipping)
+                                        <div class="row checkPayment justify-content-center align-items-center minh-10">
+                                            <div class="description-payment col center">
+                                                <input type="radio" class="radio-payment" name="payment" id="payment" value="EFECTIVO">
+                                                <img class="img-fluid" alt="Responsive image" src="{{ asset('images/dolars.png') }}">
+                                                <input type="hidden" id="paymentDescription" value="EFECTIVO">
+                                            </div>
+                                        </div>
+                                        @endif
+                                    @else
+                                        <div class="row checkPayment justify-content-center align-items-center minh-10">
+                                            <div class="description-payment col center">
+                                                <input type="radio" class="radio-payment" name="payment" id="payment" value="TRANSFERENCIA">
+                                                <img class="img-fluid" alt="Responsive image" src="{{ asset('images/transferencia.png') }}">
+                                                <input type="hidden" id="paymentDescription" value="TRANSFERENCIA">
+                                            </div>
+                                        </div>
+                                        <div id="showTransfers" style="padding-bottom: 80px; margin-top: 100px; display:none;">
+                                            <table class="table table-bordered" id="dynamic_field_transfers" bordercolor="#ff0000">
+                                                <tr id="rowTransfers1" class='trTransfers'>
+                                                    <td>
+                                                        <div class="mx-auto">
+                                                            <label><strong>Transferencia No. 1</strong> </label> <br>
+                                                        </div>
+                                                        <div class="showDataTransfers" style="text-align: initial; display:none;">
+                                                            <label><strong>Titular: </strong> <span class="showAccountName"></span></label> <br>
+                                                            <label><strong>Cédula o Rif: </strong> <span class="showIdCard"></span></label> <br>
+                                                            <label><strong>Número de Cuenta: </strong> <span class="showAccountNumber"></span></label> <br>
+                                                            <label><strong>Tipo de Cuenta: </strong> <span class="showAccountType"></span></label> <br>
+                                                        </div>
+                                                        <div class="justify-content-center align-items-center minh-10">
+                                                            <label class="col col-form-label">Banco:</label>
+                                                            <label class="content-select">
+                                                                <select class="addMargin selectBankTransfers" name="bank[]" id="bank" required>
+                                                                    <option value="" disabled selected>Seleccionar</option>
+                                                                    @foreach($transfers as $transfer)
+                                                                        <option value="{{$transfer->bank}}">{{$transfer->bank}}</option>
+                                                                    @endforeach                                                                
+                                                                </select>
+                                                            </label>
+                                                        </div>
+                                                        <div class="justify-content-center align-items-center minh-10">
+                                                            <label class="col col-form-label">Fecha:</label>
+                                                            <div class="col">
+                                                                <input type="text" class="form-control datepicker" name="date[]" autocomplete="off" required/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="justify-content-center align-items-center minh-10">
+                                                            <label class="col col-form-label">Monto:</label>
+                                                            <div class="col">
+                                                                <input type="text" class="form-control amount" name="amount[]" id='amount' data-parsley-minlength="3" minlength="3" autocomplete="off" required/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="justify-content-center align-items-center minh-10">
+                                                            <label class="col col-form-label">Número de transacción:</label>
+                                                            <div class="col">
+                                                                <input type="number" class="form-control numTransfers" name="numTransfers[]"  data-parsley-minlength="3" minlength="3" autocomplete="off" required/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">&nbsp;</div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <div style="text-align: end;">
+                                                <label><strong>Cantidad de Transferencias: <span id="showCountTransfers">1</span> </strong></label> <br>
+                                                <label><strong>Monto a pagar: <span class="totalPayment">Bs 0</span></strong></label> <br>
+                                                <label style="color:red !important;"><strong>Monto Restante: <span class="showRemainingAmount"></span> </strong></label> <br>
+                                                <label><strong>Total Pagado: <span class="showTotalPaid">Bs 0</span></strong></label> <br>
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <button type="button" name="add" id="addTransfers" class="btn" data-toggle="tooltip" data-placement="top" title="Agregar otra transferencia"><i class="fa fa-plus-circle button-add" aria-hidden="true"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="row checkPayment justify-content-center align-items-center minh-10">
+                                            <div class="description-payment col center">
+                                                <input type="radio" class="radio-payment" name="payment" id="payment" value="PAGO MOVIL">
+                                                <img class="img-fluid" alt="Responsive image" src="{{ asset('images/pagoMovil.png') }}">
+                                                <input type="hidden" id="paymentDescription" value="PAGO MOVIL">
+                                            </div>
+                                        </div>
+                                        <div id="showMobilePayment" style="padding-bottom: 80px; margin-top: 100px; display:none;">
+                                            <table class="table table-bordered" id="dynamic_field_mobile" bordercolor="#ff0000">
+                                                <tr id="rowMobiles1" class='trMobile'>
+                                                    <td>
+                                                        <div class="mx-auto">
+                                                            <label><strong>Pago Móvil No. 1</strong> </label> <br>
+                                                        </div>
+                                                        <div class="showDataMobiles" style="text-align: initial; display:none;">
+                                                            <label><strong>Cédula o Rif: </strong> <span class="showIdCard"></span></label> <br>
+                                                            <label><strong>Teléfono: </strong> <span class="showPhone"></span></label> <br>
+                                                        </div>
+                                                        <div class="justify-content-center align-items-center minh-10">
+                                                            <label class="col col-form-label">Banco:</label>
+                                                            <label class="content-select">
+                                                                <select class="addMargin selectBankMobiles" name="bank[]" id="bank" required>
+                                                                    <option value="" disabled selected>Seleccionar</option>
+                                                                    @foreach($mobilePayments as $mobilePayment)
+                                                                        <option value="{{$mobilePayment->bank}}">{{$mobilePayment->bank}}</option>
+                                                                    @endforeach                                                                
+                                                                </select>
+                                                            </label>
+                                                        </div>
+                                                        <div class="justify-content-center align-items-center minh-10">
+                                                            <label class="col col-form-label">Fecha:</label>
+                                                            <div class="col">
+                                                                <input type="text" class="form-control datepicker" name="date[]" autocomplete="off" required/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="justify-content-center align-items-center minh-10">
+                                                            <label class="col col-form-label">Monto:</label>
+                                                            <div class="col">
+                                                                <input type="text" class="form-control amount" name="amount[]" id='amount' data-parsley-minlength="3" minlength="3" autocomplete="off" required/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="justify-content-center align-items-center minh-10">
+                                                            <label class="col col-form-label">Número de transacción:</label>
+                                                            <div class="col">
+                                                                <input type="number" class="form-control numTransfers" name="numTransfers[]"  data-parsley-minlength="3" minlength="3" autocomplete="off" required/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">&nbsp;</div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <div style="text-align: end;">
+                                                <label><strong>Cantidad de Pago Móvil: <span id="showCountMobiles">1</span> </strong></label> <br>
+                                                <label><strong>Monto a pagar: <span class="totalPayment">Bs 0</span></strong></label> <br>
+                                                <label style="color:red !important;"><strong>Monto Restante: <span class="showRemainingAmount"></span> </strong></label> <br>
+                                                <label><strong>Total Pagado: <span class="showTotalPaid">Bs 0</span></strong></label> <br>
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <button type="button" name="add" id="addMobiles" class="btn" data-toggle="tooltip" data-placement="top" title="Agregar otro pago móvil"><i class="fa fa-plus-circle button-add" aria-hidden="true"></i></button>
                                             </div>
                                         </div>
                                     @endif
@@ -395,8 +463,12 @@
         var statusModification = {{$statusModification}};
         applicationId = "{{env('SQUARE_APP_ID')}}";
         
-        var MUNICIPALITIES, STATE, arrayMunicipalities, arrayState;
+        var MUNICIPALITIES, STATE, arrayMunicipalities, arrayState, dataTransfer, dataMobilePayment;
+        var iTransfers =1;
+        var iMobiles = 1;
+        var totalPaid = 0;
 
+        $(".amount").maskMoney({thousands:'.', decimal:',', allowZero:true, prefix:'Bs '});
         $('#iconClose').hide();
         $('#iconDone').hide();  
         $('#iconLoading').hide();  
@@ -414,19 +486,19 @@
             }
         });
 
-        /* $.ajax({
-            'async': false,
-            'global': false,
-            'url': "{{ asset('json/municipalities.json') }}",
-            'dataType': "json",
-            'success': function (data) {
-                MUNICIPALITIES = data;
-                /* arrayMunicipalities = Municipalities('Distrito Capital');
-                console.log(arrayMunicipalities);
-                arrayMunicipalities.forEach(showMunicipalities); 
+        var date = new Date();
+        date.setMonth(date.getMonth()-4);
+        date.setDate(1);
 
-            }
-        });  */
+        $('.datepicker').datepicker({
+            orientation: "bottom auto",
+            startDate: date,
+            endDate: new Date(),
+            language: "es",
+            autoclose: true,
+            todayHighlight: true
+        });
+
 
         function showState(item, index) {
             if(item == 'Distrito Capital' || item == 'Miranda')
@@ -440,7 +512,6 @@
         }
 
         $(document).ready(function(){           
-
             $('#selectState').on('change', function() {
                 $('#selectMunicipalities').prop('disabled', 'disabled');
                 $('#selectMunicipalities option').remove();
@@ -474,7 +545,6 @@
             }
 
             $('#discount').keyup(delay(function (e) {
-                console.log("entr");
                 $('#iconClose').hide();
                 $('#iconDone').hide();  
                 $('#iconLoading').show(); 
@@ -524,6 +594,185 @@
                 }).fail(function(result){
                     alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                 }); 
+            });
+            $(document).on('change', '.selectBankTransfers', function() {
+                var $row = jQuery(this).closest('tr');
+                var $idTransfers = $row[0]['id'];
+
+                if($(this).val() != "" && _coinClient == 1){
+                    $.ajax({
+                        url: "{{route('settingsBank.showData')}}", 
+                        data: {"selectBank" : $(this).val(), "type" : 0,},
+                        type: "POST",
+                    }).done(function(result){
+                        dataTransfer = result.data;
+                        $('#'+$idTransfers).find(".showDataTransfers").css({"display":"block"});
+                        $('#'+$idTransfers).find(".showAccountName").text(dataTransfer.accountName);
+                        $('#'+$idTransfers).find(".showIdCard").text(dataTransfer.idCard);
+                        $('#'+$idTransfers).find(".showAccountNumber").text(dataTransfer.accountNumber);
+                        if(dataTransfer.accountType == 'A')
+                            $('#'+$idTransfers).find(".showAccountType").text('Ahorro'); 
+                        else
+                            $('#'+$idTransfers).find(".showAccountType").text('Corriente'); 
+                    }).fail(function(result){
+                        alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                    }); 
+                }
+            });
+
+            $(document).on('change', '.selectBankMobiles', function() {
+                var $row = jQuery(this).closest('tr');
+                var $idMobiles = $row[0]['id'];
+
+                if($(this).val() != "" && _coinClient == 1){
+                    $.ajax({
+                        url: "{{route('settingsBank.showData')}}", 
+                        data: {"selectBank" : $(this).val(), "type" : 1,},
+                        type: "POST",
+                    }).done(function(result){
+                        dataMobiles = result.data;
+                        $('#'+$idMobiles).find(".showDataMobiles").css({"display":"block"});
+                        $('#'+$idMobiles).find(".showIdCard").text(dataMobiles.idCard);
+                        $('#'+$idMobiles).find(".showPhone").text(dataMobiles.phone);
+
+                    }).fail(function(result){
+                        alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                    }); 
+                }
+            });
+
+            $('#addTransfers').click(function(){
+                iTransfers++;
+                $('#dynamic_field_transfers').append('\
+                    <tr id="rowTransfers'+iTransfers+'" class="trTransfers">\
+                        <td>\
+                            <div class="d-flex justify-content-end">\
+                                <button type="button" name="remove" id="'+iTransfers+'" class="btn btn_remove" data-toggle="tooltip" data-placement="top" title="Eliminar transferencia" data-type="0"><i class="fa fa-minus-circle button-remove" aria-hidden="true"></i></button>\
+                            </div>\
+                            <div class="mx-auto">\
+                                <label><strong>Transferencia No. '+iTransfers+'</strong> </label> <br>\
+                            </div>\
+                            <div class="showDataTransfers" style="text-align: initial; display:none;">\
+                                <label><strong>Titular: </strong> <span class="showAccountName"></span></label> <br>\
+                                <label><strong>Cédula o Rif: </strong> <span class="showIdCard"></span></label> <br>\
+                                <label><strong>Número de Cuenta: </strong> <span class="showAccountNumber"></span></label> <br>\
+                                <label><strong>Tipo de Cuenta: </strong> <span class="showAccountType"></span></label> <br>\
+                            </div>\
+                            <div class="justify-content-center align-items-center minh-10">\
+                                <label class="col col-form-label">Banco:</label>\
+                                <label class="content-select">\
+                                    <select class="addMargin selectBankTransfers" name="bank[]" id="bank" required>\
+                                        <option value="" disabled selected>Seleccionar</option>\
+                                        @foreach($transfers as $transfer)\
+                                            <option value="{{$transfer->bank}}">{{$transfer->bank}}</option>\
+                                        @endforeach\
+                                    </select>\
+                                </label>\
+                            </div>\
+                            <div class="justify-content-center align-items-center minh-10">\
+                                <label class="col col-form-label">Fecha:</label>\
+                                <div class="col">\
+                                    <input type="text" class="form-control datepicker" name="date[]" autocomplete="off" required/>\
+                                </div>\
+                            </div>\
+                            <div class="justify-content-center align-items-center minh-10">\
+                                <label class="col col-form-label">Monto:</label>\
+                                <div class="col">\
+                                    <input type="text" class="form-control amount" name="amount[]" id="amount" data-parsley-minlength="3" minlength="3" autocomplete="off" required/>\
+                                </div>\
+                            </div>\
+                            <div class="justify-content-center align-items-center minh-10">\
+                                <label class="col col-form-label">Número de transferencia:</label>\
+                                <div class="col">\
+                                    <input type="number" class="form-control numTransfers" name="numTransfers[]" data-parsley-minlength="3" minlength="3" autocomplete="off" required/>\
+                                </div>\
+                            </div>\
+                            <div class="row">&nbsp;</div>\
+                        </td>\
+                    </tr>\
+                ');
+                $("#showCountTransfers").text(iTransfers);
+                $(".amount").maskMoney({thousands:'.', decimal:',', allowZero:true, prefix:'Bs '});
+            });
+
+            $('#addTmobiles').click(function(){
+                iMobiles++;
+                $('#dynamic_field_mobile').append('\
+                    <tr id="rowMobiles'+iMobiles+'" class="trMobile">\
+                        <td>\
+                            <div class="d-flex justify-content-end">\
+                                <button type="button" name="remove" id="'+iMobiles+'" class="btn btn_remove" data-toggle="tooltip" data-placement="top" title="Eliminar transferencia" data-type="0"><i class="fa fa-minus-circle button-remove" aria-hidden="true"></i></button>\
+                            </div>\
+                            <div class="mx-auto">\
+                                <label><strong>Pago Móvil No. '+iMobiles+'</strong> </label> <br>\
+                            </div>\
+                            <div class="showDataMobile" style="text-align: initial; display:none;">\
+                                <label><strong>Cédula o Rif: </strong> <span class="showIdCard"></span></label> <br>\
+                                <label><strong>Teléfono: </strong> <span class="showPhone"></span></label> <br>\
+                            </div>\
+                            <div class="justify-content-center align-items-center minh-10">\
+                                <label class="col col-form-label">Banco:</label>\
+                                <label class="content-select">\
+                                    <select class="addMargin selectBankMobiles" name="bank[]" id="bank" required>\
+                                        <option value="" disabled selected>Seleccionar</option>\
+                                        @foreach($mobilePayments as $mobilePayment)\
+                                            <option value="{{$mobilePayment->bank}}">{{$mobilePayment->bank}}</option>\
+                                        @endforeach\
+                                    </select>\
+                                </label>\
+                            </div>\
+                            <div class="justify-content-center align-items-center minh-10">\
+                                <label class="col col-form-label">Fecha:</label>\
+                                <div class="col">\
+                                    <input type="text" class="form-control datepicker" name="date[]" autocomplete="off" required/>\
+                                </div>\
+                            </div>\
+                            <div class="justify-content-center align-items-center minh-10">\
+                                <label class="col col-form-label">Monto:</label>\
+                                <div class="col">\
+                                    <input type="text" class="form-control amount" name="amount[]" id="amount" data-parsley-minlength="3" minlength="3" autocomplete="off" required/>\
+                                </div>\
+                            </div>\
+                            <div class="justify-content-center align-items-center minh-10">\
+                                <label class="col col-form-label">Número de transacción:</label>\
+                                <div class="col">\
+                                    <input type="number" class="form-control numTransfers" name="numTransfers[]"  data-parsley-minlength="3" minlength="3" autocomplete="off" required/>\
+                                </div>\
+                            </div>\
+                            <div class="row">&nbsp;</div>\
+                        </td>\
+                    </tr>\
+                ');
+                $("#showCountMobiles").text(iMobiles);
+                $(".amount").maskMoney({thousands:'.', decimal:',', allowZero:true, prefix:'Bs '});
+            });
+
+            $(document).on('click', '.btn_remove', function(){
+                var type = $(this).data("type");
+                var button_id = $(this).attr("id"); 
+
+                if(type == 0){
+                    iTransfers--;
+                    $('#rowTransfers'+button_id+'').remove();
+                    $("#showCountTransfers").text(iTransfers);
+                }
+                else{
+                    iMobiles--;
+                    $('#rowMobiles'+button_id+'').remove();
+                    $("#showCountMobiles").text(iMobiles);
+                }
+            });
+
+            $(document).on('blur', '.amount', function() {
+                var amount = $(this).val();
+                amount = amount.replace("Bs ", "");
+                amount = amount.replace(/\./g, "");
+                amount = amount.replace(/,/g, ".");
+                amount = parseFloat(amount);
+
+                totalPaid += amount;
+                $(".showRemainingAmount").text("Bs "+formatter.format(totalPayment - totalPaid));
+                $(".showTotalPaid").text("Bs "+formatter.format(totalPaid));
             });
         });
     </script>
