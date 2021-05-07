@@ -82,7 +82,7 @@
                     <strong>Numero de pedido: </strong> {{$paid->codeUrl}}<br>
                     <strong>Fecha de pedido: </strong> {{Carbon::parse($paid->date)->format('Y-m-d')}}<br>
                     <strong>Método de pago: </strong> 
-                        @if($paid->nameCompanyPayments == 'Square' || $paid->nameCompanyPayments == 'E-sitef')
+                        @if($paid->nameCompanyPayments == 'Square')
                             Tarjeta de Crédito
                         @elseif($paid->nameCompanyPayments == 'Pago en Efectivo')
                             Efectivo

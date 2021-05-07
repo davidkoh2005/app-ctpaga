@@ -18,12 +18,10 @@ class CreatePaymentsBsTable extends Migration
             $table->integer('paid_id');
             $table->integer("type"); // 0 transferencia y 1 pago móvil
             $table->string('bank', 100);
-            $table->string('idCard', 15);
-            $table->string('accountNumber', 50)->nullable();
-            $table->string('accountType', 1)->nullable();
-            $table->string('phone', 20)->nullable();
-            $table->float("total");
+            $table->string('transaction', 50);
+            $table->String("amount",50);
             $table->String("date",50);
+            $table->String("date_created",50);
             $table->timestamps();
         });
     }

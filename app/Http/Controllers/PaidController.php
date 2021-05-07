@@ -31,6 +31,7 @@ use App\Shipping;
 use App\Settings;
 use App\Delivery;
 use App\DeliveryCost;
+use App\PaymentsBs;
 use Session;
 use AWS;
 use PayPal\Api\Amount;
@@ -121,7 +122,7 @@ class PaidController extends Controller
                 "addressShipping"       => $request->address,
                 "detailsShipping"       => $request->details,
                 "selectShipping"        => $request->selectShipping,
-                "priceShipping"         => str_replace(",",".",$priceShipping),
+                "priceShipping"         => str_replace(",",".",str_replace(".","",$priceShipping)),
                 "percentage"            => $request->percentageSelect,
                 "nameCompanyPayments"   => "Pago en Efectivo",
                 "date"                  => Carbon::now(),
@@ -249,7 +250,7 @@ class PaidController extends Controller
                         "addressShipping"       => $request->address,
                         "detailsShipping"       => $request->details,
                         "selectShipping"        => $request->selectShipping,
-                        "priceShipping"         => str_replace(",",".",$priceShipping),
+                        "priceShipping"         => str_replace(",",".",str_replace(".","",$priceShipping)),
                         "percentage"            => $request->percentageSelect,
                         "nameCompanyPayments"   => "Square",
                         "date"                  => Carbon::now(),
@@ -393,7 +394,7 @@ class PaidController extends Controller
                 "addressShipping"       => $request->address,
                 "detailsShipping"       => $request->details,
                 "selectShipping"        => $request->selectShipping,
-                "priceShipping"         => str_replace(",",".",$priceShipping),
+                "priceShipping"         => str_replace(",",".",str_replace(".","",$priceShipping)),
                 "percentage"            => $request->percentageSelect,
                 "nameCompanyPayments"   => "Bitcoin",
                 "date"                  => Carbon::now(),
@@ -440,161 +441,108 @@ class PaidController extends Controller
         
         }elseif($request->coinClient == 1){
             
-            $url = 'https://esitef-homologacao.softwareexpress.com.br/e-sitef/api/v1/transactions';
-            $ch = curl_init($url);
-            $jsonData = array(
-                'installments' => '1',
-                'installment_type' => '4',
-                'authorizer_id' => $request->typeCard,
-                'amount' => $amount*100,
-                'additional_data' => array(
-                    'currency' => 'VEF'
-                )
-            );
+            $sales = Sale::where("codeUrl", $codeUrl)->get();
+            $message="";
+            foreach ($sales as $sale)
+            {
+                if($sale->type == 0 && $sale->productService_id != 0){
+                    $product = Product::where('id',$sale->productService_id)->first();
+                    
+                    if ($product->postPurchase)
+                        $message .= "- ".$product->postPurchase."\n";
 
-            $jsonDataEncoded = json_encode($jsonData);
-
-
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array( 
-                "Content-Type: application/json",
-                "merchant_id: ".env('merchant_id'),
-                "merchant_key: ".env('merchant_key')
-            ));
-            
-            $result = json_decode(curl_exec($ch), true);
-            curl_close($ch);
-
-            $url = 'https://esitef-homologacao.softwareexpress.com.br/e-sitef/api/v1/payments/'.$result['payment']['nit'];
-            $ch = curl_init($url);
-
-            $jsonData = array(
-                'card' => array(
-                    'number' => $request->numberCard,
-                    'expiry_date' => $request->dateMM . $request->dateMM,
-                    'security_code' => $request->cardCVC
-                )
-            );
-
-            $jsonDataEncoded = json_encode($jsonData);
-
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array( 
-                "Content-Type: application/json",
-                "merchant_id: ".env('merchant_id'),
-                "merchant_key: ".env('merchant_key')
-            ));
-            
-            $resultTransaction = json_decode(curl_exec($ch), true);
-            curl_close($ch);
-
-
-            if($resultTransaction['message'] == 'OK. Transaction successful'){
-                $sales = Sale::where("codeUrl", $codeUrl)->get();
-                $message="";
-                foreach ($sales as $sale)
-                {
-                    if($sale->type == 0 && $sale->productService_id != 0){
-                        $product = Product::where('id',$sale->productService_id)->first();
-                        
-                        if ($product->postPurchase)
-                            $message .= "- ".$product->postPurchase."\n";
-
-                        $product->stock -= $sale->quantity;
-                        $product->save();
-                    }
-
-                    if($sale->type == 1 && $sale->productService_id != 0){
-                        $service = Service::where('id',$sale->productService_id)->first();
-                        
-                        if($service->postPurchase)
-                            $message .= "- ".$service->postPurchase."\n";
-                    }
-
-                    $sale->statusSale = 1;
-                    $sale->save();
+                    $product->stock -= $sale->quantity;
+                    $product->save();
                 }
 
-                $commerce = Commerce::where('userUrl',$request->userUrl)->first();
-                $user = User::where('id',$commerce->user_id)->first();
-
-                if(strlen($request->priceShipping)>0){
-                    $priceShipping = $request->priceShipping;
-                }else{
-                    $priceShipping = "0";
+                if($sale->type == 1 && $sale->productService_id != 0){
+                    $service = Service::where('id',$sale->productService_id)->first();
+                    
+                    if($service->postPurchase)
+                        $message .= "- ".$service->postPurchase."\n";
                 }
-                
-                $paid = Paid::create([
-                    "user_id"               => $user->id,
-                    "commerce_id"           => $commerce->id,
-                    "codeUrl"               => $codeUrl,
-                    "nameClient"            => $request->nameClient,
-                    "total"                 => $amount,
-                    "coin"                  => $request->coinClient,
-                    "email"                 => $request->email,
-                    "nameShipping"          => $request->name,
-                    "numberShipping"        => $request->number,
-                    "state"                 => $request->selectState,
-                    "municipalities"        => $request->selectMunicipalities,
-                    "addressShipping"       => $request->address,
-                    "detailsShipping"       => $request->details,
-                    "selectShipping"        => $request->selectShipping,
-                    "priceShipping"         => str_replace(",",".",$priceShipping),
-                    "percentage"            => $request->percentageSelect,
-                    "nameCompanyPayments"   => "E-sitef",
-                    "statusPayment"         => 2,
-                    "date"                  => Carbon::now(),
-                    "timeDelivery"          => Carbon::now()->addMinutes(10),
+
+                $sale->statusSale = 1;
+                $sale->save();
+            }
+
+            $commerce = Commerce::where('userUrl',$request->userUrl)->first();
+            $user = User::where('id',$commerce->user_id)->first();
+
+            if(strlen($request->priceShipping)>0){
+                $priceShipping = $request->priceShipping;
+            }else{
+                $priceShipping = "0";
+            }
+            
+            $paid = Paid::create([
+                "user_id"               => $user->id,
+                "commerce_id"           => $commerce->id,
+                "codeUrl"               => $codeUrl,
+                "nameClient"            => $request->nameClient,
+                "total"                 => $amount,
+                "coin"                  => $request->coinClient,
+                "email"                 => $request->email,
+                "nameShipping"          => $request->name,
+                "numberShipping"        => $request->number,
+                "state"                 => $request->selectState,
+                "municipalities"        => $request->selectMunicipalities,
+                "addressShipping"       => $request->address,
+                "detailsShipping"       => $request->details,
+                "selectShipping"        => $request->selectShipping,
+                "priceShipping"         => str_replace(",",".",str_replace(".","",$priceShipping)),
+                "percentage"            => $request->percentageSelect,
+                "nameCompanyPayments"   => $request->payment == "TRANSFERENCIA"? "Transferencia" : "Pago Móvil",
+                "statusPayment"         => 1,
+                "date"                  => Carbon::now(),
+            ]);
+
+            $paid->save();
+
+            foreach($request->amount as $key => $transaction){
+                PaymentsBs::create([
+                    "paid_id"       => $paid->id,
+                    "type"          => $request->payment == "TRANSFERENCIA"? 0 : 1,
+                    "bank"          => $request->bank[$key],
+                    "transaction"   => $request->numTransfers[$key],
+                    "amount"         => $request->amount[$key],
+                    "date"          => $request->date[$key],
+                    "date_created"  => Carbon::now(),
                 ]);
 
-                $paid->statusDelivery = 1;
-                $paid->save();
-
-                $userUrl = $request->userUrl;
-
-                if($request->coinClient == 0)
-                    $messageNotification = "Recibiste un pago de $ ".$amount;
-                else
-                    $messageNotification = "Recibiste un pago de BS ".$amount;
-
-                $this->sendFCM($user->token_fcm, $messageNotification);
-
-                (new User)->forceFill([
-                    'email' => $request->email,
-                ])->notify(
-                    new PaymentConfirm($request->nameClient, $codeUrl)
-                );
-
-                (new User)->forceFill([
-                    'email' => $user->email,
-                ])->notify(
-                    new NotificationCommerce($commerce, $codeUrl, 0)
-                );
-
-                $emailsGet = Settings::where('name','Email Delivery')->first();
-
-                if($emailsGet){
-                    $emails = json_decode($emailsGet->value);
-                    $messageAdmin = "se ha realizado un nuevo pedido con código de compra: ".$codeUrl;
-                    foreach($emails as $email){
-                        (new User)->forceFill([
-                            'email' => $email,
-                        ])->notify(
-                            new NotificationAdmin($messageAdmin)
-                        );
-                    } 
-                }
-
-                $status = true;
-                return view('result', compact('userUrl', 'status'));
-            }else{
-                Session::flash('message', "¡Tu pago ha fallado!");
-                return Redirect::back();
             }
+
+            $userUrl = $request->userUrl;
+
+            if($request->coinClient == 0)
+                $messageNotification = "Recibiste un pago de $ ".$amount;
+            else
+                $messageNotification = "Recibiste un pago de BS ".$amount;
+
+            $this->sendFCM($user->token_fcm, $messageNotification);
+
+            (new User)->forceFill([
+                'email' => $request->email,
+            ])->notify(
+                new PaymentVerification($request->nameClient, $codeUrl)
+            );
+
+            $emailsGet = Settings::where('name','Email Delivery')->first();
+
+            if($emailsGet){
+                $emails = json_decode($emailsGet->value);
+                $messageAdmin = "se ha realizado un nuevo pedido con código de compra: ".$codeUrl;
+                foreach($emails as $email){
+                    (new User)->forceFill([
+                        'email' => $email,
+                    ])->notify(
+                        new NotificationAdmin($messageAdmin)
+                    );
+                } 
+            }
+
+            $status = true;
+            return view('result', compact('userUrl', 'status'));
         }
 
     }
@@ -685,7 +633,7 @@ class PaidController extends Controller
             "addressShipping"       => $requestForm['address'],
             "detailsShipping"       => $requestForm['details'],
             "selectShipping"        => $requestForm['selectShipping'],
-            "priceShipping"         => str_replace(",",".",$priceShipping),
+            "priceShipping"         => str_replace(",",".",str_replace(".","",$priceShipping)),
             "percentage"            => $requestForm['percentageSelect'],
             "nameCompanyPayments"   => "PayPal",
             "date"                  => Carbon::now(),

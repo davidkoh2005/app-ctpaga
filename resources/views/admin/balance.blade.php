@@ -128,7 +128,7 @@
                     @endif
                     <label class="content-select">
                         <select class="addMargin" name="changeStatus" id="changeStatus">
-                            <option value="0">Cambiar Estado</option>
+                            <option value="0" disabled selected>Cambiar Estado</option>
                             <option value="1">Pendiente</option>
                             <option value="2">En Proceso</option>
                             <option value="3">Completado</option>

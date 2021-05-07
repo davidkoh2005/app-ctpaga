@@ -215,8 +215,11 @@ table {
     background-repeat: no-repeat, repeat;
     background-position: right .7em top 50%, 0 0;
     background-size: 1em auto, 100%;
+}
+
+.content-select-bank{
     font-size: 12px;
-  }
+}
  
 .content-select:hover i{
 	margin-top: 3px;

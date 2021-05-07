@@ -181,9 +181,9 @@ class CommerceController extends Controller
         
         if(!empty($request->selectPayment) && $request->selectPayment != "Selecionar Tipo de Pago"){
             if($request->selectPayment == "Tienda Web")
-                $transactions = $transactions->where('paids.nameCompanyPayments', "!=", "Tienda Fisica")->Where('paids.nameCompanyPayments', "!=", "Pago en Efectivo" );
+                $transactions = $transactions->where('paids.nameCompanyPayments', "!=", "Tienda Fisica");
             else
-                $transactions = $transactions->where('paids.nameCompanyPayments',  'like', "%" . $request->selectPayment . "%" );
+                $transactions = $transactions->where('paids.nameCompanyPayments', "Tienda Fisica");
         }
 
         $transactions = $transactions->whereDate('paids.created_at', ">=",$startDate)

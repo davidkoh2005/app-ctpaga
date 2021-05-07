@@ -36,8 +36,7 @@
                                 <div class="col">
                                     <select class="form-select form-control" name="selectPayment" id="selectPayment">
                                         <option value="Selecionar Tipo de Pago" disabled>Selecionar Tipo de Pago</option>
-                                        <option value="Tienda Web">Tienda Web</option>
-                                        <option value="Pago en Efectivo">Pago en Efectivo</option>
+                                        <optioC value="Tienda Web">Tienda Web</optioC
                                         <option value="Tienda Fisica">Tienda Fisica</option>
                                     </select>
                                 </div>
@@ -115,7 +114,7 @@
                             <td>{{ $transaction->nameClient}}</td>
                             <td>{{ $transaction->codeUrl}}</td>
                             <td>@if($transaction->coin == 0) $ @else Bs @endif {{ $transaction->total}}</td>
-                            <td>@if($transaction->nameCompanyPayments == "PayPal" || $transaction->nameCompanyPayments == "E-Sitef" || $transaction->nameCompanyPayments == "Square" || $transaction->nameCompanyPayments == "Bitcoin" ) Tienda Web @else {{$transaction->nameCompanyPayments}} @endif</td>
+                            <td>@if($transaction->nameCompanyPayments == "PayPal" || $transaction->nameCompanyPayments == "Transferencia" || $transaction->nameCompanyPayments == "Pago Móvil" || $transaction->nameCompanyPayments == "Square" || $transaction->nameCompanyPayments == "Bitcoin" ) Tienda Web @else {{$transaction->nameCompanyPayments}} @endif</td>
                             <td>
                                 @if($transaction->statusPayment == 0)
                                     <div class="cancelled">Cancelado</div>

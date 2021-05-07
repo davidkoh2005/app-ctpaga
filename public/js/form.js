@@ -18,6 +18,8 @@ $(document).ready(function(){
 
     $('#showCardForm').hide();
     $('#errorCard').hide();
+    $('.errorTransfers').hide();
+    $('.errorMobilePayments').hide();
     $('#loading').hide();    
     _coinClient = $('#coinClient').val();
 
@@ -29,6 +31,8 @@ $(document).ready(function(){
     });
 
     function navigateTo(index){
+        $('.errorTransfers').hide();
+        $('.errorMobilePayments').hide();
         curIndexJS = index;
         $sections.removeClass('current').eq(index).addClass('current');
         $(".form-navigation .next").removeClass('btn-active');
@@ -100,10 +104,7 @@ $(document).ready(function(){
         }
 
         if(index == 7){
-            if(_coinClient == 0)
-                $('.submit').hide();
-            else
-                $('.submit').show(); 
+            $('.submit').hide();
         }
             
 
@@ -220,6 +221,8 @@ $(document).ready(function(){
     $('.checkPayment').on('click', function(){
         if(!submit){
             $('#errorCard').hide();
+            $('.errorTransfers').hide();
+            $('.errorMobilePayments').hide();
             //$('#svg-check').remove();
             $(".checkPayment").removeClass("checkPaymentActive");
             $(this).addClass("checkPaymentActive");
@@ -251,30 +254,46 @@ $(document).ready(function(){
             else 
                 $("#showMobilePayment").css({"display":"none"});
             
+            $(".showDataTransfers").css({"display":"none"});
+            $(".showDataMobiles").css({"display":"none"});
+            $(".datepicker").attr('disabled', true);
+            $(".amount").attr('disabled', true);
+            $(".numTransfers").attr('disabled', true);
+            $(".selectBankTransfers option[value='']").prop("selected",true);
+            $(".selectBankMobiles option[value='']").prop("selected",true);
             $(".amount").val(0);
             $("#numTransfers").val();
             $(".showRemainingAmount").text("Bs "+formatter.format((totalPayment)));
             $(".showTotalPaid").text("Bs "+formatter.format((0)));
-            totalPaid = 0;
-
-            if(iTransfers > 1)
-                for (var i = 2; i <= iTransfers; i++) {
-                    $('#rowTransfers'+i+'').remove();
-                    $("#showCountTransfers").text(i);
-                }
             
-            if(iMobiles > 1)
-                for (var i = 2; i <= iMobiles; i++) {
-                    $('#rowMobile'+i+'').remove();
-                    $("#showCountMobiles").text(i);
-                }
+            if(selectPayment == "TRANSFERENCIA" || selectPayment == "PAGO MOVIL"){
+                totalPaid = 0;
+            
+                if(iTransfers > 0)
+                    for (var i = 1; i <= iTransfers; i++) {
+                        $('#rowTransfers'+i+'').remove();
+                        $("#showCountTransfers").text(i);
+                    }
+                
+                if(iMobiles > 0)
+                    for (var i = 1; i <= iMobiles; i++) {
+                        $('#rowMobiles'+i+'').remove();
+                        $("#showCountMobiles").text(i);
+                    }
+                
+                iTransfers = 0;
+                iMobiles = 0;
 
-            iTransfers = 1;
-            iMobiles = 1;
-
-            $("#showCountTransfers").text(iTransfers);
-            $("#showCountMobiles").text(iMobiles);
-            $(".amount").maskMoney({thousands:'.', decimal:',', allowZero:true, prefix:'Bs '});
+                if(selectPayment == "TRANSFERENCIA")
+                    addFormTransfers();
+                else
+                    addFormMobiles();
+                
+                addDateTime();
+                $("#showCountTransfers").text(iTransfers);
+                $("#showCountMobiles").text(iMobiles);
+                $(".amount").maskMoney({thousands:'.', decimal:',', allowZero:true, prefix:'Bs '});
+            }
             
             $('.submit').show();
         }
@@ -296,53 +315,88 @@ $(document).ready(function(){
         }
     });
 
-    $("#switchPay").on('click', function(){
-        if($(this).is(':checked')){
-            switchPay = true;
-            $(".dataPay").hide();
-            $("#nameCard").prop('required',false);
-        }
-        else{
-            switchPay = false;
-            $(".dataPay").show();
-            $("#nameCard").prop('required',true);
-        }
-    });
-
     $(".submit").on('click', function(e){
         e.preventDefault();
-        statusLoading = false;
-        $('.submit').hide();
-        $('#loading').show();
 
+        statusLoading = true;
         $('#errorCard').hide();
-        if(_coinClient == 0 && selectPayment != "CARD"){
+        $('.errorTransfers').hide();
+        $('.errorMobilePayments').hide();
+        
+        if(_coinClient == 0 && selectPayment != "CARD" || switchPay){
+            $('.submit').hide();
+            $('#loading').show();
             $("#payment-form").submit();
             submit = true;
-        }else if(_coinClient == 0 && selectPayment == "CARD")
+        }else if(_coinClient == 0 && selectPayment == "CARD"){
+            $('.submit').hide();
+            $('#loading').show();
             onGetCardNonce(e);
-        else{
-            if(switchPay){
-                $("#payment-form").submit();
-                submit = true;
-            }else{
-                if(validateDate() && $("input[name='typeCard']:checked").length  == 1){
-                    $('.contact-form').parsley().whenValidate({
-                        group: 'block-' + curIndex()
-                    }).done(function(){
-                        $("#payment-form").submit();
-                        submit = true;
-                    })
-                }else{
-                    $('#errorCard').show();
-                    $('.contact-form').parsley().whenValidate({
-                        group: 'block-' + curIndex()
-                    });
-                    $('.submit').show();
-                    $('#loading').hide();
-                }
-            }
         }
+        else if(_coinClient == 1){
+            var resultBank;
+            if(selectPayment == "TRANSFERENCIA")
+                resultBank = 'selectBankTransfers';
+            else
+                resultBank = 'selectBankMobiles';
+
+            var formError = false;
+            $('.'+resultBank).each(function(){
+                if($(this).find(":selected").text() == 'Seleccionar'){
+                    formError = true;
+                    return false;
+                }
+            });
+    
+            $('.datepicker').each(function(){
+                if($(this).val().length <3){
+                    formError = true;
+                    return false;
+                }
+            }); 
+    
+            $('.amount').each(function(){
+                if($(this).val().length <3){
+                    formError = true;
+                    return false;
+                }
+            });
+
+            $('.numTransfers').each(function(){
+                if($(this).val().length <3){
+                    formError = true;
+                    return false;
+                }
+            });
+
+            if(formError){
+                alertify.error('Error: Por favor rellene los formularios!');
+            }else if(totalPaid >= totalPayment){
+                $('.contact-form').parsley().whenValidate({
+                    group: 'block-' + curIndex()
+                }).done(function(){
+                    $('.submit').hide();
+                    $('#loading').show();
+                    $("#payment-form").submit();
+                });
+            }else{
+                if(selectPayment == "TRANSFERENCIA"){
+                    $('.errorTransfers').show();
+                    $('.errorMobilePayments').hide();
+                }else{
+                    $('.errorTransfers').hide();
+                    $('.errorMobilePayments').show();
+                }
+    
+                $('.errorMissing').text("El Total pagado debe ser igual a monto a pagar! Monto Restante Bs "+formatter.format(totalPayment - totalPaid));
+                alertify.error("El Total pagado debe ser igual a monto a pagar! Monto Restante Bs "+formatter.format(totalPayment - totalPaid));
+                $('.contact-form').parsley().whenValidate({
+                    group: 'block-' + curIndex()
+                });
+                $('.submit').show();
+                $('#loading').hide();
+            }
+        } 
 
     });
 

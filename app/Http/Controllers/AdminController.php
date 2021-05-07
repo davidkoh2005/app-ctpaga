@@ -26,6 +26,7 @@ use App\Settings;
 use App\SettingsBank;
 use App\HistoryCash;
 use App\DeliveryCost;
+use App\PaymentsBs;
 use Carbon\Carbon;
 use App\Notifications\UserPaused;
 use App\Notifications\UserRejected;
@@ -385,17 +386,25 @@ class AdminController extends Controller
         if(!empty($request->idCommerce))
             $transactions = $transactions->where('commerces.id', $request->idCommerce); 
 
-        if(!empty($request->searchNameCompany))
+        if(!empty($request->searchNameCompany)){
+            $searchNameCompany = $request->searchNameCompany;
             $transactions = $transactions->where('commerces.name', 'like', '%'.$request->searchNameCompany.'%' );
+        }
         
-        if(!empty($request->searchNameClient))
+        if(!empty($request->searchNameClient)){
+            $searchNameClient = $request->searchNameClient;
             $transactions = $transactions->where('paids.nameClient', 'like', '%'.$request->searchNameClient.'%');
+        }
 
-        if(!empty($request->selectCoin) && $request->selectCoin != "Selecionar Moneda")
+        if(!empty($request->selectCoin) && $request->selectCoin != "Selecionar Moneda"){
+            $selectCoin = $request->selectCoin;
             $transactions = $transactions->where('paids.coin', $request->selectCoin);
+        }
         
-        if(!empty($request->selectPayment) && $request->selectPayment != "Selecionar Tipo de Pago")
+        if(!empty($request->selectPayment) && $request->selectPayment != "Selecionar Tipo de Pago"){
+            $selectPayment = $request->selectPayment;
             $transactions = $transactions->where('paids.nameCompanyPayments', $request->selectPayment);
+        }
 
         $transactions = $transactions->whereDate('paids.created_at', ">=",$startDate)
                     ->whereDate('paids.created_at', "<=",$endDate)
@@ -425,6 +434,13 @@ class AdminController extends Controller
         $rate = $sales[0]->rate;
         $coinClient = $sales[0]->coinClient;
         $returnHTML=view('admin.dataProductService', compact('transaction','sales', 'rate', 'coinClient', 'delivery'))->render();
+        return response()->json(array('html'=>$returnHTML));
+    }
+
+    public function transactionsBs(Request $request)
+    {
+        $transactions = PaymentsBs::where('paid_id', $request->id)->get();
+        $returnHTML=view('admin.showTransactions', compact('transactions'))->render();
         return response()->json(array('html'=>$returnHTML));
     }
 
@@ -460,7 +476,7 @@ class AdminController extends Controller
 
             if($request->status == 2){
                 $transaction->statusDelivery = 1;
-                $paid->timeDelivery = Carbon::now()->addMinutes(10);
+                $transaction->timeDelivery = Carbon::now()->addMinutes(10);
             }
 
             $transaction->save();

@@ -79,6 +79,9 @@
     </style>
 </head>
 <body style="margin: 50px;">
+    @php
+        use Carbon\Carbon;
+    @endphp
     <div class="row">
         <div class="positionImage">
         @php
@@ -130,7 +133,7 @@
                     <td>{{ $transaction->nameClient }}</td>
                     <td>{{ $transaction->codeUrl }}</td>
                     <td>@if($transaction->coin == 0) $ @else Bs @endif {{ $transaction->total}}</td>
-                    <td>@if($transaction->nameCompanyPayments == "PayPal" || $transaction->nameCompanyPayments == "E-Sitef" ) Tienda Web @else {{$transaction->nameCompanyPayments}} @endif</td>
+                    <td>@if($transaction->nameCompanyPayments == "Tienda Fisica") Tienda Fisica @else Tienda Web @endif</td>
                     <td>
                         @if($transaction->statusPayment == 0)
                             <div class="cancelled">Cancelado</div>

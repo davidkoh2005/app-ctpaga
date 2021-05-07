@@ -46,7 +46,8 @@
                                 <div class="col">
                                     <select class="form-select form-control" name="selectPayment" id="selectPayment">
                                         <option value="Selecionar Tipo de Pago" disabled>Selecionar Tipo de Pago</option>
-                                        <option value="E-sitef">E-sitef</option>
+                                        <option value="Transferencia">Transferencia</option>
+                                        <option value="Pago Móvil">Pago Móvil</option>
                                         <option value="Square">Square</option>
                                         <option value="PayPal">PayPal</option>
                                         <option value="Bitcoin">Bitcoin</option>
@@ -148,6 +149,9 @@
                             <td> {{date('d/m/Y h:i A',strtotime($transaction->date))}}</td>
                             <td>
                                 <button class="btn btn-bottom" onClick="showProduct({{$transaction->id}})" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Productos"><i class="material-icons">shopping_bag</i></button>
+                                @if($transaction->nameCompanyPayments == 'Transferencia' || $transaction->nameCompanyPayments == 'Pago Móvil')
+                                    <button class="btn btn-bottom" onClick="showTransactions({{$transaction->id}})" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Transacciones"><i class="material-icons">receipt</i></button>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
@@ -163,7 +167,7 @@
                     <strong class="addMarginRight">Acciones:</strong>
                     <label class="content-select">
                         <select class="addMargin" name="changeStatus" id="changeStatus">
-                            <option value="-1">Cambiar Estado</option>
+                            <option value="-1" disabled selected>Cambiar Estado</option>
                             <option value="0">Cancelado</option>
                             <option value="1">Pendiente</option>
                             <option value="2">Completado</option>
@@ -177,7 +181,7 @@
     </div>
 
     <!--- Modal products -->
-    <div class="modal fade" id="productsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="transactionsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -186,7 +190,7 @@
                     </button>
                 </div>              
                 <div class="modal-body">
-                    <div id="showProducts"></div>
+                    <div id="showTransactions"></div>
                 </div>
             </div>
         </div>
@@ -208,11 +212,27 @@
                 type: "GET",
             }).done(function(data){
                 $('#productsModal').modal('show'); 
-                $('#showProducts').html(data.html);
+                $('#showTransactions').html(data.html);
             }).fail(function(result){
                 alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                 $('#productsModal').modal('hide'); 
-                $('#showProducts').html();
+                $('#showTransactions').html();
+            });
+        }
+
+        function showTransactions(id)
+        {
+            $.ajax({
+                url: "{{route('admin.transactionsBs')}}", 
+                data: {"id" : id},
+                type: "GET",
+            }).done(function(data){
+                $('#transactionsModal').modal('show'); 
+                $('#showTransactions').html(data.html);
+            }).fail(function(result){
+                alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                $('#transactionsModal').modal('hide'); 
+                $('#showTransactions').html();
             });
         }
 
