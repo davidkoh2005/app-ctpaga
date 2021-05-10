@@ -375,6 +375,7 @@
     </Section>
 
     <script> 
+        var urlLoading = "{{ asset('/images/loadingTransparent.gif') }}";
         var commerceName = "{{$commerce->name}}";
         var statusModification = {{$statusModification}};
         applicationId = "{{env('SQUARE_APP_ID')}}";
@@ -503,6 +504,11 @@
                 var $row = jQuery(this).closest('tr');
                 var $idTransfers = $row[0]['id'];
 
+                if($('#'+$idTransfers).find(".showDataTransfers").css('display') == 'block')
+                    $('#'+$idTransfers).find(".showDataTransfers").css({"display":"none"});
+
+                $('#'+$idTransfers).find(".loading").css({"display":"block"});
+
                 if($(this).val() != "" && _coinClient == 1){
                     $.ajax({
                         url: "{{route('settingsBank.showData')}}", 
@@ -510,6 +516,7 @@
                         type: "POST",
                     }).done(function(result){
                         dataTransfer = result.data;
+                        $('#'+$idTransfers).find(".loading").css({"display":"none"});
                         $('#'+$idTransfers).find(".showDataTransfers").css({"display":"block"});
                         $('#'+$idTransfers).find(".showAccountName").text(dataTransfer.accountName);
                         $('#'+$idTransfers).find(".showIdCard").text(dataTransfer.idCard);
@@ -533,6 +540,11 @@
                 var $row = jQuery(this).closest('tr');
                 var $idMobiles = $row[0]['id'];
 
+                if($('#'+$idMobiles).find(".showDataMobiles").css('display') == 'block')
+                    $('#'+$idMobiles).find(".showDataMobiles").css({"display":"none"});
+
+                $('#'+$idMobiles).find(".loading").css({"display":"block"});
+
                 if($(this).val() != "" && _coinClient == 1){
                     $.ajax({
                         url: "{{route('settingsBank.showData')}}", 
@@ -540,6 +552,7 @@
                         type: "POST",
                     }).done(function(result){
                         dataMobiles = result.data;
+                        $('#'+$idMobiles).find(".loading").css({"display":"none"});
                         $('#'+$idMobiles).find(".showDataMobiles").css({"display":"block"});
                         $('#'+$idMobiles).find(".showIdCard").text(dataMobiles.idCard);
                         $('#'+$idMobiles).find(".showPhone").text(dataMobiles.phone);
@@ -555,6 +568,7 @@
             });
 
             $('#addTransfers').click(function(){
+
                 iTransfers++;
                 $('#dynamic_field_transfers').append('\
                     <tr id="rowTransfers'+iTransfers+'" class="trTransfers">\
@@ -570,6 +584,9 @@
                                 <label><strong>Cédula o Rif: </strong> <span class="showIdCard"></span></label> <br>\
                                 <label><strong>Número de Cuenta: </strong> <span class="showAccountNumber"></span></label> <br>\
                                 <label><strong>Tipo de Cuenta: </strong> <span class="showAccountType"></span></label> <br>\
+                            </div>\
+                            <div class="row justify-content-center loading" id="loading" style="display:none;">\
+                                <img widht="80px" height="80px" class="justify-content-center" src="'+urlLoading+'">\
                             </div>\
                             <div class="justify-content-center align-items-center minh-10">\
                                 <label class="col col-form-label">Banco:</label>\
@@ -620,9 +637,12 @@
                             <div class="mx-auto">\
                                 <label><strong>Pago Móvil No. '+iMobiles+'</strong> </label> <br>\
                             </div>\
-                            <div class="showDataMobile" style="text-align: initial; display:none;">\
+                            <div class="showDataMobiles" style="text-align: initial; display:none;">\
                                 <label><strong>Cédula o Rif: </strong> <span class="showIdCard"></span></label> <br>\
                                 <label><strong>Teléfono: </strong> <span class="showPhone"></span></label> <br>\
+                            </div>\
+                            <div class="row justify-content-center loading" id="loading" style="display:none;">\
+                                <img widht="80px" height="80px" class="justify-content-center" src="'+urlLoading+'">\
                             </div>\
                             <div class="justify-content-center align-items-center minh-10">\
                                 <label class="col col-form-label">Banco:</label>\
@@ -712,6 +732,9 @@
                             <label><strong>Número de Cuenta: </strong> <span class="showAccountNumber"></span></label> <br>\
                             <label><strong>Tipo de Cuenta: </strong> <span class="showAccountType"></span></label> <br>\
                         </div>\
+                        <div class="row justify-content-center loading" id="loading" style="display:none;">\
+                            <img widht="80px" height="80px" class="justify-content-center" src="'+urlLoading+'">\
+                        </div>\
                         <div class="justify-content-center align-items-center minh-10">\
                             <label class="col col-form-label">Banco:</label>\
                             <label class="content-select content-select-bank">\
@@ -757,9 +780,12 @@
                         <div class="mx-auto">\
                             <label><strong>Pago Móvil No. '+iMobiles+'</strong> </label> <br>\
                         </div>\
-                        <div class="showDataMobile" style="text-align: initial; display:none;">\
+                        <div class="showDataMobiles" style="text-align: initial; display:none;">\
                             <label><strong>Cédula o Rif: </strong> <span class="showIdCard"></span></label> <br>\
                             <label><strong>Teléfono: </strong> <span class="showPhone"></span></label> <br>\
+                        </div>\
+                        <div class="row justify-content-center loading" id="loading" style="display:none;">\
+                            <img widht="80px" height="80px" class="justify-content-center" src="'+urlLoading+'">\
                         </div>\
                         <div class="justify-content-center align-items-center minh-10">\
                             <label class="col col-form-label">Banco:</label>\
