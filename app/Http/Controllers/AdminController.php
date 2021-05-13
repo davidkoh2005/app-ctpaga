@@ -27,6 +27,7 @@ use App\SettingsBank;
 use App\HistoryCash;
 use App\DeliveryCost;
 use App\PaymentsBs;
+use App\PaymentsZelle;
 use Carbon\Carbon;
 use App\Notifications\UserPaused;
 use App\Notifications\UserRejected;
@@ -441,6 +442,13 @@ class AdminController extends Controller
     {
         $transactions = PaymentsBs::where('paid_id', $request->id)->get();
         $returnHTML=view('admin.showTransactions', compact('transactions'))->render();
+        return response()->json(array('html'=>$returnHTML));
+    }
+
+    public function transactionsZelle(Request $request)
+    {
+        $zelle = PaymentsZelle::where('paid_id', $request->id)->first();
+        $returnHTML=view('admin.showTransactions', compact('zelle'))->render();
         return response()->json(array('html'=>$returnHTML));
     }
 
@@ -967,10 +975,12 @@ class AdminController extends Controller
 
         $data = file_get_contents("json/listBanks.json");
         $listBanks = json_decode($data, true);
+
+        $zelle = Settings::where('name','Zelle')->first();
         
         $statusMenu="settings";
 
-        return view('admin.settings', compact('statusMenu', 'emailsAllPaid', 'emailsAllDelivery', 'statusPaidAll', 'scheduleInitial', 'scheduleFinal', 'listBanks', 'transfers', 'mobilePayments'));
+        return view('admin.settings', compact('statusMenu', 'emailsAllPaid', 'emailsAllDelivery', 'statusPaidAll', 'scheduleInitial', 'scheduleFinal', 'listBanks', 'transfers', 'mobilePayments', 'zelle'));
     }
     
 
@@ -1098,6 +1108,18 @@ class AdminController extends Controller
                 ]);
             }
         }
+        return redirect(route('admin.settings'));
+    }
+
+    public function SettingsZelle(Request $request)
+    {
+        $zelle = Settings::firstOrNew([
+            'name'       => 'Zelle',
+        ]);
+
+        $zelle->value = $request->email;
+        $zelle->save();
+
         return redirect(route('admin.settings'));
     }
 

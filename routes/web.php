@@ -84,6 +84,7 @@ Route::group(['middleware'=>'admin'], function() {
     Route::get('/admin/transacciones/{id}', 'AdminController@transactions')->name('admin.transactionsSearchId');
     Route::get('/admin/transactionsShow/', 'AdminController@transactionsShow')->name('admin.transactionsShow');
     Route::get('/admin/transaccionesBs/', 'AdminController@transactionsBs')->name('admin.transactionsBs');
+    Route::get('/admin/transaccionesZelle/', 'AdminController@transactionsZelle')->name('admin.transactionsZelle');
     Route::post('/admin/payment', 'AdminController@showPayment')->name('admin.showPayment');
     Route::post('/admin/status', 'AdminController@changeStatus')->name('admin.changeStatus');
     Route::post('/admin/statusPayment', 'AdminController@changeStatusPayment')->name('admin.changeStatusPayment');
@@ -116,6 +117,7 @@ Route::group(['middleware'=>'admin'], function() {
     Route::post('/admin/listCost', 'AdminController@listCost')->name('admin.listCost');
     Route::post('/admin/settingsTransfers', 'AdminController@settingsTransfers')->name('admin.settingsTransfers');
     Route::post('/admin/settingsMobile', 'AdminController@settingsMobile')->name('admin.settingsMobile');
+    Route::post('/admin/settingsZelle', 'AdminController@settingsZelle')->name('admin.settingsZelle');
 });
 
 Route::post('/admin/removePicture', 'AdminController@removePicture')->name('admin.removePicture');

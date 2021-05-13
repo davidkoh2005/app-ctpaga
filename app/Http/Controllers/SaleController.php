@@ -18,6 +18,7 @@ use App\Discount;
 use App\Product;
 use App\Service;
 use App\Category;
+use App\Settings;
 use App\DeliveryCost;
 use App\SettingsBank;
 
@@ -93,8 +94,10 @@ class SaleController extends Controller
 
         $data = file_get_contents("json/listBanks.json");
         $listBanks = json_decode($data, true);
+
+        $zelle = Settings::where('name','Zelle')->first();
     
-        return view('multi-step-form', compact('userUrl','codeUrl', 'statusModification', 'commerce','picture', 'sales', 'nameClient', 'rate', 'coinClient', 'total', 'shippings', 'quantity', 'msg', 'transfers', 'mobilePayments', 'listBanks'));
+        return view('multi-step-form', compact('userUrl','codeUrl', 'statusModification', 'commerce','picture', 'sales', 'nameClient', 'rate', 'coinClient', 'total', 'shippings', 'quantity', 'msg', 'transfers', 'mobilePayments', 'listBanks', 'zelle'));
     }
 
     public function new(Request $request)

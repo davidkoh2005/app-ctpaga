@@ -48,6 +48,7 @@
                                         <option value="Selecionar Tipo de Pago" disabled>Selecionar Tipo de Pago</option>
                                         <option value="Transferencia">Transferencia</option>
                                         <option value="Pago Móvil">Pago Móvil</option>
+                                        <option value="Zelle">Zelle</option>
                                         <option value="Square">Square</option>
                                         <option value="PayPal">PayPal</option>
                                         <option value="Bitcoin">Bitcoin</option>
@@ -151,6 +152,8 @@
                                 <button class="btn btn-bottom" onClick="showProduct({{$transaction->id}})" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Productos"><i class="material-icons">shopping_bag</i></button>
                                 @if($transaction->nameCompanyPayments == 'Transferencia' || $transaction->nameCompanyPayments == 'Pago Móvil')
                                     <button class="btn btn-bottom" onClick="showTransactions({{$transaction->id}})" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Transacciones"><i class="material-icons">receipt</i></button>
+                                @elseif($transaction->nameCompanyPayments == 'Zelle')
+                                    <button class="btn btn-bottom" onClick="showTransactionsZelle({{$transaction->id}})" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Transacciones"><i class="material-icons">receipt</i></button>
                                 @endif
                             </td>
                         </tr>
@@ -227,6 +230,23 @@
                 data: {"id" : id},
                 type: "GET",
             }).done(function(data){
+                $('#transactionsModal').modal('show'); 
+                $('#showTransactions').html(data.html);
+            }).fail(function(result){
+                alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                $('#transactionsModal').modal('hide'); 
+                $('#showTransactions').html();
+            });
+        }
+
+        function showTransactionsZelle(id)
+        {
+            $.ajax({
+                url: "{{route('admin.transactionsZelle')}}", 
+                data: {"id" : id},
+                type: "GET",
+            }).done(function(data){
+                console.log(data.html);
                 $('#transactionsModal').modal('show'); 
                 $('#showTransactions').html(data.html);
             }).fail(function(result){

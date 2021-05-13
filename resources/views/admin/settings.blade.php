@@ -49,6 +49,9 @@
                     <li class="nav-item" role="presentation">
                         <a class="nav-link settings" id="pills-mobile-tab" href="#pills-mobile" data-toggle="tab">Pago Móvil</a>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link settings" id="pills-zelle-tab" href="#pills-zelle" data-toggle="tab">Zelle</a>
+                    </li>
                 </ul>
                 <div class="row">&nbsp;</div>
                 <div class="row">&nbsp;</div>
@@ -445,6 +448,19 @@
                             <div class="row">&nbsp;</div>
                             <div class="col-6 mx-auto">
                                 <button type="submit" class="submit btn btn-bottom" id="submitMobile">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade has-success" id="pills-zelle" role="tabpanel" aria-labelledby="pills-zelle-tab">
+                        <form id="formCost" action="{{route('admin.settingsZelle')}}" method="post">
+                            <div class="mb-3 row">
+                                <label class="col-sm-4 col-form-label">Correo electronico</label>
+                                <div class="col">
+                                    <input class="form-control" type="email" name="email" autocomplete="off"  minlength="4" value="{{$zelle != NULL ? $zelle->value : ''}}" required>
+                                </div>
+                            </div>
+                            <div class="col-6 mx-auto">
+                                <button type="submit" class="submit btn btn-bottom" id="submitCost">Guardar</button>
                             </div>
                         </form>
                     </div>

@@ -32,6 +32,7 @@ use App\Settings;
 use App\Delivery;
 use App\DeliveryCost;
 use App\PaymentsBs;
+use App\PaymentsZelle;
 use Session;
 use AWS;
 use PayPal\Api\Amount;
@@ -342,7 +343,7 @@ class PaidController extends Controller
             } catch (PayPalConnectionException $ex) {
                 echo $ex->getData();
             }
-        }elseif($request->coinClient == 0 && $request->payment == "BITCOIN"){
+        }elseif($request->coinClient == 0 && $request->payment == "BITCOIN" || $request->payment == "ZELLE"  ){
             
             $sales = Sale::where("codeUrl", $codeUrl)->get();
             $message="";
@@ -379,7 +380,7 @@ class PaidController extends Controller
                 $priceShipping = "0";
             }
 
-            Paid::create([
+            $paid = Paid::create([
                 "user_id"               => $user->id,
                 "commerce_id"           => $commerce->id,
                 "codeUrl"               => $codeUrl,
@@ -396,30 +397,39 @@ class PaidController extends Controller
                 "selectShipping"        => $request->selectShipping,
                 "priceShipping"         => str_replace(",",".",str_replace(".","",$priceShipping)),
                 "percentage"            => $request->percentageSelect,
-                "nameCompanyPayments"   => "Bitcoin",
+                "nameCompanyPayments"   => $request->payment == "BITCOIN"? "Bitcoin" : "Zelle",
                 "date"                  => Carbon::now(),
                 "statusPayment"         => 1,
             ]);
 
             (new User)->forceFill([
-                'email' => $requestForm['email'],
+                'email' => $request->email,
             ])->notify(
                 new PaymentVerification($request->nameClient, $codeUrl)
             );
 
-            ApiClient::init(env('COINBASE_KEY'));
+            if($request->payment == "BITCOIN"){
+                ApiClient::init(env('COINBASE_KEY'));
 
-            $chargeData = [
-                'name' => 'Pago CTpaga',
-                'description' => 'Transacción código: '.$codeUrl,
-                'code' => $codeUrl,
-                'local_price' => [
-                    'amount' => $amount,
-                    'currency' => 'USD'
-                ],
-                'pricing_type' => 'fixed_price'
-            ];
-            $chargeObj = Charge::create($chargeData);
+                $chargeData = [
+                    'name' => 'Pago CTpaga',
+                    'description' => 'Transacción código: '.$codeUrl,
+                    'code' => $codeUrl,
+                    'local_price' => [
+                        'amount' => $amount,
+                        'currency' => 'USD'
+                    ],
+                    'pricing_type' => 'fixed_price'
+                ];
+                $chargeObj = Charge::create($chargeData);
+            }else{
+                PaymentsZelle::create([
+                    "paid_id"       => $paid->id,
+                    "nameAccount"   => $request->nameZelle,
+                    "idConfirm"     => $request->idConfirmZelle,
+                    "date_created"  => Carbon::now(),
+                ]);
+            }
 
             
             $emailsGet = Settings::where('name','Email Transaccion')->first();
@@ -436,8 +446,12 @@ class PaidController extends Controller
                 } 
             }
 
-            
-            return redirect()->away($chargeObj->hosted_url);
+            if($request->payment == "BITCOIN"){
+                return redirect()->away($chargeObj->hosted_url);
+            }else{
+                $status = false;
+                return view('result', compact('userUrl', 'status'));
+            }
         
         }elseif($request->coinClient == 1){
             

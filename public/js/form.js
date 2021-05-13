@@ -220,6 +220,8 @@ $(document).ready(function(){
 
     $('.checkPayment').on('click', function(){
         if(!submit){
+            $("#nameZelle").prop('required',false);
+            $("#idConfirmZelle").prop('required',false);
             $('#errorCard').hide();
             $('.errorTransfers').hide();
             $('.errorMobilePayments').hide();
@@ -233,6 +235,14 @@ $(document).ready(function(){
             /* var svg = $(this).find('#iconChecked');
             svg.append("<svg width='2em' height='2em' viewBox='0 0 16 16' class='bi bi-check-circle-fill' id='svg-check' fill='currentColor'><path fill-rule='evenodd' d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z'/></svg>"); */
             $('#selectPayment').val($(this).find('#paymentDescription').val());
+
+            if($(this).find('#paymentDescription').val() == "ZELLE"){
+                $("#nameZelle").prop('required',true);
+                $("#idConfirmZelle").prop('required',true);
+                $("#showZelle").css({"display":"block"});
+            }
+            else 
+                $("#showZelle").css({"display":"none"});
 
             if($(this).find('#paymentDescription').val() == "EFECTIVO")
                 switchPay = true;
@@ -323,11 +333,25 @@ $(document).ready(function(){
         $('.errorTransfers').hide();
         $('.errorMobilePayments').hide();
         
-        if(_coinClient == 0 && selectPayment != "CARD" || switchPay){
-            $('.submit').hide();
-            $('#loading').show();
-            $("#payment-form").submit();
-            submit = true;
+        if(_coinClient == 0 && selectPayment == "ZELLE"){
+            $('.contact-form').parsley().whenValidate({
+                group: 'block-' + curIndex()
+            }).done(function(){
+                submit = true;
+                $('.submit').hide();
+                $('#loading').show();
+                $("#payment-form").submit(); 
+            });
+        }else if(_coinClient == 0 && selectPayment != "CARD" || switchPay){
+            console.log("entro");
+            $('.contact-form').parsley().whenValidate({
+                group: 'block-' + curIndex()
+            }).done(function(){
+                submit = true;
+                $('.submit').hide();
+                $('#loading').show();
+                $("#payment-form").submit(); 
+            });
         }else if(_coinClient == 0 && selectPayment == "CARD"){
             $('.submit').hide();
             $('#loading').show();
@@ -586,4 +610,8 @@ function validateDate(){
     var month = parseInt($('#dateMM').val(), 10);
     var year = parseInt($('#dateYY').val(), 10);
     return (month && year && (month >= 1 && month <= 12) && (year == minYear && month >= minMonth) || year > minYear);
+}
+
+function mayus(e) {
+    e.value = e.value.toUpperCase();
 }

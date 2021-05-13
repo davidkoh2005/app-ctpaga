@@ -1,6 +1,11 @@
-@php
-    use Carbon\Carbon;
-@endphp
+@isset($zelle)
+<div id="title"><h5 class="center">Zelle</h5></div>
+<div class="row">&nbsp;</div>
+<div style="text-align: initial;">
+    <label><strong>Nombre de Cuenta: </strong> {{$zelle->nameAccount}}</label> <br>
+    <label><strong>ID de Confirmacion: </strong> {{$zelle->idConfirm}}</label> <br>
+</div>
+@else
 <div id="title"><h5 class="center">@if($transactions[0]->type == 0) Transferencia @else Pago Móvil @endif</h5></div>
 <div class="row">&nbsp;</div>
 <div class="row">&nbsp;</div>
@@ -24,3 +29,4 @@
         @endforeach
     </tbody>
 </table>
+@endif

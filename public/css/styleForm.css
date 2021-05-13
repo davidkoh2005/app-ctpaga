@@ -251,6 +251,7 @@ div.shipping-price{
 }
 
 .radio-shippings, .radio-payment {
+    display: none;
     width: 0;
     height: 0;
 }

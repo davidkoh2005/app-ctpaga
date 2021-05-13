@@ -279,7 +279,30 @@
                                             <input type="hidden" name="nonce" id="nonce">
                                             <input type="hidden" name="idempotency_key" id="idempotency_key">
                                         </div>
-
+                                        @if($zelle != NULL)
+                                        <div class="row checkPayment checkPaymentWhite justify-content-center align-items-center minh-10">
+                                            <div class="description-payment col center">
+                                                <input type="radio" class="radio-payment" name="payment" id="payment" value="ZELLE">
+                                                <img class="img-fluid" alt="Responsive image" src="{{ asset('images/zelle.png') }}">
+                                                <input type="hidden" id="paymentDescription" value="ZELLE">
+                                            </div>
+                                        </div>
+                                        <div id="showZelle" style="padding-bottom: 80px; display:none;">
+                                            <label>Por favor envíe su pago Zelle al siguiente correo: <strong>{{$zelle->value}}</strong> <br> Cuando reciba el código de confirmación del envío, ingréselo en el siguiente campo.</label>
+                                            <div class="justify-content-center align-items-center minh-10">
+                                                <label class="col col-form-label">Nombre de Cuenta Zelle:</label>
+                                                <div class="col">
+                                                    <input type="text" class="form-control nameZelle" name="nameZelle" id="nameZelle" data-parsley-minlength="3" minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" autocomplete="off"/>
+                                                </div>
+                                            </div>
+                                            <div class="justify-content-center align-items-center minh-10">
+                                                <label class="col col-form-label">Zelle ID Confirmación:</label>
+                                                <div class="col">
+                                                <input type="text" class="form-control idConfirmZelle" name="idConfirmZelle" id="idConfirmZelle" onkeyup="mayus(this);" data-parsley-minlength="12" minlength="12" maxlenght="12" data-parsñey-pattern="[A-Z0-9]{11,12}" autocomplete="off"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endif
                                         <div class="row checkPayment checkPaymentWhite justify-content-center align-items-center minh-10">
                                             <div class="description-payment col center">
                                                 <input type="radio" class="radio-payment" name="payment" id="payment" value="PAYPAL">
@@ -319,13 +342,13 @@
                                             <table class="table table-bordered" id="dynamic_field_transfers" bordercolor="#ff0000"></table>
                                             
                                             <div style="text-align: end;">
-                                                <label><strong>Cantidad de Transferencias: <span id="showCountTransfers">1</span> </strong></label> <br>
+                                                <label><strong>Cantidad de c: <span id="showCountTransfers">1</span> </strong></label> <br>
                                                 <label><strong>Monto a pagar: <span class="totalPayment">Bs 0</span></strong></label> <br>
                                                 <label style="color:red !important;"><strong>Monto Restante: <span class="showRemainingAmount"></span> </strong></label> <br>
                                                 <label><strong>Total Pagado: <span class="showTotalPaid">Bs 0</span></strong></label> <br>
                                             </div>
                                             <div class="d-flex justify-content-end">
-                                                <button type="button" name="add" id="addTransfers" class="btn" data-toggle="tooltip" data-placement="top" title="Agregar otra transferencia"><i class="fa fa-plus-circle button-add" aria-hidden="true"></i></button>
+                                                <label style="margin-top: 12px;">Agregar nuevo Transferencia</label><button type="button" name="add" id="addTransfers" class="btn" data-toggle="tooltip" data-placement="top" title="Agregar otra transferencia"><i class="fa fa-plus-circle button-add" aria-hidden="true"></i></button>
                                             </div>
                                         </div>
                                         <div class="row checkPayment checkPaymentWhite justify-content-center align-items-center minh-10">
@@ -349,7 +372,7 @@
                                                 <label><strong>Total Pagado: <span class="showTotalPaid">Bs 0</span></strong></label> <br>
                                             </div>
                                             <div class="d-flex justify-content-end">
-                                                <button type="button" name="add" id="addMobiles" class="btn" data-toggle="tooltip" data-placement="top" title="Agregar otro pago móvil"><i class="fa fa-plus-circle button-add" aria-hidden="true"></i></button>
+                                                <label style="margin-top: 12px;">Agregar nuevo Pago Móvil</label> <button type="button" name="add" id="addMobiles" class="btn" data-toggle="tooltip" data-placement="top" title="Agregar otro pago móvil"><i class="fa fa-plus-circle button-add" aria-hidden="true"></i></button>
                                             </div>
                                         </div>
                                     @endif
@@ -531,6 +554,9 @@
                         $('#'+$idTransfers).find(".amount").attr('disabled', false);
                         $('#'+$idTransfers).find(".numTransfers").attr('disabled', false);
                     }).fail(function(result){
+                        $('#'+$idTransfers).find(".selectBankTransfers option[value='']").prop("selected",true);
+                        $('#'+$idTransfers).find(".loading").css({"display":"none"});
+                        $('#'+$idTransfers).find(".showDataTransfers").css({"display":"none"});
                         alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                     }); 
                 }
@@ -562,6 +588,9 @@
                         $('#'+$idMobiles).find(".numTransfers").attr('disabled', false);
 
                     }).fail(function(result){
+                        $('#'+$idMobiles).find(".selectBankMobiles option[value='']").prop("selected",true);
+                        $('#'+$idMobiles).find(".loading").css({"display":"none"});
+                        $('#'+$idMobiles).find(".showDataMobiles").css({"display":"none"});
                         alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                     }); 
                 }
@@ -724,7 +753,7 @@
                 <tr id="rowTransfers'+iTransfers+'" class="trTransfers">\
                     <td>\
                         <div class="mx-auto">\
-                            <label><strong>Transferencia No. '+iTransfers+'</strong> </label> <br>\
+                            <label><strong>Transferencia</strong> </label> <br>\
                         </div>\
                         <div class="showDataTransfers" style="text-align: initial; display:none;">\
                             <label><strong>Titular: </strong> <span class="showAccountName"></span></label> <br>\
@@ -778,7 +807,7 @@
                 <tr id="rowMobiles'+iMobiles+'" class="trMobile">\
                     <td>\
                         <div class="mx-auto">\
-                            <label><strong>Pago Móvil No. '+iMobiles+'</strong> </label> <br>\
+                            <label><strong>Pago Móvil</strong> </label> <br>\
                         </div>\
                         <div class="showDataMobiles" style="text-align: initial; display:none;">\
                             <label><strong>Cédula o Rif: </strong> <span class="showIdCard"></span></label> <br>\

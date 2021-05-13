@@ -52,11 +52,13 @@ Route::group(['prefix' => 'auth'], function () {
 
         Route::post('updateUserImg', 'UserController@updateImg');
         Route::post('updateUser', 'UserController@updateUser');
+        Route::post('updateEmailUser', 'UserController@updateEmailUser');
 
         Route::get('updateBankUser', 'UserController@updateBankUser');
 
         Route::post('createCommerce', 'UserController@createCommerce');
         Route::post('updateCommerceUser', 'UserController@updateCommerceUser');
+        Route::post('deleteCommerceUser', 'UserController@deleteCommerceUser');
 
         Route::post('showCategories', 'CategoryController@show');
         Route::post('newCategories', 'CategoryController@new');
@@ -90,5 +92,6 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('showPaids', 'PaidController@show');
 
         Route::post('showBalances', 'BalanceController@show');
+        
     });
 });

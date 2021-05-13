@@ -53,7 +53,7 @@ class CommerceController extends Controller
             return redirect(route('admin.dashboard'));
         }
 
-        $commercesUser = Commerce::where('user_id', Auth::guard('web')->id())
+        $commercesUser = Commerce::where('user_id', Auth::guard('web')->id())->where('delete',0)
                                 ->orderBy('name', 'asc')->get();
 
         $totalShopping = 0;
@@ -142,7 +142,7 @@ class CommerceController extends Controller
             $commerceName = $commerce->name;
         }
 
-        $commercesUser = Commerce::where('user_id', Auth::guard('web')->id())
+        $commercesUser = Commerce::where('user_id', Auth::guard('web')->id())->where('delete',0)
                                 ->orderBy('name', 'asc')->get();
 
         $pictureUser = Picture::where('user_id', Auth::guard('web')->id())
@@ -243,7 +243,7 @@ class CommerceController extends Controller
 
         session()->put('commerce_id', $idCommerce);
         
-        $commercesUser = Commerce::where('user_id', Auth::guard('web')->id())
+        $commercesUser = Commerce::where('user_id', Auth::guard('web')->id())->where('delete',0)
                                 ->orderBy('name', 'asc')->get();
 
         $pictureUser = Picture::where('user_id', Auth::guard('web')->id())
@@ -425,7 +425,7 @@ class CommerceController extends Controller
 
         session()->put('commerce_id', $idCommerce);
         
-        $commercesUser = Commerce::where('user_id', Auth::guard('web')->id())
+        $commercesUser = Commerce::where('user_id', Auth::guard('web')->id())->where('delete',0)
                                 ->orderBy('name', 'asc')->get();
 
         $pictureUser = Picture::where('user_id', Auth::guard('web')->id())

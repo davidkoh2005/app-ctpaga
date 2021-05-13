@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\User;
 use App\Bank;
@@ -71,6 +72,28 @@ class UserController extends Controller
         ]);
     }
 
+    public function updateEmailUser(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+        ]);
+
+        if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password])) {
+            $user = User::whereId(Auth::guard('web')->id())->first();
+            $user->email = $request->newEmail;
+            $user->save();
+
+            return response()->json([
+                'statusCode' => 201,
+            ]);
+        }
+
+        return response()->json([
+            'statusCode' => 401,
+        ]);
+    }
+
     public function updateBankUser(Request $request)
     {   
         Bank::updateOrCreate(['user_id'=>$request->user()->id, 'coin'=>$request->coin], $request->all());
@@ -127,5 +150,28 @@ class UserController extends Controller
                 'statusCode' => 401,
             ]);
         }
+    }
+
+    public function deleteCommerceUser(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+        ]);
+
+        if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password])) {
+            $commerce = Commerce::whereId($request->idCommerce)->first();
+            $commerce->delete = 1;
+            $commerce->save();
+
+            return response()->json([
+                'statusCode' => 201,
+            ]);
+        }
+
+        return response()->json([
+            'statusCode' => 401,
+        ]);
+
     }
 }

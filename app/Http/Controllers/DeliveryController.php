@@ -18,6 +18,7 @@ use App\Email;
 use App\Cash;
 use App\DeliveryCost;
 use App\PaymentsBs;
+use App\PaymentsZelle;
 use App\Events\StatusDelivery;
 use App\Events\AlarmUrgent;
 use App\Events\NewNotification;

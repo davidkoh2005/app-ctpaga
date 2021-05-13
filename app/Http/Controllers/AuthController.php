@@ -165,7 +165,7 @@ class AuthController extends Controller
     {
         $pictures = Picture::where('user_id', $request->user()->id)->where('type',0)->get();
         $banks = Bank::where('user_id', $request->user()->id)->limit(2)->get();
-        $commerces = Commerce::where('user_id', $request->user()->id)->orderBy('name', 'asc')->get();
+        $commerces = Commerce::where('user_id', $request->user()->id)->where('delete',0)->orderBy('name', 'asc')->get();
         return response()->json(['statusCode' => 201,'data' => [$request->user(), 'banks'=> $banks, 'commerces'=> $commerces, 'pictures'=>$pictures ]]);
     }
 
