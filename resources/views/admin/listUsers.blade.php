@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CTpaga</title>
+    <title>Ctpaga</title>
     @include('bookshop')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/bookshop/datatables.min.css') }}"/>
