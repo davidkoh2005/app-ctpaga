@@ -493,7 +493,7 @@ class AdminController extends Controller
             $user = User::where('id',$commerce->user_id)->first();
 
             if($request->status == 2){
-                $sales = Sale::where("codeUrl", $transaction->codeUrl)->get();
+                /* $sales = Sale::where("codeUrl", $transaction->codeUrl)->get();
                 $message="";
                 foreach ($sales as $sale)
                 {
@@ -503,8 +503,6 @@ class AdminController extends Controller
                         if ($product->postPurchase)
                             $message .= "- ".$product->postPurchase."\n";
 
-                        $product->stock -= $sale->quantity;
-                        $product->save();
                     }
 
                     if($sale->type == 1 && $sale->productService_id != 0){
@@ -514,7 +512,7 @@ class AdminController extends Controller
                             $message .= "- ".$service->postPurchase."\n";
                     }
 
-                }
+                } */
 
                 (new User)->forceFill([
                     'email' => $transaction->email,
