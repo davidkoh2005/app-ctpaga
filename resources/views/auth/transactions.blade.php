@@ -113,7 +113,7 @@
                             @if($idCommerce == 0)<td>{{ $transaction->name }}</td>@endif
                             <td>{{ $transaction->nameClient}}</td>
                             <td>{{ $transaction->codeUrl}}</td>
-                            <td>@if($transaction->coin == 0) $ @else Bs @endif {{ $transaction->total}}</td>
+                            <td>@if($transaction->coin == 0) $ @else Bs @endif {{ number_format((floatval($transaction->total)), 2, ',', '.') }}</td>
                             <td>@if($transaction->nameCompanyPayments != "Tienda Fisica") Tienda Web @else Tienda Fisica @endif</td>
                             <td>
                                 @if($transaction->statusPayment == 0)

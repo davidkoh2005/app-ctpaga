@@ -44,7 +44,7 @@ class PasswordResetRequest extends Notification implements ShouldQueue
         }
         else{
             $url = url('/password/delivery/find/'.$this->token);
-            $subject = "Aviso Delivery Ctpaga";
+            $subject = "Aviso Ctlleva";
         }
 
         return (new MailMessage)

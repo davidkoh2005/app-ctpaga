@@ -136,7 +136,7 @@
                             @if($idCommerce == 0)<td>{{ $transaction->name }}</td>@endif
                             <td>{{ $transaction->nameClient}}</td>
                             <td>{{ $transaction->codeUrl }}</td>
-                            <td>@if($transaction->coin == 0) $ @else Bs @endif {{ $transaction->total}}</td>
+                            <td>@if($transaction->coin == 0) $ @else Bs @endif {{ number_format((floatval($transaction->total)), 2, ',', '.') }}</td>
                             <td> {{$transaction->nameCompanyPayments}}</td>
                             <td>
                                 @if($transaction->statusPayment == 0)
@@ -184,7 +184,7 @@
     </div>
 
     <!--- Modal products -->
-    <div class="modal fade" id="transactionsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="showProductsOrTransactionsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -214,11 +214,11 @@
                 data: {"id" : id},
                 type: "GET",
             }).done(function(data){
-                $('#productsModal').modal('show'); 
+                $('#showProductsOrTransactionsModal').modal('show'); 
                 $('#showTransactions').html(data.html);
             }).fail(function(result){
                 alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
-                $('#productsModal').modal('hide'); 
+                $('#showProductsOrTransactionsModal').modal('hide'); 
                 $('#showTransactions').html();
             });
         }
@@ -230,11 +230,11 @@
                 data: {"id" : id},
                 type: "GET",
             }).done(function(data){
-                $('#transactionsModal').modal('show'); 
+                $('#showProductsOrTransactionsModal').modal('show'); 
                 $('#showTransactions').html(data.html);
             }).fail(function(result){
                 alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
-                $('#transactionsModal').modal('hide'); 
+                $('#showProductsOrTransactionsModal').modal('hide'); 
                 $('#showTransactions').html();
             });
         }
@@ -247,11 +247,11 @@
                 type: "GET",
             }).done(function(data){
                 console.log(data.html);
-                $('#transactionsModal').modal('show'); 
+                $('#showProductsOrTransactionsModal').modal('show'); 
                 $('#showTransactions').html(data.html);
             }).fail(function(result){
                 alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
-                $('#transactionsModal').modal('hide'); 
+                $('#showProductsOrTransactionsModal').modal('hide'); 
                 $('#showTransactions').html();
             });
         }
@@ -274,8 +274,9 @@
                     selectID.push(id);
                 });
 
+                $("#changeStatus option[value='-1']").prop('selected', true);
+
                 if(selectID.length >0 && !error){
-                    $("#changeStatus option[value='-1']").attr("selected",true);
                     $( ".loader" ).fadeIn("slow"); 
                     $.ajax({
                         url: "{{route('admin.changeStatusPayment')}}", 
@@ -283,7 +284,6 @@
                         type: "POST",
                     }).done(function(data){
                         $( ".loader" ).fadeOut("slow"); 
-                        $("#changeStatus option[value='-1']").attr("selected",true);
                         if(data.status == 201)
                             alertify.success('Guardado correctamente');
                         
@@ -292,16 +292,13 @@
                         }, 2000);
                     }).fail(function(result){
                         $( ".loader" ).fadeOut("slow"); 
-                        $("#changeStatus option[value='-1']").attr("selected",true);
                         alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                     }); 
                 }else if (selectID.length == 0 && !error){
                     alertify.error('Debe seleccionar al menos un transaccion');
-                    $("#changeStatus option[value='-1']").attr("selected",true);
                 }
                 else{
                     alertify.error('Debe seleccionar transacciones con estado correctamente');
-                    $("#changeStatus option[value='-1']").attr("selected",true);
                 }
             }
             

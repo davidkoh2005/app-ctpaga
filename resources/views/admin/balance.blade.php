@@ -93,7 +93,7 @@
                         <td><input type="checkbox" class="check-Payment" data-id="{{ $deposit->id }}" data-status="{{$deposit->status}}"></td>
                         <td>{{ $deposit->id }}</td>
                         <td>{{ $deposit->name }}</td>
-                        <td>@if($deposit->coin == 0 )  $ @else Bs @endif {{ $deposit->total }}</td>
+                        <td>@if($deposit->coin == 0 )  $ @else Bs @endif {{ number_format((floatval($deposit->total)), 2, ',', '.') }}</td>
                         <td>
                             @if($deposit->status == 1)
                                 <div class="pending">Pendiente</div>
@@ -104,11 +104,13 @@
                             @endif
                         </td>
                         <td>
-                            <botton class="pay btn btn-bottom" onclick="showDataPayment({{$deposit->id}}, true)" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Pagar Comerciante"><i class="material-icons">payment</i></botton>
-                            <a class="btn btn-bottom" href="{{route('admin.transactionsSearchId', ['id' => $deposit->commerce_id])}}" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Transacciones"><i class="material-icons">description</i></a>
-                            @if($selectCoin == 1)
-                            <a class="btn btn-bottom" onclick="downloadTxt({{$deposit->id}}, true)" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Generar reporte de pago"><i class="material-icons">get_app</i></a>
+                            @if($deposit->status <3)
+                                <botton class="pay btn btn-bottom" onclick="showDataPayment({{$deposit->id}}, true)" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Pagar Comerciante"><i class="material-icons">payment</i></botton>
                             @endif
+                            <a class="btn btn-bottom" href="{{route('admin.transactionsSearchId', ['id' => $deposit->commerce_id])}}" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Transacciones"><i class="material-icons">description</i></a>
+                            <!-- @if($selectCoin == 1)
+                            <a class="btn btn-bottom" onclick="downloadTxt({{$deposit->id}}, true)" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Generar reporte de pago"><i class="material-icons">get_app</i></a>
+                            @endif -->
                         </td>
                     </tr>
                     @endforeach
@@ -123,9 +125,9 @@
                 <div class="text-left" style="margin-left:40px;">
                     <strong class="addMarginRight">Acciones:</strong>
                     <botton class="pay btn btn-bottom" onclick="showDataPayment(0, false)" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Pagar comerciantes seleccionados"><i class="material-icons">payment</i></botton>
-                    @if($selectCoin == 1)
+                    <!-- @if($selectCoin == 1)
                     <a class="btn btn-bottom" onclick="downloadTxt(0, false)" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Generar reporte de pago seleccionados"><i class="material-icons">get_app</i></a>
-                    @endif
+                    @endif -->
                     <label class="content-select">
                         <select class="addMargin" name="changeStatus" id="changeStatus">
                             <option value="0" disabled selected>Cambiar Estado</option>
@@ -205,11 +207,16 @@
 
         function downloadTxt(id, status)
         {
-            var selectID = [];
+            var error = false;
+            selectID = [];
             if(!status){
                 $("input:checked.check-Payment").each(function () {
                     var id = $(this).data("id");
-                    selectID.push(id);
+                    var statusPayment = $(this).data("status");
+                    if(statusPayment == 3)
+                        error = true;
+                    else
+                        selectID.push(id)
                 });
             }else{
                 selectID.push(id);
@@ -233,21 +240,30 @@
                 }).fail(function(result){
                     alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                 }); 
+            else if(error)
+                alertify.error('Por favor verifique los despositos seleccionado');
             else 
                 alertify.error('Debe seleccionar al menos un deposito');
         }
 
         function showDataPayment(id, status)
         {
-            var selectID = [];
+            var error = false;
+            selectID = [];
             if(!status){
                 $("input:checked.check-Payment").each(function () {
                     var id = $(this).data("id");
-                    selectID.push(id);
+                    var statusPayment = $(this).data("status");
+                    if(statusPayment == 3)
+                        error = true;
+                    else
+                        selectID.push(id)
                 });
             }else{
                 selectID.push(id);
             }
+
+            console.log(selectID);
 
             if(selectID.length >0)
                 $.ajax({
@@ -266,7 +282,9 @@
                     alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
                     $('#payModal').modal('hide'); 
                     $('#showPayment').html();
-                }); 
+                });
+            else if(error)
+                alertify.error('Por favor verifique los despositos seleccionado');
             else
                 alertify.error('Debe seleccionar depositos');
         }

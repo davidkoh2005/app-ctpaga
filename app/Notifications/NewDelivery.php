@@ -40,7 +40,7 @@ class NewDelivery extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-        ->subject('Bienvenido a Delivery Ctpaga')
+        ->subject('Bienvenido a Ctlleva')
         ->markdown(
             'email.welcomeDelivery', ['delivery' => $this->delivery]
         );

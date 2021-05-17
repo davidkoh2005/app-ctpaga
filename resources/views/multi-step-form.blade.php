@@ -163,7 +163,7 @@
                                     <label class="form" for="name">NOMBRE:</label>
                                     <input type="text" name="name" id="name" class="form-control formDataShipping" data-parsley-minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" required />
                                     <label class="form" for="number">NUMERO DE CELULAR:</label>
-                                    <input type="text" oninput="this.value=this.value.replace(/[^0-9]/g,'');" name="number" id="number" class="form-control formDataShipping" placeholder="04125555555" size="11" maxlength="11" data-parsley-maxlength="11" data-parsley-pattern="^(?:(\+)58|0)(?:2(?:12|4[0-9]|5[1-9]|6[0-9]|7[0-8]|8[1-35-8]|9[1-5]|3[45789])|4(?:1[246]|2[46]))\d{7}$" required autocomplete="off" />
+                                    <input type="text" oninput="this.value=this.value.replace(/[^0-9]/g,'');" name="number" id="number" class="form-control formDataShipping" placeholder="04125555555" size="11" maxlength="11" data-parsley-maxlength="11" data-parsley-pattern="^(0414|0424|0412|0416|0426)[0-9]{7}$" required autocomplete="off" />
                                     <br>
                                     <div class="row">
                                         <div class="col-md-6 col-12">
@@ -855,8 +855,8 @@
 
         function addDateTime(){
             var date = new Date();
-            date.setDate(date.getDay());
-
+            date.setDate(date.getDate() - 1);
+            
             $('.datepicker').datepicker({
                 orientation: "bottom auto",
                 startDate: date,

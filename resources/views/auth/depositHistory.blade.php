@@ -88,11 +88,11 @@
                         <tr>
                             <td>{{$history->date }}</td>
                             @if($history->status==0)
-                                <td class="received">{{$history->total}}</td>
+                                <td class="received">{{number_format((floatval($history->total)), 2, ',', '.')}}</td>
                                 <td class="received">RECIBIDO</td>
                                 <td class="depositNumRef">Transacciones</td>
                             @else 
-                                <td class="deposit">{{$history->total}}</td>
+                                <td class="deposit">{{number_format((floatval($history->total)), 2, ',', '.')}}</td>
                                 <td class="deposit">DEPOSITO</td>
                                 <td class="depositNumRef">{{$history->numRef}}</td>
                             @endif

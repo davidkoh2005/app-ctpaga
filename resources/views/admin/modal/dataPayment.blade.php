@@ -12,7 +12,6 @@
                     <label><strong>Datos del Bancaria:</strong></label>
                     <div class="dataPay">
                         @if($deposit->coin == 0)
-
                             <label><strong>País: </strong>{{$bank->country}}</label> <br> 
                             <label><strong>Nombre de la cuenta: </strong>{{$bank->accountName}}</label> <br> 
                             <label><strong>Número de la cuenta: </strong>{{$bank->accountNumber}}</label> <br> 
@@ -23,7 +22,6 @@
                             <label><strong>Dirección: </strong>{{$bank->address}}</label> <br> 
                             <label><strong>Tipo de Cuenta: </strong>{{$bank->accountType}}</label> <br> 
                         @else
-                            
                             <label><strong>País: </strong>{{$bank->country}}</label> <br> 
                             <label><strong>NUmero de cédula: </strong>{{$bank->idCard}}</label> <br> 
                             <label><strong>Nombre de la cuenta: </strong>{{$bank->accountName}}</label> <br> 
@@ -43,7 +41,7 @@
                                 <label for="refPay" classs="col-form-label">Nº Referencia del Pago:</label>
                             </div>
                             <div class="col-auto">
-                                <input type="tel" name="numRef"  id="numRef" class="form-control" placeholder="123456789" />
+                                <input type="text" name="numRef"  id="numRef" class="form-control" placeholder="123456789" minlength="4"/>
                             </div>
                         </div>
                         @if($statusID)
@@ -84,8 +82,9 @@
             $('#submit').on('click', function() {
                 var status = true;
                 var numRef = $('#numRef').val();
+                console.log(selectID);
 
-               if(numRef.length <11){
+               if(numRef.length <4){
                     status = false;
                     alertify.error('Debe ingresar el numero de referencia correctamente');
                 }

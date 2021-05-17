@@ -263,7 +263,7 @@ $(document).ready(function(){
                 $("#showMobilePayment").css({"display":"block"});
             else 
                 $("#showMobilePayment").css({"display":"none"});
-            
+                        
             $(".showDataTransfers").css({"display":"none"});
             $(".showDataMobiles").css({"display":"none"});
             $(".datepicker").attr('disabled', true);
@@ -306,6 +306,10 @@ $(document).ready(function(){
             }
             
             $('.submit').show();
+            
+            if($(this).find('#paymentDescription').val() == "EFECTIVO" || $(this).find('#paymentDescription').val() == "PAYPAL" || $(this).find('#paymentDescription').val() == "BITCOIN"){
+                window.scrollTo(0,document.body.scrollHeight);
+            }
         }
     });
 

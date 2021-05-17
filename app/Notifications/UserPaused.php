@@ -43,7 +43,7 @@ class UserPaused extends Notification
         if($this->type == 0)
             $subject = "Aviso Importante Ctpaga";
         else
-            $subject = "Aviso Importante Delivery Ctpaga";
+            $subject = "Aviso Importante Ctlleva";
         
         return (new MailMessage)
         ->subject($subject)

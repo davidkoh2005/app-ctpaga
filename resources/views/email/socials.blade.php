@@ -25,6 +25,10 @@
             <img src="{{ asset('images/email/icono-redes-6.png') }}" alt="" width="95%">
         </a>
 
+        <a href="">
+            <img src="{{ asset('images/email/icono-redes-7.png') }}" alt="" width="95%">
+        </a>
+
         
     </div>
 

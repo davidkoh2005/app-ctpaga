@@ -83,12 +83,12 @@ class AdminController extends Controller
             if($paid->coin == 0)
                 if($paid->statusPayment == 2)
                     $totalShoppingUSD += floatval($paid->total);
-                else
+                else if($paid->statusPayment == 1)
                     $totalPendingUSD += floatval($paid->total); 
             else
                 if($paid->statusPayment == 2)
                     $totalShoppingBS += floatval($paid->total);
-                else
+                else if($paid->statusPayment == 1)
                     $totalPendingBS += floatval($paid->total); 
 
         }
@@ -108,6 +108,7 @@ class AdminController extends Controller
             $totalShop = 0;
             $totalShopUSD = 0;
             $totalShopBS = 0;
+
             if(Auth::guard('admin')->check())
                 $paidAll = Paid::where("date", 'like', "%".Carbon::now()->format($years.'-'.$month.'-'.Carbon::now()->subDay(6-$i)->format('d'))."%")
                                 ->where("statusPayment",2)->get();
