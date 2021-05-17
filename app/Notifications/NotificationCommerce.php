@@ -45,7 +45,7 @@ class NotificationCommerce extends Notification
         $url = url('/pedido/'.$this->codeUrl);
 
         return (new MailMessage)
-            ->subject('Aviso CTpaga')
+            ->subject('Aviso Ctpaga')
             ->markdown(
                 'email.notificationCommerce', ['commerce' => $this->commerce, 'codeUrl' => $this->codeUrl, 'type' => $this->type, 'url' => $url]
             );

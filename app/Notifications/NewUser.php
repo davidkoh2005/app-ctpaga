@@ -40,7 +40,7 @@ class NewUser extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-        ->subject('Bienvenido a CTpaga')
+        ->subject('Bienvenido a Ctpaga')
         ->markdown(
             'email.welcome', ['user' => $this->user]
         );

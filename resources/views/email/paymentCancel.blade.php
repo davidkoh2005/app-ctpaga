@@ -61,7 +61,7 @@
                     <br>
 
                     <p style="color:#59595e; margin: 0 0 7px;">
-                        CTpaga informa que tu pago del pedido {{$codeUrl}} se encuentra Rechazada.
+                        Ctpaga informa que tu pago del pedido {{$codeUrl}} se encuentra Rechazada.
                     </p>
 
                     <br>
@@ -74,7 +74,7 @@
                     <br>
 
                     <h4 style="color:#59595e; margin: 0 0 7px;">
-                        El equipo de CTpaga.
+                        El equipo de Ctpaga.
                     </h4>
 
                     <br>

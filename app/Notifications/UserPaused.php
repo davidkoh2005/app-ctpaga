@@ -41,9 +41,9 @@ class UserPaused extends Notification
     public function toMail($notifiable)
     {
         if($this->type == 0)
-            $subject = "Aviso Importante CTpaga";
+            $subject = "Aviso Importante Ctpaga";
         else
-            $subject = "Aviso Importante Delivery CTpaga";
+            $subject = "Aviso Importante Delivery Ctpaga";
         
         return (new MailMessage)
         ->subject($subject)

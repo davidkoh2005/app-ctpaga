@@ -68,7 +68,7 @@
                     <br>
                     <br>
                     <h4 style="color:#59595e; margin: 0 0 7px;">
-                        <br>El equipo de CTpaga.
+                        <br>El equipo de Ctpaga.
                     </h4>
                     <br>
                     <br>

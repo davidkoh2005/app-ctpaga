@@ -88,18 +88,18 @@
 
                     @if($type == 0)
                         <p style="color:#59595e; margin: 0 0 7px;">
-                            CTpaga informa que el pago del pedido {{$codeUrl}} fue realizado exitoxamente, tu factura ya se encuentra disponible:
+                            Ctpaga informa que el pago del pedido {{$codeUrl}} fue realizado exitoxamente, tu factura ya se encuentra disponible:
                             <strong>
                             <a href="{{$url}}" target="_blank">{{$url}} </a>
                             </strong> 
                         </p>
                     @elseif($type == 1)
                         <p style="color:#59595e; margin: 0 0 7px;">
-                            CTpaga informa que el pago del pedido {{$codeUrl}} se encuentra en proceso de verificación
+                            Ctpaga informa que el pago del pedido {{$codeUrl}} se encuentra en proceso de verificación
                         </p>
                     @else
                         <p style="color:#59595e; margin: 0 0 7px;">
-                            CTpaga informa que el pago del pedido {{$codeUrl}} ha sido cancelado
+                            Ctpaga informa que el pago del pedido {{$codeUrl}} ha sido cancelado
                         </p>
                     @endif
                     <br>
@@ -112,7 +112,7 @@
                     <br>
 
                     <h4 style="color:#59595e; margin: 0 0 7px;">
-                        El equipo de CTpaga.
+                        El equipo de Ctpaga.
                     </h4>
 
                     <br>

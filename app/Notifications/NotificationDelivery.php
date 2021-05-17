@@ -44,7 +44,7 @@ class NotificationDelivery extends Notification
         $msg = 'Estás recibiendo este correo electrónico porque '.$this->message;
 
         return (new MailMessage)  
-            ->subject('Delivery CTpaga Aviso')
+            ->subject('Delivery Ctpaga Aviso')
             ->markdown(
                 'email.notificationDelivery', ['message' => $msg, 'delivery' => $this->delivery]
             );

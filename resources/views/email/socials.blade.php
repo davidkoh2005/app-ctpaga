@@ -21,7 +21,7 @@
             <img src="{{ asset('images/email/icono-redes-5.png') }}" alt="" width="95%">
         </a>
 
-        <a href="">
+        <a href="https://play.google.com/store/apps/details?id=ctpaga.ctpaga">
             <img src="{{ asset('images/email/icono-redes-6.png') }}" alt="" width="95%">
         </a>
 

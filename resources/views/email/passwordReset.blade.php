@@ -90,7 +90,7 @@
                        <br>
                        <br>
 
-                       Gracias por elegir CTpaga como su plataforma de comercio electrónico.
+                       Gracias por elegir Ctpaga como su plataforma de comercio electrónico.
                     </p>
 
                     <br>
@@ -99,7 +99,7 @@
                     <br>
 
                     <h4 style="color:#59595e; margin: 0 0 7px;">
-                        El equipo de CTpaga.
+                        El equipo de Ctpaga.
                     </h4>
 
                     <br>

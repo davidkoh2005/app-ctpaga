@@ -61,7 +61,7 @@
                     <br>
 
                     <p style="color:#59595e; margin: 0 0 7px;">
-                        CTpaga informa que tu pago del pedido {{$codeUrl}} fue realizado exitoxamente, tu factura ya se encuentra disponible:
+                        Ctpaga informa que tu pago del pedido {{$codeUrl}} fue realizado exitoxamente, tu factura ya se encuentra disponible:
                         <strong>
                            <a href="{{$url}}" target="_blank">{{$url}} </a>
                         </strong> 
@@ -77,7 +77,7 @@
                     <br>
 
                     <h4 style="color:#59595e; margin: 0 0 7px;">
-                        El equipo de CTpaga.
+                        El equipo de Ctpaga.
                     </h4>
 
                     <br>

@@ -41,7 +41,7 @@ class PictureRemove extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Aviso CTpaga')
+            ->subject('Aviso Ctpaga')
             ->markdown(
                 'email.pictureRemove', ['commerce' => $this->commerce]
             );

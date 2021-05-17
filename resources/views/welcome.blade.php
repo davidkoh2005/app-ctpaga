@@ -36,7 +36,7 @@
                                 <p class="text-white my-4">Permite pagar productos y/o servicios desde la comodidad de tu casa.</p>
                                 <!-- Store Buttons -->
                                 <div class="button-group store-buttons d-flex">
-                                    <a href="#">
+                                    <a href="https://play.google.com/store/apps/details?id=ctpaga.ctpaga">
                                         <img src="{{ asset('landingPage/img/icon/google-play.png') }}" alt="">
                                     </a>
                                     <a href="#">
@@ -561,7 +561,7 @@
                                 
                                 <!-- Store Buttons -->
                                 <div class="button-group store-buttons d-flex justify-content-center">
-                                    <a href="#">
+                                    <a href="https://play.google.com/store/apps/details?id=ctpaga.ctpaga">
                                         <img src="{{ asset('landingPage/img/icon/google-play.png') }}" alt="">
                                     </a>
                                     <a href="#">
@@ -704,7 +704,7 @@
                                     <h3 class="footer-title mb-2">Descarga</h3>
                                     <!-- Store Buttons -->
                                     <div class="button-group store-buttons store-black d-flex flex-wrap">
-                                        <a href="#">
+                                        <a href="https://play.google.com/store/apps/details?id=ctpaga.ctpaga">
                                             <img src="{{ asset('landingPage/img/icon/google-play-black.png') }}" alt="">
                                         </a>
                                         <a href="#">

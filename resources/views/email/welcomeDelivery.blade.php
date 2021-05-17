@@ -78,7 +78,7 @@
                         Muchas gracias,
                         <br>
                         <br>
-                        El equipo de CTpaga.
+                        El equipo de Ctpaga.
                     </h4>
 
                     <br>

@@ -48,14 +48,14 @@
                         con Éxito.</p><br>
                     <p>Recuerde que su nombre de usuario es: {{$user->email}}</p><br>
                     <p style="color:#59595e; margin: 0 0 7px;">Lo invitamos a descargar GRATUITAMENTE nuestra App
-                        “CTpaga” en Google Play Store y/o App Store para que disfrute del beneficio de tener su propio
+                        “Ctpaga” en Google Play Store y/o App Store para que disfrute del beneficio de tener su propio
                         Punto de Venta Virtual.</p><br>
                     <br>
                     <br>
                     <br>
                     <br>
                     <h4 style="color:#59595e; margin: 0 0 7px;">Muchas gracias,<br>
-                        <br>El equipo de CTPaga.
+                        <br>El equipo de Ctpaga.
                     </h4>
                     <br>
                     <br>

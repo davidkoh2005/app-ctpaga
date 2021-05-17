@@ -903,7 +903,7 @@ class PaidController extends Controller
         $sales = Sale::where('codeUrl', $request->codeUrl)->get();
         
         if(intval($request->statusShipping) == 1){
-            $message = "CTpaga Delivery le informa que el pedido ".$paid->codeUrl." fue retirado de la tienda ".$commerce->name." y será entregado a la brevedad posible. ";
+            $message = "Ctpaga Delivery le informa que el pedido ".$paid->codeUrl." fue retirado de la tienda ".$commerce->name." y será entregado a la brevedad posible. ";
 
             (new User)->forceFill([
                 'email' => $paid->email,

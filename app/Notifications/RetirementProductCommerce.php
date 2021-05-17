@@ -40,7 +40,7 @@ class RetirementProductCommerce extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject("Aviso Delivery CTpaga")
+            ->subject("Aviso Delivery Ctpaga")
             ->markdown(
                 'email.retirementProductCommerce', ['commerce' => $this->commerce, 'paid' => $this->paid, 'sales' => $this->sales]
             );
