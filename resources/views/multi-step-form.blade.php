@@ -342,7 +342,7 @@
                                             <table class="table table-bordered" id="dynamic_field_transfers" bordercolor="#ff0000"></table>
                                             
                                             <div style="text-align: end;">
-                                                <label><strong>Cantidad de c: <span id="showCountTransfers">1</span> </strong></label> <br>
+                                                <label><strong>Cantidad de Transferencia: <span id="showCountTransfers">1</span> </strong></label> <br>
                                                 <label><strong>Monto a pagar: <span class="totalPayment">Bs 0</span></strong></label> <br>
                                                 <label style="color:red !important;"><strong>Monto Restante: <span class="showRemainingAmount"></span> </strong></label> <br>
                                                 <label><strong>Total Pagado: <span class="showTotalPaid">Bs 0</span></strong></label> <br>
