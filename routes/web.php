@@ -58,6 +58,14 @@ Route::post('admin/login/', 'AdminController@login')->name('formAdmin.login');
 Route::get('logout/', 'AdminController@logout')->name('logout');
 Route::post('logout/', 'AdminController@logout')->name('logout');
 
+Route::get('privacy/ctpaga', function(){
+    return view('privacy.ctpaga');
+});
+
+Route::get('privacy/ctlleva', function(){
+    return view('privacy.ctleva');
+});
+
 Route::group(['middleware'=>'web'], function() {
     Route::get('/inicio/', 'CommerceController@dashboard')->name('commerce.dashboard');
     Route::post('/delivery', 'CommerceController@transactions')->name('commerce.transactions');
