@@ -63,7 +63,7 @@ Route::get('privacy/ctpaga', function(){
 });
 
 Route::get('privacy/ctlleva', function(){
-    return view('privacy.ctleva');
+    return view('privacy.ctlleva');
 });
 
 Route::group(['middleware'=>'web'], function() {
