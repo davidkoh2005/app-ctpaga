@@ -15,6 +15,7 @@ class AddUrlIosToVersionTable extends Migration
     {
         Schema::table('version', function (Blueprint $table) {
             $table->String("url_ios");
+            $table->String("url_android");
         });
     }
 
@@ -27,6 +28,7 @@ class AddUrlIosToVersionTable extends Migration
     {
         Schema::table('version', function (Blueprint $table) {
             $table->dropColumn('url_ios');
+            $table->dropColumn('url_android');
         });
     }
 }
