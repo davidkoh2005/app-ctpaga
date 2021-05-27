@@ -26,6 +26,8 @@
         <span class="inTransit">En tránsito</span>  
     @elseif($transaction->statusShipping == 1) 
         <span class="RetiredProduct">Producto Retirado</span>  
+    @elseif($transaction->statusDelivery == 2) 
+        <span class="completedDelivery">Entregado</span>  
     @endif 
     </label>
 </div>

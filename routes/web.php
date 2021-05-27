@@ -96,6 +96,7 @@ Route::group(['middleware'=>'admin'], function() {
     Route::post('/admin/payment', 'AdminController@showPayment')->name('admin.showPayment');
     Route::post('/admin/status', 'AdminController@changeStatus')->name('admin.changeStatus');
     Route::post('/admin/statusPayment', 'AdminController@changeStatusPayment')->name('admin.changeStatusPayment');
+    Route::post('/admin/statusPayDelivery', 'AdminController@changeStatusPayDelivery')->name('admin.changeStatusPayDelivery');
     Route::get('/admin/historial', 'AdminController@reportPayment')->name('admin.reportPayment');
     Route::post('/admin/historial', 'AdminController@reportPayment')->name('admin.reportPayment');
     Route::post('/admin/txt', 'AdminController@downloadTxt')->name('admin.downloadTxt');
@@ -118,6 +119,8 @@ Route::group(['middleware'=>'admin'], function() {
     Route::post('/admin/balance/delivery/updatePaymentDelivery', 'AdminController@updatePaymentDelivery')->name('admin.updatePaymentDelivery');
     Route::get('/admin/delivery/historial/efectivo', 'AdminController@historyCashes')->name('admin.historyCashes');
     Route::post('/admin/delivery/historial/efectivo', 'AdminController@historyCashes')->name('admin.historyCashes');
+    Route::get('/admin/delivery/historial/pedido', 'AdminController@historyPayDelivery')->name('admin.historyPayDelivery');
+    Route::post('/admin/delivery/historial/pedido', 'AdminController@historyPayDelivery')->name('admin.historyPayDelivery');
     Route::get('/admin/configuraciones', 'AdminController@settings')->name('admin.settings');
     Route::post('/admin/settingsSchedule', 'AdminController@settingsSchedule')->name('admin.settingsSchedule');
     Route::post('/admin/settingsEmails', 'AdminController@settingsEmails')->name('admin.settingsEmails');

@@ -544,6 +544,19 @@ class AdminController extends Controller
         return response()->json(array('status' => 201));
     }
 
+    public function changeStatusPayDelivery(Request $request)
+    {
+        foreach ($request->selectId as $id)
+        {
+            $transaction = Paid::where('id', $id)->first();
+            $transaction->statusPayDelivery = $request->status;
+            $transaction->datePayDelivery = Carbon::now();
+            $transaction->save();
+
+        }
+        
+        return response()->json(array('status' => 201));
+    }
 
 
     public function showPayment(Request $request)
@@ -1399,6 +1412,38 @@ class AdminController extends Controller
         
         $statusMenu = "historyCashes";
         return view('admin.historyCashes', compact('histories', 'searchNameDelivery', 'startDate', 'endDate', 'statusMenu'));
+    }
+
+    public function historyPayDelivery(Request $request){
+        $searchName="";
+        $startDate = Carbon::now()->setDay(1)->subMonth(4)->format('Y-m-d');
+        $endDate = Carbon::now()->format('Y-m-d');
+        $searchStatus = 0;
+
+        $orders = Paid::join('deliveries', 'deliveries.id', '=', 'paids.idDelivery')->where('statusDelivery',2);
+
+        if(!empty($request->searchName)){
+            $searchName = $request->searchName;
+            $orders->where('deliveries.name', 'like', "%" . $request->searchName . "%" );
+        }
+
+        if(!empty($request->searchStatus)){
+            $searchStatus = $request->searchStatus;
+            $orders = $orders->where('paids.statusPayDelivery', $searchStatus);
+        }
+
+        if(!empty($request->startDate) && !empty($request->endDate)){
+            $startDate = Carbon::createFromFormat('d/m/Y', $request->startDate)->format('Y-m-d');
+            $endDate = Carbon::createFromFormat('d/m/Y', $request->endDate)->format('Y-m-d');
+        }
+
+        $orders = $orders->whereDate('paids.created_at', ">=",$startDate)
+                    ->whereDate('paids.created_at', "<=",$endDate)
+                    ->select('paids.id', 'paids.date', 'paids.codeUrl', 'paids.state', 'paids.municipalities', 'paids.statusPayDelivery', 'paids.datePayDelivery', 'deliveries.name')
+                    ->get();
+
+        $statusMenu = "historyPayDelivery";
+        return view('admin.historyPayDelivery', compact('orders', 'searchName', 'searchStatus', 'startDate', 'endDate', 'statusMenu'));
     }
 
 }

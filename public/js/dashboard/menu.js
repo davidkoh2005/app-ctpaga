@@ -25,6 +25,8 @@ $(document).ready( function () {
         $("#title-navbar").html("Delivery Autorizado");
     else if(statusMenu == "historyCashes")
         $("#title-navbar").html("Historial Efectivo");
+    else if(statusMenu == "historyPayDelivery")
+        $("#title-navbar").html("Historial Pedido Delivery");
     else if(statusMenu == "settings")
         $("#title-navbar").html("Configuraciones");
     

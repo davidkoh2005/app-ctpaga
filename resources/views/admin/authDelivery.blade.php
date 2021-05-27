@@ -71,7 +71,8 @@
                         <td>
                             <a class="btn btn-bottom" href="{{route('admin.deliveryShow', ['id' => $delivery->id])}}" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Delivery"><i class="material-icons">visibility</i></a>
                             <button class="btn btn-bottom" onClick="showBalance('{{$delivery->id}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Efectivo"><i class="material-icons">account_balance_wallet</i></button>
-                            <a href="javascript:;" onClick="showHistory('{{$delivery->id}}')" class="btn btn-bottom" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Historial"><i class="material-icons">description</i></a>
+                            <a href="javascript:;" onClick="showHistory('{{$delivery->id}}')" class="btn btn-bottom" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Historial Efectivo"><i class="material-icons">description</i></a>
+                            <a href="{{route('admin.historyPayDelivery', ['searchName' => $delivery->name])}}" class="btn btn-bottom" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Historial Pedido"><i class="material-icons">where_to_vote</i></a>
                         </td>
                     </tr>
                     @endforeach
@@ -132,6 +133,7 @@
                 },
             });
         });
+        
         $(".main-panel").perfectScrollbar('update');
 
         $('.changeStatus').change(function(){

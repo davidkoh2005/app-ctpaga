@@ -88,7 +88,6 @@
 
         $('#table_delivery').DataTable({
             "scrollX": true,
-            "ordering": false,
             language: {
                 "decimal": "",
                 "emptyTable": "No hay información",

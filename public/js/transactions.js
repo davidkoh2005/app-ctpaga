@@ -3,7 +3,6 @@ $(document).ready( function () {
     $('#productsModal').modal('hide'); 
 
     $('#table_id').DataTable({
-        "ordering": false,
         "scrollX": true,
         language: {
             "decimal": "",
@@ -30,7 +29,6 @@ $(document).ready( function () {
     
 
     $('#table_Rate').DataTable({
-        "ordering": false,
         "scrollX": true,
         language: {
             "decimal": "",
@@ -55,7 +53,6 @@ $(document).ready( function () {
     });
 
     $('#table_Deposits').DataTable({
-        "ordering": false,
         "scrollX": true,
         language: {
             "decimal": "",

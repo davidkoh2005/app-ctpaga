@@ -74,16 +74,16 @@
                 <p>Transacciones</p>
               </a>
             </li>
-            <li class="nav-item" id="nav-delivery">
-              <a class="nav-link" href="{{route('admin.delivery')}}">
-                <i class="material-icons">local_shipping</i>
-                <p>Delivery</p>
-              </a>
-            </li>
             <li class="nav-item" id="nav-rate">
               <a class="nav-link" href="{{route('admin.showRate')}}">
               <i class="material-icons">attach_money</i>
                 <p>Tasas</p>
+              </a>
+            </li>
+            <li class="nav-item" id="nav-delivery">
+              <a class="nav-link" href="{{route('admin.delivery')}}">
+                <i class="material-icons">delivery_dining</i> <!-- local_shipping -->
+                <p>Delivery</p>
               </a>
             </li>
             <li class="nav-item" id="nav-auth-delivery">
@@ -96,6 +96,12 @@
               <a href="{{route('admin.historyCashes')}}" class="nav-link">
               <i class="material-icons">description</i>
                 <p>Historial Efectivo</p>
+              </a>
+            </li>
+            <li class="nav-item" id="nav-historyPayDelivery">
+              <a href="{{route('admin.historyPayDelivery')}}" class="nav-link">
+              <i class="material-icons">where_to_vote</i>
+                <p>Historial Pedido Delivery</p>
               </a>
             </li>
             <li class="nav-item" id="nav-settings">
