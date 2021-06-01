@@ -53,8 +53,7 @@ propósito de esta Notificación de Privacidad es explicar en qué
 modo compartimos, usamos y mantenemos segura la información personal
 que recopilamos y recibimos de usted a través de nuestros sitios web
 Ctpaga.app, aplicaciones para móvil, herramientas de comercio
-electrónico, la tienda de aplicaciones u otros servicios
-(denominados de manera colectiva, el «Servicio</FONT></P>
+electrónico, la tienda de aplicaciones u otros servicios.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">2.
 ¿Qué información personal recopila Ctpaga?</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Es
@@ -70,6 +69,11 @@ aplicaciones y dispositivos. No recopilamos ni utilizamos
 ofrecemos ni vendemos a terceros datos basados en información
 confidencial del consumidor.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">3.
+¿Qué información recopila Ctpaga en la lista de contactos de dispositivos?</FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">
+Con su consentimiento recopilamos informacion el nombre y apellido (como la que se encuentra en la libreta de contactos de su teléfono móvil) donde permite registrar los pedidos con el nombre del cliente.
+</FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">4.
 ¿Cómo utiliza Ctpaga su información personal?</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Recopilamos
 información personal sobre usted cuando solicita participar en
@@ -89,7 +93,7 @@ proporcionar un servicio solicitado o ejecutar un contrato con usted.</FONT></P>
 personal que usted nos proporciona. Utilizamos esta información
 personal para proporcionarle nuestro Servicio, responder a las
 consultas de facturación y mantenerle actualizado con noticias sobre
-Ctpaga/Compralotodo.com, el Servicio y nuestros socios.</FONT></P>
+ctpaga.app, el Servicio y nuestros socios.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Con
 su consentimiento, Comunicación de marketing. Para comunicados de
 marketing nuestros o procedente de cualquiera de nuestros socios en
@@ -274,7 +278,7 @@ de nuestros Servicios y la información que obtenemos de terceros
 automáticamente para venderle nuevos productos y servicios mediante
 el uso de cookies para publicar anuncios para usted o publicando
 anuncios en nuestras aplicaciones o en nuestros sitios web.</FONT></P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">4.
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">5.
 ¿Con quién comparte Ctpaga su información personal?</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Ctpaga
 no comparte con otras personas la información personal que obtiene
@@ -287,20 +291,20 @@ compañías del grupo y afiliadas u (vii) otras divulgaciones
 legales.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><BR><BR>
 </P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">5.
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">6.
 ¿Cuánto tiempo mantiene Ctpaga su información personal?</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Según
 se describe a continuación, conservaremos su información durante el
 tiempo que su cuenta se encuentre activa o según sea necesario para
 prestarle el Servicio, pero en ningún caso por más tiempo que lo
 permitido por la ley aplicable.</FONT></P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">6.
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">7.
 ¿Transfiere Ctpaga su información personal fuera del país?</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Cuando
 sea necesario, podemos transferir su información personal a nuestros
 servidores ubicados fuera del país en el que vive ya que nuestros
 servidores se encuentran en Los Estados Unidos de América</FONT></P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">7.
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">8.
 ¿Cuánto tiempo mantiene segura Ctpaga su información personal?</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Tomamos
 medidas razonables para poner en marcha salvaguardias físicas,
@@ -335,7 +339,7 @@ escrito. Para recibir una notificación por escrito gratuita ante una
 violación de seguridad (o para retirar su consentimiento para
 recibir notificaciones electrónicas), envíe una solicitud a través
 de nuestro centro de ayuda.</FONT></P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">8.
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">9.
 ¿Cuáles son sus Derechos de Privacidad?</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Ctpaga
 como Controlador de Datos. Si se lo solicita, le proporcionaremos
@@ -361,7 +365,7 @@ Servicio, puede corregir, actualizar o eliminar dicha información
 mediante la realización del cambio en la página de su cuenta de
 usuario, o mediante el envío de una solicitud a través de nuestro
 centro de ayuda.</FONT></P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">9.
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">10.
   Cambios a esta notificación de privacidad</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Ctpaga
 reserva el derecho de revisar, modificar o actualizar esta
@@ -370,13 +374,13 @@ significativos en la manera en la cual tratamos su información
 personal enviándole una notificación a la dirección principal de
 correo electrónico especificada en su cuenta particular de Ctpaga o
 mediante la colocación de un aviso destacado en nuestro sitio.</FONT></P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">10.
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">11.
 Contacto con Ctpaga</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Si
 tiene alguna duda sobre la privacidad con respecto a Ctpaga, o a este
 aviso, y si no puede resolverla satisfactoriamente a través del
 Servicio, le recomendamos cumplimentar una solicitud de ayuda en
-https://Ctpaga.app o escribirnos por correo electrónico a
+https://ctpaga.app o escribirnos por correo electrónico a
 saludos@Ctpaga.app</FONT></P>
 </BODY>
 </HTML>

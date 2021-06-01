@@ -52,9 +52,8 @@ Qué cubre esta Notificación de Privacidad</FONT></P>
 propósito de esta Notificación de Privacidad es explicar en qué
 modo compartimos, usamos y mantenemos segura la información personal
 que recopilamos y recibimos de usted a través de nuestros sitios web
-CTPaga.compralotodo.com, aplicaciones para móvil, herramientas de
-comercio electrónico, la tienda de aplicaciones u otros servicios
-(denominados de manera colectiva, el «Servicio</FONT></P>
+ctpaga.app, aplicaciones para móvil, herramientas de
+comercio electrónico, la tienda de aplicaciones u otros servicios.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">2.
 ¿Qué información personal recopila Ctlleva?</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Es
@@ -219,9 +218,7 @@ información personal a cualquiera de estos sitios, esta se regirá
 por las políticas de privacidad de dichos sitios. Lo instamos a que
 lea con atención la política de privacidad de cualquier sitio web
 que visite.</FONT></P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><BR><BR>
-</P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><BR><BR>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><BR>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Otros
 usos</FONT></P>
@@ -285,7 +282,7 @@ sorteos y concursos; (iii) marketing de terceros; (iv) una fusión o
 venta; (v) información públicamente accesible; (vi) nuestras
 compañías del grupo y afiliadas u (vii) otras divulgaciones
 legales.</FONT></P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><BR><BR>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in">
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">5.
 ¿Cuánto tiempo mantiene Ctlleva su información personal?</FONT></P>
@@ -345,7 +342,7 @@ cuenta en Ctlleva y editarla en cualquier momento, iniciando sesión
 en su cuenta. También puede ponerse en contacto con nosotros a
 través del centro de ayuda, y le responderemos lo antes posible en
 un máximo de 30 días.</FONT></P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><BR><BR>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Puede
 borrar su cuenta aplicable visitando la página de eliminación de
@@ -376,7 +373,7 @@ Contacto con Ctlleva</FONT></P>
 tiene alguna duda sobre la privacidad con respecto a Ctlleva, o a
 este aviso, y si no puede resolverla satisfactoriamente a través del
 Servicio, le recomendamos cumplimentar una solicitud de ayuda en
-https://CTPaga.app o escribirnos por correo electrónico a
+https://ctpaga.app o escribirnos por correo electrónico a
 saludos@CTPaga.app</FONT></P>
 </BODY>
 </HTML>
