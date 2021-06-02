@@ -956,15 +956,17 @@ class PaidController extends Controller
             if($listCost)
                 $costDelivery = $listCost->cost;
             
-            if($paid->coin == 0){
+            if($paid->coin == 0 && $paid->nameCompanyPayments != "PayPal"){
                 $balance->total += floatval($paid->total)-(floatval($paid->total)*0.05+0.35)-$costDelivery;
-                $balance->save();
+            }else if($paid->coin == 0 && $paid->nameCompanyPayments == "PayPal"){
+                $balance->total += floatval($paid->total)-(floatval($paid->total)*0.1+0.35)-$costDelivery;
             }else{
                 $rateAdmin = Rate::where("roleRate",0)->orderBy("created_at","desc")->first();
         
                 $balance->total += floatval($paid->total)-(floatval($paid->total)*0.05+(0.35*floatval($rateAdmin->rate)))-($costDelivery*floatval($rateAdmin->rate));
-                $balance->save();
             }
+
+            $balance->save();
 
             foreach ($sales as $sale)
             {

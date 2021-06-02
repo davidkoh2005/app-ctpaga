@@ -21,7 +21,7 @@ class VersionSeeder extends Seeder
                     'updated_at'    => date('Y-m-d H:m:s'),
                     'app'           => 'ctpaga',
                     'app_ios'       => 'https://www.apple.com/la/app-store/',
-                    'app_android'   => 'https://play.google.com/store/apps/details?id=ctpaga.ctpaga',
+                    'app_android'   => 'https://play.google.com/store/apps/details?id=compralotodo.ctpaga',
                 )
             );
         
@@ -35,7 +35,7 @@ class VersionSeeder extends Seeder
                     'updated_at'    => date('Y-m-d H:m:s'),
                     'app'           => 'delivery ctpaga',
                     'app_ios'       => 'https://www.apple.com/la/app-store/',
-                    'app_android'   => 'https://play.google.com/store/apps/details?id=ctpaga.ctlleva',
+                    'app_android'   => 'https://play.google.com/store/apps/details?id=ctlleva.ctlleva',
                 )
             );
     }

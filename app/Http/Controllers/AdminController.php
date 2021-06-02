@@ -485,6 +485,7 @@ class AdminController extends Controller
 
             if($request->status == 2){
                 $transaction->statusDelivery = 1;
+                $transaction->statusPayment = 2;
                 $transaction->timeDelivery = Carbon::now()->addMinutes(10);
             }
 
@@ -714,6 +715,7 @@ class AdminController extends Controller
                         ->select('paids.id', 'commerces.name', 'paids.nameClient', 'paids.selectShipping', 'paids.total', 'paids.statusShipping',
                             'paids.date', 'paids.nameCompanyPayments', 'paids.idDelivery', 'paids.codeUrl', 'paids.alarm', 'paids.statusDelivery', 'paids.timeDelivery')
                         ->whereNotNull('paids.selectShipping')
+                        ->where('paids.statusDelivery', '!=', 0)
                         ->where('paids.statusPayment',2)
                         ->where('paids.statusShipping','!=',2);
 
