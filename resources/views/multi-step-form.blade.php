@@ -19,7 +19,9 @@
     <script type="text/javascript" src="{{ asset('js/bookshop/jquery.maskMoney.min.js') }}"></script>
 
     @if($coinClient==0)
-    <!-- link to the SqPaymentForm library -->
+    <!-- link to the SqPaymentForm library production -->
+    <!-- <script type="text/javascript" src="https://js.squareup.com/v2/paymentform"> -->
+    <!-- link to the SqPaymentForm library Sandbox -->
     <script type="text/javascript" src="https://js.squareupsandbox.com/v2/paymentform">
     </script>
 
