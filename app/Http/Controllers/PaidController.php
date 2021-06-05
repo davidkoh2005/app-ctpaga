@@ -321,7 +321,7 @@ class PaidController extends Controller
 
             $transaction = new Transaction();
             $transaction->setAmount($amountPaypal);
-            $transaction->setDescription('Compra a través de ctpaga');
+            $transaction->setDescription('Compra a través de Ctpaga');
 
             $callbackUrl = url('/pagar/estadoPaypal/');
 
@@ -412,7 +412,7 @@ class PaidController extends Controller
                 ApiClient::init(env('COINBASE_KEY'));
 
                 $chargeData = [
-                    'name' => 'Pago CTpaga',
+                    'name' => 'Pago Ctpaga',
                     'description' => 'Transacción código: '.$codeUrl,
                     'code' => $codeUrl,
                     'local_price' => [
@@ -826,7 +826,7 @@ class PaidController extends Controller
                     $fecha = Carbon::now()->format("d/m/Y");
                     $urlDelivery = url('/delivery/'.$delivery->idUrl);
 
-                    $message = "CTpaga Delivery le informa que ha realizado un pedido con el Nro ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora. Ver informacion de delivery: ".$urlDelivery."";
+                    $message = "Ctpaga Delivery le informa que ha realizado un pedido con el Nro ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora. Ver informacion de delivery: ".$urlDelivery."";
                     $messageAdmin = " el delivery ".$delivery->name." tomo el pedido ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora.";
 
                     $sms = AWS::createClient('sns');
@@ -981,7 +981,7 @@ class PaidController extends Controller
                 ]);
             }
 
-            $message = "CTpaga Delivery le informa que el pedido ".$paid->codeUrl." fue entregado satisfactoriamente a ".$paid->nameShipping;
+            $message = "Ctpaga Delivery le informa que el pedido ".$paid->codeUrl." fue entregado satisfactoriamente a ".$paid->nameShipping;
     
             (new User)->forceFill([
                 'email' => $paid->email,
