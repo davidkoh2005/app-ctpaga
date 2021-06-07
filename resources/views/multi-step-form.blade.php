@@ -19,10 +19,8 @@
     <script type="text/javascript" src="{{ asset('js/bookshop/jquery.maskMoney.min.js') }}"></script>
 
     @if($coinClient==0)
-    <!-- link to the SqPaymentForm library production -->
-    <!-- <script type="text/javascript" src="https://js.squareup.com/v2/paymentform"> -->
-    <!-- link to the SqPaymentForm library Sandbox -->
-    <script type="text/javascript" src="https://js.squareupsandbox.com/v2/paymentform">
+    <!-- link to the SqPaymentForm library -->
+    <script type="text/javascript" src="{{env('SQUARE_JS')}}">
     </script>
 
     <!-- link to the local custom styles for SqPaymentForm -->
@@ -165,7 +163,7 @@
                                     <label class="form" for="name">NOMBRE:</label>
                                     <input type="text" name="name" id="name" class="form-control formDataShipping" data-parsley-minlength="3" placeholder="Joe Doe" data-parsñey-pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u" required />
                                     <label class="form" for="number">NUMERO DE CELULAR:</label>
-                                    <input type="text" oninput="this.value=this.value.replace(/[^0-9]/g,'');" name="number" id="number" class="form-control formDataShipping" placeholder="04125555555" size="11" maxlength="11" data-parsley-maxlength="11" data-parsley-pattern="^(0414|0424|0412|0416|0426)[0-9]{7}$" required autocomplete="off" />
+                                    <input type="tel" oninput="this.value=this.value.replace(/[^0-9]/g,'');" name="number" id="number" class="form-control formDataShipping" placeholder="04125555555" size="11" maxlength="11" data-parsley-maxlength="11" data-parsley-pattern="^(0414|0424|0412|0416|0426)[0-9]{7}$" required autocomplete="off" />
                                     <br>
                                     <div class="row">
                                         <div class="col-md-6 col-12">
@@ -258,7 +256,8 @@
                                 <p>Seleccionar método de pago:</p>
                                 <div class="dataPay">
                                     @if ($coinClient ==0)
-                                        <div class="row checkPayment checkPaymentWhite">
+                                        <!-- square works 100% -->
+                                        <!-- <div class="row checkPayment checkPaymentWhite">
                                             <div class="description-payment col center">
                                                 <input type="radio" class="radio-payment" name="payment" id="payment" value="CARD">
                                                 <img class="img-fluid " alt="Responsive image" src="{{ asset('images/square.png') }}">
@@ -280,7 +279,7 @@
                                             </div> 
                                             <input type="hidden" name="nonce" id="nonce">
                                             <input type="hidden" name="idempotency_key" id="idempotency_key">
-                                        </div>
+                                        </div> -->
                                         @if($zelle != NULL)
                                         <div class="row checkPayment checkPaymentWhite justify-content-center align-items-center minh-10">
                                             <div class="description-payment col center">

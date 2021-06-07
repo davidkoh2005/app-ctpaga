@@ -173,12 +173,12 @@ class PaidController extends Controller
             return view('result', compact('userUrl', 'status'));
         }elseif($request->coinClient == 0 && $request->payment == "CARD"){
 
-            $url = 'https://connect.squareupsandbox.com/v2/payments';
+            $url = env('SQUARE_API');
             $ch = curl_init($url);
 
             $jsonData = array(
                 'amount_money' => array(
-                    'amount' => intval(str_replace(".","",floatval($amount)*100)),
+                    'amount' =>  floatval(str_replace(".","",floatval($amount)*100)),
                     'currency' => "USD"
                 ),
                 "source_id" => $request->nonce,

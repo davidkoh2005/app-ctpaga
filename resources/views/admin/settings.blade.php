@@ -400,7 +400,7 @@
                                                         <div class="mb-3 row">
                                                             <label class="col-sm-4 col-form-label">Número de Teléfono</label>
                                                             <div class="col">
-                                                                <input class="form-control" type="number" name="phone[]" autocomplete="off"  placeholder="04125555555" size="11" maxlength="11" pattern="^(?:(\+)58|0)(?:2(?:12|4[0-9]|5[1-9]|6[0-9]|7[0-8]|8[1-35-8]|9[1-5]|3[45789])|4(?:1[246]|2[46]))\d{7}$" value="{{$mobilePayment->phone}}" required>
+                                                                <input class="form-control" type="tel" name="phone[]" autocomplete="off"  placeholder="04125555555" size="11" maxlength="11" pattern="^(0414|0424|0412|0416|0426)[0-9]{7}$" value="{{$mobilePayment->phone}}" required>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -691,7 +691,7 @@
                             <div class="mb-3 row">\
                                 <label class="col-sm-4 col-form-label">Número de Teléfono</label>\
                                 <div class="col">\
-                                    <input class="form-control" type="number" name="phone[]" autocomplete="off" placeholder="04125555555" size="11" maxlength="11" pattern="^(?:(\+)58|0)(?:2(?:12|4[0-9]|5[1-9]|6[0-9]|7[0-8]|8[1-35-8]|9[1-5]|3[45789])|4(?:1[246]|2[46]))\d{7}$" required>\
+                                    <input class="form-control" type="tel" name="phone[]" autocomplete="off" placeholder="04125555555" size="11" maxlength="11" pattern="^(0414|0424|0412|0416|0426)[0-9]{7}$" required>\
                                 </div>\
                             </div>\
                         </td>\
