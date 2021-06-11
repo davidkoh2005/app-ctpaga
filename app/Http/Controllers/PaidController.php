@@ -312,6 +312,63 @@ class PaidController extends Controller
 
         }elseif($request->coinClient == 0 && $request->payment == "PAYPAL"){
 
+            $sales = Sale::where("codeUrl", $codeUrl)->get();
+            $message="";
+            foreach ($sales as $sale)
+            {
+                if($sale->type == 0 && $sale->productService_id != 0){
+                    $product = Product::where('id',$sale->productService_id)->first();
+                    
+                    if ($product->postPurchase)
+                        $message .= "- ".$product->postPurchase."\n";
+
+                    $product->stock -= $sale->quantity;
+                    $product->save();
+                }
+
+                if($sale->type == 1 && $sale->productService_id != 0){
+                    $service = Service::where('id',$sale->productService_id)->first();
+                    
+                    if($service->postPurchase)
+                        $message .= "- ".$service->postPurchase."\n";
+                }
+
+                $sale->statusSale = 1;
+                $sale->save();
+
+            }
+
+            $commerce = Commerce::where('userUrl',$userUrl)->first();
+            $user = User::where('id',$commerce->user_id)->first();
+            
+            if(strlen($request->priceShipping)>0){
+                $priceShipping = $request->priceShipping;
+            }else{
+                $priceShipping = "0";
+            }
+
+            $paid = Paid::create([
+                "user_id"               => $user->id,
+                "commerce_id"           => $commerce->id,
+                "codeUrl"               => $codeUrl,
+                "nameClient"            => $request->nameClient,
+                "total"                 => $amount,
+                "coin"                  => $request->coinClient,
+                "email"                 => $request->email,
+                "nameShipping"          => $request->name,
+                "numberShipping"        => $request->number,
+                "state"                 => $request->selectState,
+                "municipalities"        => $request->selectMunicipalities,
+                "addressShipping"       => $request->address,
+                "detailsShipping"       => $request->details,
+                "selectShipping"        => $request->selectShipping,
+                "priceShipping"         => str_replace(",",".",str_replace(".","",$priceShipping)),
+                "percentage"            => $request->percentageSelect,
+                "nameCompanyPayments"   => "PayPal",
+                "date"                  => Carbon::now(),
+                "statusPayment"         => 1,
+            ]);
+
             $payer = new Payer();
             $payer->setPaymentMethod('paypal');
 
@@ -587,40 +644,8 @@ class PaidController extends Controller
         /** Execute the payment **/
         $result = $payment->execute($execution, $this->apiContext);
         
-        $sales = Sale::where("codeUrl", $codeUrl)->get();
-        $message="";
-        foreach ($sales as $sale)
-        {
-            if($sale->type == 0 && $sale->productService_id != 0){
-                $product = Product::where('id',$sale->productService_id)->first();
-                
-                if ($product->postPurchase)
-                    $message .= "- ".$product->postPurchase."\n";
-
-                $product->stock -= $sale->quantity;
-                $product->save();
-            }
-
-            if($sale->type == 1 && $sale->productService_id != 0){
-                $service = Service::where('id',$sale->productService_id)->first();
-                
-                if($service->postPurchase)
-                    $message .= "- ".$service->postPurchase."\n";
-            }
-
-            $sale->statusSale = 1;
-            $sale->save();
-
-        }
-
         $commerce = Commerce::where('userUrl',$userUrl)->first();
         $user = User::where('id',$commerce->user_id)->first();
-        
-        if(strlen($requestForm['priceShipping'])>0){
-            $priceShipping = $requestForm['priceShipping'];
-        }else{
-            $priceShipping = "0";
-        }
 
         if ($result->getState() === 'approved') {
             $statusDelivery = 1;
@@ -632,30 +657,10 @@ class PaidController extends Controller
             $resultPayment=1;
         }
 
-        $paid = Paid::create([
-            "user_id"               => $user->id,
-            "commerce_id"           => $commerce->id,
-            "codeUrl"               => $requestForm['codeUrl'],
-            "nameClient"            => $requestForm['nameClient'],
-            "total"                 => $amount,
-            "coin"                  => $requestForm['coinClient'],
-            "email"                 => $requestForm['email'],
-            "nameShipping"          => $requestForm['name'],
-            "numberShipping"        => $requestForm['number'],
-            "state"                 => $requestForm['selectState'],
-            "municipalities"        => $requestForm['selectMunicipalities'],
-            "addressShipping"       => $requestForm['address'],
-            "detailsShipping"       => $requestForm['details'],
-            "selectShipping"        => $requestForm['selectShipping'],
-            "priceShipping"         => str_replace(",",".",str_replace(".","",$priceShipping)),
-            "percentage"            => $requestForm['percentageSelect'],
-            "nameCompanyPayments"   => "PayPal",
-            "date"                  => Carbon::now(),
-            "statusPayment"         => $resultPayment,
-            "refPayment"            => $result->getId(),
-            "timeDelivery"          => $timeDelivery,
-        ]);
-
+        $paid = Paid::where('codeUrl',$codeUrl)->first();
+        $paid->statusPayment = $resultPayment;
+        $paid->refPayment = $result->getId();
+        $paid->timeDelivery = $timeDelivery;
         $paid->statusDelivery = $statusDelivery;
         $paid->save();
 
