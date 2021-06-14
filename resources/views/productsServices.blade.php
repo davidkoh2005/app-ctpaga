@@ -32,7 +32,7 @@
                     <p class="card-text">@php showPrice($service->price, $rate, $service->coin, $coinClient); @endphp</p>
                 </div>
                 <div class="card-flotter flotterAddCart">
-                <button type="button" class="btn btn-bottom" onclick="addCart({{$service}} 1)">Agregar al carrito</button>
+                <button type="button" class="btn btn-bottom" onclick="addCart({{$service}}, 1)">Agregar al carrito</button>
                 </div>
             </div>
         </div>
