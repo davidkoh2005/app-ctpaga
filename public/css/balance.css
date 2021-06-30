@@ -217,7 +217,7 @@ table {
     background-size: 1em auto, 100%;
 }
 
-.content-select-bank{
+.content-select-bank , .content-select-wallet{
     font-size: 12px;
 }
  

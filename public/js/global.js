@@ -1,6 +1,10 @@
 var locale = 'es';
 var options = {minimumFractionDigits: 2, maximumFractionDigits: 2};
 var formatter = new Intl.NumberFormat(locale, options);
+
+var optionsCrypto = {minimumFractionDigits: 8, maximumFractionDigits: 8};
+var formatterCrypto = new Intl.NumberFormat(locale, optionsCrypto);
+
 var coinClient = 1;
 var rateToday=0;
 

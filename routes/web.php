@@ -129,6 +129,8 @@ Route::group(['middleware'=>'admin'], function() {
     Route::post('/admin/settingsTransfers', 'AdminController@settingsTransfers')->name('admin.settingsTransfers');
     Route::post('/admin/settingsMobile', 'AdminController@settingsMobile')->name('admin.settingsMobile');
     Route::post('/admin/settingsZelle', 'AdminController@settingsZelle')->name('admin.settingsZelle');
+    Route::post('/admin/settingsCryptocurrencies', 'AdminController@settingsCryptocurrencies')->name('admin.settingsCryptocurrencies');
+    Route::post('/admin/showWallet', 'AdminController@showWallet')->name('admin.showWallet');
 });
 
 Route::post('/admin/removePicture', 'AdminController@removePicture')->name('admin.removePicture');

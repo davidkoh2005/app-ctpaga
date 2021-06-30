@@ -5,9 +5,11 @@ var shippingCoin = 0;
 var _coinClient = 0;
 var _rate = 0;
 var dataShipping = [];
-var _selectSale, selectPayment, applicationId;
+var _selectSale, selectPayment, applicationId, show;
 var submit = false;
 var totalPayment = 0;
+var indexCrypto = 4;
+var statusCrypto = false;
 
 $(document).ready(function(){
     var $sections = $('.form-section');
@@ -37,17 +39,18 @@ $(document).ready(function(){
         $sections.removeClass('current').eq(index).addClass('current');
         $(".form-navigation .next").removeClass('btn-active');
 
-        if(statusModification)
-            $('.form-navigation .previous').toggle(index>0);
-        else
-            $('.form-navigation .previous').toggle(index>1);
-
         var arTheEnd = index >= $sections.length -1;
+
+        if(statusModification)
+            $('.form-navigation .previous').toggle(index>0 && !arTheEnd);
+        else
+            $('.form-navigation .previous').toggle(index>1 && !arTheEnd);
+
         $('.form-navigation .pay').toggle(index == 0);
         $('.form-navigation .save').toggle(index == 1);
-        $('.form-navigation .next').toggle(!arTheEnd && index != 0 && index != 1);
+        $('.form-navigation .next').toggle(!arTheEnd && index !=7  && index != 0 && index != 1);
 
-        $('.form-navigation [type=submit]').toggle(arTheEnd);
+        $('.form-navigation [type=submit]').toggle(index >=7);
         
         switch (index) {
             case 0:
@@ -73,6 +76,10 @@ $(document).ready(function(){
                 break;
             case 7:
                 $(".title-sales").text("Método de Pago");
+                break;
+            case 8:
+                $(".title-sales").text("Criptomoneda");
+                window.scrollTo(0,0);
                 break;
             default: 
                 console.log("error case");
@@ -103,7 +110,7 @@ $(document).ready(function(){
                 $(".form-navigation .next").removeClass('btn-active');
         }
 
-        if(index == 7){
+        if(index >= 7 ){
             $('.submit').hide();
         }
             
@@ -346,8 +353,23 @@ $(document).ready(function(){
                 $('#loading').show();
                 $("#payment-form").submit(); 
             });
+        }else if(_coinClient == 0 && selectPayment == "BITCOIN"){
+            $('.contact-form').parsley().whenValidate({
+                group: 'block-' + curIndex()
+            }).done(function(){
+                if(curIndex() == 7){
+                    showCrypto();
+                    navigateTo(curIndex()+1);
+                }else if($('#show-'+show).find(".hashTransactions").val().length >5){
+                    submit = true;
+                    $('.submit').hide();
+                    $('#loading').show();
+                    $("#payment-form").submit();
+                }else{
+                    $("#payment-form").submit();
+                }
+            });
         }else if(_coinClient == 0 && selectPayment != "CARD" || switchPay){
-            console.log("entro");
             $('.contact-form').parsley().whenValidate({
                 group: 'block-' + curIndex()
             }).done(function(){
@@ -428,6 +450,10 @@ $(document).ready(function(){
 
     });
 
+    $('#verMas').on('click', function(){
+        indexCrypto += 4;
+        showCrypto(); 
+    });
 
     $('.sales').on('click', function(){
         if(statusModification){
@@ -545,6 +571,20 @@ $(document).ready(function(){
       });
     };
   }(jQuery));
+
+function showCrypto(){
+    var numItems = $('.checkPaymentCrypto').length;
+    for (var i = 1; i <= numItems; i++){
+        if(i <= indexCrypto){
+            $('#crypto-'+i).css({"display":"block"});
+        }else{
+            $('#crypto-'+i).css({"display":"none"});
+        }
+
+        if(i == indexCrypto && i == numItems)
+            $('#verMas').css({"display":"none"});
+    }
+}
 
 function showTotal(price, rate, coin, coinClient, quantity){
     var result = exchangeRate(price, rate, coin, coinClient);

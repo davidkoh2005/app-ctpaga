@@ -19,6 +19,7 @@
     <script src="{{ asset('js/bookshop/wow.js') }}"></script>
     <script src="{{ asset('js/bookshop/jquery.js') }}"></script>
     <script src="{{ asset('js/bookshop/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/bookshop/popper.min.js') }}"></script>
     <script src="{{ asset('js/bookshop/bootstrap.min.js') }}"></script>
     <script src="{{ asset('js/bookshop/parsley.js') }}"></script>
     <script src="{{ asset('js/bookshop/datatables.min.js') }}"></script>

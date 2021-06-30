@@ -67,6 +67,7 @@ class PaidController extends Controller
 
     public function formSubmit(Request $request)
     {
+        dd($request->all());
         $userUrl = $request->userUrl;
         $codeUrl = $request->codeUrl;
         $amount = str_replace(".","",$request->totalAll);

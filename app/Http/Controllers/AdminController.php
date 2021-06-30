@@ -28,6 +28,9 @@ use App\HistoryCash;
 use App\DeliveryCost;
 use App\PaymentsBs;
 use App\PaymentsZelle;
+use App\PayCryptocurrency;
+use App\Cryptocurrency;
+use App\CryptocurrenciesDetail;
 use Carbon\Carbon;
 use App\Notifications\UserPaused;
 use App\Notifications\UserRejected;
@@ -991,10 +994,12 @@ class AdminController extends Controller
         $listBanks = json_decode($data, true);
 
         $zelle = Settings::where('name','Zelle')->first();
+
+        $listCryptocurrencies = Cryptocurrency::whereNotNull('address')->get();
         
         $statusMenu="settings";
 
-        return view('admin.settings', compact('statusMenu', 'emailsAllPaid', 'emailsAllDelivery', 'statusPaidAll', 'scheduleInitial', 'scheduleFinal', 'listBanks', 'transfers', 'mobilePayments', 'zelle'));
+        return view('admin.settings', compact('statusMenu', 'emailsAllPaid', 'emailsAllDelivery', 'statusPaidAll', 'scheduleInitial', 'scheduleFinal', 'listBanks', 'transfers', 'mobilePayments', 'zelle', 'listCryptocurrencies'));
     }
     
 
@@ -1135,6 +1140,49 @@ class AdminController extends Controller
         $zelle->save();
 
         return redirect(route('admin.settings'));
+    }
+
+    public function settingsCryptocurrencies(Request $request)
+    {
+        $cryptocurrency = Cryptocurrency::where('name',$request->crypto)->first();
+        $cryptocurrency->address = $request->address;
+        $cryptocurrency->publish = $request->switchPublish == null? 0 : 1;
+        $cryptocurrency->save();
+
+        if(!empty($request->allDetailsCryptocurrency) && count($request->allDetailsCryptocurrency)> 0){
+            $exceptArray = array_merge(array_diff($request->allDetailsCryptocurrency,$request->idDetailsCryptocurrency), array_diff($request->idDetailsCryptocurrency,$request->allDetailsCryptocurrency));
+            foreach ($exceptArray as $id) {
+                CryptocurrenciesDetail::whereId($id)->delete();
+            }
+        }
+
+        if(!empty($request->detailsCryptocurrencyKey))
+            for ($i = 0; $i < count($request->detailsCryptocurrencyKey); $i++) {
+                if(!empty($request->idDetailsCryptocurrency[$i])){
+                    $detailsCryptocurrency = CryptocurrenciesDetail::whereId($request->idDetailsCryptocurrency[$i])->first();
+                    $detailsCryptocurrency->key = $request->detailsCryptocurrencyKey[$i];
+                    $detailsCryptocurrency->value = $request->detailsCryptocurrencyValue[$i];
+                    $detailsCryptocurrency->save();
+                }else{
+                    $detailsCryptocurrency = CryptocurrenciesDetail::create([
+                        "cryptocurrencies_id"   => $cryptocurrency->id,
+                        "key"                   => $request->detailsCryptocurrencyKey[$i],
+                        "value"                 => $request->detailsCryptocurrencyValue[$i],
+                    ]);
+                }
+            }
+            
+        return redirect(route('admin.settings'));
+    }
+
+    public function showWallet(Request $request)
+    {
+        $selectCryptoCurrency = Cryptocurrency::whereId($request->id)->first();
+        $listCryptocurrencies = Cryptocurrency::orderBy('name', 'ASC')->get();
+        $detailsCryptocurrencies = CryptocurrenciesDetail::where('cryptocurrencies_id', $request->id)->get();
+
+        $returnHTML=view('admin.modal.wallet', compact('listCryptocurrencies', 'selectCryptoCurrency', 'detailsCryptocurrencies'))->render();
+        return response()->json(array('html'=>$returnHTML));
     }
 
     public function showDelivery(Request $request)

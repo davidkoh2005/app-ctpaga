@@ -17,6 +17,7 @@
     <script src="{{ asset('js/global.js') }}"></script>
     <script src="{{ asset('js/stateMunicipalities.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/bookshop/jquery.maskMoney.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/bookshop/jquery-qrcode.js') }}"></script>
 
     @if($coinClient==0)
     <!-- link to the SqPaymentForm library -->
@@ -380,6 +381,54 @@
                                 </div>
                             </div>
 
+                            <div class="form-section">
+                                <p>Seleccionar Criptomoneda:</p>
+                                <div class="dataPay">
+                                    @for ($i = 1; $i <= 10; $i++)
+                                    @foreach($listCryptocurrencies as $key => $cryptocurrency)
+                                        <div class="row checkPaymentWhite checkPaymentCrypto justify-content-center align-items-center minh-10" id="crypto-{{$i == 1? $key + $i : $key + $i + $i}}">
+                                            <div class="description-payment col center">
+                                                <input type="radio" class="radio-payment" name="paymentCryptocurrency" id="paymentCryptocurrency" value="{{ $cryptocurrency->name }}" data-id="{{ $cryptocurrency->id }}" data-symbol="{{ $cryptocurrency->symbol }}" data-baseasset="{{ $cryptocurrency->baseAsset }}" data-address="{{ $cryptocurrency->address }}" data-show="{{$i == 1? $key + $i : $key + $i + $i}}">
+                                                <img class="img-fluid" alt="Responsive image" src="{{ asset('cryptocurrencies/images/'.$cryptocurrency->baseAsset.'.png') }}" width="50px" style="margin-right: 15px;">
+                                                {{ $cryptocurrency->name }}
+                                            </div>
+                                        </div>
+                                        <div id="show-{{$i == 1? $key + $i : $key + $i + $i}}" style="padding-bottom: 80px; display:none;">
+                                            <div class="row">&nbsp;</div>
+                                            <label><strong>Precio: </strong></strong> <span class="crypto-price">Consultando...</span></label>
+                                            <div class="row">&nbsp;</div>
+                                            <label><strong>Total a pagar: </strong><span class="payTotal"></span></label>
+                                            <div class="row">&nbsp;</div>
+                                            <label>Por favor pagar <strong><span class="totalPayCrypto"></span></strong> con la siguiente Dirección: </label>
+                                            <div class="row">&nbsp;</div>
+                                            <label>Dirección:</label>
+                                            <div class="input-group mb-3">
+                                                <input type="text" class="form-control address" value="{{ $cryptocurrency->address }}" style="height: 50px;" readonly>
+                                                <div class="input-group-prepend">
+                                                    <button class="btn btn-outline-success" type="button" onclick="copyText('{{$i == 1? $key + $i : $key + $i + $i}}', 'address', 'Dirección')" data-toggle="tooltip" data-placement="top" title="Copiar al portapapeles"><i class="fa fa-clone" aria-hidden="true"></i></button>
+                                                    <button class="btn btn-outline-success" type="button" onclick="copyCodeQr('{{$i == 1? $key + $i : $key + $i + $i}}', 'address')"><i class="fa fa-qrcode" aria-hidden="true"></i></button>
+                                                </div>
+                                            </div>
+                                            @if(!is_null($cryptocurrency->key) && !is_null($cryptocurrency->value))
+                                            <label>{{$cryptocurrency->key}}:</label>
+                                            <div class="input-group mb-3">
+                                                <input type="text" class="form-control codeQR" value="{{ $cryptocurrency->value }}" style="height: 50px;" readonly>
+                                                <div class="input-group-prepend">
+                                                    <button class="btn btn-outline-success" type="button" onclick="copyText('{{$i == 1? $key + $i : $key + $i + $i}}', 'codeQR', 'Código QR')" data-toggle="tooltip" data-placement="top" title="Copiar al portapapeles"><i class="fa fa-clone" aria-hidden="true"></i></button>
+                                                    <button class="btn btn-outline-success" type="button" onclick="copyCodeQr('{{$i == 1? $key + $i : $key + $i + $i}}', 'codeQR')"><i class="fa fa-qrcode" aria-hidden="true"></i></button>
+                                                </div>
+                                            </div>
+                                            @endif
+                                            <div class="form-group showInput"></div>
+                                        </div>
+                                    @endforeach
+                                    @endfor
+                                    <a href="javascript:;" id="verMas"> Ver más </a>
+                                </div>
+                            </div>
+
+                            <input type="hidden" name="priceCryptocurrency" id="priceCryptocurrency">
+
                             <div class="row">&nbsp;</div>
 
                             <div class="form-navigation bottom">
@@ -397,6 +446,24 @@
             </div>
         </div>
     </Section>
+
+    <!--- Modal Pay-->
+    <div class="modal fade" id="codeQrModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <strong>Código QR</strong>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>              
+                <div class="modal-body">
+                    <div id="qrcode" style="text-align: center;"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     <script> 
         var urlLoading = "{{ asset('/images/loadingTransparent.gif') }}";
@@ -439,7 +506,9 @@
             });
         }
 
-        $(document).ready(function(){           
+        $(document).ready(function(){         
+            $('[data-toggle="tooltip"]').tooltip()
+
             $('#selectState').on('change', function() {
                 $('#selectMunicipalities').prop('disabled', 'disabled');
                 $('#selectMunicipalities option').remove();
@@ -746,6 +815,66 @@
                 $(".showRemainingAmount").text("Bs "+formatter.format(totalPayment - totalPaid));
                 $(".showTotalPaid").text("Bs "+formatter.format(totalPaid));
             });
+
+            $('.checkPaymentCrypto').on('click', function(e){
+                e.preventDefault();
+                if(!submit){
+                    $(".checkPaymentCrypto").removeClass("checkPaymentActive");
+                    $(this).addClass("checkPaymentActive");
+                    $('.submit').show();
+
+                    $('.showInput').empty();
+                    var checkbox = $(this).find('input[type=radio]');
+                    checkbox.prop('checked', !checkbox.prop('checked'));
+                    
+                    var symbol = checkbox.data('symbol');
+                    var baseAsset = checkbox.data('baseasset');
+                    show = checkbox.data('show');
+                    var numItems = $('.checkPaymentCrypto').length;
+                    
+                    for (var i = 1; i <= numItems; i++){
+                        if(i == show){
+                            $('#show-'+i).css({"display":"block"});
+                        }else{
+                            $('#show-'+i).css({"display":"none"});
+                        }
+                        $('#show-'+i).find('.crypto-price').text("Consultando...");
+                        $('#show-'+i).find('.totalPayCrypto').text("0 "+baseAsset);
+                    }
+
+                    $('#show-'+show).find('.payTotal').text("$ "+formatter.format(totalPayment));
+                    $('#show-'+show).find('.showInput').append('\
+                        <label>Detalle del pago:</label>\
+                        <input type="text" class="form-control hashTransactions" name="hashTransactions" id="hashTransactions" placeholder="Hash de transacción" data-parsley-minlength="5" minlength="5" autocomplete="off" pattern="^\S+$" required>\
+                    ');
+
+                    var url = ['https://api.binance.com', 'https://api1.binance.com', 'https://api2.binance.com', 'https://api3.binance.com']
+                    var error = false;
+
+                    $.each(url, function(key, value) { 
+                        $.ajax({
+                            url: value+"/api/v3/ticker/price", 
+                            data: {"symbol" : symbol,},
+                            type: "GET",
+                        }).done(function(result){
+                            var totalPaymentCrypto = 0;
+                            error = false;
+                            $('#priceCryptocurrency').val();
+                            $('#show-'+show).find('.crypto-price').text("1 "+baseAsset+" equivale a $ "+formatter.format(parseFloat(result.price)));
+                            totalPaymentCrypto = parseFloat(totalPayment)/ parseFloat(result.price);
+                            $('#show-'+show).find('.totalPayCrypto').text(formatterCrypto.format(totalPaymentCrypto)+" "+baseAsset);
+                        }).fail(function(result){
+                            error = true;
+                        }); 
+
+                        if(error)
+                            alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                        else
+                            return false;
+                    });
+                }                
+            });
+
         });
 
         function addFormTransfers(){
@@ -866,6 +995,25 @@
                 autoclose: true,
                 todayHighlight: true
             });
+        }
+
+        function copyText(index, input, text){
+            var inputCopy = $('.dataPay').find('input.'+input);
+            inputCopy.select();
+            document.execCommand('copy');
+            alertify.success(text+' copiado al portapapeles');
+        }
+
+        function copyCodeQr(index, input){
+            var inputText = $('.dataPay').find('input.'+input).val();
+            // Clear Previous QR Code
+            $('#qrcode').empty();
+
+            // Generate and Output QR Code
+            $('#qrcode').qrcode({width: 150, height: 150, text:inputText});
+
+            $('#codeQrModal').modal('show'); 
+
         }
     </script>
 </body>

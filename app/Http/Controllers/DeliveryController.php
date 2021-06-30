@@ -223,6 +223,7 @@ class DeliveryController extends Controller
 
     public function test()
     {
+
         /*
         $user = User::where('email', 'angelgoitia1995@gmail.com')->first();
         $deposits = Deposits::where('user_id', $user->id)->first();

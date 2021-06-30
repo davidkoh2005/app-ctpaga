@@ -38,3 +38,12 @@
 strong {
     font-weight: bold !important;
 }
+
+.buttonAdd{
+	margin-bottom: 25px !important;
+	text-align: end !important;
+}
+
+#dynamic_field_wallet td {
+    border-color: white !important;
+}

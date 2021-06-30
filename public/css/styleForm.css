@@ -140,7 +140,7 @@ div.name label {
     height: 80px;
 }
 
-div.shippings, div.checkPayment {
+div.shippings, div.checkPayment, div.checkPaymentCrypto {
     cursor: pointer;
     padding: 15px;
     background-color: #e6e6e6;

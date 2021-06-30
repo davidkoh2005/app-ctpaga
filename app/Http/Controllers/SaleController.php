@@ -21,6 +21,8 @@ use App\Category;
 use App\Settings;
 use App\DeliveryCost;
 use App\SettingsBank;
+use App\Cryptocurrency;
+use App\CryptocurrenciesDetail;
 
 class SaleController extends Controller
 {
@@ -96,8 +98,14 @@ class SaleController extends Controller
         $listBanks = json_decode($data, true);
 
         $zelle = Settings::where('name','Zelle')->first();
+
+        $listCryptocurrencies = Cryptocurrency::leftJoin('cryptocurrencies_details', 'cryptocurrencies_details.cryptocurrencies_id', '=', 'cryptocurrencies.id')
+                                ->where('cryptocurrencies.publish', 1)
+                                ->orderBy('cryptocurrencies.name', 'asc')
+                                ->select('cryptocurrencies.id', 'cryptocurrencies.name', 'cryptocurrencies.symbol', 'cryptocurrencies.baseAsset', 'cryptocurrencies.address', 'cryptocurrencies.publish',
+                                    'cryptocurrencies_details.key', 'cryptocurrencies_details.value')->get();
     
-        return view('multi-step-form', compact('userUrl','codeUrl', 'statusModification', 'commerce','picture', 'sales', 'nameClient', 'rate', 'coinClient', 'total', 'shippings', 'quantity', 'msg', 'transfers', 'mobilePayments', 'listBanks', 'zelle'));
+        return view('multi-step-form', compact('userUrl','codeUrl', 'statusModification', 'commerce','picture', 'sales', 'nameClient', 'rate', 'coinClient', 'total', 'shippings', 'quantity', 'msg', 'transfers', 'mobilePayments', 'listBanks', 'zelle', 'listCryptocurrencies'));
     }
 
     public function new(Request $request)
