@@ -42,7 +42,7 @@ class NewUser extends Notification
         return (new MailMessage)
         ->subject('Bienvenido a Ctpaga')
         ->markdown(
-            'email.welcome', ['user' => $this->user]
+            'email.welcomeUser', ['user' => $this->user]
         );
     }
 
