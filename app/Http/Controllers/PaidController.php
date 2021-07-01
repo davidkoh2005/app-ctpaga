@@ -33,6 +33,7 @@ use App\Delivery;
 use App\DeliveryCost;
 use App\PaymentsBs;
 use App\PaymentsZelle;
+use App\PaymentsBitcoin;
 use Session;
 use AWS;
 use PayPal\Api\Amount;
@@ -67,7 +68,6 @@ class PaidController extends Controller
 
     public function formSubmit(Request $request)
     {
-        dd($request->all());
         $userUrl = $request->userUrl;
         $codeUrl = $request->codeUrl;
         $amount = str_replace(".","",$request->totalAll);
@@ -467,19 +467,13 @@ class PaidController extends Controller
             );
 
             if($request->payment == "BITCOIN"){
-                ApiClient::init(env('COINBASE_KEY'));
-
-                $chargeData = [
-                    'name' => 'Pago Ctpaga',
-                    'description' => 'Transacción código: '.$codeUrl,
-                    'code' => $codeUrl,
-                    'local_price' => [
-                        'amount' => $amount,
-                        'currency' => 'USD'
-                    ],
-                    'pricing_type' => 'fixed_price'
-                ];
-                $chargeObj = Charge::create($chargeData);
+                PaymentsBitcoin::create([
+                    "paid_id"                   => $paid->id,
+                    "price_cryptocurrency"      => $request->priceCryptocurrency,
+                    "hash"                      => $request->hashTransactions,
+                    "name"                      => $request->nameCryptocurrency,
+                    "baseAsset"                      => $request->baseAssetCryptocurrency,
+                ]);
             }else{
                 PaymentsZelle::create([
                     "paid_id"       => $paid->id,
@@ -504,12 +498,8 @@ class PaidController extends Controller
                 } 
             }
 
-            if($request->payment == "BITCOIN"){
-                return redirect()->away($chargeObj->hosted_url);
-            }else{
-                $status = false;
-                return view('result', compact('userUrl', 'status'));
-            }
+            $status = false;
+            return view('result', compact('userUrl', 'status'));
         
         }elseif($request->coinClient == 1){
             

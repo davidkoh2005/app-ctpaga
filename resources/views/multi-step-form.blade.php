@@ -315,7 +315,7 @@
                                         <div class="row checkPayment checkPaymentWhite justify-content-center align-items-center minh-10">
                                             <div class="description-payment col center">
                                                 <input type="radio" class="radio-payment" name="payment" id="payment" value="BITCOIN">
-                                                <img class="img-fluid" alt="Responsive image" src="{{ asset('images/bitcoin.png') }}">    
+                                                <img class="img-fluid" alt="Responsive image" src="{{ asset('images/criptomoneda.png') }}">    
                                                 <input type="hidden" id="paymentDescription" value="BITCOIN">                                    
                                             </div>
                                         </div>
@@ -427,7 +427,9 @@
                                 </div>
                             </div>
 
-                            <input type="hidden" name="priceCryptocurrency" id="priceCryptocurrency">
+                            <input type="hidden" name="priceCryptocurrency" id="priceCryptocurrency" value="">
+                            <input type="hidden" name="nameCryptocurrency" id="nameCryptocurrency" value="">
+                            <input type="hidden" name="baseAssetCryptocurrency" id="baseAssetCryptocurrency" value="">
 
                             <div class="row">&nbsp;</div>
 
@@ -829,6 +831,7 @@
                     
                     var symbol = checkbox.data('symbol');
                     var baseAsset = checkbox.data('baseasset');
+                    var nameCryptocurrency = checkbox.val();
                     show = checkbox.data('show');
                     var numItems = $('.checkPaymentCrypto').length;
                     
@@ -845,7 +848,9 @@
                     $('#show-'+show).find('.payTotal').text("$ "+formatter.format(totalPayment));
                     $('#show-'+show).find('.showInput').append('\
                         <label>Detalle del pago:</label>\
-                        <input type="text" class="form-control hashTransactions" name="hashTransactions" id="hashTransactions" placeholder="Hash de transacción" data-parsley-minlength="5" minlength="5" autocomplete="off" pattern="^\S+$" required>\
+                        <input type="text" class="form-control hashTransactions" name="hashTransactions" id="hashTransactions" placeholder="Hash de transacción" data-parsley-minlength="5" minlength="5" autocomplete="off" required>\
+                        <div class="row">&nbsp;</div>\
+                        <p class="ErrorHash">Hash de Transacción es incorrecto</p>\
                     ');
 
                     var url = ['https://api.binance.com', 'https://api1.binance.com', 'https://api2.binance.com', 'https://api3.binance.com']
@@ -859,7 +864,9 @@
                         }).done(function(result){
                             var totalPaymentCrypto = 0;
                             error = false;
-                            $('#priceCryptocurrency').val();
+                            $('#priceCryptocurrency').val(parseFloat(result.price));
+                            $('#nameCryptocurrency').val(nameCryptocurrency);
+                            $('#baseAssetCryptocurrency').val(baseAsset);
                             $('#show-'+show).find('.crypto-price').text("1 "+baseAsset+" equivale a $ "+formatter.format(parseFloat(result.price)));
                             totalPaymentCrypto = parseFloat(totalPayment)/ parseFloat(result.price);
                             $('#show-'+show).find('.totalPayCrypto').text(formatterCrypto.format(totalPaymentCrypto)+" "+baseAsset);

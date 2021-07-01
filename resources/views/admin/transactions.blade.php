@@ -151,9 +151,11 @@
                             <td>
                                 <button class="btn btn-bottom" onClick="showProduct({{$transaction->id}})" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Productos"><i class="material-icons">shopping_bag</i></button>
                                 @if($transaction->nameCompanyPayments == 'Transferencia' || $transaction->nameCompanyPayments == 'Pago Móvil')
-                                    <button class="btn btn-bottom" onClick="showTransactions({{$transaction->id}})" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Transacciones"><i class="material-icons">receipt</i></button>
+                                    <button class="btn btn-bottom" onClick="showTransactions({{$transaction->id}}, '{{$transaction->nameCompanyPayments}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Transacciones"><i class="material-icons">receipt</i></button>
                                 @elseif($transaction->nameCompanyPayments == 'Zelle')
-                                    <button class="btn btn-bottom" onClick="showTransactionsZelle({{$transaction->id}})" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Transacciones"><i class="material-icons">receipt</i></button>
+                                    <button class="btn btn-bottom" onClick="showTransactions({{$transaction->id}}, '{{$transaction->nameCompanyPayments}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Transacciones"><i class="material-icons">receipt</i></button>
+                                @elseif($transaction->nameCompanyPayments == 'Bitcoin')
+                                    <button class="btn btn-bottom" onClick="showTransactions({{$transaction->id}}, '{{$transaction->nameCompanyPayments}}')" rel="tooltip" data-toggle="tooltip" data-placement="left" title="Ver Transacciones"><i class="material-icons">receipt</i></button>
                                 @endif
                             </td>
                         </tr>
@@ -223,30 +225,13 @@
             });
         }
 
-        function showTransactions(id)
+        function showTransactions(id, payment)
         {
             $.ajax({
-                url: "{{route('admin.transactionsBs')}}", 
-                data: {"id" : id},
+                url: "{{route('admin.transactionsPayment')}}", 
+                data: {"id" : id, "payment": payment},
                 type: "GET",
             }).done(function(data){
-                $('#showProductsOrTransactionsModal').modal('show'); 
-                $('#showTransactions').html(data.html);
-            }).fail(function(result){
-                alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
-                $('#showProductsOrTransactionsModal').modal('hide'); 
-                $('#showTransactions').html();
-            });
-        }
-
-        function showTransactionsZelle(id)
-        {
-            $.ajax({
-                url: "{{route('admin.transactionsZelle')}}", 
-                data: {"id" : id},
-                type: "GET",
-            }).done(function(data){
-                console.log(data.html);
                 $('#showProductsOrTransactionsModal').modal('show'); 
                 $('#showTransactions').html(data.html);
             }).fail(function(result){

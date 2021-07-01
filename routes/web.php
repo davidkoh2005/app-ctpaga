@@ -91,8 +91,7 @@ Route::group(['middleware'=>'admin'], function() {
     Route::get('/admin/transacciones', 'AdminController@transactions')->name('admin.transactions');
     Route::get('/admin/transacciones/{id}', 'AdminController@transactions')->name('admin.transactionsSearchId');
     Route::get('/admin/transactionsShow/', 'AdminController@transactionsShow')->name('admin.transactionsShow');
-    Route::get('/admin/transaccionesBs/', 'AdminController@transactionsBs')->name('admin.transactionsBs');
-    Route::get('/admin/transaccionesZelle/', 'AdminController@transactionsZelle')->name('admin.transactionsZelle');
+    Route::get('/admin/transaccionesReferencia/', 'AdminController@transactionsPayment')->name('admin.transactionsPayment');
     Route::post('/admin/payment', 'AdminController@showPayment')->name('admin.showPayment');
     Route::post('/admin/status', 'AdminController@changeStatus')->name('admin.changeStatus');
     Route::post('/admin/statusPayment', 'AdminController@changeStatusPayment')->name('admin.changeStatusPayment');

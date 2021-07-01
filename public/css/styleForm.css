@@ -423,6 +423,11 @@ div#card_number, div#card_expiry, div#card_cvc{
     border: 2px solid #00cc5f;
 }
 
+.ErrorHash {
+    color: red;
+    display: none;
+}
+
 
 
 

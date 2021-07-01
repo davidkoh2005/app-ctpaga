@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePayCryptocurrenciesTable extends Migration
+class CreatePaymentsBitcoinsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreatePayCryptocurrenciesTable extends Migration
      */
     public function up()
     {
-        Schema::create('pay_cryptocurrencies', function (Blueprint $table) {
+        Schema::create('payments_bitcoins', function (Blueprint $table) {
             $table->id();
             $table->integer('paid_id');
             $table->string('price_cryptocurrency');
-            $table->string('Hash');
+            $table->string('hash');
+            $table->string('name',50);
+            $table->string('baseAsset',50);
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ class CreatePayCryptocurrenciesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pay_cryptocurrencies');
+        Schema::dropIfExists('payments_bitcoins');
     }
 }

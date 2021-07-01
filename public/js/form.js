@@ -357,16 +357,18 @@ $(document).ready(function(){
             $('.contact-form').parsley().whenValidate({
                 group: 'block-' + curIndex()
             }).done(function(){
+                var regex = "^\\S+$";
                 if(curIndex() == 7){
                     showCrypto();
                     navigateTo(curIndex()+1);
-                }else if($('#show-'+show).find(".hashTransactions").val().length >5){
+                }else if($('#show-'+show).find(".hashTransactions").val().length >5 && $('#show-'+show).find(".hashTransactions").val().match(regex)){
+                    $('#show-'+show).find('.ErrorHash').css({"display":"none"});
                     submit = true;
                     $('.submit').hide();
                     $('#loading').show();
                     $("#payment-form").submit();
                 }else{
-                    $("#payment-form").submit();
+                    $('#show-'+show).find('.ErrorHash').css({"display":"block"});
                 }
             });
         }else if(_coinClient == 0 && selectPayment != "CARD" || switchPay){

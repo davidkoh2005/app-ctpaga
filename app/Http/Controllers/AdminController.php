@@ -28,7 +28,7 @@ use App\HistoryCash;
 use App\DeliveryCost;
 use App\PaymentsBs;
 use App\PaymentsZelle;
-use App\PayCryptocurrency;
+use App\PaymentsBitcoin;
 use App\Cryptocurrency;
 use App\CryptocurrenciesDetail;
 use Carbon\Carbon;
@@ -442,17 +442,23 @@ class AdminController extends Controller
         return response()->json(array('html'=>$returnHTML));
     }
 
-    public function transactionsBs(Request $request)
+    public function transactionsPayment(Request $request)
     {
-        $transactions = PaymentsBs::where('paid_id', $request->id)->get();
-        $returnHTML=view('admin.showTransactions', compact('transactions'))->render();
-        return response()->json(array('html'=>$returnHTML));
-    }
+        $payment =  $request->payment;
+        if($payment == 'Transferencia' || $payment == 'Pago Móvil' ){
+            $transactions = PaymentsBs::where('paid_id', $request->id)->get();
+            $returnHTML=view('admin.showTransactions', compact('transactions', 'payment'))->render();
+        }
+        elseif($payment == 'Zelle'){
+            $transaction = PaymentsZelle::where('paid_id', $request->id)->first();
+            $returnHTML=view('admin.showTransactions', compact('transaction', 'payment'))->render();
+        }
+        elseif($payment == 'Bitcoin'){
+            $transaction = Paid::join('payments_bitcoins', 'payments_bitcoins.paid_id', '=', 'paids.id')
+                                ->where('paid_id', $request->id)->first();
+            $returnHTML=view('admin.showTransactions', compact('transaction', 'payment'))->render();
+        }
 
-    public function transactionsZelle(Request $request)
-    {
-        $zelle = PaymentsZelle::where('paid_id', $request->id)->first();
-        $returnHTML=view('admin.showTransactions', compact('zelle'))->render();
         return response()->json(array('html'=>$returnHTML));
     }
 
