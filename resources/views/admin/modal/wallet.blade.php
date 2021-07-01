@@ -86,7 +86,9 @@
                                                     <input class="form-control" type="text" name="detailsCryptocurrencyValue[]" autocomplete="off" minlength="4" value="{{$detailsCryptocurrency->value}}" required>
                                                 </div>
                                             </div>
-                                            
+                                        </td>
+                                        <td style="text-align: center; vertical-align: middle; border-left-color: transparent !important; border-left-width: 2px; border-left-style: solid;">
+                                            <button type="button" name="remove" id="{{intval($key)+1}}" class="btn btn-danger btn_remove_wallet"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                         </td>
                                     </tr>
                                 @endforeach

@@ -1155,9 +1155,13 @@ class AdminController extends Controller
         $cryptocurrency->publish = $request->switchPublish == null? 0 : 1;
         $cryptocurrency->save();
 
-        if(!empty($request->allDetailsCryptocurrency) && count($request->allDetailsCryptocurrency)> 0){
+        if(!empty($request->allDetailsCryptocurrency) && count($request->allDetailsCryptocurrency)> 0 && !empty($request->idDetailsCryptocurrency) ){
             $exceptArray = array_merge(array_diff($request->allDetailsCryptocurrency,$request->idDetailsCryptocurrency), array_diff($request->idDetailsCryptocurrency,$request->allDetailsCryptocurrency));
             foreach ($exceptArray as $id) {
+                CryptocurrenciesDetail::whereId($id)->delete();
+            }
+        }elseif(!empty($request->allDetailsCryptocurrency) && count($request->allDetailsCryptocurrency)> 0 && empty($request->idDetailsCryptocurrency) ){
+            foreach ($request->allDetailsCryptocurrency as $id) {
                 CryptocurrenciesDetail::whereId($id)->delete();
             }
         }
