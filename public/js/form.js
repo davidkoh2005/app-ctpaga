@@ -80,6 +80,9 @@ $(document).ready(function(){
             case 8:
                 $(".title-sales").text("Criptomoneda");
                 window.scrollTo(0,0);
+                var numItems = $('.checkPaymentCrypto').length;
+                if(numItems < indexCrypto)
+                    $('#verMas').css({"display":"none"});
                 break;
             default: 
                 console.log("error case");

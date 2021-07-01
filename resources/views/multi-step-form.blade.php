@@ -384,16 +384,15 @@
                             <div class="form-section">
                                 <p>Seleccionar Criptomoneda:</p>
                                 <div class="dataPay">
-                                    @for ($i = 1; $i <= 10; $i++)
                                     @foreach($listCryptocurrencies as $key => $cryptocurrency)
-                                        <div class="row checkPaymentWhite checkPaymentCrypto justify-content-center align-items-center minh-10" id="crypto-{{$i == 1? $key + $i : $key + $i + $i}}">
+                                        <div class="row checkPaymentWhite checkPaymentCrypto justify-content-center align-items-center minh-10" id="crypto-{{$key}}">
                                             <div class="description-payment col center">
-                                                <input type="radio" class="radio-payment" name="paymentCryptocurrency" id="paymentCryptocurrency" value="{{ $cryptocurrency->name }}" data-id="{{ $cryptocurrency->id }}" data-symbol="{{ $cryptocurrency->symbol }}" data-baseasset="{{ $cryptocurrency->baseAsset }}" data-address="{{ $cryptocurrency->address }}" data-show="{{$i == 1? $key + $i : $key + $i + $i}}">
+                                                <input type="radio" class="radio-payment" name="paymentCryptocurrency" id="paymentCryptocurrency" value="{{ $cryptocurrency->name }}" data-id="{{ $cryptocurrency->id }}" data-symbol="{{ $cryptocurrency->symbol }}" data-baseasset="{{ $cryptocurrency->baseAsset }}" data-address="{{ $cryptocurrency->address }}" data-show="{{$key}}">
                                                 <img class="img-fluid" alt="Responsive image" src="{{ asset('cryptocurrencies/images/'.$cryptocurrency->baseAsset.'.png') }}" width="50px" style="margin-right: 15px;">
                                                 {{ $cryptocurrency->name }}
                                             </div>
                                         </div>
-                                        <div id="show-{{$i == 1? $key + $i : $key + $i + $i}}" style="padding-bottom: 80px; display:none;">
+                                        <div id="show-{{$key}}" style="padding-bottom: 80px; display:none;">
                                             <div class="row">&nbsp;</div>
                                             <label><strong>Precio: </strong></strong> <span class="crypto-price">Consultando...</span></label>
                                             <div class="row">&nbsp;</div>
@@ -405,8 +404,8 @@
                                             <div class="input-group mb-3">
                                                 <input type="text" class="form-control address" value="{{ $cryptocurrency->address }}" style="height: 50px;" readonly>
                                                 <div class="input-group-prepend">
-                                                    <button class="btn btn-outline-success" type="button" onclick="copyText('{{$i == 1? $key + $i : $key + $i + $i}}', 'address', 'Dirección')" data-toggle="tooltip" data-placement="top" title="Copiar al portapapeles"><i class="fa fa-clone" aria-hidden="true"></i></button>
-                                                    <button class="btn btn-outline-success" type="button" onclick="copyCodeQr('{{$i == 1? $key + $i : $key + $i + $i}}', 'address')"><i class="fa fa-qrcode" aria-hidden="true"></i></button>
+                                                    <button class="btn btn-outline-success" type="button" onclick="copyText('{{$key}}', 'address', 'Dirección')" data-toggle="tooltip" data-placement="top" title="Copiar al portapapeles"><i class="fa fa-clone" aria-hidden="true"></i></button>
+                                                    <button class="btn btn-outline-success" type="button" onclick="copyCodeQr('{{$key}}', 'address')"><i class="fa fa-qrcode" aria-hidden="true"></i></button>
                                                 </div>
                                             </div>
                                             @if(!is_null($cryptocurrency->key) && !is_null($cryptocurrency->value))
@@ -414,15 +413,14 @@
                                             <div class="input-group mb-3">
                                                 <input type="text" class="form-control codeQR" value="{{ $cryptocurrency->value }}" style="height: 50px;" readonly>
                                                 <div class="input-group-prepend">
-                                                    <button class="btn btn-outline-success" type="button" onclick="copyText('{{$i == 1? $key + $i : $key + $i + $i}}', 'codeQR', 'Código QR')" data-toggle="tooltip" data-placement="top" title="Copiar al portapapeles"><i class="fa fa-clone" aria-hidden="true"></i></button>
-                                                    <button class="btn btn-outline-success" type="button" onclick="copyCodeQr('{{$i == 1? $key + $i : $key + $i + $i}}', 'codeQR')"><i class="fa fa-qrcode" aria-hidden="true"></i></button>
+                                                    <button class="btn btn-outline-success" type="button" onclick="copyText('{{$key}}', 'codeQR', 'Código QR')" data-toggle="tooltip" data-placement="top" title="Copiar al portapapeles"><i class="fa fa-clone" aria-hidden="true"></i></button>
+                                                    <button class="btn btn-outline-success" type="button" onclick="copyCodeQr('{{$key}}', 'codeQR')"><i class="fa fa-qrcode" aria-hidden="true"></i></button>
                                                 </div>
                                             </div>
                                             @endif
                                             <div class="form-group showInput"></div>
                                         </div>
                                     @endforeach
-                                    @endfor
                                     <a href="javascript:;" id="verMas"> Ver más </a>
                                 </div>
                             </div>
