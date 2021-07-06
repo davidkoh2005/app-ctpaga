@@ -394,13 +394,13 @@
                                                 {{ $cryptocurrency->name }}
                                             </div>
                                         </div>
-                                        <div id="show-{{$key + 1}}" style="padding-bottom: 80px; display:none;">
+                                        <div id="show-{{$key + 1}}" style="display:none;">
                                             <div class="row">&nbsp;</div>
-                                            <label><strong>Precio: </strong></strong> <span class="crypto-price">Consultando...</span></label>
+                                            <label><strong>Precio: </strong></strong> 1 <span class="select-cryptocurrency"></span> <img src="{{asset('images/right-arrow.png')}}" width="35px"> <span class="crypto-price">Consultando...</span></label>
                                             <div class="row">&nbsp;</div>
                                             <label><strong>Total a pagar: </strong><span class="payTotal"></span></label>
                                             <div class="row">&nbsp;</div>
-                                            <label>Por favor pagar <strong><span class="totalPayCrypto"></span></strong> con la siguiente Dirección: </label>
+                                            <label>Por favor realice el pago <strong><span class="totalPayCrypto"></span></strong> en la siguiente dirección: </label>
                                             <div class="row">&nbsp;</div>
                                             <label>Dirección:</label>
                                             <div class="input-group mb-3">
@@ -867,7 +867,8 @@
                             $('#priceCryptocurrency').val(parseFloat(result.price));
                             $('#nameCryptocurrency').val(nameCryptocurrency);
                             $('#baseAssetCryptocurrency').val(baseAsset);
-                            $('#show-'+show).find('.crypto-price').text("1 "+baseAsset+" equivale a $ "+formatter.format(parseFloat(result.price)));
+                            $('#show-'+show).find('.select-cryptocurrency').text(baseAsset);
+                            $('#show-'+show).find('.crypto-price').text(" $ "+formatter.format(parseFloat(result.price)));
                             totalPaymentCrypto = parseFloat(totalPayment)/ parseFloat(result.price);
                             $('#show-'+show).find('.totalPayCrypto').text(formatterCrypto.format(totalPaymentCrypto)+" "+baseAsset);
                         }).fail(function(result){
