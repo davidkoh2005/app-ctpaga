@@ -848,7 +848,7 @@
                     $('#show-'+show).find('.payTotal').text("$ "+formatter.format(totalPayment));
                     $('#show-'+show).find('.showInput').append('\
                         <label>Detalle del pago:</label>\
-                        <input type="text" class="form-control hashTransactions" name="hashTransactions" id="hashTransactions" placeholder="Hash de transacción" data-parsley-minlength="5" minlength="5" autocomplete="off" required>\
+                        <input type="text" class="form-control hashTransactions" name="hashTransactions" id="hashTransactions" placeholder="Hash de transacción" data-parsley-minlength="15" minlength="15" autocomplete="off" required>\
                         <div class="row">&nbsp;</div>\
                         <p class="ErrorHash">Hash de Transacción es incorrecto</p>\
                     ');
