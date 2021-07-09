@@ -364,7 +364,7 @@ $(document).ready(function(){
                 if(curIndex() == 7){
                     showCrypto();
                     navigateTo(curIndex()+1);
-                }else if($('#show-'+show).find(".hashTransactions").val().length >5 && $('#show-'+show).find(".hashTransactions").val().match(regex)){
+                }else if($('#show-'+show).find(".hashTransactions").val().length >=15 && $('#show-'+show).find(".hashTransactions").val().match(regex)){
                     $('#show-'+show).find('.ErrorHash').css({"display":"none"});
                     submit = true;
                     $('.submit').hide();

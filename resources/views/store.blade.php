@@ -253,16 +253,18 @@
 
     <script>
         var commerceName = "{{$commerce->name}}";
-        var ClientType = 0
+        var clientType = 0
         var categorySelect = null;
         var rateToday = {{$rate}};
+        var coinClient = $('#coinClient').val();
+
         function showCategories(type)
         {   
             $( ".loader" ).fadeIn(150, function() {
                 $( ".loader" ).fadeIn("slow"); 
             }); 
 
-            ClientType = type
+            clientType = type
 
             $.ajax({
                 url: "{{ route('show.categories')}}", 
@@ -271,7 +273,6 @@
                 dataType: "json"
             }).done(function(data){
                 $('#showCategories').html(data.html);
-                console.log(data.html);
                 showProductsServices(null);  
             }).fail(function(){  
                 alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
@@ -284,7 +285,7 @@
 
             $.ajax({
                 url: "{{ route('show.productsServices')}}", 
-                data: {"type" : ClientType, "commerce_id" : "{{$commerce->id}}", "category_select" : _categorySelect, "coinClient" : coinClient, "user_id": "{{$commerce->user_id}}"},
+                data: {"type" : clientType, "commerce_id" : "{{$commerce->id}}", "category_select" : _categorySelect, "coinClient" : coinClient, "user_id": "{{$commerce->user_id}}"},
                 type: "POST",
                 dataType: "json"
             }).done(function(data){

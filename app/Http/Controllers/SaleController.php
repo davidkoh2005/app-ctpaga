@@ -270,7 +270,7 @@ class SaleController extends Controller
 
     public function indexStore($userUrl)
     {
-        $coinClient = 1;
+        $coinClient = 0;
         $commerce = Commerce::where('userUrl',$userUrl)->first();
                 
         if(!$commerce)
