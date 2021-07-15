@@ -18,7 +18,7 @@
                     <div class="table-responsive">
                         <table class="table" id="dynamic_field_wallet" style="width:99% !important;">
                             <tr>
-                                <td colspan="2" style='border-color: white !important;'><button type="button" name="add" id="addDetailsWallet" class="btn btn-bottom">Agregar Detalle</button></td>
+                                <td colspan="2" style='border-color: white !important;'><button type="button" name="add" id="addDetailsWallet" class="btn btn-bottom">Agregar campo adicional</button></td>
                             </tr>
                             <tr>
                                 <td colspan="2">
