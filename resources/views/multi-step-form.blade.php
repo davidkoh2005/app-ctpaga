@@ -856,30 +856,42 @@
                     var url = ['https://api.binance.com', 'https://api1.binance.com', 'https://api2.binance.com', 'https://api3.binance.com']
                     var error = false;
 
-                    $.each(url, function(key, value) { 
-                        $.ajax({
-                            url: value+"/api/v3/ticker/price", 
-                            data: {"symbol" : symbol,},
-                            type: "GET",
-                        }).done(function(result){
-                            var totalPaymentCrypto = 0;
-                            error = false;
-                            $('#priceCryptocurrency').val(parseFloat(result.price));
-                            $('#nameCryptocurrency').val(nameCryptocurrency);
-                            $('#baseAssetCryptocurrency').val(baseAsset);
-                            $('#show-'+show).find('.select-cryptocurrency').text(baseAsset);
-                            $('#show-'+show).find('.crypto-price').text(" $ "+formatter.format(parseFloat(result.price)));
-                            totalPaymentCrypto = parseFloat(totalPayment)/ parseFloat(result.price);
-                            $('#show-'+show).find('.totalPayCrypto').text(formatterCrypto.format(totalPaymentCrypto)+" "+baseAsset);
-                        }).fail(function(result){
-                            error = true;
-                        }); 
 
-                        if(error)
-                            alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
-                        else
-                            return false;
-                    });
+                    if(symbol == "USDT"){
+                        var totalPaymentCrypto = 0;
+                        error = false;
+                        $('#priceCryptocurrency').val(parseFloat(1));
+                        $('#nameCryptocurrency').val("USDT");
+                        $('#baseAssetCryptocurrency').val("USDT");
+                        $('#show-'+show).find('.select-cryptocurrency').text("USDT");
+                        $('#show-'+show).find('.crypto-price').text(" $ "+formatter.format(parseFloat(1)));
+                        totalPaymentCrypto = parseFloat(totalPayment)/ parseFloat(1);
+                        $('#show-'+show).find('.totalPayCrypto').text(formatter.format(totalPaymentCrypto)+" USDT");
+                    }else
+                        $.each(url, function(key, value) { 
+                            $.ajax({
+                                url: value+"/api/v3/ticker/price", 
+                                data: {"symbol" : symbol,},
+                                type: "GET",
+                            }).done(function(result){
+                                var totalPaymentCrypto = 0;
+                                error = false;
+                                $('#priceCryptocurrency').val(parseFloat(result.price));
+                                $('#nameCryptocurrency').val(nameCryptocurrency);
+                                $('#baseAssetCryptocurrency').val(baseAsset);
+                                $('#show-'+show).find('.select-cryptocurrency').text(baseAsset);
+                                $('#show-'+show).find('.crypto-price').text(" $ "+formatter.format(parseFloat(result.price)));
+                                totalPaymentCrypto = parseFloat(totalPayment)/ parseFloat(result.price);
+                                $('#show-'+show).find('.totalPayCrypto').text(formatterCrypto.format(totalPaymentCrypto)+" "+baseAsset);
+                            }).fail(function(result){
+                                error = true;
+                            }); 
+
+                            if(error)
+                                alertify.error('Sin Conexión, intentalo de nuevo mas tardes!');
+                            else
+                                return false;
+                        });
                 }                
             });
 

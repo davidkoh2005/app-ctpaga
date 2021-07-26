@@ -46,5 +46,18 @@ class CryptocurrenciesSeeder extends Seeder
             }
 
         }
+
+        Cryptocurrency::updateOrCreate(
+            [
+                "name" => "Tether",
+            ],
+            [
+                "symbol" => "USDT",
+                "baseAsset" => "USDT",
+                "quoteAsset" => "USDT",
+            ]
+        );
+
+
     }
 }
