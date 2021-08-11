@@ -31,10 +31,6 @@ class SaleController extends Controller
         $sales = Sale::where('codeUrl',$codeUrl)->orderBy('name', 'asc')->get();
 
         $commerce = Commerce::where('userUrl',$userUrl)->first();
-        $user = User::where('id',$commerce->user_id)->first();
-        
-        if($user->status>0)
-            return redirect()->route('welcome');
 
         if(count($sales) == 0 || !$commerce)
             return redirect()->route('welcome');
@@ -43,6 +39,11 @@ class SaleController extends Controller
             
         if($sales[0]->statusSale == 1 || Carbon::now() > $sales[0]->expires_at)
             return redirect()->route('form.store', ['userUrl' => $userUrl]);
+
+        $user = User::where('id',$commerce->user_id)->first();
+    
+        if($user->status>0)
+            return redirect()->route('welcome');
 
         $picture = Picture::where('commerce_id', $commerce->id)->where('type',0)->first();
         $shippings = Shipping::where('user_id', $commerce->user_id)->get();
