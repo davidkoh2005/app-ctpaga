@@ -194,10 +194,10 @@ class CommerceController extends Controller
         if($request->statusFile == "PDF"){
             $today = Carbon::now()->format('Y-m-d');
             $pdf = \PDF::loadView('report.transactionsCommercePDF', compact('transactions', 'today', 'commerce', 'pictureUser', 'startDate', 'endDate'))->setPaper('a4', 'landscape');
-            return $pdf->download('ctpaga_transacciones.pdf');
+            return $pdf->download(env('APP_NAME').'_transacciones.pdf');
         }elseif($request->statusFile == "EXCEL"){
             $today = Carbon::now()->format('Y-m-d');
-            return Excel::download(new TransactionsCommerceExport($transactions, $today, $commerce, $pictureUser, $startDate, $endDate), 'ctpaga_transacciones.xlsx');
+            return Excel::download(new TransactionsCommerceExport($transactions, $today, $commerce, $pictureUser, $startDate, $endDate), env('APP_NAME').'_transacciones.xlsx');
         }
 
         $statusMenu = "transactions";
@@ -263,10 +263,10 @@ class CommerceController extends Controller
         if($request->statusFile == "PDF"){
             $today = Carbon::now()->format('Y-m-d');
             $pdf = \PDF::loadView('report.depositsCommercePDF', compact("historyDeposits", "historyAll" ,'today' ,'selectCoin', 'startDate', 'endDate', "commerceData", 'pictureUser'));
-            return $pdf->download('ctpaga_depositos.pdf');
+            return $pdf->download(env('APP_NAME').'_depositos.pdf');
         }elseif($request->statusFile == "EXCEL"){
             $today = Carbon::now()->format('Y-m-d');
-            return Excel::download(new DepositsCommerceExport($historyDeposits, $today, $startDate, $endDate, $commerceData, $pictureUser), 'ctpaga_depositos.xlsx');
+            return Excel::download(new DepositsCommerceExport($historyDeposits, $today, $startDate, $endDate, $commerceData, $pictureUser), env('APP_NAME').'_depositos.xlsx');
         }
         
         
@@ -380,10 +380,10 @@ class CommerceController extends Controller
         if($request->statusFile == "PDF"){
             $today = Carbon::now()->format('Y-m-d');
             $pdf = \PDF::loadView('report.depositsCommercePDF', compact("historyAll" ,'today' ,'selectCoin', 'startDate', 'endDate', "commerceData", 'pictureUser'));
-            return $pdf->download('ctpaga_depositos.pdf');
+            return $pdf->download(env('APP_NAME').'_depositos.pdf');
         }elseif($request->statusFile == "EXCEL"){
             $today = Carbon::now()->format('Y-m-d');
-            return Excel::download(new DepositsCommerceExport($historyAll, $today, $startDate, $endDate, $commerceData, $pictureUser), 'ctpaga_depositos.xlsx');
+            return Excel::download(new DepositsCommerceExport($historyAll, $today, $startDate, $endDate, $commerceData, $pictureUser), env('APP_NAME').'_depositos.xlsx');
         }
         
         
@@ -445,9 +445,9 @@ class CommerceController extends Controller
 
         if($request->statusFile == "PDF"){
             $pdf = \PDF::loadView('report.ratesPDF', compact('rates', 'commerceData', 'pictureUser', 'startDate', 'endDate'));
-            return $pdf->download('ctpaga_tasas.pdf');
+            return $pdf->download(env('APP_NAME').'_tasas.pdf');
         }elseif($request->statusFile == "EXCEL"){
-            return Excel::download(new RatesExport($rates, $commerceData, $pictureUser, $startDate, $endDate), 'ctpaga_tasas.xlsx');
+            return Excel::download(new RatesExport($rates, $commerceData, $pictureUser, $startDate, $endDate), env('APP_NAME').'_tasas.xlsx');
         }
 
         $statusMenu = "rateHistory";

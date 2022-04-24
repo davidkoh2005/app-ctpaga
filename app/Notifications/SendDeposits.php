@@ -42,7 +42,7 @@ class SendDeposits extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Aviso Ctpaga')
+            ->subject('Aviso '.env('APP_NAME'))
             ->markdown(
                 'email.sendDeposits', ['user' => $this->user, 'deposits' => $this->deposits,]
             );

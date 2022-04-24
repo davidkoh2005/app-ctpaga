@@ -379,7 +379,7 @@ class PaidController extends Controller
 
             $transaction = new Transaction();
             $transaction->setAmount($amountPaypal);
-            $transaction->setDescription('Compra a través de Ctpaga');
+            $transaction->setDescription('Compra a través de '.env('APP_NAME'));
 
             $callbackUrl = url('/pagar/estadoPaypal/');
 
@@ -822,7 +822,7 @@ class PaidController extends Controller
                     $fecha = Carbon::now()->format("d/m/Y");
                     $urlDelivery = url('/delivery/'.$delivery->idUrl);
 
-                    $message = "Ctpaga Delivery le informa que ha realizado un pedido con el Nro ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora. Ver informacion de delivery: ".$urlDelivery."";
+                    $message = env('APP_NAME')." Delivery le informa que ha realizado un pedido con el Nro ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora. Ver informacion de delivery: ".$urlDelivery."";
                     $messageAdmin = " el delivery ".$delivery->name." tomo el pedido ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora.";
 
                     $sms = AWS::createClient('sns');
@@ -899,7 +899,7 @@ class PaidController extends Controller
         $sales = Sale::where('codeUrl', $request->codeUrl)->get();
         
         if(intval($request->statusShipping) == 1){
-            $message = "Ctpaga Delivery le informa que el pedido ".$paid->codeUrl." fue retirado de la tienda ".$commerce->name." y será entregado a la brevedad posible. ";
+            $message = env('APP_NAME')." Delivery le informa que el pedido ".$paid->codeUrl." fue retirado de la tienda ".$commerce->name." y será entregado a la brevedad posible. ";
 
             (new User)->forceFill([
                 'email' => $paid->email,
@@ -977,7 +977,7 @@ class PaidController extends Controller
                 ]);
             }
 
-            $message = "Ctpaga Delivery le informa que el pedido ".$paid->codeUrl." fue entregado satisfactoriamente a ".$paid->nameShipping;
+            $message = env('APP_NAME')." Delivery le informa que el pedido ".$paid->codeUrl." fue entregado satisfactoriamente a ".$paid->nameShipping;
     
             (new User)->forceFill([
                 'email' => $paid->email,
@@ -1061,6 +1061,6 @@ class PaidController extends Controller
         $today = Carbon::now()->format('d/m/Y g:i A');
         
         $pdf = \PDF::loadView('report.billing', compact('paid', 'sales', 'today','pictureUser'));
-        return $pdf->download('ctpaga_pedido.pdf');
+        return $pdf->download(env('APP_NAME').'_pedido.pdf');
     }
 }

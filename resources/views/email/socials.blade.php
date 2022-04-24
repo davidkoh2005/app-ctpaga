@@ -21,7 +21,7 @@
             <img src="{{ asset('images/email/icono-redes-5.png') }}" alt="" width="95%">
         </a>
 
-        <a href="https://play.google.com/store/apps/details?id=compralotodo.ctpaga">
+        <a href="https://play.google.com/store/apps/details?id=compralotodo.appBusiness">
             <img src="{{ asset('images/email/icono-redes-6.png') }}" alt="" width="95%">
         </a>
 
@@ -34,7 +34,7 @@
 
     <div style="text-align: center; font-size: 14px; color:#59595e;font-family: sans-serif;">
         <p style="text-align: center !important;">
-            No podemos recibir respuestas a este correo electrónico. Si necesitas ayuda.  Visita nuestro <a href="http://wa.me/{{env('WHATSAPP_NUM')}}?text=Hola CTpaga! Necesito ayuda con ">Centro de ayuda</a>.
+            No podemos recibir respuestas a este correo electrónico. Si necesitas ayuda.  Visita nuestro <a href="http://wa.me/{{env('WHATSAPP_NUM')}}?text=Hola {{env('APP_NAME')}}! Necesito ayuda con ">Centro de ayuda</a>.
         </p>
     </div>
 </td>

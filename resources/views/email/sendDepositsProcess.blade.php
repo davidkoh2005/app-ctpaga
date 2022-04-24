@@ -48,7 +48,7 @@
                     <p style="color:#59595e; margin: 0 0 7px;">Estimado/a <strong>{{strtoupper($user->name)}}</strong></p>
                     <br>
                     <br>
-                    <p style="color:#59595e; margin: 0 0 7px;">Ctpaga informa que los fondos que tenía en su cartera por
+                    <p style="color:#59595e; margin: 0 0 7px;">{{env('APP_NAME')}} informa que los fondos que tenía en su cartera por
                         Concepto de Ventas de Productos y/o Servicios, está en proceso de pago a la cuenta proporcionada por Ud. en el módulo de
                         Bancos.
                     </p>
@@ -64,7 +64,7 @@
                     <br>
                     <br>
                     <h4 style="color:#59595e; margin: 0 0 7px;">Muchas gracias,<br>
-                        <br>El equipo de Ctpaga.
+                        <br>El equipo de {{env('APP_NAME')}}.
                     </h4>
                     <br>
                     <br>

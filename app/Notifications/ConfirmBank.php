@@ -41,7 +41,7 @@ class ConfirmBank extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-        ->subject('Bienvenido a Ctpaga')
+        ->subject('Bienvenido a '.env('APP_NAME'))
         ->markdown(
             'email.confirmBank', ['user' => $this->user, 'commerce' => $this->commerce]
         );

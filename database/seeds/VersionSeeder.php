@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 
 class VersionSeeder extends Seeder
 {
-    /**
+    /**php artisan migrate:refresh && php artisan db:seed --class=AdminSeeder
      * Run the database seeds.
      *
      * @return void
@@ -19,9 +19,9 @@ class VersionSeeder extends Seeder
                     'url'           => 'https://drive.google.com/file/d/1CMtAtfHiVajGsJ3SUjlinuqH18dWg2AX/view?usp=sharing',
                     'created_at'    => date('Y-m-d H:m:s'),
                     'updated_at'    => date('Y-m-d H:m:s'),
-                    'app'           => 'ctpaga',
+                    'app'           => env('APP_NAME'),
                     'app_ios'       => 'https://www.apple.com/la/app-store/',
-                    'app_android'   => 'https://play.google.com/store/apps/details?id=compralotodo.ctpaga',
+                    'app_android'   => 'https://play.google.com/store/apps/details?id=compralotodo.appBusiness',
                 )
             );
         
@@ -33,7 +33,7 @@ class VersionSeeder extends Seeder
                     'url'           => 'https://drive.google.com/file/d/1l_2D-lmk88X0HYzuyYyjx6iuduJH6-3C/view?usp=sharing',
                     'created_at'    => date('Y-m-d H:m:s'),
                     'updated_at'    => date('Y-m-d H:m:s'),
-                    'app'           => 'delivery ctpaga',
+                    'app'           => 'delivery '.env('APP_NAME'),
                     'app_ios'       => 'https://www.apple.com/la/app-store/',
                     'app_android'   => 'https://play.google.com/store/apps/details?id=ctlleva.ctlleva',
                 )

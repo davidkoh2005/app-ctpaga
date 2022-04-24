@@ -30,7 +30,7 @@
                     <!-- Welcome Intro Start -->
                     <div class="col-12 col-lg-7">
                         <div class="welcome-intro">
-                            <h1 class="text-white">Bienvenido a CTpaga!</h1>
+                            <h1 class="text-white">Bienvenido a {{env('APP_NAME')}}!</h1>
                         </div>
                     </div>
                     <div class="col-12 col-md-8 col-lg-5">

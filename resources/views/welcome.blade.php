@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>Ctpaga</title>
+        <title>{{env('APP_NAME')}}</title>
         <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo/logoct.svg') }}" />
         <!-- ***** All CSS Files ***** -->
 
@@ -32,11 +32,11 @@
                         <!-- Welcome Intro Start -->
                         <div class="col-12 col-md-6 col-lg-6">
                             <div class="welcome-intro">
-                                <h1 class="text-white">Ctpaga</h1>
+                                <h1 class="text-white">{{env('APP_NAME')}}</h1>
                                 <p class="text-white my-4">Permite pagar productos y/o servicios desde la comodidad de tu casa.</p>
                                 <!-- Store Buttons -->
                                 <div class="button-group store-buttons d-flex">
-                                    <a href="https://play.google.com/store/apps/details?id=compralotodo.ctpaga">
+                                    <a href="https://play.google.com/store/apps/details?id=compralotodo.appBusiness">
                                         <img src="{{ asset('landingPage/img/icon/google-play.png') }}" alt="">
                                     </a>
                                     <a href="#">
@@ -104,9 +104,9 @@
                         <div class="col-12 col-md-10 col-lg-8">
                             <!-- Section Heading -->
                             <div class="section-heading text-center">
-                                <h2>Lo que hace diferente a Ctpaga?</h2>
+                                <h2>Lo que hace diferente a {{env('APP_NAME')}}?</h2>
                                 <p class="d-none d-sm-block mt-4">Permite realizar venta de productos sin necesidad de tener gastos adicional para crear pagina web.</p>
-                                <p class="d-block d-sm-none mt-4">Ctpaga es una aplicación para vender productos en las redes sociales.</p>
+                                <p class="d-block d-sm-none mt-4">{{env('APP_NAME')}} es una aplicación para vender productos en las redes sociales.</p>
                             </div>
                         </div>
                     </div>
@@ -121,7 +121,7 @@
                                 <!-- Icon Text -->
                                 <div class="icon-text">
                                     <h3 class="mb-2">Completamente funcional</h3>
-                                    <p>El propósito de Ctpaga es permitir vender los productos a través de las redes sociales sin necesidad de gastos adicional de manera gratuitas.</p>
+                                    <p>El propósito de {{env('APP_NAME')}} es permitir vender los productos a través de las redes sociales sin necesidad de gastos adicional de manera gratuitas.</p>
                                 </div>
                             </div>
                         </div>
@@ -149,7 +149,7 @@
                                 <!-- Icon Text -->
                                 <div class="icon-text">
                                     <h3 class="mb-2">Datos Seguros</h3>
-                                    <p>Ctpaga garantiza que su cuenta y su información personal estén seguras.</p>
+                                    <p>{{env('APP_NAME')}} garantiza que su cuenta y su información personal estén seguras.</p>
                                 </div>
                             </div>
                         </div>
@@ -295,7 +295,7 @@
                         <div class="col-12 col-md-10 col-lg-8">
                             <!-- Work Content -->
                             <div class="work-content text-center">
-                                <h2 class="text-white">Cómo funciona Ctpaga?</h2>
+                                <h2 class="text-white">Cómo funciona {{env('APP_NAME')}}?</h2>
                                 <p class="d-none d-sm-block text-white my-3 mt-sm-4 mb-sm-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum obcaecati dignissimos quae quo ad iste ipsum officiis deleniti asperiores sit.</p>
                                 <p class="d-block d-sm-none text-white my-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum obcaecati.</p>
                             </div>
@@ -510,7 +510,7 @@
                                                 <div class="card-header bg-inherit border-0 p-0">
                                                     <h2 class="mb-0">
                                                         <button class="btn px-0 py-3" type="button">
-                                                            Cómo instalar Ctpaga?
+                                                            Cómo instalar {{env('APP_NAME')}}?
                                                         </button>
                                                     </h2>
                                                 </div>
@@ -533,7 +533,7 @@
                                                 </div>
                                                 <!-- Card Body -->
                                                 <div class="card-body px-0 py-3">
-                                                    Ingrese en nuestra aplicación Ctpaga selecciona Menú (<i class="fa fa-bars" aria-hidden="true"></i>) y luego Perfil, nos aparecera para cambiar datos personales, empresa y bancaria.
+                                                    Ingrese en nuestra aplicación {{env('APP_NAME')}} selecciona Menú (<i class="fa fa-bars" aria-hidden="true"></i>) y luego Perfil, nos aparecera para cambiar datos personales, empresa y bancaria.
                                                 </div>
                                             </div>
                                             
@@ -557,11 +557,11 @@
                         <div class="col-12 col-md-10 col-lg-9">
                             <!-- Download Text -->
                             <div class="download-text text-center">
-                                <h2 class="text-white">Ctpaga está disponible para todos los dispositivos</h2>
+                                <h2 class="text-white">{{env('APP_NAME')}} está disponible para todos los dispositivos</h2>
                                 
                                 <!-- Store Buttons -->
                                 <div class="button-group store-buttons d-flex justify-content-center">
-                                    <a href="https://play.google.com/store/apps/details?id=compralotodo.ctpaga">
+                                    <a href="https://play.google.com/store/apps/details?id=compralotodo.appBusiness">
                                         <img src="{{ asset('landingPage/img/icon/google-play.png') }}" alt="">
                                     </a>
                                     <a href="#">
@@ -704,7 +704,7 @@
                                     <h3 class="footer-title mb-2">Descarga</h3>
                                     <!-- Store Buttons -->
                                     <div class="button-group store-buttons store-black d-flex flex-wrap">
-                                        <a href="https://play.google.com/store/apps/details?id=compralotodo.ctpaga">
+                                        <a href="https://play.google.com/store/apps/details?id=compralotodo.appBusiness">
                                             <img src="{{ asset('landingPage/img/icon/google-play-black.png') }}" alt="">
                                         </a>
                                         <a href="#">
@@ -724,7 +724,7 @@
                                 <!-- Copyright Area -->
                                 <div class="copyright-area d-flex flex-wrap justify-content-center justify-content-sm-between text-center py-4">
                                     <!-- Copyright Left -->
-                                    <div class="copyright-left">&copy; Copyrights 2020 Ctpaga Todos los derechos reservados.</div>
+                                    <div class="copyright-left">&copy; Copyrights 2020 {{env('APP_NAME')}} Todos los derechos reservados.</div>
                                 </div>
                             </div>
                         </div>

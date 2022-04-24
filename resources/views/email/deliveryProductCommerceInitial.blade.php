@@ -46,7 +46,7 @@
                     <p style="color:#59595e; margin: 0 0 7px;">Estimado/a <strong>{{strtoupper($commerce->name)}}</strong></p>
                     <br>
                     <br>
-                    <p style="color:#59595e; margin: 0 0 7px;">CTpaga Delivery le informa que el pedido con el Nro {{$paid->codeUrl}} , el cual será despachado en aproximadamente 1 hora.
+                    <p style="color:#59595e; margin: 0 0 7px;">{{env('APP_NAME')}} Delivery le informa que el pedido con el Nro {{$paid->codeUrl}} , el cual será despachado en aproximadamente 1 hora.
                     </p>
                     <p style="text-align: center">[Pedido {{$paid->codeUrl}}] (
                         @php
@@ -68,7 +68,7 @@
                     <br>
                     <br>
                     <h4 style="color:#59595e; margin: 0 0 7px;">
-                        <br>El equipo de Ctpaga.
+                        <br>El equipo de {{env('APP_NAME')}}.
                     </h4>
                     <br>
                     <br>

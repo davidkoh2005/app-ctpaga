@@ -15,7 +15,7 @@ class AdminSeeder extends Seeder
             \DB::table("admins")->insert(
                 array(
                     'id'        => 1,
-                    'email'   => 'ctpaga@admin.com',
+                    'email'   => 'compralotodo@admin.com',
                     'password' => bcrypt("Ee81887127*"),
                     'created_at'=> date('Y-m-d H:m:s'),
                     'updated_at'=> date('Y-m-d H:m:s'),

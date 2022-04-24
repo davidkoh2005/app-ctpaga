@@ -30,7 +30,7 @@
                 <div style="color: #34495e; width: 100%; margin: 4% 10% 2%; text-align: center; font-family: sans-serif;">
 
                     <h2 style="color:#59595e; margin: 0 0 7px; text-transform: uppercase; font-size: 15px; text-align: center;">
-                        SOLICITUD RECUPERACIÓN DE <br> CONTRASEÑA DE CTPAGA
+                        SOLICITUD RECUPERACIÓN DE <br> CONTRASEÑA DE {{env('APP_NAME')}}
                     </h2>
 
                 </div>
@@ -61,7 +61,7 @@
                     <br>
 
                     <p style="color:#59595e; margin: 0 0 7px;">
-                        Ha solicitado recuperar la contraseña para tu cuenta de CTpaga. Por favor seleccione el siguiente
+                        Ha solicitado recuperar la contraseña para tu cuenta de {{env('APP_NAME')}}. Por favor seleccione el siguiente
                         enlace 
                         <strong>
                            <a href="{{$url}}">{{$url}} </a>
@@ -85,12 +85,12 @@
                         <br>
 
                         Si no solicitó este cambio, comuníquese con el servicio de atención al cliente a través del correo 
-                       <strong>soporte@ctpaga.app</strong>.
+                       <strong>soporte@{{env('DOMAIN_EMAIL')}}</strong>.
 
                        <br>
                        <br>
 
-                       Gracias por elegir Ctpaga como su plataforma de comercio electrónico.
+                       Gracias por elegir {{env('APP_NAME')}} como su plataforma de comercio electrónico.
                     </p>
 
                     <br>
@@ -99,7 +99,7 @@
                     <br>
 
                     <h4 style="color:#59595e; margin: 0 0 7px;">
-                        El equipo de Ctpaga.
+                        El equipo de {{env('APP_NAME')}}.
                     </h4>
 
                     <br>

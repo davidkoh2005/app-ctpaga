@@ -42,7 +42,7 @@ class DeliveryProductCommerceInitial extends Notification
     {
         $url = url('/delivery/'.$this->delivery->idUrl);
         return (new MailMessage)
-            ->subject("Aviso Delivery Ctpaga")
+            ->subject("Aviso Delivery ".env('APP_NAME'))
             ->markdown(
                 'email.deliveryProductCommerceInitial', ['commerce' => $this->commerce, 'paid' => $this->paid, 'sales' => $this->sales, 'url' => $url]
             );

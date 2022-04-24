@@ -42,7 +42,7 @@
                     <p style="color:#59595e; margin: 0 0 7px;">Su usuario ha sido desactivado debido a múltiples eventos
                         ocurridos con su cuenta, pronto nos estaremos comunicando con usted.</p><br>
                     <p style="color:#59595e; margin: 0 0 7px;">Muchas gracias.</p>
-                    <h4 style="color:#59595e; margin: 0 0 7px;">El equipo de Ctpaga.</h4><br><br><br><br>
+                    <h4 style="color:#59595e; margin: 0 0 7px;">El equipo de {{env('APP_NAME')}}.</h4><br><br><br><br>
                 </div>
             </td>
         </tr>

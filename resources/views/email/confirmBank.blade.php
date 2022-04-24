@@ -28,7 +28,7 @@
                 <div
                     style="color: #34495e; width: 100%; margin: 4% 10% 2%; text-align: center; font-family: sans-serif;">
                     <h2 style="color:#59595e; margin: 0 0 7px; text-transform: uppercase; font-size: 15px; text-align: center;">CONFIRMACIÓN
-                        DE REGISTRO EN <br> CTPAGA SU PUNTO DE VENTA</h2>
+                        DE REGISTRO EN <br> {{env('APP_NAME')}} SU PUNTO DE VENTA</h2>
                 </div>
             </td>
         </tr>
@@ -48,14 +48,14 @@
                         con Éxito.</p><br>
                     <p>Recuerde que su nombre de usuario es: {{$user->email}}</p><br>
                     <p style="color:#59595e; margin: 0 0 7px;">Lo invitamos a descargar GRATUITAMENTE nuestra App
-                        “Ctpaga” en Google Play Store y/o App Store para que disfrute del beneficio de tener su propio
+                        “{{env('APP_NAME')}}” en Google Play Store y/o App Store para que disfrute del beneficio de tener su propio
                         Punto de Venta Virtual.</p><br>
                     <br>
                     <br>
                     <br>
                     <br>
                     <h4 style="color:#59595e; margin: 0 0 7px;">Muchas gracias,<br>
-                        <br>El equipo de Ctpaga.
+                        <br>El equipo de {{env('APP_NAME')}}.
                     </h4>
                     <br>
                     <br>

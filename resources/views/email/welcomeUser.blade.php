@@ -30,7 +30,7 @@
                 <div style="color: #34495e; width: 100%; margin: 4% 10% 2%; text-align: left; font-family: sans-serif;">
 
                     <h2 style="color:#59595e; margin: 0 0 7px; text-transform: uppercase; font-size: 15px; text-align: center;">
-                        LE DAMOS LA BIENVENIDA A <br> CTPAGA SU PUNTO DE VENTA
+                        LE DAMOS LA BIENVENIDA A <br> {{env('APP_NAME')}} SU PUNTO DE VENTA
                     </h2>
 
                 </div>
@@ -56,7 +56,7 @@
                     <br>
 
                     <p style="color:#59595e; margin: 0 0 7px;">
-                        En Ctpaga estamos encantados de que haya creado su cuenta.
+                        En {{env('APP_NAME')}} estamos encantados de que haya creado su cuenta.
                         <br>
                         <br>
                         Su nombre de usuario es <strong><a href="">{{$user->email}}</a></strong>
@@ -79,7 +79,7 @@
                         Muchas gracias,
                         <br>
                         <br>
-                        El equipo de Ctpaga.
+                        El equipo de {{env('APP_NAME')}}.
                     </h4>
 
                     <br>

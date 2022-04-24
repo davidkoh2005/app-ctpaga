@@ -40,7 +40,7 @@ class PaymentConfirm extends Notification
         $url = url('/pedido/'.$this->codeUrl);
 
         return (new MailMessage)
-            ->subject("Aviso Ctpaga")
+            ->subject("Aviso ".env('APP_NAME'))
             ->markdown(
                 'email.paymentConfirm', ['nameClient' => $this->nameClient, 'codeUrl' => $this->codeUrl, 'url' => $url]
             );

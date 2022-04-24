@@ -40,7 +40,7 @@ class PasswordResetRequest extends Notification implements ShouldQueue
     {
         if($this->type == 0){
             $url = url('/password/find/'.$this->token);
-            $subject = "Aviso Ctpaga";
+            $subject = "Aviso ".env('APP_NAME');
         }
         else{
             $url = url('/password/delivery/find/'.$this->token);

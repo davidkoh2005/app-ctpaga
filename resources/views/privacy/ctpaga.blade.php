@@ -2,7 +2,7 @@
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
-	<TITLE>Ctpaga</TITLE>
+	<TITLE>{{env('APP_NAME')}}</TITLE>
 	<link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo/logoct.svg') }}" />
 	<META NAME="GENERATOR" CONTENT="LibreOffice 4.1.6.2 (Linux)">
 	<META NAME="AUTHOR" CONTENT="Robed Jules">
@@ -24,13 +24,13 @@
 </HEAD>
 <BODY LANG="es-US" DIR="LTR">
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Esta
-política de Privacidad hace referencia a la App </FONT><FONT FACE="Arial, serif"><B>Ctpaga</B></FONT><FONT FACE="Arial, serif">,
+política de Privacidad hace referencia a la App </FONT><FONT FACE="Arial, serif"><B>{{env('APP_NAME')}}</B></FONT><FONT FACE="Arial, serif">,
 la cual usted está contratando. La entidad de contratación se
 determina en función al país de residencia o de su comercio. El
 </FONT><FONT FACE="Arial, serif"><B>País de residencia</B></FONT><FONT FACE="Arial, serif">
-es la jurisdicción que se asocia con su cuenta </FONT><FONT FACE="Arial, serif"><B>Ctpaga</B></FONT><FONT FACE="Arial, serif">
+es la jurisdicción que se asocia con su cuenta </FONT><FONT FACE="Arial, serif"><B>{{env('APP_NAME')}}</B></FONT><FONT FACE="Arial, serif">
 según lo expresado por usted o en función a la evaluación que
-realice </FONT><FONT FACE="Arial, serif"><B>Ctpaga</B></FONT><FONT FACE="Arial, serif">
+realice </FONT><FONT FACE="Arial, serif"><B>{{env('APP_NAME')}}</B></FONT><FONT FACE="Arial, serif">
 de su residencia a partir de diversos atributos de datos asociados
 con su cuenta.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">*
@@ -52,12 +52,12 @@ Qué cubre esta Notificación de Privacidad</FONT></P>
 propósito de esta Notificación de Privacidad es explicar en qué
 modo compartimos, usamos y mantenemos segura la información personal
 que recopilamos y recibimos de usted a través de nuestros sitios web
-Ctpaga.app, aplicaciones para móvil, herramientas de comercio
+{{env('DOMAIN_EMAIL')}}, aplicaciones para móvil, herramientas de comercio
 electrónico, la tienda de aplicaciones u otros servicios.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">2.
-¿Qué información personal recopila Ctpaga?</FONT></P>
+¿Qué información personal recopila {{env('APP_NAME')}}?</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Es
-posible que </FONT><FONT FACE="Arial, serif"><B>Ctpaga</B></FONT><FONT FACE="Arial, serif">
+posible que </FONT><FONT FACE="Arial, serif"><B>{{env('APP_NAME')}}</B></FONT><FONT FACE="Arial, serif">
 recopile información personal según se describe más abajo a través
 de: (a) Información personal que usted nos proporcione, (b)
 Información recopilada automáticamente, (c) Información de
@@ -69,12 +69,12 @@ aplicaciones y dispositivos. No recopilamos ni utilizamos
 ofrecemos ni vendemos a terceros datos basados en información
 confidencial del consumidor.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">3.
-¿Qué información recopila Ctpaga en la lista de contactos de dispositivos?</FONT></P>
+¿Qué información recopila {{env('APP_NAME')}} en la lista de contactos de dispositivos?</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">
 Con su consentimiento recopilamos informacion el nombre y apellido (como la que se encuentra en la libreta de contactos de su teléfono móvil) donde permite registrar los pedidos con el nombre del cliente.
 </FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">4.
-¿Cómo utiliza Ctpaga su información personal?</FONT></P>
+¿Cómo utiliza {{env('APP_NAME')}} su información personal?</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Recopilamos
 información personal sobre usted cuando solicita participar en
 nuestros Servicios para una variedad de usos por diferentes razones.
@@ -93,7 +93,7 @@ proporcionar un servicio solicitado o ejecutar un contrato con usted.</FONT></P>
 personal que usted nos proporciona. Utilizamos esta información
 personal para proporcionarle nuestro Servicio, responder a las
 consultas de facturación y mantenerle actualizado con noticias sobre
-ctpaga.app, el Servicio y nuestros socios.</FONT></P>
+{{env('DOMAIN_EMAIL')}}, el Servicio y nuestros socios.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Con
 su consentimiento, Comunicación de marketing. Para comunicados de
 marketing nuestros o procedente de cualquiera de nuestros socios en
@@ -108,7 +108,7 @@ nuestro centro de ayuda.</FONT></P>
 Mostramos testimonios personales de clientes satisfechos en nuestro
 sitio, además de otros avales. Con su consentimiento, podemos
 publicar su testimonio junto con su nombre. Si desea actualizar o
-eliminar su testimonio, puede escribirnos a saludos@Ctpaga.app.</FONT></P>
+eliminar su testimonio, puede escribirnos a saludos@{{env('DOMAIN_EMAIL')}}.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"> <FONT FACE="Arial, serif">Notificaciones
 de cuenta; </FONT>
 </P>
@@ -130,7 +130,7 @@ contactar usando marcación automática o llamadas y mensajes
 pregrabados con fines de marketing (e.g. ofertas y promociones) si
 usted autoriza explícitamente a este tipo de comunicaciones; su
 autorización a recibir tales llamadas/mensajes no es una condición
-de compra de ningún producto o servicio de Ctpaga.</FONT></P>
+de compra de ningún producto o servicio de {{env('APP_NAME')}}.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">También
 podemos recopilar otros números telefónicos suyos y podemos hacer
 llamadas manuales no relacionadas con el marketing a cualquiera de
@@ -279,8 +279,8 @@ automáticamente para venderle nuevos productos y servicios mediante
 el uso de cookies para publicar anuncios para usted o publicando
 anuncios en nuestras aplicaciones o en nuestros sitios web.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">5.
-¿Con quién comparte Ctpaga su información personal?</FONT></P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Ctpaga
+¿Con quién comparte {{env('APP_NAME')}} su información personal?</FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">{{env('APP_NAME')}}
 no comparte con otras personas la información personal que obtiene
 sobre usted a partir del uso del Servicio, salvo para los fines que
 se describen en esta Notificación de Privacidad y en relación con:
@@ -292,20 +292,20 @@ legales.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><BR><BR>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">6.
-¿Cuánto tiempo mantiene Ctpaga su información personal?</FONT></P>
+¿Cuánto tiempo mantiene {{env('APP_NAME')}} su información personal?</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Según
 se describe a continuación, conservaremos su información durante el
 tiempo que su cuenta se encuentre activa o según sea necesario para
 prestarle el Servicio, pero en ningún caso por más tiempo que lo
 permitido por la ley aplicable.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">7.
-¿Transfiere Ctpaga su información personal fuera del país?</FONT></P>
+¿Transfiere {{env('APP_NAME')}} su información personal fuera del país?</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Cuando
 sea necesario, podemos transferir su información personal a nuestros
 servidores ubicados fuera del país en el que vive ya que nuestros
 servidores se encuentran en Los Estados Unidos de América</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">8.
-¿Cuánto tiempo mantiene segura Ctpaga su información personal?</FONT></P>
+¿Cuánto tiempo mantiene segura {{env('APP_NAME')}} su información personal?</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Tomamos
 medidas razonables para poner en marcha salvaguardias físicas,
 electrónicas y de procedimiento apropiadas para proteger la
@@ -325,7 +325,7 @@ almacenamiento electrónico no son 100 % seguros. En consecuencia, no
 podemos garantizar la seguridad de la información que nos brinde y,
 por lo tanto, lo hace bajo su propio riesgo.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Si
-Ctpaga se entera de una violación de los sistemas de seguridad,
+{{env('APP_NAME')}} se entera de una violación de los sistemas de seguridad,
 podemos intentar notificarlo de manera electrónica para que pueda
 adoptar las medidas de protección apropiadas. Podemos publicar una
 comunicación en nuestros sitios web correspondientes si se produce
@@ -341,11 +341,11 @@ recibir notificaciones electrónicas), envíe una solicitud a través
 de nuestro centro de ayuda.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">9.
 ¿Cuáles son sus Derechos de Privacidad?</FONT></P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Ctpaga
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">{{env('APP_NAME')}}
 como Controlador de Datos. Si se lo solicita, le proporcionaremos
 información acerca de si tenemos o procesamos su información
 personal en nombre de terceros. Puede acceder a la información de su
-cuenta en Ctpaga y editarla en cualquier momento, iniciando sesión
+cuenta en {{env('APP_NAME')}} y editarla en cualquier momento, iniciando sesión
 en su cuenta. También puede ponerse en contacto con nosotros a
 través del centro de ayuda, y le responderemos lo antes posible en
 un máximo de 30 días.</FONT></P>
@@ -367,20 +367,20 @@ usuario, o mediante el envío de una solicitud a través de nuestro
 centro de ayuda.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">10.
   Cambios a esta notificación de privacidad</FONT></P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Ctpaga
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">{{env('APP_NAME')}}
 reserva el derecho de revisar, modificar o actualizar esta
 notificación en cualquier momento. Le notificaremos los cambios
 significativos en la manera en la cual tratamos su información
 personal enviándole una notificación a la dirección principal de
-correo electrónico especificada en su cuenta particular de Ctpaga o
+correo electrónico especificada en su cuenta particular de {{env('APP_NAME')}} o
 mediante la colocación de un aviso destacado en nuestro sitio.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">11.
-Contacto con Ctpaga</FONT></P>
+Contacto con {{env('APP_NAME')}}</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Si
-tiene alguna duda sobre la privacidad con respecto a Ctpaga, o a este
+tiene alguna duda sobre la privacidad con respecto a {{env('APP_NAME')}}, o a este
 aviso, y si no puede resolverla satisfactoriamente a través del
 Servicio, le recomendamos cumplimentar una solicitud de ayuda en
-https://ctpaga.app o escribirnos por correo electrónico a
-saludos@Ctpaga.app</FONT></P>
+https://{{env('APP_NAME')}}.app o escribirnos por correo electrónico a
+saludos@{{env('DOMAIN_EMAIL')}}</FONT></P>
 </BODY>
 </HTML>

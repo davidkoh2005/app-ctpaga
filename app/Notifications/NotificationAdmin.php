@@ -43,7 +43,7 @@ class NotificationAdmin extends Notification
         $msg = 'Estás recibiendo este correo electrónico porque '.$this->message;
 
         return (new MailMessage)  
-            ->subject('Ctpaga Aviso')
+            ->subject(env('APP_NAME').' Aviso')
             ->markdown(
                 'email.notificationAdmin', ['message' => $msg]
             );

@@ -421,10 +421,10 @@ class AdminController extends Controller
         if($request->statusFile == "PDF"){
             $today = Carbon::now()->format('Y-m-d');
             $pdf = \PDF::loadView('report.transactionsPDF', compact('transactions', 'today', 'idCommerce', 'companyName'))->setPaper('a4', 'landscape');
-            return $pdf->download('ctpaga_transacciones.pdf');
+            return $pdf->download(env('APP_NAME').'_transacciones.pdf');
         }elseif($request->statusFile == "EXCEL"){
             $today = Carbon::now()->format('Y-m-d');
-            return Excel::download(new TransactionsExport($transactions, $today, $idCommerce, $companyName), 'ctpaga_transacciones.xlsx');
+            return Excel::download(new TransactionsExport($transactions, $today, $idCommerce, $companyName), env('APP_NAME').'_transacciones.xlsx');
         }
 
         $statusMenu = "transactions";
@@ -674,9 +674,9 @@ class AdminController extends Controller
         $today = Carbon::now()->format('Y-m-d');
         if($request->statusFile == "PDF"){
             $pdf = \PDF::loadView('report.depositsPDF', compact('deposits', 'today'));
-            return $pdf->download('ctpaga_depositos.pdf');
+            return $pdf->download(env('APP_NAME').'_depositos.pdf');
         }elseif($request->statusFile == "EXCEL"){
-            return Excel::download(new DepositsExport($deposits, $today), 'ctpaga_depositos.xlsx');
+            return Excel::download(new DepositsExport($deposits, $today), env('APP_NAME').'_depositos.xlsx');
         }
 
         $statusMenu = "balance";
@@ -685,10 +685,10 @@ class AdminController extends Controller
 
     public function downloadTxt(Request $request)
     {
-        if(file_exists("ctpaga.txt"))
-            unlink("ctpaga.txt");
+        if(file_exists(env('APP_NAME').".txt"))
+            unlink(env('APP_NAME').".txt");
         
-        $file=fopen("ctpaga.txt","a") or die("Problemas");
+        $file=fopen(env('APP_NAME').".txt","a") or die("Problemas");
         fputs($file,"primera linea 1");
         fputs($file,"\n");
         fputs($file,"segunda linea 2");
@@ -696,7 +696,7 @@ class AdminController extends Controller
         fputs($file,"tercera linea 3");
         fclose($file); 
 
-        $url = 'http://'.$_SERVER['HTTP_HOST'].'/ctpaga.txt';
+        $url = 'http://'.$_SERVER['HTTP_HOST'].'/'.env('APP_NAME').'.txt';
         return response()->json(array('url'=>$url, 'status' => 201));
 
     }
@@ -795,7 +795,7 @@ class AdminController extends Controller
         $phone = '+'.app('App\Http\Controllers\Controller')->validateNum($paid->numberShipping);
         $phoneCommerce = '+'.app('App\Http\Controllers\Controller')->validateNum($commerce->phone);
         $fecha = Carbon::now()->format("d/m/Y");
-        $message = "CTpaga Delivery le informa que ha realizado un pedido con el Nro ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora. Ver informacion de delivery: ".$urlDelivery."";
+        $message = env('APP_NAME')." Delivery le informa que ha realizado un pedido con el Nro ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora. Ver informacion de delivery: ".$urlDelivery."";
         
         $sms = AWS::createClient('sns');
         $sms->publish([
@@ -890,10 +890,10 @@ class AdminController extends Controller
         if($request->statusFile == "PDF"){
             $today = Carbon::now()->format('Y-m-d');
             $pdf = \PDF::loadView('report.ratesPDF', compact('rates', 'startDate', 'endDate'));
-            return $pdf->download('ctpaga_tasas.pdf');
+            return $pdf->download(env('APP_NAME').'_tasas.pdf');
         }elseif($request->statusFile == "EXCEL"){
             $today = Carbon::now()->format('Y-m-d');
-            return Excel::download(new RatesExport($rates, null, null, $startDate, $endDate), 'ctpaga_tasas.xlsx');
+            return Excel::download(new RatesExport($rates, null, null, $startDate, $endDate), env('APP_NAME').'_tasas.xlsx');
         }
         
         $statusMenu = "rate";
@@ -1461,9 +1461,9 @@ class AdminController extends Controller
  
         if($request->statusFile == "PDF"){
             $pdf = \PDF::loadView('report.historyCashesPDF', compact('histories', 'searchNameDelivery', 'startDate', 'endDate'));
-            return $pdf->download('ctpaga_historial.pdf');
+            return $pdf->download(env('APP_NAME').'_historial.pdf');
         }elseif($request->statusFile == "EXCEL"){
-            return Excel::download(new HistoryCashesExport($histories, $startDate, $endDate), 'ctpaga_historial.xlsx');
+            return Excel::download(new HistoryCashesExport($histories, $startDate, $endDate), env('APP_NAME').'_historial.xlsx');
         }
 
         if($request->idDelivery && count($histories) >0){

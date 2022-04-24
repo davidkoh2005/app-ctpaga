@@ -38,9 +38,9 @@
                         <div class="welcome-intro">
                             @if($type == 0)
                                 <h1 class="text-white">Bienvenido</h1>
-                                <p class="text-white my-4">al Panel Administrativa de CTpaga.</p>
+                                <p class="text-white my-4">al Panel Administrativa de {{env('APP_NAME')}}.</p>
                             @else
-                            <h1 class="text-white">Bienvenido a CTpaga!</h1>
+                            <h1 class="text-white">Bienvenido a {{env('APP_NAME')}}!</h1>
                             @endif
                         </div>
                     </div>

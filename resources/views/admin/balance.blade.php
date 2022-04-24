@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ctpaga</title>
+    <title>{{env('APP_NAME')}}</title>
     @include('bookshop')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/datatables.min.css') }}"/>
@@ -233,7 +233,7 @@
                         alertify.error('Selección incorrecto, valido solo para cuenta de Venezuela');
                     }else{
                         var link = document.createElement("a");
-                        link.download = "ctpaga";
+                        link.download = "compralotodo";
                         link.href = data.url;
                         link.click();
                     }

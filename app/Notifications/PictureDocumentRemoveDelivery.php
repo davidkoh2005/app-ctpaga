@@ -41,7 +41,7 @@ class PictureDocumentRemoveDelivery extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Aviso Delivery Ctpaga')
+            ->subject('Aviso Delivery '.env('APP_NAME'))
             ->markdown(
                 'email.pictureDocumentRemoveDelivery', ['delivery' => $this->delivery]
             );

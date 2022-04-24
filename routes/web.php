@@ -58,8 +58,8 @@ Route::post('admin/login/', 'AdminController@login')->name('formAdmin.login');
 Route::get('logout/', 'AdminController@logout')->name('logout');
 Route::post('logout/', 'AdminController@logout')->name('logout');
 
-Route::get('privacy/ctpaga', function(){
-    return view('privacy.ctpaga');
+Route::get('privacy/compralotodo', function(){
+    return view('privacy.compralotodo');
 });
 
 Route::get('privacy/ctlleva', function(){

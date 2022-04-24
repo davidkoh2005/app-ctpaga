@@ -45,7 +45,7 @@
                     <p style="color:#59595e; margin: 0 0 7px;">Estimado/a <strong>{{strtoupper($commerce->name)}}</strong></p>
                     <br>
                     <br>
-                    <p style="color:#59595e; margin: 0 0 7px;">Ctpaga Delivery ha retirado del comercio el pedido {{$paid->codeUrl}}, apenas sea entregado con Éxito en la dirección {{$paid->addressShipping}},
+                    <p style="color:#59595e; margin: 0 0 7px;">{{env('APP_NAME')}} Delivery ha retirado del comercio el pedido {{$paid->codeUrl}}, apenas sea entregado con Éxito en la dirección {{$paid->addressShipping}},
                         le llegará otro correo con la Confirmación de Entrega.</p>
                     <p style="text-align: center">[Pedido {{$paid->codeUrl}}] (
                         @php
@@ -61,7 +61,7 @@
                     <br>
                     <br>
                     <h4 style="color:#59595e; margin: 0 0 7px;">
-                        <br>El equipo de Ctpaga.
+                        <br>El equipo de {{env('APP_NAME')}}.
                     </h4>
                     <br>
                     <br>

@@ -30,7 +30,7 @@ class ratesExport implements FromView, WithDrawings
         $drawing->setName('Logo');
 
         if(Auth::guard('admin')->check()){
-            $drawing->setDescription('Loco CTpaga');
+            $drawing->setDescription('Logo '.env('APP_NAME'));
             $drawing->setPath(public_path('/images/logo/logo.png'));
             $drawing->setWidth(240);
         }else{

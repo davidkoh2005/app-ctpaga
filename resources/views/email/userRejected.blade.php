@@ -51,7 +51,7 @@
                     </p>
                     <br><br><br>
                     <p style="color:#59595e; margin: 0 0 7px;">Muchas gracias.</p>
-                    <h4 style="color:#59595e; margin: 0 0 7px;">El equipo de Ctpaga.</h4>
+                    <h4 style="color:#59595e; margin: 0 0 7px;">El equipo de {{env('APP_NAME')}}.</h4>
                     <br><br><br><br>
                 </div>
             </td>

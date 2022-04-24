@@ -2,7 +2,7 @@
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
-	<TITLE>Ctpaga</TITLE>
+	<TITLE>{{env('APP_NAME')}}</TITLE>
 	<link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo/logoct.svg') }}" />
 	<META NAME="GENERATOR" CONTENT="LibreOffice 4.1.6.2 (Linux)">
 	<META NAME="AUTHOR" CONTENT="Robed Jules">
@@ -52,7 +52,7 @@ Qué cubre esta Notificación de Privacidad</FONT></P>
 propósito de esta Notificación de Privacidad es explicar en qué
 modo compartimos, usamos y mantenemos segura la información personal
 que recopilamos y recibimos de usted a través de nuestros sitios web
-ctpaga.app, aplicaciones para móvil, herramientas de
+{{env('DOMAIN_EMAIL')}}, aplicaciones para móvil, herramientas de
 comercio electrónico, la tienda de aplicaciones u otros servicios.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">2.
 ¿Qué información personal recopila Ctlleva?</FONT></P>
@@ -88,7 +88,7 @@ proporcionar un servicio solicitado o ejecutar un contrato con usted.</FONT></P>
 personal que usted nos proporciona. Utilizamos esta información
 personal para proporcionarle nuestro Servicio, responder a las
 consultas de facturación y mantenerle actualizado con noticias sobre
-ctpaga.app, el Servicio y nuestros socios.</FONT></P>
+{{env('DOMAIN_EMAIL')}}, el Servicio y nuestros socios.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Con
 su consentimiento, Comunicación de marketing. Para comunicados de
 marketing nuestros o procedente de cualquiera de nuestros socios en
@@ -103,7 +103,7 @@ nuestro centro de ayuda.</FONT></P>
 Mostramos testimonios personales de clientes satisfechos en nuestro
 sitio, además de otros avales. Con su consentimiento, podemos
 publicar su testimonio junto con su nombre. Si desea actualizar o
-eliminar su testimonio, puede escribirnos a saludos@ctpaga.app.</FONT></P>
+eliminar su testimonio, puede escribirnos a saludos@{{env('DOMAIN_EMAIL')}}.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"> <FONT FACE="Arial, serif">Notificaciones
 de cuenta; </FONT>
 </P>
@@ -273,7 +273,7 @@ el uso de cookies para publicar anuncios para usted o publicando
 anuncios en nuestras aplicaciones o en nuestros sitios web.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">4.
 ¿Con quién comparte Ctlleva su información personal?</FONT></P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">CTPaga
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">{{env('APP_NAME')}}
 no comparte con otras personas la información personal que obtiene
 sobre usted a partir del uso del Servicio, salvo para los fines que
 se describen en esta Notificación de Privacidad y en relación con:
@@ -318,7 +318,7 @@ almacenamiento electrónico no son 100 % seguros. En consecuencia, no
 podemos garantizar la seguridad de la información que nos brinde y,
 por lo tanto, lo hace bajo su propio riesgo.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">Si
-CTPaga se entera de una violación de los sistemas de seguridad,
+{{env('APP_NAME')}} se entera de una violación de los sistemas de seguridad,
 podemos intentar notificarlo de manera electrónica para que pueda
 adoptar las medidas de protección apropiadas. Podemos publicar una
 comunicación en nuestros sitios web correspondientes si se produce
@@ -334,7 +334,7 @@ recibir notificaciones electrónicas), envíe una solicitud a través
 de nuestro centro de ayuda.</FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">8.
 ¿Cuáles son sus Derechos de Privacidad?</FONT></P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">CTPaga
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.11in"><FONT FACE="Arial, serif">{{env('APP_NAME')}}
 como Controlador de Datos. Si se lo solicita, le proporcionaremos
 información acerca de si tenemos o procesamos su información
 personal en nombre de terceros. Puede acceder a la información de su
@@ -373,7 +373,7 @@ Contacto con Ctlleva</FONT></P>
 tiene alguna duda sobre la privacidad con respecto a Ctlleva, o a
 este aviso, y si no puede resolverla satisfactoriamente a través del
 Servicio, le recomendamos cumplimentar una solicitud de ayuda en
-https://ctpaga.app o escribirnos por correo electrónico a
-saludos@CTPaga.app</FONT></P>
+https://{{env('DOMAIN_EMAIL')}} o escribirnos por correo electrónico a
+saludos@{{env('DOMAIN_EMAIL')}}</FONT></P>
 </BODY>
 </HTML>

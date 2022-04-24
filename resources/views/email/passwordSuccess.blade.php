@@ -29,7 +29,7 @@
                 <div style="color: #34495e; width: 100%; margin: 4% 10% 2%; text-align: center; font-family: sans-serif;">
 
                     <h2 style="color:#59595e; margin: 0 0 7px; text-transform: uppercase; font-size: 15px; text-align: center;">
-                    CAMBIO DE CONTRASEÑA <br> DE CTPAGA
+                    CAMBIO DE CONTRASEÑA <br> DE {{env('APP_NAME')}}
                     </h2>
                 </div>
             </td>
@@ -57,15 +57,15 @@
                     <br>
 
                     <p style="color:#59595e; margin: 0 0 7px;">
-                        Se ha cambiado la contraseña de su cuenta de CTpaga. Si no realizó este cambio, comuníquese
+                        Se ha cambiado la contraseña de su cuenta de {{env('APP_NAME')}}. Si no realizó este cambio, comuníquese
                         con el servicio de atención al cliente a través del correo 
-                        <strong>soporte@ctpaga.app.</strong>
+                        <strong>soporte@{{env('DOMAIN_EMAIL')}}.</strong>
                     </p>
 
                     <br>
 
                     <p style="color:#59595e; margin: 0 0 7px;">
-                        Gracias por elegir Ctpaga como su plataforma de comercio electrónico.
+                        Gracias por elegir {{env('APP_NAME')}} como su plataforma de comercio electrónico.
                     </p>
 
                     <br>
@@ -75,7 +75,7 @@
 
                     <h4 style="color:#59595e; margin: 0 0 7px;">
                         <br>
-                        El equipo de Ctpaga.
+                        El equipo de {{env('APP_NAME')}}.
                     </h4>
 
                     <br>

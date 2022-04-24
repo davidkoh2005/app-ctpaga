@@ -67,7 +67,7 @@
 
                     <h4 style="color:#59595e; margin: 0 0 7px;">
                         <br>
-                        El equipo de Ctpaga.
+                        El equipo de {{env('APP_NAME')}}.
                     </h4>
 
                     <br>
