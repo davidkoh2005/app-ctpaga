@@ -724,7 +724,7 @@
                                 <!-- Copyright Area -->
                                 <div class="copyright-area d-flex flex-wrap justify-content-center justify-content-sm-between text-center py-4">
                                     <!-- Copyright Left -->
-                                    <div class="copyright-left">&copy; Copyrights 2020 {{env('APP_NAME')}} Todos los derechos reservados.</div>
+                                    <div class="copyright-left">&copy; Copyrights {{date("Y")}} {{env('APP_NAME')}} Todos los derechos reservados.</div>
                                 </div>
                             </div>
                         </div>
