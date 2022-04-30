@@ -167,7 +167,7 @@
                     <div class="marginAuto">
                         <input type="input" class="btn btn-bottom btn-current" id="submitAlarm" value="Guardar Alarma">
                         <div class="row marginAuto hide"id="loading">
-                            <img widht="80px" height="80px" class="justify-content-center" src="{{ asset('images/loadingTransparent.gif')  }}">
+                            <img widht="80px" height="80px" class="justify-content-center" src="{{ asset('images/loadingTransparent.gif').'?v='.time()   }}">
                         </div>
                     </div>
 

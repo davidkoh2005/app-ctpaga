@@ -7,11 +7,11 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <title>{{env('APP_NAME')}}</title>
-        <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo/logoct.svg') }}" />
+        <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo/logoct.svg').'?v='.time() }}" />
         <!-- ***** All CSS Files ***** -->
 
         <!-- Style css -->
-        <link rel="stylesheet" type="text/css" href="{{ asset('landingPage/css/style.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('landingPage/css/style.css').'?v='.time() }}">
     
     </head>
     <body>
@@ -49,7 +49,7 @@
                         <div class="col-12 col-md-6 col-lg-6">
                             <!-- Welcome Thumb -->
                             <div class="welcome-thumb mx-auto" data-aos="fade-left" data-aos-delay="500" data-aos-duration="1000">
-                                <img class="img-mobile" src="{{ asset('images/mobile.png') }}" alt="">
+                                <img class="img-mobile" src="{{ asset('images/mobile.png').'?v='.time() }}" alt="">
                             </div>
                         </div>
                     </div>
@@ -599,7 +599,7 @@
                                             <div class="social-icon mr-3">
                                                 <i class="fas fa-home"></i>
                                             </div>
-                                            <span class="media-body align-self-center">Vestibulum nulla libero, convallis, tincidunt suscipit diam, DC 2002</span>
+                                            <span class="media-body align-self-center">{{env('ADDRESS_CTPAGA')}}</span>
                                         </a>
                                     </li>
                                     <li class="py-2">
@@ -607,7 +607,7 @@
                                             <div class="social-icon mr-3">
                                                 <i class="fas fa-phone-alt"></i>
                                             </div>
-                                            <span class="media-body align-self-center">+1 230 456 789-012 345 6789</span>
+                                            <span class="media-body align-self-center">{{env('PHONE_CTPAGA')}}</span>
                                         </a>
                                     </li>
                                     <li class="py-2">
@@ -615,7 +615,7 @@
                                             <div class="social-icon mr-3">
                                                 <i class="fas fa-envelope"></i>
                                             </div>
-                                            <span class="media-body align-self-center">exampledomain@domain.com</span>
+                                            <span class="media-body align-self-center">saludos@{{env('DOMAIN_EMAIL')}}</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -642,7 +642,7 @@
             <!--====== Height Emulator Area End ======-->
 
             <!--====== Footer Area Start ======-->
-            <footer class="footer-area footer-fixed">
+            <footer class="footer-area footer-fixed overlay-dark ">
                 <!-- Footer Top -->
                 <div class="footer-top ptb_100">
                     <div class="container">
@@ -652,7 +652,7 @@
                                 <div class="footer-items">
                                     <!-- Logo -->
                                     <a class="navbar-brand" href="#">
-                                        <img class="logo" src="{{ asset('images/logo/logo.png') }}" alt="">
+                                        <img class="logo" src="{{ asset('images/logo/logoWhite.png').'?v='.time() }}" alt="">
                                     </a>
                                     <p class="mt-2 mb-3">Comparte tus aplicaciones móviles favoritas con tus amigos.</p>
                                     <!-- Social Icons -->
@@ -724,7 +724,7 @@
                                 <!-- Copyright Area -->
                                 <div class="copyright-area d-flex flex-wrap justify-content-center justify-content-sm-between text-center py-4">
                                     <!-- Copyright Left -->
-                                    <div class="copyright-left">&copy; Copyrights {{date("Y")}} {{env('APP_NAME')}} Todos los derechos reservados.</div>
+                                    <div class="copyright-left text-white">&copy; Copyrights {{date("Y")}} {{env('APP_NAME')}} Todos los derechos reservados.</div>
                                 </div>
                             </div>
                         </div>

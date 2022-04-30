@@ -3,7 +3,7 @@
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
 	<TITLE>{{env('APP_NAME')}}</TITLE>
-	<link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo/logoct.svg') }}" />
+	<link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo/logoct.svg').'?v='.time() }}" />
 	<META NAME="GENERATOR" CONTENT="LibreOffice 4.1.6.2 (Linux)">
 	<META NAME="AUTHOR" CONTENT="Robed Jules">
 	<META NAME="CREATED" CONTENT="20200702;12400000000000">

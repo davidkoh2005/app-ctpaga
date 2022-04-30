@@ -10,8 +10,8 @@
     <title>Iniciar Sesión</title>
     @include('bookshop')
     <!-- Style css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('landingPage/css/style.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/login.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('landingPage/css/style.css').'?v='.time()  }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/login.css').'?v='.time().'?v='.time()  }}">
     
     <!-- Script js -->
     <script src="{{ asset('js/i18n/es.js') }}"></script>
@@ -87,7 +87,7 @@
                                     <div class="col-12">
                                         <button class="submit btn btn-bordered w-100 mt-3 mt-sm-4" type="submit">Ingresar</button>
                                         <div class="hide" id="loading">
-                                            <img class="justify-content-center" src="{{ asset('images/loadingTransparent.gif') }}" style="max-width:80px !important;">
+                                            <img class="justify-content-center" src="{{ asset('images/loadingTransparent.gif').'?v='.time()  }}" style="max-width:80px !important;">
                                         </div>
                                     </div>
                                 </div>

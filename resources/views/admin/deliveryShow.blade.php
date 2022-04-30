@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{env('APP_NAME')}}</title>
     @include('bookshop')
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/show.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/show.css').'?v='.time() }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/bookshop/datatables.min.css') }}"/>
     <script type="text/javascript" src="{{ asset('js/show.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/bookshop/rotate.js') }}"></script>

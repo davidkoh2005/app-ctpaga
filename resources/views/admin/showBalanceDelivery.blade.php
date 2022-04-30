@@ -20,7 +20,7 @@
     <div class="marginAuto">
         <input type="button" class="btn btn-bottom btn-current" id="updatePayment" value="Pagado">
         <div class="row marginAuto hide" id="loading">
-            <img widht="80px" height="80px" class="justify-content-center marginAuto" src="{{ asset('images/loadingTransparent.gif')  }}">
+            <img widht="80px" height="80px" class="justify-content-center marginAuto" src="{{ asset('images/loadingTransparent.gif').'?v='.time()   }}">
         </div>
     </div>
     <div class="row">&nbsp;</div>

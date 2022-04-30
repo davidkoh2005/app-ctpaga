@@ -40,7 +40,7 @@
     </div>
     <div class="row">&nbsp;</div>
     <div style="text-align: initial;">
-        <label><strong>Price: </strong> 1 {{$transaction->baseAsset}} <img src="{{asset('images/right-arrow.png')}}" width="35px"> $ {{number_format(floatval($transaction->price_cryptocurrency), 2, '.', ',')}}</label> <br>
+        <label><strong>Price: </strong> 1 {{$transaction->baseAsset}} <img src="{{asset('images/right-arrow.png').'?v='.time()}}" width="35px"> $ {{number_format(floatval($transaction->price_cryptocurrency), 2, '.', ',')}}</label> <br>
         <label><strong>Total a Pagar: </strong> {{number_format((floatval($transaction->total) / floatval($transaction->price_cryptocurrency)), 8, '.', ',') }} {{$transaction->baseAsset}}</label> <br>
         <label><strong>Hah de Transaccion: </strong> {{$transaction->hash}}</label> <br>
     </div>

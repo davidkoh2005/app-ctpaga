@@ -81,7 +81,8 @@
   --nav-hover-color: #2c2e30;
   --nav-toggler-color: #7e8085;
   --primary-color: #565656;
-  --primary-color-2: #00cc5f;
+  --primary-color-2: #ffa200;
+  /* --primary-color-2: #00cc5f; ctpaga */
   --secondary-color: #666;
   --secondary-color-2: #777;
   --social-color-1: #3b5999;
@@ -96,9 +97,11 @@
   --valid-color: #28a745;
   --invalid-color: #ffa200;
   --primary-bg-color: #f6f9fe;
-  --primary-bg-color-2: linear-gradient(-47deg, #00cc5f 0%, #039145 100%);
+  --primary-bg-color-2: linear-gradient(-47deg, #f5b950 0%, #ffa200 100%); 
+  /* --primary-bg-color-2: linear-gradient(-47deg, #00cc5f 0%, #039145 100%); ctpaga */
   --primary-bg-color-3: #ffffff;
-  --primary-bg-color-4: #00cc5f;
+  --primary-bg-color-4: #ffa200;
+  /* --primary-bg-color-4: #00cc5f; ctpaga */
   --nav-bg-color: #d3d3d3;
 }
 
@@ -663,6 +666,10 @@ img {
   z-index: 0;
 }
 
+.overlay-dark p, .overlay-dark h3, .overlay-dark li a {
+  color:white;
+}
+
 .overlay-dark::after {
   position: absolute;
   content: '';
@@ -1060,7 +1067,7 @@ img {
 .navbar.navbar-sticky-moved-up {
   position: fixed;
   top: 0;
-  background: #039145;
+  background: var(--primary-color-2);
   margin-top: -100px;
 }
 

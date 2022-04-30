@@ -2,8 +2,8 @@
             <header class="navbar navbar-sticky navbar-expand-lg navbar-dark">
                 <div class="container position-relative">
                     <a class="navbar-brand" href="{{route('welcome')}}">
-                        <img class="navbar-brand-regular" src="{{ asset('images/logo/logoWhite.png') }}" width="180px" alt="brand-logo">
-                        <img class="navbar-brand-sticky" src="{{ asset('images/logo/logoWhite.png') }}" width="180px" alt="sticky brand-logo">
+                        <img class="navbar-brand-regular" src="{{ asset('images/logo/logoWhite.png').'?v='.time() }}" width="180px" alt="brand-logo">
+                        <img class="navbar-brand-sticky" src="{{ asset('images/logo/logoWhite.png').'?v='.time() }}" width="180px" alt="sticky brand-logo">
                     </a>
                     <button class="navbar-toggler d-lg-none" type="button" data-toggle="navbarToggler" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>

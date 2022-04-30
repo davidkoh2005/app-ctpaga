@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{env('APP_NAME')}}</title>
     @include('bookshop')
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/styleForm.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/styleForm.css').'?v='.time() }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css').'?v='.time() }}">
     @include('admin.bookshop')
     <script src="{{ asset('js/dashboard/script.js') }}" type="text/javascript"></script>
     <script type="text/javascript" src="{{ asset('js/transactions.js') }}"></script>

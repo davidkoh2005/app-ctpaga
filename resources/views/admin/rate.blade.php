@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{env('APP_NAME')}}</title>
     @include('bookshop')
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/styleForm.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/styleForm.css').'?v='.time() }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css').'?v='.time() }}">
     @include('admin.bookshop')
     <script type="text/javascript" src="{{ asset('js/transactions.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/bookshop/jquery.maskMoney.min.js') }}"></script>
@@ -106,7 +106,7 @@
                     <div class="marginAuto">
                         <input type="input" class="btn btn-bottom btn-current" id="submitRate" value="Crear Tasa">
                         <div class="row marginAuto" id="loadingRate">
-                            <img widht="80px" height="80px" class="justify-content-center" src="{{ asset('images/loadingTransparent.gif') }}">
+                            <img widht="80px" height="80px" class="justify-content-center" src="{{ asset('images/loadingTransparent.gif').'?v='.time()  }}">
                         </div>
                     </div>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

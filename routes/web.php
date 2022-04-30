@@ -59,7 +59,7 @@ Route::get('logout/', 'AdminController@logout')->name('logout');
 Route::post('logout/', 'AdminController@logout')->name('logout');
 
 Route::get('privacy/compralotodo', function(){
-    return view('privacy.compralotodo');
+    return view('privacy.ctpaga');
 });
 
 Route::get('privacy/ctlleva', function(){

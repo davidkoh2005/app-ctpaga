@@ -10,7 +10,7 @@
     @include('bookshop')
     <script src="{{ asset('js/formPassword.js') }}"></script>
     <script src="{{ asset('js/i18n/es.js') }}"></script>
-    <link rel="stylesheet" type="text/css" href="{{ asset('landingPage/css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('landingPage/css/style.css').'?v='.time() }}">
 </head>
 
 <body class="homepage-5 accounts">
@@ -84,7 +84,7 @@
                                     <div class="col-12 form-navigation">
                                         <button class="submit btn btn-bordered w-100 mt-3 mt-sm-4" type="submit">Guardar Contraseña</button>
                                         <div id="loading">
-                                            <img class="justify-content-center" src="{{ asset('images/loadingTransparent.gif') }}" style="max-width:80px !important;">
+                                            <img class="justify-content-center" src="{{ asset('images/loadingTransparent.gif').'?v='.time()  }}" style="max-width:80px !important;">
                                         </div>
                                     </div>
                                 </div>

@@ -202,7 +202,7 @@
                                     <div class="col">
                                         <i class="fa fa-times" aria-hidden="true"id="iconClose" style="font-size:35px; color:red"></i>
                                         <i class="fa fa-check" aria-hidden="true" id="iconDone" style="font-size:35px; color:#00cc5f"></i>
-                                        <img widht="40px" height="40px" id="iconLoading" src="{{ asset('/images/loadingTransparent.gif') }}">
+                                        <img widht="40px" height="40px" id="iconLoading" src="{{ asset('/images/loadingTransparent.gif').'?v='.time()  }}">
                                     </div>                                
                                 </div>
                                 <div class="row">&nbsp;</div>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{env('APP_NAME')}}</title>
     @include('bookshop')
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/show.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/show.css').'?v='.time() }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/bookshop/datatables.min.css') }}"/>
     <script type="text/javascript" src="{{ asset('js/show.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/bookshop/rotate.js') }}"></script>
@@ -161,7 +161,7 @@
                     <div class="marginAuto">
                         <input type="input" class="btn btn-bottom btn-current" id="submitReason" value="Enviar Razón">
                         <div class="row marginAuto"id="loadingReason">
-                            <img widht="80px" height="80px" class="justify-content-center" src="{{ asset('images/loadingTransparent.gif') }}">
+                            <img widht="80px" height="80px" class="justify-content-center" src="{{ asset('images/loadingTransparent.gif').'?v='.time()  }}">
                         </div>
                     </div>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

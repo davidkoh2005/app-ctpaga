@@ -1,12 +1,12 @@
   <div class="wrapper ">
-    <div class="sidebar" data-color="green" data-background-color="white" style="background-color: white;">
+    <div class="sidebar" data-color="orange" data-background-color="white" style="background-color: white;">
       <!--
         Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
 
         Tip 2: you can also add an image using data-image tag
     -->
-      <div class="logo" style="background-color: white;"><a href="{{route('admin.dashboard')}}" class="simple-text logo-normal">
-        <img src="{{ asset('images/logo/logo.png') }}" alt="image" width="160px" height="60px">
+      <div class="logo" style="background-color: orange;"><a href="{{route('admin.dashboard')}}" class="simple-text logo-normal">
+        <img src="{{ asset('images/logo/logoWhite.png').'?v='.time() }}" alt="image" width="160px" height="60px">
         </a>
       </div>
       <div class="sidebar-wrapper" style="background-color: white;">

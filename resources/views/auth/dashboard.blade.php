@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo/logoct.svg') }}" />
+  <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo/logoct.svg').'?v='.time() }}" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>{{env('APP_NAME')}}</title>
   <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />

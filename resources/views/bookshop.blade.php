@@ -1,4 +1,4 @@
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo/logoct.svg') }}" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo/logoct.svg').'?v='.time() }}" />
     <!-- Bootstrap CSS -->
     <link href="{{ asset('css/bookshop/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/bookshop/bootstrap-datepicker.min.css') }}"/>
