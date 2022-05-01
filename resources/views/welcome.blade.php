@@ -615,7 +615,8 @@
                                             <div class="social-icon mr-3">
                                                 <i class="fas fa-envelope"></i>
                                             </div>
-                                            <span class="media-body align-self-center">saludos@{{env('DOMAIN_EMAIL')}}</span>
+                                            @php $email = 'saludos@'.env('DOMAIN_EMAIL'); @endphp
+                                            <span class="media-body align-self-center">{{$email}}</span>
                                         </a>
                                     </li>
                                 </ul>
