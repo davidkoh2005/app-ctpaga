@@ -210,7 +210,7 @@
                         <div class="col-12 col-lg-4 order-1 order-lg-2 d-none d-lg-block">
                             <!-- Service Thumb -->
                             <div class="service-thumb mx-auto">
-                                <img src="{{ asset('images/perfil.png') }}" alt="">
+                                <img src="{{ asset('images/perfil.png').'?v='.time() }}" alt="">
                             </div>
                         </div>
                     </div>
@@ -225,7 +225,7 @@
                         <div class="col-12 col-lg-6 order-2 order-lg-1">
                             <!-- Discover Thumb -->
                             <div class="service-thumb discover-thumb mx-auto pt-5 pt-lg-0">
-                                <img src="{{ asset('images/ws.png') }}" alt="">
+                                <img src="{{ asset('images/ws.png').'?v='.time() }}" alt="">
                             </div>
                         </div>
                         <div class="col-12 col-lg-6 order-1 order-lg-2">
