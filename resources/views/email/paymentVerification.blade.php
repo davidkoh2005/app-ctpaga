@@ -42,7 +42,7 @@
                 <br>
                 <a href="">
                     <img 
-                        src="{{ asset('images/email/11.png') }}" 
+                        src="{{ asset('images/email/11.png').'?v='.time() }}" 
                         alt="" 
                         style="padding: 10px; display: block; margin: 0 auto; width: 80px;">
                 </a>

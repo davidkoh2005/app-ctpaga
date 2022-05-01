@@ -24,7 +24,7 @@
         </tr>
 
         <tr>
-            <td style="border-left: 25px solid #00b426; border-right: 25px solid #00b426; display: flex; align-items: center; justify-content: center">
+            <td style="border-left: 25px solid #ffa200; border-right: 25px solid #ffa200; display: flex; align-items: center; justify-content: center">
 
                 <div style="color: #34495e; width: 100%; margin: 4% 10% 2%; text-align: center; font-family: sans-serif;">
 
@@ -40,7 +40,7 @@
             <td style="background-color: #fff; text-align: left; padding: 0;">
                 <br>
                 <a href="">
-                    <img src="{{ asset('images/email/3.png') }}" alt="" style="padding: 10px; display: block; margin: 0 auto; width: 80px;">
+                    <img src="{{ asset('images/email/3.png').'?v='.time() }}" alt="" style="padding: 10px; display: block; margin: 0 auto; width: 80px;">
                 </a>
             </td>
         </tr>

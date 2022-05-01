@@ -24,17 +24,17 @@
 
         <tr>
             <td
-                style="border-left: 25px solid #00b426; border-right: 25px solid #00b426; display: flex; align-items: center; justify-content: center;">
+                style="border-left: 25px solid #ffa200; border-right: 25px solid #ffa200; display: flex; align-items: center; justify-content: center;">
                 <div
                     style="color: #34495e; width: 100%; margin: 4% 10% 2%; text-align: center; font-family: sans-serif;">
                     <h2 style="color:#59595e; margin: 0 0 7px; text-transform: uppercase; font-size: 15px; text-align: center;">CONFIRMACIÓN
-                        DE REGISTRO EN <br> {{env('APP_NAME')}} SU PUNTO DE VENTA</h2>
+                        DE REGISTRO EN <br> SU PUNTO DE VENTA</h2>
                 </div>
             </td>
         </tr>
         <tr>
             <td style="background-color: #fff; text-align: left; padding: 0;"><br><a href=""><img
-                        src="{{ asset('images/email/2.png') }}" alt=""
+                        src="{{ asset('images/email/2.png').'?v='.time() }}" alt=""
                         style="padding: 10px; display: block; margin: 0 auto; width: 80px;"></a></td>
         </tr>
         <tr>

@@ -642,7 +642,7 @@
             <!--====== Height Emulator Area End ======-->
 
             <!--====== Footer Area Start ======-->
-            <footer class="footer-area footer-fixed overlay-dark ">
+            <footer class="footer-area footer-fixed">
                 <!-- Footer Top -->
                 <div class="footer-top ptb_100">
                     <div class="container">
@@ -652,7 +652,7 @@
                                 <div class="footer-items">
                                     <!-- Logo -->
                                     <a class="navbar-brand" href="#">
-                                        <img class="logo" src="{{ asset('images/logo/logoWhite.png').'?v='.time() }}" alt="">
+                                        <img class="logo" src="{{ asset('images/logo/logo.png').'?v='.time() }}" alt="">
                                     </a>
                                     <p class="mt-2 mb-3">Comparte tus aplicaciones móviles favoritas con tus amigos.</p>
                                     <!-- Social Icons -->
@@ -724,7 +724,7 @@
                                 <!-- Copyright Area -->
                                 <div class="copyright-area d-flex flex-wrap justify-content-center justify-content-sm-between text-center py-4">
                                     <!-- Copyright Left -->
-                                    <div class="copyright-left text-white">&copy; Copyrights {{date("Y")}} {{env('APP_NAME')}} Todos los derechos reservados.</div>
+                                    <div class="copyright-left">&copy; Copyrights {{date("Y")}} {{env('APP_NAME')}} Todos los derechos reservados.</div>
                                 </div>
                             </div>
                         </div>

@@ -25,7 +25,7 @@
 
         <tr>
             @if($type == 0)
-            <td style="border-left: 25px solid #00b426; border-right: 25px solid #00b426; display: flex;
+            <td style="border-left: 25px solid #ffa200; border-right: 25px solid #ffa200; display: flex;
             align-items: center;
             justify-content: center;">
                 <div style="color: #34495e; width: 100%; margin: 4% 10% 2%; text-align: center; font-family: sans-serif;">
@@ -57,17 +57,17 @@
                 <a href="">
                     @if($type == 0)
                     <img 
-                        src="{{ asset('images/email/8.png') }}" 
+                        src="{{ asset('images/email/8.png').'?v='.time() }}" 
                         alt="" 
                         style="padding: 10px; display: block; margin: 0 auto; width: 80px;">
                     @elseif($type == 1)
                     <img 
-                        src="{{ asset('images/email/11.png') }}" 
+                        src="{{ asset('images/email/11.png').'?v='.time() }}" 
                         alt="" 
                         style="padding: 10px; display: block; margin: 0 auto; width: 80px;">
                     @else
                     <img 
-                        src="{{ asset('images/email/10.png') }}" 
+                        src="{{ asset('images/email/10.png').'?v='.time() }}" 
                         alt="" 
                         style="padding: 10px; display: block; margin: 0 auto; width: 80px;">
                     @endif
