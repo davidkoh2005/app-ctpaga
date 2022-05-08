@@ -15,7 +15,7 @@ class VersionSeeder extends Seeder
             \DB::table("version")->insert(
                 array(
                     'id'            => 1,
-                    'version'       => '1.0.42',
+                    'version'       => '1.0.44',
                     'url'           => 'https://drive.google.com/file/d/1CMtAtfHiVajGsJ3SUjlinuqH18dWg2AX/view?usp=sharing',
                     'created_at'    => date('Y-m-d H:m:s'),
                     'updated_at'    => date('Y-m-d H:m:s'),
@@ -33,7 +33,7 @@ class VersionSeeder extends Seeder
                     'url'           => 'https://drive.google.com/file/d/1l_2D-lmk88X0HYzuyYyjx6iuduJH6-3C/view?usp=sharing',
                     'created_at'    => date('Y-m-d H:m:s'),
                     'updated_at'    => date('Y-m-d H:m:s'),
-                    'app'           => 'delivery '.env('APP_NAME'),
+                    'app'           => 'delivery',
                     'url_ios'       => 'https://www.apple.com/la/app-store/',
                     'url_android'   => 'https://play.google.com/store/apps/details?id=ctlleva.ctlleva',
                 )
