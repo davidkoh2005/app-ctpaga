@@ -1,12 +1,23 @@
+:root {
+    --primary-color-2: #ffa200;
+    /* --primary-color-2: #00cc5f; ctpaga */
+    --primary-bg-color-2: linear-gradient(-47deg, #f5b950 0%, #ffa200 100%); 
+    /* --primary-bg-color-2: linear-gradient(-47deg, #00cc5f 0%, #039145 100%); ctpaga */
+    --primary-bg-color-3: #ffffff;
+    --primary-bg-color-4: #ffa200;
+    /* --primary-bg-color-4: #00cc5f; ctpaga */
+    --nav-bg-color: #d3d3d3;
+}
+
 .nav-link.settings.active {
     color: white !important;
-    background-color: #00cc5f !important;
+    background-color: var(--primary-color-2)  !important;
     font-weight: 600;
 }
 
 .nav-link.settings.active:hover {
     color: white !important;
-    background-color: #00cc5f !important;
+    background-color: var(--primary-color-2)  !important;
     font-weight: 600;
 }
 
@@ -27,7 +38,7 @@
 
 #until {
     color: white !important;
-    background-color: #00cc5f !important;
+    background-color: var(--primary-color-2)  !important;
     padding-top: 9px !important;
     padding-left: 20px !important;
     padding-right: 20px !important;

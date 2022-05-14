@@ -817,15 +817,28 @@ class PaidController extends Controller
                     $delivery->statusAvailability = 0;
                     $delivery->save();
 
-                    $phone = '+'.app('App\Http\Controllers\Controller')->validateNum($paid->numberShipping);
-                    $phoneCommerce = '+'.app('App\Http\Controllers\Controller')->validateNum($commerce->phone);
+                    /* $phone = '+'.app('App\Http\Controllers\Controller')->validateNum($paid->numberShipping);
+                    $phoneCommerce = '+'.app('App\Http\Controllers\Controller')->validateNum($commerce->phone); */
+                    $phone = $paid->numberShipping;
+                    $phoneCommerce = $commerce->phone;
                     $fecha = Carbon::now()->format("d/m/Y");
                     $urlDelivery = url('/delivery/'.$delivery->idUrl);
 
-                    $message = env('APP_NAME')." Delivery le informa que ha realizado un pedido con el Nro ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora. Ver informacion de delivery: ".$urlDelivery."";
+                    $message = env('APP_NAME')."_Delivery_le_informa_que_ha_realizado_un_pedido_con_el_Nro_".$paid->codeUrl."_con_fecha_de_".$fecha.",_el_cual_será_despachado_en_aproximadamente_1_hora._Ver_informacion_de_delivery:_".$urlDelivery."";
+                    $messageAdminSMS = "El_delivery_".$delivery->name."_tomo_el_pedido_".$paid->codeUrl."_con_fecha_de_".$fecha.",_el_cual_será_despachado_en_aproximadamente_1 hora.";
                     $messageAdmin = " el delivery ".$delivery->name." tomo el pedido ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora.";
 
-                    $sms = AWS::createClient('sns');
+                    $url = "https://mensajesms.com.ve/sms2/API/api.php?cel=".$phone."&men=".$message."&u=demoMT&t=D3M0MT";
+                    $client = new \GuzzleHttp\Client();
+                    $request  = $client->request('GET',$url);
+                    $response = $request->getBody()->getContents();
+
+                    $url = "https://mensajesms.com.ve/sms2/API/api.php?cel=".$phoneCommerce."&men=".$messageAdminSMS."&u=demoMT&t=D3M0MT";
+                    $client = new \GuzzleHttp\Client();
+                    $request  = $client->request('GET',$url);
+                    $response = $request->getBody()->getContents();
+
+                    /* $sms = AWS::createClient('sns');
                     $sms->publish([
                         'Message' => $message,
                         'PhoneNumber' => $phone,
@@ -847,7 +860,8 @@ class PaidController extends Controller
                                 'StringValue' => 'Transactional',
                             ]
                         ],
-                    ]); 
+                    ]);  */
+                    
 
                     (new User)->forceFill([
                         'email' => $paid->email,

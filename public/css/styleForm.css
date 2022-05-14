@@ -1,3 +1,14 @@
+:root {
+    --primary-color-2: #ffa200;
+    /* --primary-color-2: #00cc5f; ctpaga */
+    --primary-bg-color-2: linear-gradient(-47deg, #f5b950 0%, #ffa200 100%); 
+    /* --primary-bg-color-2: linear-gradient(-47deg, #00cc5f 0%, #039145 100%); ctpaga */
+    --primary-bg-color-3: #ffffff;
+    --primary-bg-color-4: #ffa200;
+    /* --primary-bg-color-4: #00cc5f; ctpaga */
+    --nav-bg-color: #d3d3d3;
+}
+
 div.result {
     position: absolute;
     left: 50%;
@@ -214,14 +225,14 @@ div.shipping-price{
     width: 100%;
     border-radius: 60px;
     font-size: large;
-    background-color: #00cc5f !important;
+    background-color: var(--primary-color-2) !important;
     color: white !important;
 }
 
 .btn-active:hover {
     background-color: white !important;
-    border: 2px solid #00cc5f !important;
-    color: #00cc5f !important;
+    border: 2px solid var(--primary-color-2) !important;
+    color: var(--primary-color-2) !important;
 }
 
 .btn-remove { 
@@ -239,7 +250,7 @@ div.shipping-price{
 }
 
 .bi-chevron-left{
-    color: #00cc5f;
+    color: var(--primary-color-2);
 }
 
 .parsley-errors-list {
@@ -247,7 +258,7 @@ div.shipping-price{
 }
 
 .bi-check-circle-fill {
-    color: #00cc5f;
+    color: var(--primary-color-2);
 }
 
 .radio-shippings, .radio-payment {
@@ -420,7 +431,7 @@ div#card_number, div#card_expiry, div#card_cvc{
 
 
 .checkPaymentActive {
-    border: 2px solid #00cc5f;
+    border: 2px solid var(--primary-color-2);
 }
 
 .ErrorHash {

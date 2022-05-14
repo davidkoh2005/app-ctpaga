@@ -1,3 +1,14 @@
+:root {
+    --primary-color-2: #ffa200;
+    /* --primary-color-2: #00cc5f; ctpaga */
+    --primary-bg-color-2: linear-gradient(-47deg, #f5b950 0%, #ffa200 100%); 
+    /* --primary-bg-color-2: linear-gradient(-47deg, #00cc5f 0%, #039145 100%); ctpaga */
+    --primary-bg-color-3: #ffffff;
+    --primary-bg-color-4: #ffa200;
+    /* --primary-bg-color-4: #00cc5f; ctpaga */
+    --nav-bg-color: #d3d3d3;
+}
+
 .container{
     padding-left: 0px !important;
     padding-right: 0px !important;
@@ -22,7 +33,7 @@ a {
 }
 
 .btnFloating {
-    border: 2px solid #00cc5f;
+    border: 2px solid var(--primary-color-2);
     border-radius: 45%;
 }
 
@@ -185,7 +196,7 @@ div.colorGreyInverse {
 }
 
 .bi-chevron-left{
-    color: #00cc5f;
+    color: var(--primary-color-2);
 }
 
 .button-circle > ul {
@@ -306,14 +317,14 @@ div.shipping-price{
     width: 100%;
     border-radius: 60px;
     font-size: large;
-    background-color: #00cc5f !important;
+    background-color: var(--primary-color-2) !important;
     color: white;
 }
 
 .btn-bottom:hover {
     background-color: white !important;
-    border: 2px solid #00cc5f;
-    color: #00cc5f;
+    border: 2px solid var(--primary-color-2);
+    color: var(--primary-color-2);
 }
 
 .statusButton, .statusButton:hover{
@@ -327,13 +338,13 @@ div.shipping-price{
 
 .btn-current {
     background-color: white !important;
-    color: #00cc5f !important;
+    color: var(--primary-color-2) !important;
     font-weight: bold;
 }
 
 .btn-current:hover {
     background-color: white !important;
-    color: #00cc5f !important;
+    color: var(--primary-color-2) !important;
     font-weight: bold;
 }
 
@@ -363,7 +374,7 @@ hr.category {
 }
 
 hr {
-    background-color: #00cc5f;
+    background-color: var(--primary-color-2);
     margin-bottom: 20px;
 }
 
@@ -388,7 +399,7 @@ a.listCategories label.category-name {
 }
 
 a.listCategories:hover div.category-image {
-    background: #00cc5f none repeat scroll 0 0;
+    background: var(--primary-color-2) none repeat scroll 0 0;
     display: inline-block;
     font-size: 26px;
     width: 70px;
@@ -403,11 +414,11 @@ a.listCategories:hover div.category-image {
 }
 
 a.listCategories:hover label.category-name {
-    color: #00cc5f;
+    color: var(--primary-color-2);
 }
 
 a.category-current div.category-image {
-    background: #00cc5f;
+    background: var(--primary-color-2);
     display: inline-block;
     font-size: 26px;
     width: 70px;
@@ -422,7 +433,7 @@ a.category-current div.category-image {
 }
 
 .category-current label.category-name {
-    color: #00cc5f;
+    color: var(--primary-color-2);
 }
 
 #showCategories li {

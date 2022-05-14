@@ -1,3 +1,15 @@
+:root {
+    --primary-color-2: #ffa200;
+    /* --primary-color-2: #00cc5f; ctpaga */
+    --primary-bg-color-2: linear-gradient(-47deg, #f5b950 0%, #ffa200 100%); 
+    /* --primary-bg-color-2: linear-gradient(-47deg, #00cc5f 0%, #039145 100%); ctpaga */
+    --primary-bg-color-3: #ffffff;
+    --primary-bg-color-4: #ffa200;
+    /* --primary-bg-color-4: #00cc5f; ctpaga */
+    --nav-bg-color: #d3d3d3;
+}
+  
+
 body.body-admin{
     background-color: white;
 }
@@ -29,14 +41,14 @@ table {
 .btn-bottom { 
     border-radius: 90px  !important;
     font-size: large;
-    background-color: #00cc5f !important;
+    background-color: var(--primary-color-2) !important;
     color: white  !important;
 }
 
 .btn-bottom:hover {
     background-color: white !important;
-    border: 2px solid #00cc5f  !important;
-    color: #00cc5f  !important;
+    border: 2px solid var(--primary-color-2)   !important;
+    color: var(--primary-color-2)   !important;
 }
 
 #row {
@@ -60,8 +72,8 @@ table {
 #title {
     height: 40px;
     border-radius: 60px !important;
-    background-color: #00cc5f !important;
-    border: 2px solid #00cc5f !important;
+    background-color: var(--primary-color-2) !important;
+    border: 2px solid var(--primary-color-2) !important;
     color: white !important;
     margin-bottom: 10px !important;
     padding-top: 7px;
@@ -95,19 +107,19 @@ table {
     width: 100%;
     border-radius: 60px;
     font-size: large;
-    background-color: #00cc5f !important;
+    background-color: var(--primary-color-2) !important;
     color: white;
 }
 
 .submit:hover {
     background-color: white !important;
-    border: 2px solid #00cc5f;
-    color: #00cc5f;
+    border: 2px solid var(--primary-color-2);
+    color: var(--primary-color-2);
 }
 
 .input-group-addon{
     color: white !important;
-    background-color: #00cc5f !important;
+    background-color: var(--primary-color-2) !important;
     padding-top: 6px !important;
     padding-left: 20px !important;
     padding-right: 20px !important;
@@ -268,7 +280,7 @@ table {
 
 .input-group-addon{
     color: white !important;
-    background-color: #00cc5f !important;
+    background-color: var(--primary-color-2) !important;
     padding-top: 6px !important;
     padding-left: 20px !important;
     padding-right: 20px !important;
@@ -390,16 +402,16 @@ div.colorGrey {
 
 button.ajs-button.ajs-ok {
     border-radius: 60px !important;
-    border: 2px solid #00cc5f !important;
-    background-color: #00cc5f !important;
+    border: 2px solid var(--primary-color-2) !important;
+    background-color: var(--primary-color-2) !important;
     color: white !important;
 }
 
 button.ajs-button.ajs-ok:hover {
     border-radius: 60px !important;
     background-color: white !important;
-    border: 2px solid #00cc5f !important;
-    color: #00cc5f !important;
+    border: 2px solid var(--primary-color-2) !important;
+    color: var(--primary-color-2) !important;
 }
 
 button.ajs-button.ajs-cancel {
