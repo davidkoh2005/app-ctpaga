@@ -278,7 +278,7 @@ function showTotalBtn()
         }
     }
 
-    $('.circleGreen').text(quantity);
+    $('.circleColorLogo').text(quantity);
     $("#btnFloatingShipping").addClass("WOW animated bounceIn");
 
 }

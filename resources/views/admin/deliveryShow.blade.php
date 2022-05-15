@@ -7,7 +7,7 @@
     @include('bookshop')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/show.css').'?v='.time() }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/bookshop/datatables.min.css') }}"/>
-    <script type="text/javascript" src="{{ asset('js/show.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/show.js').'?v='.time() }}"></script>
     <script type="text/javascript" src="{{ asset('js/bookshop/rotate.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/bookshop/datatables.min.js') }}"></script>
     @include('admin.bookshop')

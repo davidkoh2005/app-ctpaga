@@ -7,7 +7,7 @@
     @include('bookshop')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css').'?v='.time() }}">
     @include('admin.bookshop')
-    <script type="text/javascript" src="{{ asset('js/transactions.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/transactions.js').'?v='.time() }}"></script>
 </head>
 <body class="body-admin">
 <div class="loader"></div>

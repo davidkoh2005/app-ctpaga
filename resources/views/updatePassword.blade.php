@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Cambiar Contraseña</title>
     @include('bookshop')
-    <script src="{{ asset('js/formPassword.js') }}"></script>
+    <script src="{{ asset('js/formPassword.js').'?v='.time() }}"></script>
     <script src="{{ asset('js/i18n/es.js') }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ asset('landingPage/css/style.css').'?v='.time() }}">
 </head>

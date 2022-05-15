@@ -15,7 +15,7 @@
     
     <!-- Script js -->
     <script src="{{ asset('js/i18n/es.js') }}"></script>
-    <script src="{{ asset('js/login.js') }}"></script>
+    <script src="{{ asset('js/login.js').'?v='.time() }}"></script>
 
 </head>
 

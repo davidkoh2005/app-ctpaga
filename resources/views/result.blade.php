@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{env('APP_NAME')}}</title>
     @include('bookshop')
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/styleForm.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/styleForm.css').'?v='.time() }}">
     <style>
         .btn-bottom {
             width: 100%;

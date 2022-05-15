@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css').'?v='.time() }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/settings.css').'?v='.time() }}">
     @include('admin.bookshop')
-    <script type="text/javascript" src="{{ asset('js/transactions.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/transactions.js').'?v='.time() }}"></script>
     <script src="{{ asset('js/stateMunicipalities.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/bookshop/jquery.maskMoney.min.js') }}"></script>
     

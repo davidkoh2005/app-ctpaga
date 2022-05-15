@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/datatables.min.css') }}"/>
     @include('admin.bookshop')
     <script type="text/javascript" src="{{ asset('js/datatables.min.js') }}"></script>
-    <script src="{{ asset('js/dashboard/script.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/dashboard/script.js').'?v='.time() }}" type="text/javascript"></script>
 </head>
 <body class="body-admin">
     <div class="loader"></div>

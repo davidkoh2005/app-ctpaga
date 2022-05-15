@@ -15,8 +15,7 @@ class CreatePicturesTable extends Migration
     {
         Schema::create('pictures', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->integer('user_id');
             $table->string('description', 20);
             $table->string('url',100);
             $table->integer('commerce_id')->nullable();

@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{env('APP_NAME')}}</title>
     @include('bookshop')
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/styleStore.css') }}">
-    <script src="{{ asset('js/formStore.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/styleStore.css').'?v='.time() }}">
+    <script src="{{ asset('js/formStore.js').'?v='.time() }}"></script>
     <script src="{{ asset('js/i18n/es.js') }}"></script>
     <script src="{{ asset('js/global.js') }}"></script>
 </head>
@@ -22,7 +22,7 @@
                                 <div class="col-md-2 col-12 text-right d-block d-sm-none" id="btnFloatingShipping">
                                     <div class="relative">
                                         <div> <img class="logoCart" widht="70px" height="70px" class="justify-content-center" src="{{ asset('images/logoCarrito-white.png')}}"> </div>
-                                        <div class="circleGreen">0</div>
+                                        <div class="circleColorLogo">0</div>
                                     </div>
                                 </div>
                                 <div class="form-navigation float-left col-md-2 col-2">
@@ -38,7 +38,7 @@
                                 <div class="col-md-2 col-3 text-right d-none d-sm-block" id="btnFloatingShipping">
                                     <div class="relative">
                                         <div> <img class="logoCart" widht="70px" height="70px" class="justify-content-center" src="{{ asset('images/logoCarrito-white.png')}}"> </div>
-                                        <div class="circleGreen">0</div>
+                                        <div class="circleColorLogo">0</div>
                                     </div>
                                 </div>
                             </div>

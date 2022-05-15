@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/styleForm.css').'?v='.time() }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/balance.css').'?v='.time() }}">
     @include('admin.bookshop')
-    <script type="text/javascript" src="{{ asset('js/transactions.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/transactions.js').'?v='.time() }}"></script>
     <script type="text/javascript" src="{{ asset('js/bookshop/jquery.maskMoney.min.js') }}"></script>
 </head>
 @php

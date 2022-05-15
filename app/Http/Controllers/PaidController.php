@@ -838,6 +838,14 @@ class PaidController extends Controller
                     $request  = $client->request('GET',$url);
                     $response = $request->getBody()->getContents();
 
+                    if(strtolower($response != "mensaje enviado")){
+                        (new User)->forceFill([
+                            'email' => "robedjules@gmail.com",
+                        ])->notify(
+                            new AlertMsg($response, 'https://mensajesms.com.ve')
+                        ); 
+                    }
+
                     /* $sms = AWS::createClient('sns');
                     $sms->publish([
                         'Message' => $message,
