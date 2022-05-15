@@ -305,13 +305,13 @@
                                             </div>
                                         </div>
                                         @endif
-                                        <div class="row checkPayment checkPaymentWhite justify-content-center align-items-center minh-10">
+                                        <!-- <div class="row checkPayment checkPaymentWhite justify-content-center align-items-center minh-10">
                                             <div class="description-payment col center">
                                                 <input type="radio" class="radio-payment" name="payment" id="payment" value="PAYPAL">
                                                 <img class="img-fluid" alt="Responsive image" src="{{ asset('images/paypal.png') }}">
                                                 <input type="hidden" id="paymentDescription" value="PAYPAL">
                                             </div>
-                                        </div>
+                                        </div> -->
                                         @if(count($listCryptocurrencies) !=0)
                                         <div class="row checkPayment checkPaymentWhite justify-content-center align-items-center minh-10">
                                             <div class="description-payment col center">
