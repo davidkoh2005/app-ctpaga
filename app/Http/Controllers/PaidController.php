@@ -829,12 +829,12 @@ class PaidController extends Controller
                     $messageAdminSMS = "El_delivery_".$delivery->name."_tomo_el_pedido_".$paid->codeUrl."_con_fecha_de_".$fecha.",_el_cual_será_despachado_en_aproximadamente_1 hora.";
                     $messageAdmin = " el delivery ".$delivery->name." tomo el pedido ".$paid->codeUrl." con fecha de ".$fecha.", el cual será despachado en aproximadamente 1 hora.";
 
-                    $url = "https://mensajesms.com.ve/sms2/API/api.php?cel=".$phone."&men=".$message."&u=demoMT&t=D3M0MT";
+                    $url = "https://mensajesms.com.ve/sms2/API/api.php?cel=".$phone."&men=".$message."&u=".env('USER_SMS')."&t=".env('KEY_SMS');
                     $client = new \GuzzleHttp\Client();
                     $request  = $client->request('GET',$url);
                     $response = $request->getBody()->getContents();
 
-                    $url = "https://mensajesms.com.ve/sms2/API/api.php?cel=".$phoneCommerce."&men=".$messageAdminSMS."&u=demoMT&t=D3M0MT";
+                    $url = "https://mensajesms.com.ve/sms2/API/api.php?cel=".$phoneCommerce."&men=".$messageAdminSMS."&u=".env('USER_SMS')."&t=".env('KEY_SMS');
                     $client = new \GuzzleHttp\Client();
                     $request  = $client->request('GET',$url);
                     $response2 = $request->getBody()->getContents();
@@ -1055,7 +1055,7 @@ class PaidController extends Controller
 
         $message = str_replace(" ", "_", $message);
 
-        $url = "https://mensajesms.com.ve/sms2/API/api.php?cel=".$phone."&men=".$message."&u=demoMT&t=D3M0MT";
+        $url = "https://mensajesms.com.ve/sms2/API/api.php?cel=".$phone."&men=".$message."&u=".env('USER_SMS')."&t=".env('KEY_SMS');
         $client = new \GuzzleHttp\Client();
         $request  = $client->request('GET',$url);
         $response = $request->getBody()->getContents();
