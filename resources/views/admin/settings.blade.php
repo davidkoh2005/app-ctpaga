@@ -14,7 +14,7 @@
     <script type="text/javascript" src="{{ asset('js/bookshop/jquery.maskMoney.min.js') }}"></script>
     
     <!-- libreria multi emails -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('css//bookshop/jquery.multi-emails.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css//bookshop/jquery.multi-emails.css').'?v='.time() }}">
     <script type="text/javascript" src="{{ asset('js/bookshop/jquery.multi-emails.js') }}"></script>
     <style>
         table, th, td {
