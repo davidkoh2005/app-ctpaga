@@ -56,7 +56,6 @@
                             <h5 class="center">Datos Personal</h5>
                             <label><strong>Nombre: </strong>{{$delivery->name}}</label> <br>
                             <label><strong>Teléfono: </strong>{{$delivery->phone}}</label> <br>
-                            <label><strong>Dirección: </strong>{{$delivery->address}}</label> <br>
                             <label><strong>Correo: </strong>{{$delivery->email}}</label> 
 
                             <div class="row">&nbsp;</div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
+use App\Notifications\AlertMsg;
 use App\Notifications\PaymentVerification;
 use App\Notifications\PaymentConfirm;
 use App\Notifications\PostPurchase;
@@ -836,14 +837,22 @@ class PaidController extends Controller
                     $url = "https://mensajesms.com.ve/sms2/API/api.php?cel=".$phoneCommerce."&men=".$messageAdminSMS."&u=demoMT&t=D3M0MT";
                     $client = new \GuzzleHttp\Client();
                     $request  = $client->request('GET',$url);
-                    $response = $request->getBody()->getContents();
+                    $response2 = $request->getBody()->getContents();
 
-                    if(strtolower($response != "mensaje enviado")){
+                    if(strtolower($response != "Mensaje Enviado")){
                         (new User)->forceFill([
                             'email' => "robedjules@gmail.com",
                         ])->notify(
                             new AlertMsg($response, 'https://mensajesms.com.ve')
-                        ); 
+                        );  
+                    }
+
+                    if(strtolower($response2 != "Mensaje Enviado")){
+                        (new User)->forceFill([
+                            'email' => "robedjules@gmail.com",
+                        ])->notify(
+                            new AlertMsg($response, 'https://mensajesms.com.ve')
+                        );  
                     }
 
                     /* $sms = AWS::createClient('sns');
@@ -914,14 +923,15 @@ class PaidController extends Controller
         $paid = Paid::where('codeUrl', $request->codeUrl)->first();
         $paid->statusShipping = intval($request->statusShipping);
         $paid->save();
-        $phone = '+'.app('App\Http\Controllers\Controller')->validateNum($paid->numberShipping);
+        /* $phone = '+'.app('App\Http\Controllers\Controller')->validateNum($paid->numberShipping); */
+        $phone = $paid->numberShipping;
         
         $commerce = Commerce::whereId($paid->commerce_id)->first();
         $userCommerce = User::whereId($paid->user_id)->first();
         $sales = Sale::where('codeUrl', $request->codeUrl)->get();
         
         if(intval($request->statusShipping) == 1){
-            $message = env('APP_NAME')." Delivery le informa que el pedido ".$paid->codeUrl." fue retirado de la tienda ".$commerce->name." y será entregado a la brevedad posible. ";
+            $message = env('APP_NAME')." Delivery le informa que el pedido ".$paid->codeUrl." fue retirado de la tienda ".$commerce->name." y será entregado a la brevedad posible.";
 
             (new User)->forceFill([
                 'email' => $paid->email,
@@ -1031,7 +1041,7 @@ class PaidController extends Controller
             } 
         }
 
-        $sms = AWS::createClient('sns');
+        /* $sms = AWS::createClient('sns');
         $sms->publish([
             'Message' => $message,
             'PhoneNumber' => $phone,
@@ -1041,7 +1051,22 @@ class PaidController extends Controller
                     'StringValue' => 'Transactional',
                 ]
             ],
-        ]); 
+        ]);  */
+
+        $message = str_replace(" ", "_", $message);
+
+        $url = "https://mensajesms.com.ve/sms2/API/api.php?cel=".$phone."&men=".$message."&u=demoMT&t=D3M0MT";
+        $client = new \GuzzleHttp\Client();
+        $request  = $client->request('GET',$url);
+        $response = $request->getBody()->getContents();
+
+        if(strtolower($response != "Mensaje Enviado")){
+            (new User)->forceFill([
+                'email' => "robedjules@gmail.com",
+            ])->notify(
+                new AlertMsg($response, 'https://mensajesms.com.ve')
+            );  
+        }
 
         return response()->json(['statusCode' => 201,'data' =>['paid'=>$paid]]);
 
